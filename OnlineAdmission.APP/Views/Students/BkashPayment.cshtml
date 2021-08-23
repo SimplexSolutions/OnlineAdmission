@@ -1,0 +1,44 @@
+﻿@model OnlineAdmission.APP.ViewModels.Student.SelectedStudentVM
+@{
+
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+}
+<div class="row">
+    <div class="col-md-6 offset-3 text-center">
+        <div class="card text-center p-3" style=" background-color: #E01E70" >
+            <img src="~/Images/Payment/bkash_payment_logo.png" style="width:100%;"/>
+            <div class="card-body pt-1">
+                <div class="row p-3" style="background-color:white">
+                    <div class="col-md-6 text-left">
+                        <img src="~/Images/Collge/logo.jpg" style="width:80px;"/>
+                    </div>
+                    <div class="col-md-6 text-right d-flex align-items-center justify-content-end">
+                        <span>
+                            <img src="~/Images/Payment/tk.jpg" style="width:20px;"/>
+                        </span> <h5 class="p-0 m-0">12000</h5>
+                            @*<input asp-for="MeritStudent.PaidAmaount" type="hidden" value="" />*@
+                    </div>
+                </div>
+                <div class="row pt-4">
+                    <div class="col-md-12">
+                        <form asp-action="BkashPayment" asp-controller="Students" method="post">
+                            <div class="form-group">
+                                <label for="bkashPaymentNumber" class="text-center text-white">Your bkash Account number</label>
+                                <input type="number" class="form-control text-center" id="bkashPaymentNumber" placeholder="e.g 01xxxxxxxxx">
+                                <p class="text-white">By clicking on <span class="font-weight-bold">confirm,</span> you are agreeing to the <span class="font-weight-bold"><u>terms & conditions</u></span> </p>
+                            </div>
+                            <div class="row bg-secondary">
+                                <div class="col-md-6 text-center btn btn-block btn-info">
+                                    <button type="submit">
+                                        Confirm
+                                    </button>
+                                </div>
+                                <div class="col-md-6 text-center btn btn-block btn-secondary">Cancel</div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

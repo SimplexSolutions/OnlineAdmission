@@ -1,0 +1,65 @@
+﻿@model OnlineAdmission.APP.ViewModels.TransactionInfo
+@{
+
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+}
+<div class="row">
+    <div class="col-md-6 offset-3 text-center">
+        <div class="card text-center p-3" style=" background-color: #E5E6E8">
+            <div class="col-md-12 text-md-center">
+                <h4>College Payment</h4>
+            </div>
+            <div class="card-body pt-1">
+                <div class="row p-3" style="background-color:white">
+                    <div class="col-md-4 text-left">
+                        <img src="~/Images/Collge/logo.png" style="width:120px;" />
+                    </div>
+                    <div class="col-md-8 text-left d-flex align-items-center">
+                        <span class="h5 p-0 m-0">
+                            Admission Fee:
+                            @*<img src="~/Images/Payment/tk.jpg" style="width:16px;" />*@
+                        </span> <h5 class="text-right p-0 m-0"> @Model.Amount/-</h5>
+
+                    </div>
+                </div>
+                <div class="row p-3">
+                    <div class="col-md-12 text-center">
+                        <p>
+                            Name: <span class="font-weight-bold">@Model.Name</span> Roll: <span class="font-weight-bold">@Model.NuRoll</span> <br />
+                            Subject: <span class="font-weight-bold">@Model.SubjectName </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="row pt-4" style="background: #ED161F">
+                    <div class="col-md-12">
+
+                        @*<form asp-action="NagadPayment" asp-controller="Students" method="post">*@
+                        <form asp-controller="" asp-action="CollegePayment" method="post">
+                            <div class="form-group">
+                                <label for="bkashPaymentNumber" class="text-center text-white">Your Nagad Account number</label>
+                                <input class="form-control text-center" asp-for="PaymentTransaction.AccountNo" placeholder="e.g 01xxxxxxxxx">
+                                <p class="text-white">By clicking on <span class="font-weight-bold">confirm,</span> you are agreeing to the <span class="font-weight-bold"><u>terms & conditions</u></span> </p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 text-center">
+                                    <input asp-for="Amount" type="hidden" />
+                                    <input asp-for="PaymentTransaction.Amount" value="@Model.Amount" type="hidden" />
+                                    <input asp-for="PaymentTransaction.ReferenceNo" value="@Model.NuRoll" type="hidden" />
+                                    <input asp-for="NuRoll" hidden />
+                                    <button type="submit" class="btn btn-info btn-block">
+                                        Confirm
+                                    </button>
+                                </div>
+                                <div class="col-md-6 text-center btn btn-block btn-secondary">
+                                    <a asp-action="Search" asp-controller="Students">content</a>
+                                    Cancel
+                                </div>
+                            </div>
+                        </form>
+                        <br /><br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

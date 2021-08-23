@@ -1,0 +1,46 @@
+﻿@model OnlineAdmission.Entity.Subject
+
+@{
+    ViewData["Title"] = "Subject Edit";
+}
+
+<h4>Subject Edit</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group row">
+                <label asp-for="SubjectName" class="control-label col-form-label col-md-3 text-md-right"></label>
+                <div class="col-md-9">
+                    <input asp-for="SubjectName" class="form-control" />
+                    <span asp-validation-for="SubjectName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Code" class="control-label col-form-label col-md-3 text-md-right"></label>
+                <div class="col-md-9">
+                    <input asp-for="Code" class="form-control" />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="AdmissionFee" class="control-label col-form-label col-md-3 text-md-right"></label>
+                <div class="col-md-9">
+                    <input asp-for="AdmissionFee" class="form-control" />
+                    <span asp-validation-for="AdmissionFee" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-9 offset-md-3">
+                    <partial name="~/Views/PartialViews/_Update_Back.cshtml" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

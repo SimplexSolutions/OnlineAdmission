@@ -1,0 +1,87 @@
+﻿@model IEnumerable<OnlineAdmission.Entity.AppliedStudent>
+
+@{
+    ViewData["Title"] = "Index";
+    int i = 0;
+}
+
+<h1>Applied Student's List</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="GetAppliedStudentList">Add Applied Student's Excel File</a>
+</p>
+<table class="table" id="myTable">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>
+                @Html.DisplayNameFor(model => model.NUAdmissionRoll)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicantName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FatherName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MotherName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MobileNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HSCGroup)
+            </th>
+
+            <th><a class="btn btn-info" asp-action="Create">Create New</a></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(++i)</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NUAdmissionRoll)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicantName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FatherName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MotherName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MobileNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HSCGroup)
+                    </td>
+
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                "pageLength": 50
+            });
+        });
+    </script>
+}

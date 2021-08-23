@@ -1,0 +1,20 @@
+﻿@model OnlineAdmission.APP.ViewModels.SpecialOfferVM
+
+<form asp-action="SpecialOffer" asp-controller="MeritStudents" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @Html.AntiForgeryToken()
+    
+    <div class="row">
+        <div class="col">
+            <select asp-for="MeritStudentId" asp-items="@Model.MeritStudentList">
+                <option selected disabled>Select Student</option>
+            </select>
+        </div>
+        <div class="col">
+            <input asp-for="Amount" class="form-control" placeholder="Input deduction amount">
+        </div>
+    </div>
+    <div>
+        <button type="submit" value="Submit">Submit</button>
+    </div>
+</form>

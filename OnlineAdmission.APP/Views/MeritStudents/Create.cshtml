@@ -1,0 +1,72 @@
+﻿@model OnlineAdmission.Entity.MeritStudent
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h4>Add Merit Student</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NUAdmissionRoll" class="control-label"></label>
+                <input asp-for="NUAdmissionRoll" class="form-control" />
+                <span asp-validation-for="NUAdmissionRoll" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+            <label asp-for="ApplicantName" class="control-label"></label>
+            <input asp-for="ApplicantName" class="form-control" />
+            <span asp-validation-for="ApplicantName" class="text-danger"></span>
+        </div>*@
+            <div class="form-group">
+                <label asp-for="HSCRoll" class="control-label"></label>
+                <input asp-for="HSCRoll" class="form-control" />
+                <span asp-validation-for="HSCRoll" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubjectCode" class="control-label"></label>
+                <input asp-for="SubjectCode" class="form-control" />
+                <span asp-validation-for="SubjectCode" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+            <label asp-for="SubjectName" class="control-label"></label>
+            <input asp-for="SubjectName" class="form-control" />
+            <span asp-validation-for="SubjectName" class="text-danger"></span>
+        </div>*@
+            <div class="form-group">
+                <label asp-for="MeritPosition" class="control-label"></label>
+                <input asp-for="MeritPosition" class="form-control" />
+                <span asp-validation-for="MeritPosition" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Comments" class="control-label"></label>
+                <input asp-for="Comments" class="form-control" />
+                <span asp-validation-for="Comments" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="PaymentStatus" /> @Html.DisplayNameFor(model => model.PaymentStatus)
+                </label>
+            </div>
+            @*<div class="form-group">
+            <label asp-for="PaidAmaount" class="control-label"></label>
+            <input asp-for="PaidAmaount" class="form-control" />
+            <span asp-validation-for="PaidAmaount" class="text-danger"></span>
+        </div>*@
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

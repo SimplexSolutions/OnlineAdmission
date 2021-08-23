@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewData["Title"] = "StudentApply";
+    Layout = User.IsInRole("Admin") ? "~/Views/Shared/_Layout.cshtml" : "~/Views/Shared/_LayoutStudent.cshtml";
+}
+
+<div class="row" id="">
+    <div class="col-md-12 p-3 text-center">
+        
+    </div>
+</div>
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-3 offset-3">
+            <a asp-action="Create" asp-controller="Students" class="btn btn-info btn-block btn-lg"><i class="fa fa-plus"></i> New Admission</a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-success btn-block btn-lg" id="alreadyAdmitted"> Already Admitted!</a>
+        </div>
+    </div>
+</div>
+@if (ViewBag.msg!=null)
+{
+<div class="row" id="msg">
+    <div class=" col-md-10 text-center offset-1" >
+        <h4  alert alert-warning">@ViewBag.msg</h4>
+    </div>
+</div>
+}
+
+<div class="" id="checkApply" style="visibility:hidden;">
+    <form method="post" asp-controller="Students" asp-action="CheckApply">
+        <div class="form-row align-items-center">
+            <div class="col-sm-3 my-1">
+                <input type="text" class="form-control" placeholder="Input HSC Roll" name="hscRoll">
+            </div>
+
+            <div class="col-sm-3 my-1">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Passing Year" name="passingYear">
+                </div>
+            </div>
+
+            <div class="col-sm-3 my-1">
+                <div class="input-group">
+                    <select name="board" class="form-control select2">
+                        <option disabled selected>Select Board Name</option>
+                        <option value="Dhaka">Dhaka</option>
+                        <option value="Comilla">Comilla</option>
+                        <option value="Rajshahi">Rajshahi</option>
+                        <option value="Chittagong">Chittagong</option>
+                        <option value="Sylhet">Sylhet</option>
+                        <option value="Barisal">Barisal</option>
+                        <option value="Jessore">Jessore</option>
+                        <option value="Dinajpur">Dinajpur</option>
+                        <option value="Mymensingh">Mymensingh</option>
+                        <option value="Technical">Technical</option>
+                        <option value="Madrasha">Madrasha</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-auto my-1">
+                <button type="submit" class="btn btn-primary">View Admission Form</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            @*var msgText = @ViewBag.msg;
+            if (!msgText.trim()) {
+                alert(msgText);
+            }*@
+            $('#msg').fadeOut(10000);
+
+
+            $("#alreadyAdmitted").click(function () {
+                $('#checkApply').css('visibility', 'visible');
+            });
+        });
+    </script>
+
+}

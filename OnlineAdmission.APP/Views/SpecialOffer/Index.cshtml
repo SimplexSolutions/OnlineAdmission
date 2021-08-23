@@ -1,0 +1,62 @@
+﻿@model IEnumerable<OnlineAdmission.APP.ViewModels.SpecialOfferVM>
+
+@{
+    ViewBag.Title = "Requseted Student List";
+    int sl = 0;
+}
+
+<h4>Special Deduction Student List</h4>
+@if (Model.Any())
+{
+
+    <table class="table" id="myTable">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>NU Roll</th>
+                <th>Subject</th>
+                <th>Phone</th>
+                <th>Deduction Amount</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in Model)
+            {
+                <tr>
+                    <td>@(++sl)</td>
+                    <td>@student.AppliedStudent.ApplicantName</td>
+                    <td>@student.MeritStudent.NUAdmissionRoll</td>
+                    <td>@student.Subject.SubjectName</td>
+                    <td>@student.AppliedStudent.MobileNo</td>
+                    <td>@student.MeritStudent.DeductedAmaount</td>
+                    @if (student.MeritStudent.PaymentStatus == true)
+                    {
+                        <td>Payment Completed</td>
+                        <td>done | Details</td>
+                    }
+                    else
+                    {
+                        <td>Not paid yet</td>
+                        <td>
+                            <partial name="~/Views/PartialViews/_Edit_Details_Delete.cshtml" model="1" />
+                        </td>
+                    }
+
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+else
+{
+	      <div class="jumbotron">
+              <div class="col-md-10 text-center">
+                  <h4>Doesn't Found any student</h4>
+                  <a asp-action="Create" asp-controller="SpecialOffer" class="btn btn-info" >Add New</a>
+              </div>
+          </div>
+	}

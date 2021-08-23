@@ -1,0 +1,107 @@
+﻿@model IEnumerable<OnlineAdmission.Entity.MeritStudent>
+
+@{
+    ViewData["Title"] = "Index";
+    int sl = 0;
+}
+
+<h1>Merit Student's List</h1>
+<p>
+    <a class="btn btn-info" asp-action="GetMeritStudentList">Add Merit Student's Excel File</a>
+</p>
+<table class="table" id="myTable">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>
+                NU Roll
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.ApplicantName)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.HSCRoll)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubjectCode)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.SubjectName)
+                </th>*@
+            @*<th>
+                    @Html.DisplayNameFor(model => model.HSCGroup)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.MeritPosition)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comments)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentStatus)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.PaidAmaount)
+            </th>*@
+            <th  data-orderable="false">
+                <a class="btn btn-info" asp-action="Create">Add New</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@(++sl)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NUAdmissionRoll)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.ApplicantName)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.HSCRoll)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubjectCode)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.SubjectName)
+                    </td>*@
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.HSCGroup)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.MeritPosition)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Comments)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaymentStatus)
+                </td>
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.PaidAmaount)
+                </td>*@
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts{
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                "pageLength": 50
+            });
+        });
+    </script>
+}

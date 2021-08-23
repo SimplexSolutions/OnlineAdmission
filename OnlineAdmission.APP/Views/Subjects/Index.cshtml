@@ -1,0 +1,65 @@
+﻿@model IEnumerable<OnlineAdmission.Entity.Subject>
+
+@{
+    ViewData["Title"] = "Index";
+    int sl = 0;
+}
+
+<h1>Subject List</h1>
+<hr />
+
+
+<table class="table" id="myTable">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubjectName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AdmissionFee)
+            </th>
+            <th  data-orderable="false">
+                <partial name="~/Views/PartialViews/_Create_Partial.cshtml" />
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @(++sl).
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubjectName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AdmissionFee)
+                </td>
+                <td>
+                    <partial name="~/Views/PartialViews/_Edit_Details_Delete.cshtml" model="@item.Id" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts{
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                "pageLength": 25
+            });
+        });
+    </script>
+}
