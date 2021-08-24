@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OnlineAdmission.APP.Models;
+using OnlineAdmission.APP.ViewModels.Student;
 using OnlineAdmission.BLL.IManager;
 using OnlineAdmission.Entity;
 using System;
@@ -22,17 +23,31 @@ namespace OnlineAdmission.APP.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IWebHostEnvironment _host;
         private readonly IPaymentTransactionManager _paymentTransactionManager;
+        private readonly IAppliedStudentManager _appliedStudentManager;
+        private readonly IMeritStudentManager _meritStudentManager;
+        private readonly IStudentManager _studentManager;
 
-        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment host, IPaymentTransactionManager paymentTransactionManager)
+        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment host, IPaymentTransactionManager paymentTransactionManager, IAppliedStudentManager appliedStudentManager, IMeritStudentManager meritStudentManager, IStudentManager studentManager)
         {
             _logger = logger;
             _host = host;
             _paymentTransactionManager = paymentTransactionManager;
+            _appliedStudentManager = appliedStudentManager;
+            _meritStudentManager = meritStudentManager;
+            _studentManager = studentManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            AllStudentVM students = new AllStudentVM();
+            var appliedStudents = await _appliedStudentManager.GetAllAsync();
+            var meritStudents = await _meritStudentManager.GetAllAsync();
+            var admittedStudents = await _studentManager.GetAllAsync();
+            students.AppliedStudents = appliedStudents;
+            students.MeritStudents = meritStudents;
+            students.Students = admittedStudents;
+
+            return View(students);
         }
 
         public IActionResult GetTransaction()
@@ -53,7 +68,7 @@ namespace OnlineAdmission.APP.Controllers
 
             return RedirectToAction("showData");
         }
-        public async Task<IActionResult> showData()
+        public async Task<IActionResult> ShowData()
         {
             var transactions =await _paymentTransactionManager.GetAllAsync();
             return View(transactions);
