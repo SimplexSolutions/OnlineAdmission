@@ -564,7 +564,7 @@ namespace OnlineAdmission.APP.Controllers
 
 
             //string merchantCallbackURL = "http://sandbox.mynagad.com:10707/merchant-server/web/confirm"; //merchant Callback URL - as you want
-            string merchantCallbackURL = "http://115.127.26.3:4356/api/PaymentTransactions/add"; //merchant Callback URL - as you want
+            string merchantCallbackURL = "http://115.127.26.3:4430/api/PaymentTransactions"; //merchant Callback URL - as you want
 
             // Prepare Final JSON for Payment API
             var paymentFinalJSON = new
