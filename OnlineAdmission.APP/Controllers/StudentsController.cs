@@ -262,13 +262,14 @@ namespace OnlineAdmission.APP.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Search()
+        public IActionResult Search(string notification)
         {
+
             if (TempData["msg"]!=null)
             {
                 ViewBag.msg = TempData["msg"].ToString();
             }
-
+            ViewBag.notify = notification;
             return View();
         }
 
