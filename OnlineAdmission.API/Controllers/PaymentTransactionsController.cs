@@ -46,20 +46,20 @@ namespace OnlineAdmission.API.Controllers
 
                 PaymentTransaction newPayment = new PaymentTransaction();
 
-                newPayment.Amount = model.PaymentTransaction.Amount;
-                newPayment.TransactionDate = DateTime.Today;
-                newPayment.Balance = model.PaymentTransaction.Balance;
-                newPayment.AccountNo = model.PaymentTransaction.AccountNo;
-                var guid = Guid.NewGuid();
-                newPayment.TransactionId = guid.ToString();
-                newPayment.ReferenceNo = model.PaymentTransaction.ReferenceNo;
+                //newPayment.Amount = model.PaymentTransaction.Amount;
+                //newPayment.TransactionDate = DateTime.Today;
+                //newPayment.Balance = model.PaymentTransaction.Balance;
+                //newPayment.AccountNo = model.PaymentTransaction.AccountNo;
+                //var guid = Guid.NewGuid();
+                //newPayment.TransactionId = guid.ToString();
+                //newPayment.ReferenceNo = model.PaymentTransaction.ReferenceNo;
 
-                await _paymentTransactionManager.AddAsync(newPayment);
+                //await _paymentTransactionManager.AddAsync(newPayment);
 
-                MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(model.NuRoll);
-                meritStudent.PaymentStatus = true;
-                meritStudent.PaymentTransactionId = newPayment.Id;
-                await _meritStudentManager.UpdateAsync(meritStudent);
+                //MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(model.NuRoll);
+                //meritStudent.PaymentStatus = true;
+                //meritStudent.PaymentTransactionId = newPayment.Id;
+                //await _meritStudentManager.UpdateAsync(meritStudent);
                 //string site = "https://localhost:44356/";
                 string site = "http://115.127.26.3:4356/";
                 string param = "students/search?notification="+model.Notification;
