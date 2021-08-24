@@ -37,7 +37,7 @@ namespace OnlineAdmission.API.Controllers
         }
 
         // POST api/<PaymentTransactionsController>
-        [HttpPost("add-Transaction")]
+        [HttpPost("add-transaction")]
         public async Task<IActionResult> Add([FromBody] TransactionInfo model)
         {
             if (model.Status.ToLower()=="success")
@@ -62,7 +62,7 @@ namespace OnlineAdmission.API.Controllers
                 await _meritStudentManager.UpdateAsync(meritStudent);
                 //string site = "https://localhost:44356/";
                 string site = "http://115.127.26.3:4356/";
-                string param = "students/search?notification="+model.Notification+"";
+                string param = "students/search?notification="+model.Notification;
                 return Redirect(site+param);
             }
 
