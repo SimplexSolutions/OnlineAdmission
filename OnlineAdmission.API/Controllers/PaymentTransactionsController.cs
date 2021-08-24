@@ -37,33 +37,37 @@ namespace OnlineAdmission.API.Controllers
         }
 
         // POST api/<PaymentTransactionsController>
-        [HttpPost]
+        [HttpPost("add-Transaction")]
         public async Task<IActionResult> Add([FromBody] TransactionInfo model)
         {
             if (model.Status.ToLower()=="success")
             {
+                model.Notification = "Payment successfull";
+
+                PaymentTransaction newPayment = new PaymentTransaction();
+
+                newPayment.Amount = model.PaymentTransaction.Amount;
+                newPayment.TransactionDate = DateTime.Today;
+                newPayment.Balance = model.PaymentTransaction.Balance;
+                newPayment.AccountNo = model.PaymentTransaction.AccountNo;
+                var guid = Guid.NewGuid();
+                newPayment.TransactionId = guid.ToString();
+                newPayment.ReferenceNo = model.PaymentTransaction.ReferenceNo;
+
+                await _paymentTransactionManager.AddAsync(newPayment);
+
+                MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(model.NuRoll);
+                meritStudent.PaymentStatus = true;
+                meritStudent.PaymentTransactionId = newPayment.Id;
+                await _meritStudentManager.UpdateAsync(meritStudent);
+                //string site = "https://localhost:44356/";
                 string site = "http://115.127.26.3:4356/";
-                return Redirect(site);
+                string param = "students/search?notification="+model.Notification+"";
+                return Redirect(site+param);
             }
 
-            PaymentTransaction newPayment = new PaymentTransaction();
-
-            newPayment.Amount = model.PaymentTransaction.Amount;
-            newPayment.TransactionDate = DateTime.Today;
-            newPayment.Balance = model.PaymentTransaction.Balance;
-            newPayment.AccountNo = model.PaymentTransaction.AccountNo;
-            var guid = Guid.NewGuid();
-            newPayment.TransactionId = guid.ToString();
-            newPayment.ReferenceNo = model.PaymentTransaction.ReferenceNo;
-
-            await _paymentTransactionManager.AddAsync(newPayment);
-
-            MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(model.NuRoll);
-            meritStudent.PaymentStatus = true;
-            meritStudent.PaymentTransactionId = newPayment.Id;
-            await _meritStudentManager.UpdateAsync(meritStudent);
-
             return Ok();
+        
         }
         
 

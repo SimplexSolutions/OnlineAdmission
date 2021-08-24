@@ -32,6 +32,12 @@
                         <span id="msgId" class="text-danger offset-2">@ViewBag.msg</span>
                     </div>
                 }
+                @if (ViewBag.notify != null)
+                {
+                    <div class="row">
+                        <span id="notifyId" class="text-danger offset-2">@ViewBag.notify</span>
+                    </div>
+                }
 
             </form>
         </div>
@@ -169,6 +175,7 @@
     <script>
         $(document).ready(function () {
             $('#msgId').fadeOut(10000);
+            $('#notifyId').fadeOut(10000);
 
             $('#paymentId').click(function () {
                 let isHidden = $('#bankingId').is(':hidden');

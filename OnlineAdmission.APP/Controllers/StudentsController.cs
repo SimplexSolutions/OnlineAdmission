@@ -262,21 +262,27 @@ namespace OnlineAdmission.APP.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Search()
+        public IActionResult Search(string notification)
         {
             if (TempData["msg"]!=null)
             {
                 ViewBag.msg = TempData["msg"].ToString();
             }
-
+            ViewBag.notify = notification;
             return View();
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Search(int NuAdmissionRoll)
+        public async Task<IActionResult> Search(int NuAdmissionRoll, string notification)
         {
             string msg = "";
+            string notify = "";
+            if (!string.IsNullOrEmpty(notification))
+            {
+                notify = notification;
+            }
+            
             string nuRoll = "";
             if (NuAdmissionRoll>0)
             {
@@ -313,7 +319,7 @@ namespace OnlineAdmission.APP.Controllers
                     }
                     else
                     {
-
+                        ViewBag.notify = notify;
                         ViewBag.nuRoll = nuRoll;
                         return View(selectedStudent);
                     }
@@ -564,7 +570,7 @@ namespace OnlineAdmission.APP.Controllers
 
 
             //string merchantCallbackURL = "http://sandbox.mynagad.com:10707/merchant-server/web/confirm"; //merchant Callback URL - as you want
-            string merchantCallbackURL = "http://115.127.26.3:4430/api/PaymentTransactions"; //merchant Callback URL - as you want
+            string merchantCallbackURL = "http://115.127.26.3:4430/api/PaymentTransactions/add-Transaction"; //merchant Callback URL - as you want
 
             // Prepare Final JSON for Payment API
             var paymentFinalJSON = new

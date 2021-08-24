@@ -6,7 +6,7 @@ namespace OnlineAdmission.API.ViewModels
     {
         
         public string Status { get; set; }
-
+        public string Notification { get; set; }
 
 
 
