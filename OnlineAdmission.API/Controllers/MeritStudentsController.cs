@@ -25,12 +25,7 @@ namespace OnlineAdmission.API.Controllers
             _mapper = mapper;
             _paymentTransactionManager = paymentTransactionManager;
         }
-        //[HttpGet("get-all-student")]
-        //public IActionResult GetAllStudent()
-        //{
-        //    var stuList = _meritStudentManager.GetAllAsync();
-        //    return Ok(stuList);
-        //}
+
 
         [HttpGet("get-all-student")]
         public async Task<ActionResult<IEnumerable<MeritStudent>>> GetStudents()
