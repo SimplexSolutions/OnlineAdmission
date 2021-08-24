@@ -42,7 +42,7 @@ namespace OnlineAdmission.API.Controllers
         {
             if (model.Status.ToLower()=="success")
             {
-                string site = "http://115.127.26.3:4356";
+                string site = "http://115.127.26.3:4356/";
                 return Redirect(site);
             }
 

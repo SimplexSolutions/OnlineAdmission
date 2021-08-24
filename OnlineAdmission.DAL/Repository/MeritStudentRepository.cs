@@ -25,7 +25,7 @@ namespace OnlineAdmission.DAL.Repository
 
         public async Task<List<MeritStudent>> GetAppliedStudentAsync()
         {
-            var appliedStudent = await _context.MeritStudents.Where(s => s.SubjectCode == 0 || s.SubjectCode == null).ToListAsync();
+            var appliedStudent = await _context.MeritStudents.Where(s => s.SubjectCode == 0 ).ToListAsync();
             return appliedStudent;
         }
 

@@ -9,7 +9,7 @@ namespace OnlineAdmission.APP.Utilities.NagadSetting
     {
         public static string MerchantId = "683002007104225";
 
-        private static DateTime DateTime = DateTime.Now.AddMinutes(-5);
+        private static DateTime DateTime = DateTime.Now;
         public static string RequestDateTime = DateTime.ToString("yyyyMMddHHmmss"); //{// Format should be 20200827134915
 
         //Generate Random Number
