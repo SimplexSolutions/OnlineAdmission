@@ -57,6 +57,7 @@ namespace OnlineAdmission.APP
             });
 
             services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddMvc(options =>
             {
                 var policy = new AuthorizationPolicyBuilder()

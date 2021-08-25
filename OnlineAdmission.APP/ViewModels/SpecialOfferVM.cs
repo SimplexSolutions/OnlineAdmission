@@ -11,13 +11,12 @@ namespace OnlineAdmission.APP.ViewModels
     {
 
 
-        public int MeritStudentId { get; set; }
         public double Amount { get; set; }
-        public int AppliedStudentId { get; set; }
         public int SubjectId { get; set; }
         public Subject Subject { get; set; }
         public MeritStudent MeritStudent { get; set; }
         public AppliedStudent AppliedStudent { get; set; }
+
         public ICollection<SelectListItem> MeritStudentList { get; set; }
     }
 }

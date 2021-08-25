@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
@@ -13,6 +14,7 @@ using OnlineAdmission.Entity;
 
 namespace OnlineAdmission.APP.Controllers
 {
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class PaymentTransactions : ControllerBase
@@ -27,6 +29,7 @@ namespace OnlineAdmission.APP.Controllers
             this.paymentTransactionManager = paymentTransactionManager;
         }
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Get(string status,string notification,string amount, string payment_ref_id)
         {
             // Status Check
@@ -87,7 +90,6 @@ namespace OnlineAdmission.APP.Controllers
             //string site = "https://localhost:44356/";
             //return Redirect(site);
         }
-
 
     }
 }

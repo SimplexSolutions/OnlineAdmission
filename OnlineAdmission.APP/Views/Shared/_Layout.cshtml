@@ -1,7 +1,166 @@
-﻿@inject SignInManager<IdentityUser> signInManager
+﻿
+@inject SignInManager<IdentityUser> signInManager
 @inject UserManager<IdentityUser> userManager
 
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/theme/css/style.css">
+    <title>@ViewData["Title"] Online Admission</title>
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+
+</head>
+<body>
+
+    <div class="wrapper d-flex align-items-stretch">
+        <nav id="sidebar">
+            <div class="p-2 pt-2">
+                @*<a href="#" class="img logo rounded-circle mb-5" style="background-image: url(images/logo.jpg);"></a>*@
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <partial name="_LoginPartial" />
+                    </li>
+                </ul>
+
+                @if (signInManager.IsSignedIn(User))
+                {
+                    <ul class="list-unstyled components mb-5">
+                        <li class="active">
+                            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+                            <ul class="collapse list-unstyled" id="homeSubmenu">
+                                <li>
+                                    <a asp-action="Index" asp-controller="AppliedStudents">Applied Students</a>
+                                </li>
+                                <li>
+                                    <a asp-action="Index" asp-controller="MeritStudents">Selected Students</a>
+                                </li>
+                                <li>
+                                    <a asp-action="Index" asp-controller="Students">Admitted Students</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">About</a>
+                        </li>
+                        <li>
+                            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Setup</a>
+                            <ul class="collapse list-unstyled" id="pageSubmenu">
+                                <li>
+                                    <a asp-action="Index" asp-controller="Subjects">Subject</a>
+                                </li>
+                                <li>
+                                    <a asp-action="userList" asp-controller="Administrations">Users</a>
+                                </li>
+                                <li>
+                                    <a asp-action="roleList" asp-controller="Administrations">Roles</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Other</a>
+                        </li>
+                        <li>
+                            <a href="#">Support</a>
+                        </li>
+                    </ul>
+                }
+
+                <div class="footer">
+                    <p>
+                        &copy; @DateTime.Today.ToString("yyyy") - Online Admission - <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </p>
+
+                    <p>
+                        <br /><br />
+                    </p>
+                </div>
+
+            </div>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content" class="p-2 p-md-2">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light mb-2 p-1">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                        <i class="fa fa-bars"></i>
+                        <span class="sr-only">Toggle Menu</span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" asp-action="Index" asp-controller="Home">Home</a>
+                            </li>
+                            @if (signInManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="Index" asp-controller="Students">Students</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="Index" asp-controller="SpecialOffer">Recommendation</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div>
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <script src="~/theme/js/jquery.min.js"></script>
+    <script src="~/theme/js/popper.js"></script>
+    <script src="~/theme/js/bootstrap.min.js"></script>
+    <script src="~/theme/js/main.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -22,26 +181,25 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    
+
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         @if (signInManager.IsSignedIn(User))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Subjects" asp-action="Index">Subjects</a>
-                            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Subjects" asp-action="Index">Subjects</a>
+            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="AppliedStudents" asp-action="Index">Applied Students</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="MeritStudents" asp-action="Index">Marit Students</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="Index">Admitted Students</a>
-                            </li>
-                        }
+                                            <li class="nav-item">
+                                                <a class="nav-link text-dark" asp-area="" asp-controller="MeritStudents" asp-action="Index">Marit Students</a>
+                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="Index">Admitted Students</a>
+                                                            </li>}
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="Search">Check</a>
                         </li>
@@ -69,4 +227,4 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-</html>
+</html>*@

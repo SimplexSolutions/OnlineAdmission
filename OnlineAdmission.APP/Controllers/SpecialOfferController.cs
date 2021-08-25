@@ -28,9 +28,10 @@ namespace OnlineAdmission.APP.Controllers
         {
             var specialStudent = await _meritStudentManager.GetSpecialPaymentStudent();
             List<SpecialOfferVM> specialOfferVMList = new List<SpecialOfferVM>();
-            SpecialOfferVM specialOfferVM = new SpecialOfferVM();
+            
             foreach (var item in specialStudent)
             {
+                SpecialOfferVM specialOfferVM = new SpecialOfferVM();
                 var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(item.NUAdmissionRoll);
                 var subject = await _subjectManager.GetByCodeAsync(item.SubjectCode);
                 specialOfferVM.AppliedStudent = appliedStudent;
@@ -53,25 +54,21 @@ namespace OnlineAdmission.APP.Controllers
         public async Task<ActionResult> Create()
         {
             List<SpecialOfferVM> specialOfferVMList = new List<SpecialOfferVM>();
-            SpecialOfferVM specialOfferVM = new SpecialOfferVM();
+            
 
             var meritStudents = await _meritStudentManager.GetAllWithoutPaidAsync();
 
             foreach (var item in meritStudents)
             {
-
-                MeritStudent newMerit = new MeritStudent();
-                newMerit = item;
-                AppliedStudent newApplied = new AppliedStudent();
-                newApplied = await _appliedStudentManager.GetByAdmissionRollAsync(item.NUAdmissionRoll);
-
-                specialOfferVM.MeritStudent = newMerit;
-                specialOfferVM.AppliedStudent = newApplied;
-
+                SpecialOfferVM specialOfferVM = new SpecialOfferVM();
+                specialOfferVM.AppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(item.NUAdmissionRoll);
+                specialOfferVM.Subject = await _subjectManager.GetByCodeAsync(item.SubjectCode);
+                specialOfferVM.MeritStudent = item;
                 specialOfferVMList.Add(specialOfferVM);
+
             }
             
-            ViewData["meritStudentId"] = new SelectList((from s in specialOfferVMList.ToList()
+            ViewData["meritStudentId"] = new SelectList((from s in specialOfferVMList
                                                      select new
                                                      {
                                                          Id = s.MeritStudent.Id,
@@ -89,10 +86,10 @@ namespace OnlineAdmission.APP.Controllers
         {
             if (ModelState.IsValid)
             {
-                MeritStudent meritStudent = await _meritStudentManager.GetByIdAsync(model.MeritStudentId);
+                MeritStudent meritStudent = await _meritStudentManager.GetByIdAsync(model.MeritStudent.Id);
                 meritStudent.DeductedAmaount = model.Amount;
                 await _meritStudentManager.UpdateAsync(meritStudent);
-                return View();
+                return RedirectToAction("Index");
             }
 
             SpecialOfferVM spO = new SpecialOfferVM();
