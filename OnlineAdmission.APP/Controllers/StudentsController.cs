@@ -445,7 +445,7 @@ namespace OnlineAdmission.APP.Controllers
 
             var meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll);
             var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
-            string OrderId = meritStudent.NUAdmissionRoll+meritStudent.SubjectCode+DateTime.Now.ToString("hhmmss");
+            string OrderId = meritStudent.NUAdmissionRoll+""+meritStudent.SubjectCode+""+DateTime.Now.ToString("hhmmss");
 
             
 
@@ -564,7 +564,7 @@ namespace OnlineAdmission.APP.Controllers
 
 
             //string merchantCallbackURL = "http://sandbox.mynagad.com:10707/merchant-server/web/confirm"; //merchant Callback URL - as you want
-            string merchantCallbackURL = "http://115.127.26.3:4430/api/PaymentTransactions/add-transaction"; //merchant Callback URL - as you want
+            string merchantCallbackURL = "https://115.127.26.3:4356/api/PaymentTransactions"; //merchant Callback URL - as you want
 
             // Prepare Final JSON for Payment API
             var paymentFinalJSON = new
@@ -597,11 +597,8 @@ namespace OnlineAdmission.APP.Controllers
 
                     // If the response contains content we want to read it!
                     if (httpResponse.Content != null)
-                    {
-                        
-                        br_ResponseContent = await httpResponse.Content.ReadAsStringAsync();
-                        
-                        
+                    {                        
+                        br_ResponseContent = await httpResponse.Content.ReadAsStringAsync();                      
                     }
                 }
 
@@ -622,6 +619,7 @@ namespace OnlineAdmission.APP.Controllers
             string site = co_Response.callBackUrl;
             if (co_Response.status == "Success")
             {
+                GlobalVariables.nuRoll = nuRoll.ToString();
                 return Redirect(site);
                 
             }
