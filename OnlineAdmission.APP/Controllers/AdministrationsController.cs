@@ -18,7 +18,12 @@ namespace OnlineAdmission.APP.Controllers
             _roleManager = roleManager;
             _userManager = userManager;
         }
-
+        
+        public IActionResult UserList()
+        {
+            var users = _userManager.Users;
+            return View(users);
+        }
 
         [HttpGet]
         public IActionResult RoleList()
