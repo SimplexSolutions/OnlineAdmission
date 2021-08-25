@@ -15,14 +15,14 @@
             <h4>Applied</h4>
         </div>
         <div class="card-body">
-            <h5 class="card-title">Total @Model.AppliedStudents.Count</h5>
+            <h5 class="card-title">Total @Model.AppliedStudents.Count Students</h5>
             <p class="card-text">
                 
             </p>
         </div>
-        <div class="card-footer">
+        @*<div class="card-footer">
             <small class="text-muted"></small>
-        </div>
+        </div>*@
     </div>
 
     <div class="card">
@@ -30,27 +30,42 @@
             <h4>Selected</h4>
         </div>
         <div class="card-body">
-            <h5 class="card-title">Total @Model.MeritStudents.Count</h5>
+            <h5 class="card-title">Total @Model.MeritStudents.Count Students</h5>
             <p class="card-text">
 
             </p>
         </div>
-        <div class="card-footer">
+        @*<div class="card-footer">
             <small class="text-muted"></small>
-        </div>
+        </div>*@
     </div>
 
     <div class="card">
         <div class="card-header bg-success border-success text-center">
-            <h4>Paid</h4>
+            <h4>Payment Completed</h4>
         </div>
         <div class="card-body">
-            <h5 class="card-title">Total </h5>
-            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+            
+            @if (Model.MeritStudents!=null)
+            {
+                <h5 class="card-title">Total @Model.MeritStudents.Count Students </h5>
+                <h4></h4>
+
+                foreach (var merits in Model.MeritStudents)
+                {
+                    <table>
+                        <tr></tr>
+                    </table>
+                }
+            }
+            else
+            {
+                <h4>Merit Student List is Empty</h4>
+            }
         </div>
-        <div class="card-footer">
-            <small class="text-muted">Last updated 3 mins ago</small>
-        </div>
+        @*<div class="card-footer">
+            
+        </div>*@
     </div>
 
     <div class="card">
@@ -58,13 +73,13 @@
             <h4>Admitted</h4>
         </div>
         <div class="card-body">
-            <h5 class="card-title">Total @Model.Students.Count</h5>
+            <h5 class="card-title">Total @Model.Students.Count Students</h5>
             <p class="card-text">
 
             </p>
         </div>
-        <div class="card-footer">
+        @*<div class="card-footer">
             <small class="text-muted">Last updated 3 mins ago</small>
-        </div>
+        </div>*@
     </div>
 </div>

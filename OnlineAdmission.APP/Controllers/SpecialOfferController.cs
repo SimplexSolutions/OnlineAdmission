@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using OnlineAdmission.APP.ViewModels;
+using OnlineAdmission.APP.ViewModels.SpecialOffer;
 using OnlineAdmission.BLL.IManager;
 using OnlineAdmission.Entity;
 using System;
@@ -98,31 +98,66 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         // GET: SpecialOfferController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int nuRoll)
         {
-            return View();
+            var meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll);
+            var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+            var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
+
+            SpecialOfferVM specialOfferVM = new SpecialOfferVM() {
+                MeritStudent = meritStudent,
+                AppliedStudent = appliedStudent,
+                Subject = subject,
+                Amount = meritStudent.DeductedAmaount
+            };
+            
+            return View(specialOfferVM);
         }
 
         // POST: SpecialOfferController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, SpecialOfferVM model)
         {
-            try
+            if (id!=model.MeritStudent.Id)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
+            if (ModelState.IsValid)
             {
-                return View();
+                MeritStudent meritStudent = await _meritStudentManager.GetByIdAsync(model.MeritStudent.Id);
+                meritStudent.DeductedAmaount = model.Amount;
+                await _meritStudentManager.UpdateAsync(meritStudent);
+                return RedirectToAction("Index");
             }
+            var mStudent = await _meritStudentManager.GetByIdAsync(model.MeritStudent.Id);
+            var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(mStudent.NUAdmissionRoll);
+            var subject = await _subjectManager.GetByCodeAsync(mStudent.SubjectCode);
+
+            SpecialOfferVM specialOfferVM = new SpecialOfferVM()
+            {
+                MeritStudent = mStudent,
+                AppliedStudent = appliedStudent,
+                Subject = subject,
+                Amount = mStudent.DeductedAmaount
+            };
+
+            return View(specialOfferVM);
         }
 
         // GET: SpecialOfferController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int nuRoll)
         {
+            if (ModelState.IsValid)
+            {
+                MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll);
+                meritStudent.DeductedAmaount = 0;
+                await _meritStudentManager.UpdateAsync(meritStudent);
+                return RedirectToAction("Index");
+            }
             return View();
         }
+
 
         // POST: SpecialOfferController/Delete/5
         [HttpPost]

@@ -39,10 +39,12 @@ namespace OnlineAdmission.APP.Controllers
 
         public async Task<IActionResult> Index()
         {
+
             AllStudentVM students = new AllStudentVM();
             var appliedStudents = await _appliedStudentManager.GetAllAsync();
             var meritStudents = await _meritStudentManager.GetAllAsync();
             var admittedStudents = await _studentManager.GetAllAsync();
+
             students.AppliedStudents = appliedStudents;
             students.MeritStudents = meritStudents;
             students.Students = admittedStudents;

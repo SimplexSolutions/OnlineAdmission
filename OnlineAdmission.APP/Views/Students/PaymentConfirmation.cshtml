@@ -1,42 +1,11 @@
 ﻿@model OnlineAdmission.APP.ViewModels.Student.SelectedStudentVM
-
-@*@inject SignInManager<IdentityUser> signInManager
-@inject UserManager<IdentityUser> userManager*@
+@{ 
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+}
 
 <div class="">
     <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">
-        @*<div class="card-body">
-            <form asp-action="Search" asp-controller="Students" method="post">
-                <div class="form-group row">
-                    <label class="col-md-2 text-md-right text-left col-form-label">Roll</label>
-                    <div class="col-md-6">
-                        @if (ViewBag.nuRoll != null)
-                        {
-                            <input type="text" name="NuAdmissionRoll" value="@ViewBag.nuRoll" class="form-control" />
-                        }
-                        else
-                        {
-                            <input type="text" name="NuAdmissionRoll" class="form-control" placeholder="NU Admission Roll" />
-                        }
 
-                    </div>
-                    <button type="submit" class="btn btn-primary mb-2">Search</button>
-                </div>
-                @if (ViewBag.msg != null)
-                {
-                    <div class="row">
-                        <span id="msgId" class="text-danger offset-2">@ViewBag.msg</span>
-                    </div>
-                }
-                @if (ViewBag.notify != null)
-                {
-                    <div class="row">
-                        <span id="notifyId" class="text-danger offset-2">@ViewBag.notify</span>
-                    </div>
-                }
-
-            </form>
-        </div>*@
 
 
         @if (Model != null)
@@ -45,7 +14,7 @@
                 <div class="card-body">
                     <table class="table table-bordered">
                         <thead class="thead-light bg-primary text-white">
-                           @* @ViewBag.succussNotification*@
+
                             <tr>
                                 <td style="color:#f7f452;font-weight:800;font-size:large;">@ViewBag.succussNotification</td>
                             </tr>

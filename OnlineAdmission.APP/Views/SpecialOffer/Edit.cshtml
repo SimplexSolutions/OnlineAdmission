@@ -1,18 +1,19 @@
 ﻿@model OnlineAdmission.APP.ViewModels.SpecialOffer.SpecialOfferVM
 
 <div class="col-md-10 offset-md-1">
-    <form asp-action="Create" asp-controller="SpecialOffer" method="post">
+    <form asp-action="Edit" asp-controller="SpecialOffer" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" name="id" value="@Model.MeritStudent.Id" />
+        <input type="hidden" asp-for="MeritStudent" value="@Model.MeritStudent" />
+        <input type="hidden" asp-for="AppliedStudent" value="@Model.AppliedStudent" />
+        <input type="hidden" asp-for="Subject" value="@Model.Subject" />
         @Html.AntiForgeryToken()
-
 
         <div class="form-group row">
             <label asp-for="MeritStudent" class="col-md-2 col-form-label text-md-right">Student</label>
             <div class="col-sm-10">
-                <select asp-for="MeritStudent.Id" asp-items="@ViewBag.meritStudentId" class="form-control">
-                    <option selected disabled>Select Student</option>
-                </select>
-                <span asp-validation-for="MeritStudent.Id" class="text-danger"></span>
+                <input type="hidden" asp-for="MeritStudent.Id" />
+                <input readonly value="@Model.AppliedStudent.ApplicantName (@Model.MeritStudent.NUAdmissionRoll)" class="form-control"/>
             </div>
         </div>
 
@@ -20,16 +21,12 @@
             <label asp-for="Amount" class="col-md-2 col-form-label text-md-right"></label>
             <div class="col-sm-10">
                 <input asp-for="Amount" class="form-control" placeholder="Deduction amount">
-                <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group row">
             <div class="col-sm-10 offset-sm-2">
-                <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
+                <button type="submit" value="Submit" class="btn btn-primary">Update</button>
             </div>
         </div>
     </form>
 </div>
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
