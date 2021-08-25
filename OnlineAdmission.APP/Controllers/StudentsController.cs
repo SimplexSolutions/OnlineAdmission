@@ -336,14 +336,65 @@ namespace OnlineAdmission.APP.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult PaymentConfirmation(string notification)
+        public async Task<IActionResult> PaymentConfirmation(int NuAdmissionRoll, string notification)
         {
-
-            if (TempData["msg"] != null)
+            string msg = "";
+            string nuRoll = "";
+            if (NuAdmissionRoll > 0)
             {
-                ViewBag.msg = TempData["msg"].ToString();
+                var meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll);
+                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll);
+
+                //if (meritStudent == null)
+                //{
+                //    ViewBag.msg = "You are not applied yet";
+                //    return View();
+                //}
+                //if (appliedStudent == null)
+                //{
+                //    ViewBag.msg = "You are not eligible";
+                //    return View();
+                //}
+                var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
+
+                SelectedStudentVM selectedStudent = new SelectedStudentVM()
+                {
+                    MeritStudent = meritStudent,
+                    AppliedStudent = appliedStudent,
+                    Subject = subject
+                };
+
+
+                if (selectedStudent != null)
+                {
+                    var admittedStudent = await _studentManager.GetStudentByHSCRollAsync(selectedStudent.MeritStudent.HSCRoll);
+                    if (admittedStudent != null)
+                    {
+                        msg = "Congratulations! You are already admitted.";
+                        ViewBag.admittedStudent = admittedStudent;
+                        return View();
+                    }
+                    else
+                    {
+
+                        ViewBag.nuRoll = nuRoll;
+                        ViewBag.succussNotification = notification;
+                        return View(selectedStudent);
+                    }
+                }
+                else
+                {
+                    msg = "Sorry! Roll Number not found.";
+                }
+                ViewBag.msg = msg;
             }
-            ViewBag.notify = notification;
+            else
+            {
+                msg = "Please insert a valid roll first.";
+
+            }
+            ViewBag.msg = msg;
+            
             return View();
         }
 
@@ -578,6 +629,7 @@ namespace OnlineAdmission.APP.Controllers
 
             //string merchantCallbackURL = "http://sandbox.mynagad.com:10707/merchant-server/web/confirm"; //merchant Callback URL - as you want
             string merchantCallbackURL = "http://115.127.26.3:4356/api/PaymentTransactions"; //merchant Callback URL - as you want
+            //string merchantCallbackURL = "https://localhost:44356/api/PaymentTransactions"; //merchant Callback URL - as you want
 
             // Prepare Final JSON for Payment API
             var paymentFinalJSON = new

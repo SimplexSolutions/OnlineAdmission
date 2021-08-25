@@ -42,7 +42,7 @@ namespace OnlineAdmission.APP.Controllers
 
             if (status.ToLower() == "success")
             {
-              string  notification = "Congratulations! Payment done Successfully";
+              string  successNotification = "Congratulations! Payment Completed (BDT: " + responsevalue.amount+".00/-)";
             //Guid guid = new Guid();
             //{"merchantId":"683002007104225",
             //                "orderId":"3001639025135",
@@ -83,7 +83,7 @@ namespace OnlineAdmission.APP.Controllers
                 //return Redirect(site);
                 // return Ok();
                 //return RedirectToAction("search","students",new { notification=notification});
-                return RedirectToAction("PaymentConfirmation", "Students",new { notification=notification});
+                return RedirectToAction("PaymentConfirmation", "Students",new { NuAdmissionRoll = newPayment.ReferenceNo,notification= successNotification});
             }
 
             return  Ok();

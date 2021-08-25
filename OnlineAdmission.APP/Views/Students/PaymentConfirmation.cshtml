@@ -5,7 +5,7 @@
 
 <div class="">
     <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">
-        <div class="card-body">
+        @*<div class="card-body">
             <form asp-action="Search" asp-controller="Students" method="post">
                 <div class="form-group row">
                     <label class="col-md-2 text-md-right text-left col-form-label">Roll</label>
@@ -36,13 +36,22 @@
                 }
 
             </form>
-        </div>
+        </div>*@
 
 
         @if (Model != null)
         {
             <div class="card text-center border-0">
                 <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead class="thead-light bg-primary text-white">
+                           @* @ViewBag.succussNotification*@
+                            <tr>
+                                <td style="color:#f7f452;font-weight:800;font-size:large;">@ViewBag.succussNotification</td>
+                            </tr>
+                        </thead>
+                        
+                    </table>
                     <table class="table table-bordered">
                         <thead class="thead-light bg-primary text-white">
                             <tr>
@@ -63,45 +72,45 @@
                     </table>
                     @if (Model.MeritStudent.PaymentStatus == true)
                     {
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h5>Payment Completed</h5>
-                            </div>
-                            <div class="col-md-6">
-                                <a class="btn btn-outline-info" asp-action="Create" asp-controller="Students" asp-route-nuAdmissionRoll="@Model.AppliedStudent.NUAdmissionRoll">Admission Form</a>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Payment Completed</h5>
                         </div>
+                        <div class="col-md-6">
+                            <a class="btn btn-outline-info" asp-action="Create" asp-controller="Students" asp-route-nuAdmissionRoll="@Model.AppliedStudent.NUAdmissionRoll">Admission Form</a>
+                        </div>
+                    </div>
                     }
                     else
                     {
-                        <div class="text-center">
-                            <button class="text-center btn btn-info" id="paymentId">Make Payment</button>
-                        </div>
-                        <div class="col-md-4 offset-4 pt-3" id="bankingId" style="display:none;">
-                            <div class="card-deck">
-                                @*<div class="card">
-                                        <a asp-action="BkashPayment" asp-controller="Students"><img class="card-img-top" src="~/Images/Payment/Bkash.png" alt="Bkash Logo"></a>
-                                    </div>*@
-                                <div class="card border-0">
-                                    <form asp-action="NagadPayment" asp-controller="Students" method="get">
-                                        <input name="nuRoll" value="@Model.MeritStudent.NUAdmissionRoll" type="hidden" />
-                                        <button type="submit">
-                                            <img class="card-img-top" src="~/Images/Payment/Nagad.png" alt="Nagad Logo" style="width:80px;">
-                                        </button>
-                                    </form>
+                    <div class="text-center">
+                        <button class="text-center btn btn-info" id="paymentId">Make Payment</button>
+                    </div>
+                    <div class="col-md-4 offset-4 pt-3" id="bankingId" style="display:none;">
+                        <div class="card-deck">
+                            @*<div class="card">
+                    <a asp-action="BkashPayment" asp-controller="Students"><img class="card-img-top" src="~/Images/Payment/Bkash.png" alt="Bkash Logo"></a>
+                </div>*@
+                            <div class="card border-0">
+                                <form asp-action="NagadPayment" asp-controller="Students" method="get">
+                                    <input name="nuRoll" value="@Model.MeritStudent.NUAdmissionRoll" type="hidden" />
+                                    <button type="submit">
+                                        <img class="card-img-top" src="~/Images/Payment/Nagad.png" alt="Nagad Logo" style="width:80px;">
+                                    </button>
+                                </form>
 
-                                </div>
-                                    <div class="card border-0">
-                                        <form asp-action="CollegePayment" asp-controller="Students" method="get">
-                                            <input name="nuRoll" value="@Model.MeritStudent.NUAdmissionRoll" type="hidden" />
-                                            <button type="submit">
-                                                <img class="card-img-top" src="~/Images/Collge/logo.png" alt="College Logo" style="width:80px;">
-                                            </button>
-                                        </form>
-                                    </div>
-                              
                             </div>
+                            <div class="card border-0">
+                                <form asp-action="CollegePayment" asp-controller="Students" method="get">
+                                    <input name="nuRoll" value="@Model.MeritStudent.NUAdmissionRoll" type="hidden" />
+                                    <button type="submit">
+                                        <img class="card-img-top" src="~/Images/Collge/logo.png" alt="College Logo" style="width:80px;">
+                                    </button>
+                                </form>
+                            </div>
+
                         </div>
+                    </div>
                     }
                 </div>
             </div>
