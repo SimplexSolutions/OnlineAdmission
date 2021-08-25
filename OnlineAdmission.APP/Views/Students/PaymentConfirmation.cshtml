@@ -91,8 +91,6 @@
                                     </form>
 
                                 </div>
-                                @if (signInManager.IsSignedIn(User))
-                                {
                                     <div class="card border-0">
                                         <form asp-action="CollegePayment" asp-controller="Students" method="get">
                                             <input name="nuRoll" value="@Model.MeritStudent.NUAdmissionRoll" type="hidden" />
@@ -101,10 +99,7 @@
                                             </button>
                                         </form>
                                     </div>
-                                }
-                                @*<div class="card">
-                                        <a asp-action="RocketPayment" asp-controller="Students"><img class="card-img-top" src="~/Images/Payment/rocket.png" alt="Rocket Logo"></a>
-                                    </div>*@
+                              
                             </div>
                         </div>
                     }

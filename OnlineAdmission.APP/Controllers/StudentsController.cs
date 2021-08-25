@@ -334,6 +334,19 @@ namespace OnlineAdmission.APP.Controllers
             return View();
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult PaymentConfirmation(string notification)
+        {
+
+            if (TempData["msg"] != null)
+            {
+                ViewBag.msg = TempData["msg"].ToString();
+            }
+            ViewBag.notify = notification;
+            return View();
+        }
+
 
         [HttpGet]
         public async Task<ActionResult> CollegePayment(int nuRoll)

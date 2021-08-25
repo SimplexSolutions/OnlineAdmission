@@ -30,7 +30,7 @@ namespace OnlineAdmission.APP.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Get(string status,string notification,string amount, string payment_ref_id)
+        public async Task<IActionResult> Get(string status,string payment_ref_id)
         {
             // Status Check
             //Call Status Check API with Payment Ref ID
@@ -42,7 +42,7 @@ namespace OnlineAdmission.APP.Controllers
 
             if (status.ToLower() == "success")
             {
-                notification = "Congratulations! Payment done Successfully";
+              string  notification = "Congratulations! Payment done Successfully";
             //Guid guid = new Guid();
             //{"merchantId":"683002007104225",
             //                "orderId":"3001639025135",
@@ -82,7 +82,8 @@ namespace OnlineAdmission.APP.Controllers
                 //return Redirect(mySite + param);
                 //return Redirect(site);
                 // return Ok();
-                return RedirectToAction("search","students",new { notification=notification});
+                //return RedirectToAction("search","students",new { notification=notification});
+                return RedirectToAction("PaymentConfirmation", "Students",new { notification=notification});
             }
 
             return  Ok();
