@@ -79,9 +79,38 @@ namespace OnlineAdmission.APP.Controllers
         {
             if (nuAdmissionRoll>0)
             {
+
                 var existingMeritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuAdmissionRoll);
                 var existingAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuAdmissionRoll);
                 var existingSubject = await _subjectManager.GetByCodeAsync(existingMeritStudent.SubjectCode);
+
+                string year = DateTime.Today.ToString("yyyy");
+                int subjectCode = existingSubject.Code;
+                int count = await _studentManager.GetCountAsync(existingSubject.Id);
+                string sl = "";
+                if (count < 100)
+                {
+                    if (count == 0)
+                    {
+                        sl = "001";
+                    }
+                    else if (count < 10)
+                    {
+                        sl = "00" + count.ToString();
+                    }
+                    else if (count < 100 && count > 9)
+                    {
+                        sl = "0" + count.ToString();
+                    }
+                }
+                else
+                {
+                    sl = count.ToString();
+                }
+
+
+                //student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + subjectCode + "" + sl);
+
                 StudentCreateVM student = new StudentCreateVM();
                 student.Name = existingAppliedStudent.ApplicantName;
                 student.FatherName = existingAppliedStudent.FatherName;
@@ -90,6 +119,7 @@ namespace OnlineAdmission.APP.Controllers
                 student.HSCRoll = existingMeritStudent.HSCRoll;
                 student.SubjectId = existingSubject.Id;
                 student.Subject = existingSubject;
+                student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + subjectCode + "" + sl);
 
                 student.DistrictList = new SelectList(await _districtManager.GetAllAsync(), "Id", "DistrictName").ToList();
                 return View(student);
@@ -152,33 +182,36 @@ namespace OnlineAdmission.APP.Controllers
                     {
                         msg = "Please upload an image";
                     }
+                    if (student.CollegeRoll == 0)
+                    {
+                        string year = DateTime.Today.ToString("yyyy");
+                        int subjectCode = existingSubject.Code;
+                        int count = await _studentManager.GetCountAsync(existingSubject.Id);
+                        string sl = "";
+                        if (count < 100)
+                        {
+                            if (count == 0)
+                            {
+                                sl = "001";
+                            }
+                            else if (count < 10)
+                            {
+                                sl = "00" + count.ToString();
+                            }
+                            else if (count < 100 && count > 9)
+                            {
+                                sl = "0" + count.ToString();
+                            }
+                        }
+                        else
+                        {
+                            sl = count.ToString();
+                        }
 
-                    string year = DateTime.Today.ToString("yyyy");
-                    int subjectCode = existingSubject.Code;
-                    int count = await _studentManager.GetCountAsync(existingSubject.Id);
-                    string sl = "";
-                    if (count < 100)
-                    {
-                        if (count == 0)
-                        {
-                            sl = "001";
-                        }
-                        else if (count<10)
-                        {
-                            sl = "00" + count.ToString();
-                        }
-                        else if (count<100 && count>9)
-                        {
-                            sl = "0" + count.ToString();
-                        }
-                    }
-                    else
-                    {
-                        sl = count.ToString();
+
+                        student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + subjectCode + "" + sl);
                     }
                     
-                    
-                    student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length -2) + "" + subjectCode + "" + sl);
                     
                     Student newStudent = _mapper.Map<Student>(student);
                     newStudent.Photo = student.Photo;
@@ -278,7 +311,7 @@ namespace OnlineAdmission.APP.Controllers
         public async Task<IActionResult> Search(int NuAdmissionRoll)
         {
             string msg = "";
-            string nuRoll = "";
+            string nuRoll = NuAdmissionRoll.ToString();
             if (NuAdmissionRoll>0)
             {
                 var meritStudent =await _meritStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll);
@@ -315,7 +348,7 @@ namespace OnlineAdmission.APP.Controllers
                     else
                     {
 
-                        ViewBag.nuRoll = nuRoll;
+                        ViewBag.nuRoll = 3000012;
                         return View(selectedStudent);
                     }
                 }
@@ -339,22 +372,11 @@ namespace OnlineAdmission.APP.Controllers
         public async Task<IActionResult> PaymentConfirmation(int NuAdmissionRoll, string notification)
         {
             string msg = "";
-            string nuRoll = "";
             if (NuAdmissionRoll > 0)
             {
                 var meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll);
                 var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll);
 
-                //if (meritStudent == null)
-                //{
-                //    ViewBag.msg = "You are not applied yet";
-                //    return View();
-                //}
-                //if (appliedStudent == null)
-                //{
-                //    ViewBag.msg = "You are not eligible";
-                //    return View();
-                //}
                 var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
 
                 SelectedStudentVM selectedStudent = new SelectedStudentVM()
@@ -377,7 +399,7 @@ namespace OnlineAdmission.APP.Controllers
                     else
                     {
 
-                        ViewBag.nuRoll = nuRoll;
+                        ViewBag.nuRoll = NuAdmissionRoll;
                         ViewBag.succussNotification = notification;
                         return View(selectedStudent);
                     }
@@ -606,7 +628,10 @@ namespace OnlineAdmission.APP.Controllers
             dynamic responsevalue = JObject.Parse(decryptedSensitiveData);
             string challenge = responsevalue.challenge;
             string paymentRefId = responsevalue.paymentReferenceId;
-            string amount = subject.AdmissionFee.ToString();
+            //string amountOriginal = subject.AdmissionFee.ToString();
+            //string amountWaiver = meritStudent.DeductedAmaount.ToString();
+            //string amount = (Convert.ToInt32(amountOriginal) -Convert.ToInt32( amountWaiver)).ToString();
+            string amount = (subject.AdmissionFee - meritStudent.DeductedAmaount).ToString();
 
             // Create JSON Object
             var paymentJSON = new
