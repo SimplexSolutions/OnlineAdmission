@@ -37,9 +37,10 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         // GET: MeritStudentsController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View();
+            var meritStudent =await _meritStudentManager.GetByIdAsync(id);
+            return View(meritStudent);
         }
 
         // GET: MeritStudentsController/Create
@@ -65,9 +66,11 @@ namespace OnlineAdmission.APP.Controllers
         
 
         // GET: MeritStudentsController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var meritStudent = await _meritStudentManager.GetByIdAsync(id);
+            return View(meritStudent);
+
         }
 
         // POST: MeritStudentsController/Edit/5
@@ -86,9 +89,10 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         // GET: MeritStudentsController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            var meritStudent = await _meritStudentManager.GetByIdAsync(id);
+            return View(meritStudent);
         }
 
         // POST: MeritStudentsController/Delete/5

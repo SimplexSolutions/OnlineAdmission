@@ -56,8 +56,8 @@
                         @Html.DisplayFor(modelItem => item.Subject.SubjectName)
                     </td>
                     <td>
-
-                        <partial name="~/Views/PartialViews/_Edit_Details_Delete.cshtml" model="@item.Id" />
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn  btn-sm btn-primary">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn  btn-sm btn-warning">Details</a>
 
                     </td>
                 </tr>

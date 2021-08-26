@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Home Page";
+    var paymentCompletedStudent = Model.MeritStudents.Where(m => m.PaymentStatus == true).ToList();
 }
 
 <div class="text-center">
@@ -15,7 +16,7 @@
             <h4>Applied</h4>
         </div>
         <div class="card-body">
-            <h5 class="card-title">Total @Model.AppliedStudents.Count Students</h5>
+            <h5 class="card-title">Total <span class="text-info font-weight-bold">@Model.AppliedStudents.Count</span>  Students</h5>
             <p class="card-text">
                 
             </p>
@@ -30,7 +31,7 @@
             <h4>Selected</h4>
         </div>
         <div class="card-body">
-            <h5 class="card-title">Total @Model.MeritStudents.Count Students</h5>
+            <h5 class="card-title">Total <span class="text-info font-weight-bold">@Model.MeritStudents.Count</span>  Students</h5>
             <p class="card-text">
 
             </p>
@@ -48,7 +49,7 @@
             
             @if (Model.MeritStudents!=null)
             {
-                <h5 class="card-title">Total @Model.MeritStudents.Count Students </h5>
+                <h5 class="card-title">Total <span class="text-info font-weight-bold">@paymentCompletedStudent.Count</span>  Students </h5>
                 <h4></h4>
 
                 foreach (var merits in Model.MeritStudents)
@@ -73,7 +74,7 @@
             <h4>Admitted</h4>
         </div>
         <div class="card-body">
-            <h5 class="card-title">Total @Model.Students.Count Students</h5>
+            <h5 class="card-title">Total <span class="text-info font-weight-bold">@Model.Students.Count</span>  Students</h5>
             <p class="card-text">
 
             </p>

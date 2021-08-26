@@ -263,9 +263,9 @@ namespace OnlineAdmission.APP.Controllers
                     }
                     student.Photo = attachFile;
                 }
-
                 Student existStudent = _mapper.Map<Student>(student);
                 await _studentManager.UpdateAsync(existStudent);
+                return RedirectToAction("Index");
             }
             ViewBag.msg = msg;
             return View(student);
@@ -310,6 +310,7 @@ namespace OnlineAdmission.APP.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Search(int NuAdmissionRoll)
         {
+            ViewBag.nuRoll = NuAdmissionRoll;
             string msg = "";
             string nuRoll = NuAdmissionRoll.ToString();
             if (NuAdmissionRoll>0)
@@ -348,7 +349,7 @@ namespace OnlineAdmission.APP.Controllers
                     else
                     {
 
-                        ViewBag.nuRoll = 3000012;
+                        
                         return View(selectedStudent);
                     }
                 }

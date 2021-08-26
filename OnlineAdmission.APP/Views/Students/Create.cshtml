@@ -409,20 +409,19 @@
             $('#sameAddress').change(function () {
                 let prAddress1 = $('#PresentAddress1').val();
                 let prAddress2 = $('#PresentAddress2').val();
-                let prAddressDist = $('#PresentDistrictId option:selected').text();
-                let prAddressDistVal = $('#PresentDistrictId option:selected').val();
+                var ds = "<option selected value=" + $("#PresentDistrictId").val() + ">" + $("#PresentDistrictId option:selected").text() + "</option>";
+
+                $("#dslist1").html(ds);
                 let isClicked = $('#sameAddress').is(':checked');
                 if (isClicked == true) {
                     $('#PermanentAddress1').val(prAddress1);
                     $('#PermanentAddress2').val(prAddress2);
-                    $('#permPermanentDistrictId').text(prAddressDist);
-                    $('#permPermanentDistrictId').val(prAddressDistVal);
+                    $("#PermanentDistrictId").append(ds);
                 }
                 else if (isClicked == false) {
-                    $('#PermanentAddress1').val();
-                    $('#PermanentAddress2').val();
-                    $('#permPermanentDistrictId').text();
-                    $('#permPermanentDistrictId').val();
+                    $('#PermanentAddress1').val("");
+                    $('#PermanentAddress2').val("");
+                    $('#PermanentDistrictId').val();
                 }
             });
         });

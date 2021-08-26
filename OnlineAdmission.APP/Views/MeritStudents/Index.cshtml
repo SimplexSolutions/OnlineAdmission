@@ -83,9 +83,23 @@
                 @*<td>
                     @Html.DisplayFor(modelItem => item.PaidAmaount)
                 </td>*@
-                <td>
-                    <partial name="~/Views/PartialViews/_Edit_Details_Delete.cshtml" model="@item.Id" />                    
-                </td>
+            <td>
+                @if (item.PaymentStatus == true)
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn  btn-sm btn-primary disabled">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn  btn-sm btn-warning">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn  btn-sm btn-danger disabled">Delete</a>
+                }
+                else
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn  btn-sm btn-primary">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn  btn-sm btn-warning">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn  btn-sm btn-danger">Delete</a>
+                }
+
+
+                @*<partial name="~/Views/PartialViews/_Edit_Details_Delete.cshtml" model="@item.Id" />*@
+            </td>
             </tr>
         }
     </tbody>

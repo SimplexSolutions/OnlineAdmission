@@ -1,0 +1,68 @@
+﻿@model OnlineAdmission.Entity.MeritStudent
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<h4>Merit Student Edit</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="NUAdmissionRoll" class="control-label"></label>
+                <input readonly asp-for="NUAdmissionRoll" class="form-control" value="@Model.NUAdmissionRoll" />
+                <span asp-validation-for="NUAdmissionRoll" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HSCRoll" class="control-label"></label>
+                <input asp-for="HSCRoll" class="form-control" />
+                <span asp-validation-for="HSCRoll" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubjectCode" class="control-label"></label>
+                <input asp-for="SubjectCode" class="form-control" />
+                <span asp-validation-for="SubjectCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MeritPosition" class="control-label"></label>
+                <input asp-for="MeritPosition" class="form-control" />
+                <span asp-validation-for="MeritPosition" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Comments" class="control-label"></label>
+                <input asp-for="Comments" class="form-control" />
+                <span asp-validation-for="Comments" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="PaymentStatus" /> @Html.DisplayNameFor(model => model.PaymentStatus)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaymentTransactionId" class="control-label"></label>
+                <select asp-for="PaymentTransactionId" class="form-control" asp-items="ViewBag.PaymentTransactionId"></select>
+                <span asp-validation-for="PaymentTransactionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DeductedAmaount" class="control-label"></label>
+                <input asp-for="DeductedAmaount" class="form-control" />
+                <span asp-validation-for="DeductedAmaount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
