@@ -209,6 +209,22 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label asp-for="FatherMobile" class="col-form-label text-right col-md-2"></label>
+                <div class="col-md-4">
+                    @{
+                        string fMob = "0" + Model.FatherMobile;
+                    }
+                    <input asp-for="FatherMobile" value="@fMob" class="form-control form-control-plaintext font-weight-bold" />
+                </div>
+                <label asp-for="MotherMobile" class="col-form-label text-right col-md-2"></label>
+                <div class="col-md-4">
+                    @{
+                        string mMob = "0" + Model.MotherMobile.ToString();
+                    }
+                    <input asp-for="MotherMobile" class="form-control form-control-plaintext font-weight-bold" value="@mMob" />
+                </div>
+            </div>
+            <div class="form-group row">
                 <label asp-for="StudentMobile" class="col-form-label text-right col-md-2"></label>
                 <div class="col-md-4">
                     @{
@@ -221,7 +237,7 @@
                     @{
                         string gMob = "0" + Model.GuardianMobile.ToString();
                     }
-                    <input asp-for="GuardianMobile" class="form-control form-control-plaintext font-weight-bold" value="@gMob" disabled readonly />
+                    <input asp-for="GuardianMobile" class="form-control form-control-plaintext font-weight-bold" value="@gMob" />
                 </div>
             </div>
 
