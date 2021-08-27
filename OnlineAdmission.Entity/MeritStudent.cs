@@ -37,7 +37,9 @@ namespace OnlineAdmission.Entity
         public int? PaymentTransactionId { get; set; }
 
         [Display(Name = "Deduction")]
-        public double DeductedAmaount { get; set; }
+        public double DeductedAmaount { get; set; } 
+        [Display(Name = "College Roll")]
+        public int? CollegeRoll { get; set; }
 
         public PaymentTransaction PaymentTransaction { get; set; }
     }

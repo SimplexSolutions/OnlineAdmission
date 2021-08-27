@@ -22,11 +22,18 @@ namespace OnlineAdmission.APP.Controllers
         private readonly IMeritStudentManager meritStudentManager;
         private readonly IPaymentTransactionManager paymentTransactionManager;
         private HttpClient httpClient;
+        private readonly IAppliedStudentManager appliedStudentManager;
+        private readonly ISubjectManager subjectManager;
+        private readonly IStudentManager studentManager;
 
-        public PaymentTransactions(IMeritStudentManager meritStudentManager, IPaymentTransactionManager paymentTransactionManager)
+        public PaymentTransactions(IMeritStudentManager meritStudentManager, IPaymentTransactionManager paymentTransactionManager, IAppliedStudentManager appliedStudentManager,
+            ISubjectManager subjectManager, IStudentManager studentManager)
         {
             this.meritStudentManager = meritStudentManager;
             this.paymentTransactionManager = paymentTransactionManager;
+            this.appliedStudentManager = appliedStudentManager;
+            this.subjectManager = subjectManager;
+            this.studentManager = studentManager;
         }
         [HttpGet]
         [AllowAnonymous]
@@ -43,21 +50,50 @@ namespace OnlineAdmission.APP.Controllers
             if (status.ToLower() == "success")
             {
               string  successNotification = "Congratulations! Payment Completed (BDT: " + responsevalue.amount+".00/-)";
-            //Guid guid = new Guid();
-            //{"merchantId":"683002007104225",
-            //                "orderId":"3001639025135",
-            //"paymentRefId":"MDgyNTE0NTEzNTQ1Ni42ODMwMDIwMDcxMDQyMjUuMzAwMTYzOTAyNTEzNS44MjcyM2EzZmU2N2NmM2M3MjNlNQ==",
-            //"amount":"5",
-            //"clientMobileNo":"016****7504",
-            //"merchantMobileNo":"01300200710",
-            //"orderDateTime":"2021-08-25 14:51:35.0",
-            //"issuerPaymentDateTime":"2021-08-25 14:51:56.0",
-            //"issuerPaymentRefNo":"0000Z1DW",
-            //"additionalMerchantInfo":null,
-            //"status":"Success",
-            //"statusCode":"000",
-            //"cancelIssuerDateTime":null,
-            //"cancelIssuerRefNo":null}
+                //Guid guid = new Guid();
+                //{"merchantId":"683002007104225",
+                //                "orderId":"3001639025135",
+                //"paymentRefId":"MDgyNTE0NTEzNTQ1Ni42ODMwMDIwMDcxMDQyMjUuMzAwMTYzOTAyNTEzNS44MjcyM2EzZmU2N2NmM2M3MjNlNQ==",
+                //"amount":"5",
+                //"clientMobileNo":"016****7504",
+                //"merchantMobileNo":"01300200710",
+                //"orderDateTime":"2021-08-25 14:51:35.0",
+                //"issuerPaymentDateTime":"2021-08-25 14:51:56.0",
+                //"issuerPaymentRefNo":"0000Z1DW",
+                //"additionalMerchantInfo":null,
+                //"status":"Success",
+                //"statusCode":"000",
+                //"cancelIssuerDateTime":null,7
+                //"cancelIssuerRefNo":null}
+
+                var existingMeritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(GlobalVariables.nuRoll));
+                var existingAppliedStudent = await appliedStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(GlobalVariables.nuRoll));
+                var existingSubject = await subjectManager.GetByCodeAsync(existingMeritStudent.SubjectCode);
+
+                string year = DateTime.Today.ToString("yyyy");
+                int subjectCode = existingSubject.Code;
+                int count = await studentManager.GetCountAsync(existingSubject.Id);
+                string sl = "";
+                if (count < 100)
+                {
+                    if (count == 0)
+                    {
+                        sl = "001";
+                    }
+                    else if (count < 10)
+                    {
+                        sl = "00" + count.ToString();
+                    }
+                    else if (count < 100 && count > 9)
+                    {
+                        sl = "0" + count.ToString();
+                    }
+                }
+                else
+                {
+                    sl = count.ToString();
+                }
+
 
                 PaymentTransaction newPayment = new PaymentTransaction();
 
@@ -65,7 +101,7 @@ namespace OnlineAdmission.APP.Controllers
                 newPayment.TransactionDate = DateTime.Today;
                 newPayment.Balance = 0;
                 newPayment.AccountNo = responsevalue.clientMobileNo;
-                newPayment.TransactionId = responsevalue.paymentRefId;
+                newPayment.TransactionId = responsevalue.orderId;
                 newPayment.ReferenceNo =Convert.ToInt32(GlobalVariables.nuRoll);
 
                 await paymentTransactionManager.AddAsync(newPayment);
@@ -73,6 +109,7 @@ namespace OnlineAdmission.APP.Controllers
                 MeritStudent meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(GlobalVariables.nuRoll));
                 meritStudent.PaymentStatus = true;
                 meritStudent.PaymentTransactionId = newPayment.Id;
+                meritStudent.CollegeRoll = newPayment.CollegeRoll;
                 await meritStudentManager.UpdateAsync(meritStudent);
 
 
@@ -83,7 +120,7 @@ namespace OnlineAdmission.APP.Controllers
                 //return Redirect(site);
                 // return Ok();
                 //return RedirectToAction("search","students",new { notification=notification});
-                return RedirectToAction("PaymentConfirmation", "Students",new { NuAdmissionRoll = newPayment.ReferenceNo,notification= successNotification});
+                return RedirectToAction("PaymentConfirmation", "Students",new { NuAdmissionRoll = newPayment.ReferenceNo,notification= successNotification, collegeRoll=newPayment.CollegeRoll });
             }
 
             return  Ok();

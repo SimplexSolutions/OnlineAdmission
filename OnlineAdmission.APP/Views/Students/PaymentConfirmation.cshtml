@@ -46,7 +46,7 @@
                             <h5>Payment Completed</h5>
                         </div>
                         <div class="col-md-6">
-                            <a class="btn btn-outline-info" asp-action="Create" asp-controller="Students" asp-route-nuAdmissionRoll="@Model.AppliedStudent.NUAdmissionRoll">Admission Form</a>
+                            <a class="btn btn-outline-info" asp-action="Create" asp-controller="Students" asp-route-nuAdmissionRoll="@Model.AppliedStudent.NUAdmissionRoll,@ViewBag.collegeRoll">Admission Form</a>
                         </div>
                     </div>
                     }

@@ -370,7 +370,7 @@ namespace OnlineAdmission.APP.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> PaymentConfirmation(int NuAdmissionRoll, string notification)
+        public async Task<IActionResult> PaymentConfirmation(int NuAdmissionRoll, string notification,int collegeRoll)
         {
             string msg = "";
             if (NuAdmissionRoll > 0)
@@ -402,6 +402,7 @@ namespace OnlineAdmission.APP.Controllers
 
                         ViewBag.nuRoll = NuAdmissionRoll;
                         ViewBag.succussNotification = notification;
+                        ViewBag.collegeRoll = collegeRoll;
                         return View(selectedStudent);
                     }
                 }
@@ -532,7 +533,7 @@ namespace OnlineAdmission.APP.Controllers
 
             var meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll);
             var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
-            string OrderId = meritStudent.NUAdmissionRoll+""+meritStudent.SubjectCode+""+DateTime.Now.ToString("hhmmss");
+            string OrderId = meritStudent.NUAdmissionRoll + "" + meritStudent.SubjectCode + "" + DateTime.Now.ToString("HHmmss");
 
             
 
@@ -632,7 +633,9 @@ namespace OnlineAdmission.APP.Controllers
             //string amountOriginal = subject.AdmissionFee.ToString();
             //string amountWaiver = meritStudent.DeductedAmaount.ToString();
             //string amount = (Convert.ToInt32(amountOriginal) -Convert.ToInt32( amountWaiver)).ToString();
-            string amount = (subject.AdmissionFee - meritStudent.DeductedAmaount).ToString();
+            double amount = subject.AdmissionFee - meritStudent.DeductedAmaount;
+            double charge = ((subject.AdmissionFee - meritStudent.DeductedAmaount) * .015);
+            double totalAmount = amount + charge;
 
             // Create JSON Object
             var paymentJSON = new
@@ -640,7 +643,7 @@ namespace OnlineAdmission.APP.Controllers
                 merchantId = GlobalVariables.MerchantId,
                 orderId = OrderId,
                 currencyCode = "050",
-                amount = amount,
+                amount = totalAmount,
                 challenge = challenge
             };
 
@@ -654,16 +657,24 @@ namespace OnlineAdmission.APP.Controllers
 
 
             //string merchantCallbackURL = "http://sandbox.mynagad.com:10707/merchant-server/web/confirm"; //merchant Callback URL - as you want
-            string merchantCallbackURL = "http://115.127.26.3:4356/api/PaymentTransactions"; //merchant Callback URL - as you want
-            //string merchantCallbackURL = "https://localhost:44356/api/PaymentTransactions"; //merchant Callback URL - as you want
+            //string merchantCallbackURL = "http://115.127.26.3:4356/api/PaymentTransactions"; //merchant Callback URL - as you want
+            string merchantCallbackURL = "https://localhost:44356/api/PaymentTransactions"; //merchant Callback URL - as you want
 
+            //Additional Merchant JSON Info
+            //var paymentMarchantInfo = new
+            //{
+            //    charge:charge
+            //};
             // Prepare Final JSON for Payment API
+       
+
             var paymentFinalJSON = new
             {
                 sensitiveData = paymentSensitiveData,
                 signature = paymentSignatureValue,
-                merchantCallbackURL = merchantCallbackURL
-            };
+                merchantCallbackURL = merchantCallbackURL,
+               
+        };
 
             // Serialize JSON data to pass through Initialize API
             string finalJSONData = JsonConvert.SerializeObject(paymentFinalJSON);

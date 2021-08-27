@@ -15,5 +15,6 @@ namespace OnlineAdmission.Entity
         public string AccountNo { get; set; }
         public string TransactionId { get; set; }
         public int ReferenceNo { get; set; }
+        public int CollegeRoll { get; set; }
     }
 }
