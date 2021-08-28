@@ -1,7 +1,7 @@
 ﻿@model OnlineAdmission.APP.ViewModels.Student.StudentEditVM
 
 @{
-    ViewData["Title"] = @Model.Name+" Edit";
+    ViewData["Title"] = @Model.Name + " Edit";
 }
 
 <h4 class="text-center">Student(<span class="text-info">@Model.Name</span>) Information</h4>
@@ -50,6 +50,12 @@
                     <input type="file" name="photo" class="" onchange="readURL(this);" id="imageUpload" />
 
                     <span asp-validation-for="Photo" class="text-danger"></span>
+                    <p id="error1" style="display:none; color:#FF0000;">
+                        Invalid Image Format! Image Format Must Be JPG, JPEG, PNG or GIF.
+                    </p>
+                    <p id="error2" style="display:none; color:#FF0000;">
+                        Maximum File Size Limit is 200kb.
+                    </p>
                 </div>
             </div>
             <div class="form-group row">
@@ -370,4 +376,125 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+        $(document).ready(function () {
+
+            //Image validation
+            $('input[type="submit"]').prop("disabled", true);
+            var a = 0;
+            //binds to onchange event of your input field
+            $('#imageUpload').bind('change', function () {
+                if ($('input:submit').attr('disabled', false)) {
+                    $('input:submit').attr('disabled', true);
+                }
+                var ext = $('#imageUpload').val().split('.').pop().toLowerCase();
+                if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+                    $('#error1').slideDown("slow");
+                    $('#error2').slideUp("slow");
+                    a = 0;
+                } else {
+                    var picsize = (this.files[0].size);
+                    if (picsize > 200000) {
+                        $('#error2').slideDown("slow");
+                        a = 0;
+                    } else {
+                        a = 1;
+                        $('#error2').slideUp("slow");
+                    }
+                    $('#error1').slideUp("slow");
+                    if (a == 1) {
+                        $('input:submit').attr('disabled', false);
+                    }
+                }
+            });
+
+
+
+
+
+
+
+            $("#msgId").fadeOut(10000);
+            $("#imageUpload").change(function () {
+                $("#imageFrame").hide();
+                $("#imageBox").show();
+            });
+
+
+
+            //$('#checkbox1').change(function () {
+            //    if (this.checked) {
+            //        var returnVal = confirm("Are you sure?");
+            //        $(this).prop("checked", returnVal);
+            //    }
+            //    $('#textbox1').val(this.checked);
+            //});
+
+
+
+
+
+            //Code for Autofill
+            $('#sameAddress').change(function () {
+                let prAddress1 = $('#PresentAddress1').val();
+                let prAddress2 = $('#PresentAddress2').val();
+                var ds = "<option selected value=" + $("#PresentDistrictId").val() + ">" + $("#PresentDistrictId option:selected").text() + "</option>";
+
+                $("#dslist1").html(ds);
+                let isClicked = $('#sameAddress').is(':checked');
+                if (isClicked == true) {
+                    $('#PermanentAddress1').val(prAddress1);
+                    $('#PermanentAddress2').val(prAddress2);
+                    $("#PermanentDistrictId").append(ds);
+                }
+                else if (isClicked == false) {
+                    $('#PermanentAddress1').val("");
+                    $('#PermanentAddress2').val("");
+                    $('#PermanentDistrictId').val();
+                }
+            });
+
+            //Code autoFile for Father phone to guardian phone
+            $('#FatherMobile').keyup(function () {
+                let fMobileNumber = $('#FatherMobile').val();
+                $('#GuardianMobile').val(fMobileNumber);
+            });
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#blah')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        //Code for Fill Address
+
+
+        function FillAddress(sender) {
+            if ($(sender).is(':checked')) {
+                var pr = $("#PreaddresBn").val();
+                $("#PeraddresBn").val(pr);
+
+                var pdvid = $("#Predvlist").val();
+                $("#Perdvlist [value=" + pdvid + "]").attr('selected', 'selected');
+
+                var ds = "<option value=" + $("#Predslist").val() + ">" + $("#Predslist option:selected").text() + "</option>";
+                $("#Perdslist").html(ds);
+
+                var up = "<option value=" + $("#Preupzlist").val() + ">" + $("#Preupzlist option:selected").text() + "</option>";
+                $("#Perupzlist").html(up);
+            }
+        }
+
+    </script>
+
 }
+
