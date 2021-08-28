@@ -1086,27 +1086,33 @@ namespace OnlineAdmission.APP.Controllers
 
         #endregion
 
-        public async Task<IActionResult> PaymentReceipt()
-        {
-            var allStudents = await _studentManager.GetAllAsync();
-            ViewData["StudentId"] = new SelectList((from s in allStudents
-                                                    select new
-                                                         {
-                                                             Id = s.Id,
-                                                             FullName = s.Name + "(" + s.CollegeRoll + ")"
-                                                         }), "Id", "FullName", null);
+        //public async Task<IActionResult> PaymentReceipt()
+        //{
+        //    var allStudents = await _studentManager.GetAllAsync();
+        //    ViewData["StudentId"] = new SelectList((from s in allStudents
+        //                                            select new
+        //                                                 {
+        //                                                     Id = s.Id,
+        //                                                     FullName = s.Name + "(" + s.CollegeRoll + ")"
+        //                                                 }), "Id", "FullName", null);
 
 
-            return View();
-        }
+        //    return View();
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> PaymentReceipt(int id)
-        {
-            var existStudent = await _studentManager.GetByIdAsync(id);
-
-            return View();
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> PaymentReceipt(int id)
+        //{
+        //    var existStudent = await _studentManager.GetByIdAsync(id);
+        //    var paymentTransactions = await _paymentTransactionManager.GetAllAsync();
+        //    var selectedTransactions = paymentTransactions.Where(t => t.ReferenceNo == existStudent.NUAdmissionRoll).ToList();
+        //    var subject = await _subjectManager.GetByIdAsync(existStudent.SubjectId);
+        //    PaymentReceiptVM paymentReceiptVM = new PaymentReceiptVM();
+        //    paymentReceiptVM.PaymentTransactions = selectedTransactions;
+        //    paymentReceiptVM.Student = existStudent;
+        //    paymentReceiptVM.Subject = subject;
+        //    return View(paymentReceiptVM);
+        //}
 
 
     }

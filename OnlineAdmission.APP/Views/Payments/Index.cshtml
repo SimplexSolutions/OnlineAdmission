@@ -1,0 +1,90 @@
+﻿@model PaginatedList<OnlineAdmission.Entity.PaymentTransaction>
+
+@{
+    ViewData["Title"] = "Index";
+
+    int i = (Model.PageIndex - 1) * Model.PageSize + 1;
+    ViewBag.pagesize = Model.PageSize;
+
+    ViewBag.controller = "Payments";
+    ViewBag.action = "index";
+    ViewBag.search = ViewBag.data;
+}
+
+<h1>Index</h1>
+
+
+<partial name="~/Views/PartialViews/_SearchCreateBtn.cshtml">
+    @if (ViewBag.count != null)
+    {
+        <span>Total found @ViewBag.count</span>
+    }
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Amount
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Balance
+                </th>
+                <th>
+                    Account No
+                </th>
+                <th>
+                    Transaction Id
+                </th>
+                <th>
+                    Reff No
+                </th>
+                <th>
+                    Admission Fee
+                </th>
+                <th>
+                    ServiceCharge
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td>
+                        @item.TransactionDate.ToString("dd MMM yyyy")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Balance)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AccountNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransactionId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReferenceNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AdmissionFee)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ServiceCharge)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <partial name="~/Views/PartialViews/_paging.cshtml" model="@Model" />
