@@ -31,6 +31,7 @@
     <div class="shadow p-1 mb-2 bg-white rounded">
         <form asp-action="Create" enctype="multipart/form-data" method="post">
             <input asp-for="CollegeRoll" value="0" type="hidden" />
+            <input asp-for="NuAdmissionRoll" type="hidden" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group row">
                 <label asp-for="SubjectId" class="col-form-label col-md-2 text-md-right text-left">Subject: </label>
@@ -69,6 +70,12 @@
                 <div class="col-md-3">
                     <input type="file" name="photo" class="" onchange="readURL(this);" id="imageUpload" />
                     <span asp-validation-for="Photo" class="text-danger"></span>
+                    <p id="error1" style="display:none; color:#FF0000;">
+                        Invalid Image Format! Image Format Must Be JPG, JPEG, PNG or GIF.
+                    </p>
+                    <p id="error2" style="display:none; color:#FF0000;">
+                        Maximum File Size Limit is 200kb.
+                    </p>
                 </div>
             </div>
             <div class="form-group row">
@@ -86,7 +93,7 @@
             <div class="form-group row">
                 <label asp-for="MotherName" class="control-label col-md-2 text-md-right"></label>
                 <div class="col-md-5">
-                    <input readonly asp-for="MotherName" class="form-control"  />
+                    <input readonly asp-for="MotherName" class="form-control" />
                     <span asp-validation-for="MotherName" class="text-danger"></span>
                 </div>
                 <label asp-for="MotherOccupation" class="control-label col-md-2 text-md-right"></label>
@@ -279,7 +286,7 @@
                 </div>
             </div>
 
-            
+
 
             <div class="p-1 bg-success">
                 <h5 class="text-center text-white">Student's Academic Info</h5>
@@ -384,6 +391,8 @@
                 <a class="btn btn-danger" asp-action="Search">Cancel</a>
             </div>
         </form>
+
+
     </div>
 </div>
 <br /><br />
@@ -395,10 +404,49 @@
 
 
     <script src="~/lib/select2/select2.js"></script>
+
+
+
     @*<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
         <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>*@
     <script>
         $(document).ready(function () {
+
+            //Image validation
+            $('input[type="submit"]').prop("disabled", true);
+            var a = 0;
+            //binds to onchange event of your input field
+            $('#imageUpload').bind('change', function () {
+                if ($('input:submit').attr('disabled', false)) {
+                    $('input:submit').attr('disabled', true);
+                }
+                var ext = $('#imageUpload').val().split('.').pop().toLowerCase();
+                if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+                    $('#error1').slideDown("slow");
+                    $('#error2').slideUp("slow");
+                    a = 0;
+                } else {
+                    var picsize = (this.files[0].size);
+                    if (picsize > 200000) {
+                        $('#error2').slideDown("slow");
+                        a = 0;
+                    } else {
+                        a = 1;
+                        $('#error2').slideUp("slow");
+                    }
+                    $('#error1').slideUp("slow");
+                    if (a == 1) {
+                        $('input:submit').attr('disabled', false);
+                    }
+                }
+            });
+
+
+
+
+
+
+
             $("#msgId").fadeOut(10000);
             $("#imageUpload").change(function () {
                 $("#imageFrame").hide();

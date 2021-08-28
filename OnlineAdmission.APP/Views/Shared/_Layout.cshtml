@@ -17,6 +17,11 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
 
+    @*Alertify*@
+    <link href="~/lib/alertify.js/alertify.bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/alertify.js/alertify.core.css" rel="stylesheet" />
+    <link href="~/lib/alertify.js/alertify.default.css" rel="stylesheet" />
+
 </head>
 <body>
 
@@ -129,6 +134,8 @@
     <script src="~/theme/js/popper.js"></script>
     <script src="~/theme/js/bootstrap.min.js"></script>
     <script src="~/theme/js/main.js"></script>
+    <script src="~/lib/sweetalert/sweetalert.min.js"></script>
+    <script src="~/lib/alertify.js/alertify.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     @RenderSection("Styles", required: false)
    

@@ -119,6 +119,7 @@ namespace OnlineAdmission.APP.Controllers
                 student.HSCRoll = existingMeritStudent.HSCRoll;
                 student.SubjectId = existingSubject.Id;
                 student.Subject = existingSubject;
+                student.NuAdmissionRoll = nuAdmissionRoll;
                 student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + subjectCode + "" + sl);
 
                 student.DistrictList = new SelectList(await _districtManager.GetAllAsync(), "Id", "DistrictName").ToList();
@@ -166,6 +167,13 @@ namespace OnlineAdmission.APP.Controllers
                 {
                     if (photo != null)
                     {
+                        int allowedImgSize = 200000;
+                        if (photo.Length > allowedImgSize)
+                        {
+                            ViewBag.msg = "File size should not more than 200 KB.";
+                            return View(student);
+                        }
+
                         string ext = Path.GetExtension(photo.FileName);
                         string root = _host.WebRootPath;
                         string folder = "Images/Students/";

@@ -5,6 +5,14 @@
     {
       "library": "datatable@2.0.1",
       "destination": "wwwroot/lib/datatable/"
+    },
+    {
+      "library": "alertify.js@0.3.11",
+      "destination": "wwwroot/lib/alertify.js/"
+    },
+    {
+      "library": "sweetalert@2.1.2",
+      "destination": "wwwroot/lib/sweetalert/"
     }
   ]
 }
