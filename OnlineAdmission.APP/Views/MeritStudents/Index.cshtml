@@ -1,119 +1,148 @@
-﻿@model IEnumerable<OnlineAdmission.Entity.MeritStudent>
-
+﻿
+@model PaginatedList<OnlineAdmission.Entity.MeritStudent>
 @{
     ViewData["Title"] = "Index";
     int sl = 0;
+
+    int i = (Model.PageIndex - 1) * Model.PageSize + 1;
+    ViewBag.pagesize = Model.PageSize;
+
+    ViewBag.controller = "MeritStudents";
+    ViewBag.action = "index";
+    ViewBag.search = ViewBag.data;
 }
 
 <h1>Merit Student's List</h1>
 <p>
     <a class="btn btn-info" asp-action="GetMeritStudentList">Add Merit Student's Excel File</a>
 </p>
-<table class="table" id="myTable">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>
-                NU Roll
-            </th>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.ApplicantName)
-                </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.HSCRoll)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SubjectCode)
-            </th>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.SubjectName)
-                </th>*@
-            @*<th>
-                    @Html.DisplayNameFor(model => model.HSCGroup)
-                </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.MeritPosition)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Comments)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PaymentStatus)
-            </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.PaidAmaount)
-            </th>*@
-            <th  data-orderable="false">
-                <a class="btn btn-info" asp-action="Create">Add New</a>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<partial name="~/Views/PartialViews/_SearchCreateBtn.cshtml">
+    @if (ViewBag.count != null)
+    {
+        <span>Total found @ViewBag.count</span>
+    }
+
+    <table class="table">
+        <thead>
             <tr>
-                <td>@(++sl)</td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NUAdmissionRoll)
-                </td>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.ApplicantName)
-                    </td>*@
-                <td>
-                    @Html.DisplayFor(modelItem => item.HSCRoll)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SubjectCode)
-                </td>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.SubjectName)
-                    </td>*@
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.HSCGroup)
-                    </td>*@
-                <td>
-                    @Html.DisplayFor(modelItem => item.MeritPosition)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Comments)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PaymentStatus)
-                </td>
-                @*<td>
-                    @Html.DisplayFor(modelItem => item.PaidAmaount)
-                </td>*@
-            <td>
-                @if (item.PaymentStatus == true)
-                {
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn  btn-sm btn-primary disabled">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn  btn-sm btn-warning">Details</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn  btn-sm btn-danger disabled">Delete</a>
-                }
-                else
-                {
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn  btn-sm btn-primary">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn  btn-sm btn-warning">Details</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn  btn-sm btn-danger">Delete</a>
-                }
+                <th>#</th>
+
+                <th>
+                    <a asp-action="Index" asp-controller="MeritStudents" asp-route-sortRoll="@ViewBag.sortByRoll">
+                        NU Roll
+                    </a>
+                </th>
 
 
-                @*<partial name="~/Views/PartialViews/_Edit_Details_Delete.cshtml" model="@item.Id" />*@
-            </td>
+                @*<th>
+                        @Html.DisplayNameFor(model => model.ApplicantName)
+                    </th>*@
+                <th>
+                    <a asp-action="Index" asp-controller="MeritStudents" asp-route-sortHSCRoll="@ViewBag.sortByHSCRoll">
+                        HSC Roll
+                    </a>
+
+                </th>
+                <th>
+                    <a asp-action="" asp-controller="" asp-route-sortSubjectCode="">
+                        Subject Code
+                    </a>
+
+                </th>
+                @*<th>
+                        @Html.DisplayNameFor(model => model.SubjectName)
+                    </th>*@
+                @*<th>
+                        @Html.DisplayNameFor(model => model.HSCGroup)
+                    </th>*@
+                <th>
+                    <a asp-action="Index" asp-controller="MeritStudents" asp-route-sortMeritPosition="@ViewBag.sortByMeritPosition">
+                        Merit Position
+                        <i class="fas fa-sort-up"></i>
+                    </a>
+
+                </th>
+                <th>
+                    Comments
+                </th>
+                <th>
+                    Payment Status
+                </th>
+                @*<th>
+                        @Html.DisplayNameFor(model => model.PaidAmaount)
+                    </th>*@
+                <th data-orderable="false">
+                    <a class="btn btn-info" asp-action="Create">Add New</a>
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@i.</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NUAdmissionRoll)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.ApplicantName)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HSCRoll)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SubjectCode)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.SubjectName)
+                        </td>*@
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.HSCGroup)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MeritPosition)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Comments)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PaymentStatus)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.PaidAmaount)
+                        </td>*@
+                    <td>
+                        @if (item.PaymentStatus == true)
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn  btn-sm btn-primary disabled">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn  btn-sm btn-warning">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn  btn-sm btn-danger disabled">Delete</a>
+                        }
+                        else
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn  btn-sm btn-primary">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn  btn-sm btn-warning">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn  btn-sm btn-danger">Delete</a>
+                        }
 
 
-@section Scripts{
+                        @*<partial name="~/Views/PartialViews/_Edit_Details_Delete.cshtml" model="@item.Id" />*@
+                    </td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+    <partial name="~/Views/PartialViews/_paging.cshtml" model="@Model" />
 
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#myTable').DataTable({
-                "pageLength": 50
+    @section Scripts{
+
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#myTable').DataTable({
+                    "pageLength": 50
+                });
             });
-        });
-    </script>
-}
+        </script>
+    }

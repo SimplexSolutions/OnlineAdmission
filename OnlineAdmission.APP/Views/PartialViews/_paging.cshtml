@@ -1,0 +1,107 @@
+﻿@model dynamic
+
+@{
+    int cp = Model.PageIndex;
+    int tp = Model.TotalPages;
+    int pagesize = Model.PageSize;
+
+    int i = (cp - 1) * pagesize + 1;
+
+    int start = cp - 5;
+    int end = cp + 5;
+
+    string dprev = Model.HasPreviousPage ? "" : " disabled";
+    string dnext = Model.HasNextPage ? "" : " disabled";
+
+    string searchtext = ViewBag.search == null ? "" : ViewBag.search;
+    string pagecontroller = ViewBag.controller == null ? "home" : ViewBag.controller; ;
+    string pageaction = ViewBag.action == null ? "index" : ViewBag.action;
+
+    int[] pgsize = { 20, 50, 100, 250, 500 };
+
+}
+
+
+    <nav aria-label="...">
+        <ul class="pagination">
+
+            <li class="page-item">
+                <a asp-action="@pageaction" asp-controller="@pagecontroller"
+                   asp-route-usrtext="@ViewBag.data"
+                   asp-route-page="1"
+                   asp-route-pagesize="@pagesize"
+                   class="page-link">First</a>
+            </li>
+
+            <li class="page-item @dprev">
+                <a asp-action="@pageaction" asp-controller="@pagecontroller"
+                   asp-route-usrtext="@ViewBag.data"
+                   asp-route-page="@(cp-1)"
+                   asp-route-pagesize="@pagesize"
+                   class="page-link" style="@dprev">Prev.</a>
+            </li>
+
+            @for (int p = start; p <= end; p++)
+            {
+                @if (p >= 1 && p <= tp)
+                {
+                    @if (p == cp)
+                    {
+                        <li class="page-item active">
+
+                            <a asp-action="@pageaction" asp-controller="@pagecontroller"
+                               asp-route-usrtext="@ViewBag.data"
+                               asp-route-page="@p"
+                               asp-route-pagesize="@pagesize"
+                               class="page-link">@p</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a asp-action="@pageaction" asp-controller="@pagecontroller"
+                               asp-route-usrtext="@ViewBag.data"
+                               asp-route-page="@p"
+                               asp-route-pagesize="@pagesize"
+                               class="page-link">@p</a>
+                        </li>
+                    }
+                }
+            }
+
+            <li class="page-item @dnext">
+                <a asp-action="@pageaction" asp-controller="@pagecontroller"
+                   asp-route-usrtext="@ViewBag.data"
+                   asp-route-page="@(cp+1)"
+                   asp-route-pagesize="@pagesize"
+                   class="page-link @dnext">Next</a>
+            </li>
+            <li class="page-item">
+                <a asp-action="@pageaction" asp-controller="@pagecontroller"
+                   asp-route-usrtext="@ViewBag.data"
+                   asp-route-page="@tp"
+                   asp-route-pagesize="@pagesize"
+                   class="page-link">Last</a>
+            </li>
+            <li class="float-right">
+                <form id="frm" class="form-inline" asp-action="@ViewBag.action" method="post">
+
+                    <select id="pagesize" name="pagesize" class="form-control">
+                        @foreach (var item in pgsize)
+                        {
+                            if (item == ViewBag.pagesize)
+                            {
+                                <option value="@item" selected>@item</option>
+                            }
+                            else
+                            {
+                                <option value="@item">@item</option>
+                            }
+                        }
+                    </select>
+                    <button class="page-link"> Entries </button>
+                </form>
+            </li>
+
+        </ul>
+    </nav>

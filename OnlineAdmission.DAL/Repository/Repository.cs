@@ -38,6 +38,12 @@ namespace OnlineAdmission.DAL.Repository
             return await Table.FindAsync(id);
         }
 
+        public IQueryable<T> GetIQueryableData()
+        {
+            IQueryable<T> result = Table;
+            return result;
+        }
+
         public virtual async Task<bool> RemoveAsync(T entity)
         {
             Table.Remove(entity);

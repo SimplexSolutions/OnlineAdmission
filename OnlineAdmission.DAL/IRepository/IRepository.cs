@@ -13,5 +13,6 @@ namespace OnlineAdmission.DAL.IRepository
         Task<bool> AddAsync(T entity);
         Task<bool> UpdateAsync(T entity);
         Task<bool> RemoveAsync(T entity);
+        IQueryable<T> GetIQueryableData();
     }
 }

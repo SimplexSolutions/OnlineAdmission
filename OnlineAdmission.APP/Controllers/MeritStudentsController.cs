@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace OnlineAdmission.APP.Controllers
 {
@@ -30,10 +31,41 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         // GET: MeritStudentsController
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string searchingText, string sortRoll, string sortHSCRoll, int page, int pagesize)
         {
-            var meritStudentList = await _meritStudentManager.GetAllAsync();
-            return View(meritStudentList);
+
+            IQueryable<MeritStudent> meritStudentList = _meritStudentManager.GetMeritStudents();
+
+            ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
+
+            
+            switch (sortRoll)
+            {
+                case "desc":
+                    meritStudentList = meritStudentList.OrderByDescending(m => m.NUAdmissionRoll);
+                    break;
+                default:
+                    meritStudentList = meritStudentList.OrderBy(m => m.NUAdmissionRoll);
+                    break;
+            }
+
+            
+            ViewBag.searchingText = searchingText;
+            ViewBag.count = meritStudentList.Count();
+            
+            int pageSize = pagesize <= 0 ? 10 : pagesize;
+            if (page <= 0) page = 1;
+
+            if (!string.IsNullOrEmpty(searchingText))
+            {
+                searchingText = searchingText.Trim().ToLower();
+
+                meritStudentList = meritStudentList.Where(m => m.NUAdmissionRoll.ToString().ToLower() == searchingText || m.HSCRoll.ToString().ToLower() == searchingText || m.MeritPosition.ToString().ToLower() == searchingText || m.SubjectCode.ToString().ToLower() == searchingText);
+
+                return View(await PaginatedList<MeritStudent>.CreateAsync(meritStudentList, page, pageSize));
+            }
+
+            return View(await PaginatedList<MeritStudent>.CreateAsync(meritStudentList, page, pageSize));
         }
 
         // GET: MeritStudentsController/Details/5

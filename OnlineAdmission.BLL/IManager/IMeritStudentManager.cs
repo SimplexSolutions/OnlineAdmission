@@ -14,5 +14,6 @@ namespace OnlineAdmission.BLL.IManager
         Task<List<MeritStudent>> GetAppliedStudentAsync(); //Student will filterd with subject Code = 0
         Task<List<MeritStudent>> GetAllWithoutPaidAsync(); //Which students are not paid yet
         Task<List<MeritStudent>> GetSpecialPaymentStudent();
+        IQueryable<MeritStudent> GetMeritStudents();
     }
 }

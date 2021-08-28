@@ -31,6 +31,11 @@ namespace OnlineAdmission.BLL.Manager
             return await _repository.GetByIdAsync(id);
         }
 
+        public IQueryable<T> GetIQueryableData()
+        {
+            return _repository.GetIQueryableData();
+        }
+
         public virtual async Task<bool> RemoveAsync(T entity)
         {
             return await _repository.RemoveAsync(entity);

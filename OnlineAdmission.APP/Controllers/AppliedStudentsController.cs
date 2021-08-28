@@ -28,10 +28,44 @@ namespace OnlineAdmission.APP.Controllers
             _mapper = mapper;
             _host = host;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchingText, string sortRoll, string sortHSCRoll, int page, int pagesize)
         {
-            var appliedStudentList = await _appliedStudentManager.GetAllAsync();
-            return View(appliedStudentList);
+
+
+
+            IQueryable<AppliedStudent> appliedStudentList = _appliedStudentManager.GetIQueryableData();
+            ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
+
+
+            switch (sortRoll)
+            {
+                case "desc":
+                    appliedStudentList = appliedStudentList.OrderByDescending(m => m.NUAdmissionRoll);
+                    break;
+                default:
+                    appliedStudentList = appliedStudentList.OrderBy(m => m.NUAdmissionRoll);
+                    break;
+            }
+
+
+            ViewBag.searchingText = searchingText;
+            ViewBag.count = appliedStudentList.Count();
+
+            int pageSize = pagesize <= 0 ? 10 : pagesize;
+            if (page <= 0) page = 1;
+
+            if (!string.IsNullOrEmpty(searchingText))
+            {
+                searchingText = searchingText.Trim().ToLower();
+
+                appliedStudentList = appliedStudentList.Where(m => m.NUAdmissionRoll.ToString().ToLower() == searchingText || m.ApplicantName.ToString().ToLower() == searchingText || m.MobileNo.ToString().ToLower() == searchingText || m.HSCGroup.ToString().ToLower() == searchingText);
+
+                return View(await PaginatedList<AppliedStudent>.CreateAsync(appliedStudentList, page, pageSize));
+            }
+
+            return View(await PaginatedList<AppliedStudent>.CreateAsync(appliedStudentList, page, pageSize));
+
+
         }
 
         public IActionResult Create()

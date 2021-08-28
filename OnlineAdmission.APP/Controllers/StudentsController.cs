@@ -1086,7 +1086,27 @@ namespace OnlineAdmission.APP.Controllers
 
         #endregion
 
+        public async Task<IActionResult> PaymentReceipt()
+        {
+            var allStudents = await _studentManager.GetAllAsync();
+            ViewData["StudentId"] = new SelectList((from s in allStudents
+                                                    select new
+                                                         {
+                                                             Id = s.Id,
+                                                             FullName = s.Name + "(" + s.CollegeRoll + ")"
+                                                         }), "Id", "FullName", null);
 
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PaymentReceipt(int id)
+        {
+            var existStudent = await _studentManager.GetByIdAsync(id);
+
+            return View();
+        }
 
 
     }

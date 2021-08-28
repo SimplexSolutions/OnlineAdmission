@@ -35,6 +35,12 @@ namespace OnlineAdmission.DAL.Repository
             return existStudent;
         }
 
+        public IQueryable<MeritStudent> GetMeritStudents()
+        {
+            IQueryable<MeritStudent> meritStudents =_context.MeritStudents;
+            return meritStudents;
+        }
+
         public async Task<List<MeritStudent>> GetSpecialPaymentStudent()
         {
             return await _context.MeritStudents.Where(m => m.DeductedAmaount > 0).ToListAsync();

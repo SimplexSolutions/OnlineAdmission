@@ -1,0 +1,15 @@
+﻿
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <form class="form-inline" asp-action="PaymentReceipt" asp-controller="Students">
+            <label class="col-md-2 text-md-right col-form-label">Student</label>
+            <div class="col-md-8 row">
+                <select class="form-control mr-sm-2 select2" type="search" placeholder="Search" aria-label="Search" asp-items="@ViewBag.StudentId">
+                    <option selected disabled>Select Student</option>
+                </select>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+</div>

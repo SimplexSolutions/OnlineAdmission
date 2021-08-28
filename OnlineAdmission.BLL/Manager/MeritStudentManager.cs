@@ -34,6 +34,11 @@ namespace OnlineAdmission.BLL.Manager
             return existStudent;
         }
 
+        public IQueryable<MeritStudent> GetMeritStudents()
+        {
+           return _meritStudentRepository.GetMeritStudents();
+        }
+
         public async Task<List<MeritStudent>> GetSpecialPaymentStudent()
         {
             return await _meritStudentRepository.GetSpecialPaymentStudent();

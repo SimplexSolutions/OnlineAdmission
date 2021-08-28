@@ -1,8 +1,14 @@
-﻿@model IEnumerable<OnlineAdmission.Entity.AppliedStudent>
-
+﻿
+@model PaginatedList<OnlineAdmission.Entity.AppliedStudent>
 @{
     ViewData["Title"] = "Index";
-    int i = 0;
+    int sl = 0;
+    int i = (Model.PageIndex - 1) * Model.PageSize + 1;
+    ViewBag.pagesize = Model.PageSize;
+
+    ViewBag.controller = "AppliedStudents";
+    ViewBag.action = "index";
+    ViewBag.search = ViewBag.data;
 }
 
 <h1>Applied Student's List</h1>
@@ -10,76 +16,85 @@
 <p>
     <a class="btn btn-primary" asp-action="GetAppliedStudentList">Add Applied Student's Excel File</a>
 </p>
-<table class="table" id="myTable">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>
-                @Html.DisplayNameFor(model => model.NUAdmissionRoll)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ApplicantName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FatherName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MotherName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MobileNo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HSCGroup)
-            </th>
 
-            <th><a class="btn btn-info" asp-action="Create">Create New</a></th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null)
-        {
+<partial name="~/Views/PartialViews/_SearchCreateBtn.cshtml">
+    @if (ViewBag.count != null)
+    {
+        <span>Total found @ViewBag.count</span>
+    }
 
-            @foreach (var item in Model)
+    <table class="table" >
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>
+                    NU Roll
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Father
+                </th>
+                <th>
+                    Mother
+                </th>
+                <th>
+                    Mobile
+                </th>
+                <th>
+                    Group
+                </th>
+
+                <th><a class="btn btn-info" asp-action="Create">Create New</a></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
             {
-                <tr>
-                    <td>@(++i)</td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NUAdmissionRoll)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ApplicantName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FatherName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MotherName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MobileNo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.HSCGroup)
-                    </td>
 
-                    <td>
-                        <partial name="~/Views/PartialViews/_Edit_Details_Delete.cshtml" model="@item.Id" />
-                    </td>
-                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@i.</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NUAdmissionRoll)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ApplicantName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FatherName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MotherName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MobileNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.HSCGroup)
+                        </td>
+
+                        <td>
+                            <partial name="~/Views/PartialViews/_Edit_Details_Delete.cshtml" model="@item.Id" />
+                        </td>
+                    </tr>
+                    i++;
+                }
             }
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+    <partial name="~/Views/PartialViews/_paging.cshtml" model="@Model" />
 
-@section Scripts{
+    @section Scripts{
 
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#myTable').DataTable({
-                "pageLength": 50
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#myTable').DataTable({
+                    "pageLength": 50
+                });
             });
-        });
-    </script>
-}
+        </script>
+    }
