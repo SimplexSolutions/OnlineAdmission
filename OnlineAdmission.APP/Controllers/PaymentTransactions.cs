@@ -65,51 +65,53 @@ namespace OnlineAdmission.APP.Controllers
                 //"statusCode":"000",
                 //"cancelIssuerDateTime":null,7
                 //"cancelIssuerRefNo":null}
+                var additionalMerchantInfo = (responsevalue.additionalMerchantInfo).Value;
+                dynamic MerchantInfo = JObject.Parse(additionalMerchantInfo);
 
-                var existingMeritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(GlobalVariables.nuRoll));
-                var existingAppliedStudent = await appliedStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(GlobalVariables.nuRoll));
-                var existingSubject = await subjectManager.GetByCodeAsync(existingMeritStudent.SubjectCode);
+                //var existingMeritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(GlobalVariables.nuRoll));
+                //var existingAppliedStudent = await appliedStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(GlobalVariables.nuRoll));
+                //var existingSubject = await subjectManager.GetByCodeAsync(existingMeritStudent.SubjectCode);
 
-                string year = DateTime.Today.ToString("yyyy");
-                int subjectCode = existingSubject.Code;
-                int count = await studentManager.GetCountAsync(existingSubject.Id);
-                string sl = "";
-                if (count < 100)
-                {
-                    if (count == 0)
-                    {
-                        sl = "001";
-                    }
-                    else if (count < 10)
-                    {
-                        sl = "00" + count.ToString();
-                    }
-                    else if (count < 100 && count > 9)
-                    {
-                        sl = "0" + count.ToString();
-                    }
-                }
-                else
-                {
-                    sl = count.ToString();
-                }
-
+                //string year = DateTime.Today.ToString("yyyy");
+                //int subjectCode = existingSubject.Code;
+                //int count = await studentManager.GetCountAsync(existingSubject.Id);
+                //string sl = "";
+                //if (count < 100)
+                //{
+                //    if (count == 0)
+                //    {
+                //        sl = "001";
+                //    }
+                //    else if (count < 10)
+                //    {
+                //        sl = "00" + count.ToString();
+                //    }
+                //    else if (count < 100 && count > 9)
+                //    {
+                //        sl = "0" + count.ToString();
+                //    }
+                //}
+                //else
+                //{
+                //    sl = count.ToString();
+                //}
 
                 PaymentTransaction newPayment = new PaymentTransaction();
-
+                
                 newPayment.Amount = responsevalue.amount;
                 newPayment.TransactionDate = DateTime.Today;
                 newPayment.Balance = 0;
                 newPayment.AccountNo = responsevalue.clientMobileNo;
                 newPayment.TransactionId = responsevalue.orderId;
                 newPayment.ReferenceNo =Convert.ToInt32(GlobalVariables.nuRoll);
+                newPayment.AdmissionFee = MerchantInfo.AdmissionFee;
+                newPayment.ServiceCharge = MerchantInfo.ServiceCharge;
 
                 await paymentTransactionManager.AddAsync(newPayment);
 
                 MeritStudent meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(GlobalVariables.nuRoll));
                 meritStudent.PaymentStatus = true;
                 meritStudent.PaymentTransactionId = newPayment.Id;
-                meritStudent.CollegeRoll = newPayment.CollegeRoll;
                 await meritStudentManager.UpdateAsync(meritStudent);
 
 
@@ -120,7 +122,7 @@ namespace OnlineAdmission.APP.Controllers
                 //return Redirect(site);
                 // return Ok();
                 //return RedirectToAction("search","students",new { notification=notification});
-                return RedirectToAction("PaymentConfirmation", "Students",new { NuAdmissionRoll = newPayment.ReferenceNo,notification= successNotification, collegeRoll=newPayment.CollegeRoll });
+                return RedirectToAction("PaymentConfirmation", "Students",new { NuAdmissionRoll = newPayment.ReferenceNo,notification= successNotification});
             }
 
             return  Ok();

@@ -329,9 +329,6 @@ namespace OnlineAdmission.DB.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CollegeRoll")
-                        .HasColumnType("int");
-
                     b.Property<string>("Comments")
                         .HasColumnType("nvarchar(max)");
 
@@ -373,17 +370,20 @@ namespace OnlineAdmission.DB.Migrations
                     b.Property<string>("AccountNo")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("AdmissionFee")
+                        .HasColumnType("float");
+
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
                     b.Property<double>("Balance")
                         .HasColumnType("float");
 
-                    b.Property<int>("CollegeRoll")
-                        .HasColumnType("int");
-
                     b.Property<int>("ReferenceNo")
                         .HasColumnType("int");
+
+                    b.Property<double>("ServiceCharge")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("datetime2");
@@ -491,6 +491,9 @@ namespace OnlineAdmission.DB.Migrations
 
                     b.Property<string>("MotherOccupation")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NUAdmissionRoll")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()

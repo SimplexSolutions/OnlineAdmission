@@ -9,6 +9,8 @@ namespace OnlineAdmission.Entity
 {
     public class Student : BaseProps
     {
+        [Display(Name = "NU Roll")]
+        public int NUAdmissionRoll { get; set; }
 
         [Required, StringLength(150)]
         public string Name { get; set; }

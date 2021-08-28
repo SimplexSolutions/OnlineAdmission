@@ -370,7 +370,7 @@ namespace OnlineAdmission.APP.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> PaymentConfirmation(int NuAdmissionRoll, string notification,int collegeRoll)
+        public async Task<IActionResult> PaymentConfirmation(int NuAdmissionRoll, string notification)
         {
             string msg = "";
             if (NuAdmissionRoll > 0)
@@ -402,7 +402,7 @@ namespace OnlineAdmission.APP.Controllers
 
                         ViewBag.nuRoll = NuAdmissionRoll;
                         ViewBag.succussNotification = notification;
-                        ViewBag.collegeRoll = collegeRoll;
+                        //ViewBag.collegeRoll = collegeRoll;
                         return View(selectedStudent);
                     }
                 }
@@ -634,8 +634,8 @@ namespace OnlineAdmission.APP.Controllers
             //string amountWaiver = meritStudent.DeductedAmaount.ToString();
             //string amount = (Convert.ToInt32(amountOriginal) -Convert.ToInt32( amountWaiver)).ToString();
             double amount = subject.AdmissionFee - meritStudent.DeductedAmaount;
-            double charge = ((subject.AdmissionFee - meritStudent.DeductedAmaount) * .015);
-            double totalAmount = amount + charge;
+            double serviceCharge = ((subject.AdmissionFee - meritStudent.DeductedAmaount) * .015);
+            double totalAmount = amount + serviceCharge;
 
             // Create JSON Object
             var paymentJSON = new
@@ -657,8 +657,8 @@ namespace OnlineAdmission.APP.Controllers
 
 
             //string merchantCallbackURL = "http://sandbox.mynagad.com:10707/merchant-server/web/confirm"; //merchant Callback URL - as you want
-            //string merchantCallbackURL = "http://115.127.26.3:4356/api/PaymentTransactions"; //merchant Callback URL - as you want
-            string merchantCallbackURL = "https://localhost:44356/api/PaymentTransactions"; //merchant Callback URL - as you want
+            string merchantCallbackURL = "http://115.127.26.3:4356/api/PaymentTransactions"; //merchant Callback URL - as you want
+            //string merchantCallbackURL = "https://localhost:44356/api/PaymentTransactions"; //merchant Callback URL - as you want
 
             //Additional Merchant JSON Info
             //var paymentMarchantInfo = new
@@ -666,15 +666,20 @@ namespace OnlineAdmission.APP.Controllers
             //    charge:charge
             //};
             // Prepare Final JSON for Payment API
-       
+            var additionalMerchantInfo = new
+            {
+                ServiceCharge = serviceCharge,
+                AdmissionFee = amount
+            };
 
             var paymentFinalJSON = new
             {
                 sensitiveData = paymentSensitiveData,
                 signature = paymentSignatureValue,
                 merchantCallbackURL = merchantCallbackURL,
-               
-        };
+                additionalMerchantInfo = additionalMerchantInfo
+
+            };
 
             // Serialize JSON data to pass through Initialize API
             string finalJSONData = JsonConvert.SerializeObject(paymentFinalJSON);
@@ -722,6 +727,8 @@ namespace OnlineAdmission.APP.Controllers
             if (co_Response.status == "Success")
             {
                 GlobalVariables.nuRoll = nuRoll.ToString();
+                //GlobalVariables.AdmissionFee = co_Response.paymentMarchantInfo.AdmissionFee;
+                //GlobalVariables.ServiceCharge = serviceCharge;
                 return Redirect(site);
                 
             }
