@@ -9,7 +9,8 @@ namespace OnlineAdmission.APP.ViewModels
     public class PaymentReceiptVM
     {
         public PaymentTransaction PaymentTransaction { get; set; }
-        public OnlineAdmission.Entity.Student Student { get; set; }
         public Subject Subject { get; set; }
+        public MeritStudent MeritStudent { get; set; }
+        public AppliedStudent AppliedStudent { get; set; }
     }
 }

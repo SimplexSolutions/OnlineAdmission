@@ -18,17 +18,26 @@ namespace OnlineAdmission.APP.Controllers
         private readonly IPaymentTransactionManager _paymentTransactionManager;
         private readonly IStudentManager _studentManager;
         private readonly ISubjectManager _subjectManager;
+        private readonly IMeritStudentManager _meritStudentManager;
+        private readonly IAppliedStudentManager _appliedStudentManager;
 
-        public PaymentsController(IPaymentTransactionManager paymentTransactionManager, IStudentManager studentManager, ISubjectManager subjectManager)
+        public PaymentsController(IPaymentTransactionManager paymentTransactionManager, IStudentManager studentManager, ISubjectManager subjectManager, IMeritStudentManager meritStudentManager, IAppliedStudentManager appliedStudentManager)
         {
             _paymentTransactionManager = paymentTransactionManager;
             _studentManager = studentManager;
             _subjectManager = subjectManager;
+            _meritStudentManager = meritStudentManager;
+            _appliedStudentManager = appliedStudentManager;
+
         }
 
         // GET: Payments
         public async Task<IActionResult> Index(string searchingText, string sortRoll, string sortHSCRoll, int page, int pagesize)
         {
+            if (TempData["msg"]!=null)
+            {
+                ViewBag.msg = TempData["msg"].ToString();
+            }
 
             IQueryable<PaymentTransaction> transactions = _paymentTransactionManager.GetIQueryableData();
 
@@ -72,36 +81,22 @@ namespace OnlineAdmission.APP.Controllers
             {
                 return NotFound();
             }
-            var allStudents = await _studentManager.GetAllAsync();
+            var allMeritStudents = await _meritStudentManager.GetAllAsync();
+
             var paymentTransaction = await _paymentTransactionManager.GetByIdAsync((int)id);
+            var existMeritStudent = await _meritStudentManager.GetByAdmissionRollAsync(paymentTransaction.ReferenceNo);
+            var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(paymentTransaction.ReferenceNo);
+            var existSubject = await _subjectManager.GetByCodeAsync(existMeritStudent.SubjectCode);
 
-
-
-            var existStudent = allStudents.Where(s => s.NUAdmissionRoll == paymentTransaction.ReferenceNo).FirstOrDefault();
-            //var paymentTransactions = await _paymentTransactionManager.GetAllAsync();
-            //var selectedTransactions = paymentTransactions.Where(t => t.ReferenceNo == existStudent.NUAdmissionRoll).ToList();
-            var subject = await _subjectManager.GetByIdAsync(existStudent.SubjectId);
             PaymentReceiptVM paymentReceiptVM = new PaymentReceiptVM();
             paymentReceiptVM.PaymentTransaction = paymentTransaction;
-            paymentReceiptVM.Student = existStudent;
-            paymentReceiptVM.Subject = subject;
+            paymentReceiptVM.MeritStudent = existMeritStudent;
+            paymentReceiptVM.AppliedStudent = appliedStudent;
+            paymentReceiptVM.Subject = existSubject;
+
+            TempData["msg"] = "Student Not Found";
+
             return View(paymentReceiptVM);
-
-
-
-
-
-
-
-
-            
-
-            //if (paymentTransaction == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //return View(paymentTransaction);
         }
 
         // GET: Payments/Create

@@ -11,13 +11,17 @@
     ViewBag.search = ViewBag.data;
 }
 
-<h1>Index</h1>
-
+<h4>Student's Payment</h4>
 
 <partial name="~/Views/PartialViews/_SearchCreateBtn.cshtml">
     @if (ViewBag.count != null)
     {
         <span>Total found @ViewBag.count</span>
+    }
+    @if (ViewBag.msg!=null)
+    {
+        <br />
+        <span id="notFoundMSG" class="text-danger h4">@ViewBag.msg</span>
     }
     <table class="table">
         <thead>
@@ -78,7 +82,7 @@
                         @Html.DisplayFor(modelItem => item.ServiceCharge)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                     </td>
@@ -88,3 +92,13 @@
     </table>
 
     <partial name="~/Views/PartialViews/_paging.cshtml" model="@Model" />
+
+
+    @section Scripts{ 
+        <script>
+            $(document).ready(function () {
+                //$("#msgId").fadeOut(6000);
+                $("#notFoundMSG").fadeOut("slow");
+            });
+        </script>
+    }

@@ -1,174 +1,113 @@
 ﻿
 @model OnlineAdmission.APP.ViewModels.PaymentReceiptVM
 
-    @{
-        ViewData["Title"] = "Details";
-    }
+@{
+    ViewData["Title"] = "Details";
+    string[] copy = { "College Copy", "Student Copy", "Account Copy" };
+}
 
-    @*<h1>Details</h1>
-
-    <div>
-        <h4>PaymentTransaction</h4>
-        <hr />
-        <dl class="row">
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.Amount)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.Amount)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.TransactionDate)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.TransactionDate)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.Balance)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.Balance)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.AccountNo)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.AccountNo)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.TransactionId)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.TransactionId)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.ReferenceNo)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.ReferenceNo)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.AdmissionFee)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.AdmissionFee)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.ServiceCharge)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.ServiceCharge)
-            </dd>
-        </dl>
-    </div>
-    <div>
-        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-        <a asp-action="Index">Back to List</a>
-    </div>*@
-
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
+<div class="row">
+    @foreach (var item in copy)
+    {
+        <div class="col-md-4">
             <div class="card text-center" id="DivIdToPrint">
                 <div class="card-header">
-                    <img src="~/Images/Collge/logo.png" alt="Alternate Text" style="width:100px;" /> <span class="h5">Tejgaon College</span>
+                    <img src="~/Images/Collge/logo.png" alt="Alternate Text" style="width:100px;" /> 
+                    <span class="h5">Tejgaon College</span>
+                    <div class="row">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6 text-md-right text-muted">
+                            <span>@item</span>
+                        </div>
+                    </div>
+                    
                 </div>
                 <div class="card-body text-md-left">
                     <dl class="row">
-                        <dt class="col-md-2">
-                            @Html.DisplayNameFor(model => model.Student.Name)
+                        <dt class="col-md-3">
+                            @Html.DisplayNameFor(model => model.AppliedStudent.ApplicantName)
                         </dt>
-                        <dd class="col-md-10">
-                            @Html.DisplayFor(model => model.Student.Name)
+                        <dd class="col-md-9">
+                            @Html.DisplayFor(model => model.AppliedStudent.ApplicantName)
                         </dd>
-                        <dt class="col-md-2">
-                            @Html.DisplayNameFor(model => model.Student.CollegeRoll)
+                        <dt class="col-md-3">
+                            @Html.DisplayNameFor(model => model.Subject)
                         </dt>
-                        <dd class="col-md-10">
-                            @Html.DisplayFor(model => model.Student.CollegeRoll)
+                        <dd class="col-md-9">
+                            @Html.DisplayFor(model => model.Subject.SubjectName)
                         </dd>
-                        <dt class="col-md-2">
+                        <dt class="col-md-3">
                             @Html.DisplayNameFor(model => model.PaymentTransaction.Amount)
                         </dt>
-                        <dd class="col-md-10">
+                        <dd class="col-md-9">
                             @Html.DisplayFor(model => model.PaymentTransaction.Amount)
                         </dd>
-                        <dt class="col-md-2">
+                        <dt class="col-md-3">
                             @Html.DisplayNameFor(model => model.PaymentTransaction.TransactionDate)
                         </dt>
-                        <dd class="col-md-10">
-                            @Html.DisplayFor(model => model.PaymentTransaction.TransactionDate)
+                        <dd class="col-md-9">
+                            @Model.PaymentTransaction.TransactionDate.ToString("dd/MM/yyyy")
                         </dd>
-                        <dt class="col-md-2">
-                            @Html.DisplayNameFor(model => model.PaymentTransaction.Balance)
-                        </dt>
-                        <dd class="col-md-10">
-                            @Html.DisplayFor(model => model.PaymentTransaction.Balance)
-                        </dd>
-                        <dt class="col-md-2">
+                        <dt class="col-md-3">
                             @Html.DisplayNameFor(model => model.PaymentTransaction.AccountNo)
                         </dt>
-                        <dd class="col-md-10">
+                        <dd class="col-md-9">
                             @Html.DisplayFor(model => model.PaymentTransaction.AccountNo)
                         </dd>
-                        <dt class="col-md-2">
+                        <dt class="col-md-3">
                             @Html.DisplayNameFor(model => model.PaymentTransaction.TransactionId)
                         </dt>
-                        <dd class="col-md-10">
+                        <dd class="col-md-9">
                             @Html.DisplayFor(model => model.PaymentTransaction.TransactionId)
                         </dd>
-                        <dt class="col-md-2">
+                        <dt class="col-md-3">
                             @Html.DisplayNameFor(model => model.PaymentTransaction.ReferenceNo)
                         </dt>
-                        <dd class="col-md-10">
+                        <dd class="col-md-9">
                             @Html.DisplayFor(model => model.PaymentTransaction.ReferenceNo)
                         </dd>
-                        <dt class="col-md-2">
+                        <dt class="col-md-3">
                             @Html.DisplayNameFor(model => model.PaymentTransaction.AdmissionFee)
                         </dt>
-                        <dd class="col-md-10">
+                        <dd class="col-md-9">
                             @Html.DisplayFor(model => model.PaymentTransaction.AdmissionFee)
                         </dd>
-                        <dt class="col-md-2">
+                        <dt class="col-md-3">
                             @Html.DisplayNameFor(model => model.PaymentTransaction.ServiceCharge)
                         </dt>
-                        <dd class="col-md-10">
+                        <dd class="col-md-9">
                             @Html.DisplayFor(model => model.PaymentTransaction.ServiceCharge)
                         </dd>
                     </dl>
                 </div>
-                <div class="card-footer text-muted">
-                   <span>
-                       <br /><br />
-                       Signature
-                   </span>
+                <div class="card-footer text-muted text-md-right">
+                    <span>
+                        <br /><br />
+                        Signature
+                    </span>
                 </div>
             </div>
-            <div class="row">
-                <div class="text-md-right">
-                    <input type='button' id='btn' value='Print' onclick='printDiv();'>
-                </div>
-            </div>
+
         </div>
-    </div>
-
-
-@section Scripts{ 
-
-<script>
-    function printDiv() {
-
-        var divToPrint = document.getElementById('DivIdToPrint');
-
-        var newWin = window.open('', 'Print-Window');
-
-        newWin.document.open();
-
-        newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
-
-        newWin.document.close();
-
-        setTimeout(function () { newWin.close(); }, 10);
-
     }
-</script>
+
+</div>
+<div class="row">
+    <div class="col-md-12 text-md-right">
+        <input type='button' id='btn' value='Print' onclick='printDiv();'>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        function printDiv() {
+            var divToPrint = document.getElementById('DivIdToPrint');
+            var newWin = window.open('', 'Print-Window');
+            newWin.document.open();
+            newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+            newWin.document.close();
+            setTimeout(function () { newWin.close(); }, 10);
+        }
+    </script>
 }
