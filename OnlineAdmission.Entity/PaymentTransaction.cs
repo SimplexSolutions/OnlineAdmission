@@ -31,5 +31,7 @@ namespace OnlineAdmission.Entity
         [Display(Name = "Service Charge")]
         public double ServiceCharge { get; set; }
 
+        public string Description { get; set; }
+
     }
 }
