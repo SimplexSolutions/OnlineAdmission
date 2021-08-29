@@ -174,7 +174,21 @@ namespace OnlineAdmission.APP.Controllers
                             return View(student);
                         }
 
+                        string[] supportedExt = { ".jpg", ".jpeg", ".png" };
+                        bool validImage = false;
                         string ext = Path.GetExtension(photo.FileName);
+                        foreach (var item in supportedExt)
+                        {
+                            if (ext == item)
+                            {
+                                validImage = true;
+                            }
+                        }
+                        if (validImage==false)
+                        {
+                            ViewBag.msg = "Image file is not valid. Upload only supported file(.jpg, .png, .jpeg)";
+                            return View(student);
+                        }
                         string root = _host.WebRootPath;
                         string folder = "Images/Students/";
                         string attachFile = "p_" + student.HSCRoll.ToString().Trim() + "_" + student.HSCPassingYear.ToString().Trim() + ext;
@@ -259,7 +273,23 @@ namespace OnlineAdmission.APP.Controllers
             {
                 if (photo != null)
                 {
+
+                    string[] supportedExt = { ".jpg", ".jpeg", ".png" };
+                    bool validImage = false;
                     string ext = Path.GetExtension(photo.FileName);
+                    foreach (var item in supportedExt)
+                    {
+                        if (ext == item)
+                        {
+                            validImage = true;
+                        }
+                    }
+                    if (validImage == false)
+                    {
+                        ViewBag.msg = "Image file is not valid. Upload only supported file(.jpg, .png, .jpeg)";
+                        return View(student);
+                    }
+
                     string root = _host.WebRootPath;
                     string folder = "Images/Students/";
                     string attachFile = "p_" + student.HSCRoll.ToString().Trim() + "_" + student.HSCPassingYear.ToString().Trim() + ext;

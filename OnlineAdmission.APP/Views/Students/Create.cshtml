@@ -51,7 +51,7 @@
             </div>
             @if (ViewBag.msg != null)
             {
-                <div class="col-md-5" id="msgId">
+                <div class="col-md-12" id="msgId">
                     <span class="alert text-danger font-weight-bold">@ViewBag.msg</span>
                 </div>
             }
@@ -443,7 +443,7 @@
 
 
 
-            $("#msgId").fadeOut(10000);
+            $("#msgId").fadeOut(12000);
             $("#imageUpload").change(function () {
                 $("#imageFrame").hide();
                 $("#imageBox").show();
