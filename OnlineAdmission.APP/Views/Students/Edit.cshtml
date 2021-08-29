@@ -382,13 +382,11 @@
         $(document).ready(function () {
 
             //Image validation
-            $('input[type="submit"]').prop("disabled", true);
+
             var a = 0;
             //binds to onchange event of your input field
             $('#imageUpload').bind('change', function () {
-                if ($('input:submit').attr('disabled', false)) {
-                    $('input:submit').attr('disabled', true);
-                }
+
                 var ext = $('#imageUpload').val().split('.').pop().toLowerCase();
                 if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
                     $('#error1').slideDown("slow");
@@ -404,9 +402,7 @@
                         $('#error2').slideUp("slow");
                     }
                     $('#error1').slideUp("slow");
-                    if (a == 1) {
-                        $('input:submit').attr('disabled', false);
-                    }
+
                 }
             });
 
