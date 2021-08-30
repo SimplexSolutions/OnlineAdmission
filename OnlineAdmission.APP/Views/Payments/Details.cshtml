@@ -7,39 +7,50 @@
 }
 @section Styles{
 
-    <style  media="print" type="text/css">
-        @@page{
-            size:A4 landscape;
+    <style media="print" type="text/css">
+
+        @@page {
+            size: A4 landscape;
         }
-        .noPrint{
-            visibility:hidden;
+
+        @@media print {
+          body * {
+            visibility: hidden;
+          }
+          #section-to-print, #section-to-print * {
+            visibility: visible;
+            color:black;
+          }
+          #section-to-print {
+            position: absolute;
+            left: 0;
+            top: 20px;
+          }
         }
-        #PrintArea {
-        }
-        .card {
-            
-        }
+
+
+
     </style>
 }
 
-<div class="row" id="PrintArea">
+<div class="row" id="section-to-print">
         @foreach (var item in copy)
         {
-            <div class="col-md-4">
-                <div class="card text-center">
+            <div class="col-md-4 ">
+                <div class="card text-center border border-dark">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <img src="~/Images/Collge/logo.png" alt="Alternate Text" style="width:100px;" />
                             </div>
-                            <div class="col-md-6">
-
+                            <div class="col-md-8 text-md-left">
+                                <p>
+                                    <span class="h5 font-weight-bold">Tejgaon College</span><br />
+                                                                                            <span class="h6">(EIIN : 108533)</span><br />
+                                                                           <span class="h6"> 16 Indira Rd, Dhaka 1215</span>
+                                </p>
                             </div>
                         </div>
-                        
-                        <span class="h5">Tejgaon College <span class="h6"> <br />Address</span> </span>
-                        
-                        
                         <hr /><span class="font-weight-bold text-dark">Payment Receipt</span><hr />
                         <div class="row">
                             <div class="col-md-6 text-md-left">
@@ -132,8 +143,8 @@
 </div>
 <div class="row noPrint">
     <div class="col-md-12 text-md-right">
-        <button class="btn btn-success" onclick="printContent('PrintArea')"><i class="fa fa-print"></i> Print</button>
-        <button onclick="window.print()">Print this page</button>
+        @*<button class="btn btn-success" onclick="printContent('PrintArea')"><i class="fa fa-print"></i> Print</button>*@
+        <button onclick="window.print()" class="btn btn-success"><i class="fa fa-print"></i> Print</button>
         <a asp-controller="Payments" asp-action="Index" class="btn btn-info">Back To List</a>
     </div>
 </div>
