@@ -33,5 +33,10 @@ namespace OnlineAdmission.Entity
 
         public string Description { get; set; }
 
+        public int SubjectId { get; set; }
+        public Subject Subject { get; set; }
+        public string ApplicantName { get; set; }
+        public string MobileNo { get; set; }
+
     }
 }

@@ -568,7 +568,7 @@ namespace OnlineAdmission.APP.Controllers
         [HttpGet]
         public async Task<ActionResult> NagadPayment(int nuRoll)
         {
-
+            var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
             var meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll);
             var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
             string OrderId = meritStudent.NUAdmissionRoll + "" + meritStudent.SubjectCode + "" + DateTime.Now.ToString("HHmmss");
@@ -707,7 +707,10 @@ namespace OnlineAdmission.APP.Controllers
             var additionalMerchantInfo = new
             {
                 ServiceCharge = serviceCharge,
-                AdmissionFee = amount
+                AdmissionFee = amount,
+                StudentName= appliedStudent.ApplicantName,
+                MobileNo = appliedStudent.MobileNo,
+                SubjectId = subject.Id
             };
 
             var paymentFinalJSON = new

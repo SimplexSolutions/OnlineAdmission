@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
-
+    int sl = 0;
     int i = (Model.PageIndex - 1) * Model.PageSize + 1;
     ViewBag.pagesize = Model.PageSize;
 
@@ -27,66 +27,73 @@
         <thead>
             <tr>
                 <th>
+                    #
+                </th>
+                <th>
                     Amount
                 </th>
                 <th>
-                    Date
+                    Name
                 </th>
                 <th>
-                    Balance
+                    NU Roll
                 </th>
                 <th>
-                    Account No
+                    Session
                 </th>
+                <th>
+                    Mobile
+                </th>
+
                 <th>
                     Transaction Id
                 </th>
                 <th>
-                    Reff No
+                    Subject
                 </th>
-                <th>
-                    Admission Fee
-                </th>
-                <th>
-                    ServiceCharge
-                </th>
+
                 <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Amount)
-                    </td>
-                    <td>
-                        @item.TransactionDate.ToString("dd MMM yyyy")
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Balance)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AccountNo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TransactionId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ReferenceNo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AdmissionFee)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ServiceCharge)
-                    </td>
-                    <td>
-                        @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    @(++sl)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicantName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReferenceNo)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.ReferenceNo)*@
+                    2021-2022
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MobileNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TransactionId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubjectId)
+                </td>
+                <td>
+                    @item.TransactionDate.ToString("dd MMM yyyy")
+                </td>
+
+                <td>
+                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>
