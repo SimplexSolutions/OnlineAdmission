@@ -93,6 +93,9 @@ namespace OnlineAdmission.APP
             services.AddScoped<IAppliedStudentManager, AppliedStudentManager>();
             services.AddScoped<IAppliedStudentRepository, AppliedStudentRepository>();
 
+            services.AddScoped<ISMSManager, SMSManager>();
+            services.AddScoped<ISMSRepository, SMSRepository>();
+
             services.AddScoped<ISecurityKey, SecurityKey>();
         }
 

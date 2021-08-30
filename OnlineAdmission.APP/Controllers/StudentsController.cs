@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OnlineAdmission.APP.Utilities.Helper;
 using OnlineAdmission.APP.Utilities.NagadSetting;
+using OnlineAdmission.APP.Utilities.SMS;
 using OnlineAdmission.APP.ViewModels;
 using OnlineAdmission.APP.ViewModels.Student;
 using OnlineAdmission.BLL.IManager;
@@ -241,6 +242,14 @@ namespace OnlineAdmission.APP.Controllers
                     newStudent.CreatedBy = "Online User"; /*HttpContext.Session.GetString("User")*/
                     
                     await _studentManager.AddAsync(newStudent);
+                    bool SentSMS = false;
+                    string phoneNum = newStudent.StudentMobile.ToString();
+                    string msgText = "Congratulations! "+newStudent.Name+", your admission process is completely done. Your college roll is "+newStudent.CollegeRoll;
+                    SentSMS = await ESMS.SendSMS("0"+phoneNum, msgText);
+                    if (SentSMS)
+                    {
+
+                    }
                     return RedirectToAction("StudentApply", new { id = newStudent.Id });
                 }
             }

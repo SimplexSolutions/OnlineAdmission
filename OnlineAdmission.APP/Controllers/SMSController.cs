@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OnlineAdmission.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,16 +31,13 @@ namespace OnlineAdmission.APP.Controllers
         // POST: SMSController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(SMSModel model)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
+            if (ModelState.IsValid)
             {
                 return View();
             }
+            return View();
         }
 
         // GET: SMSController/Edit/5
