@@ -46,6 +46,9 @@
                                     <input asp-for="PaymentTransaction.Amount" value="@Model.Amount" type="hidden" />
                                     <input asp-for="PaymentTransaction.ReferenceNo" value="@Model.NuRoll" type="hidden" />
                                     <input asp-for="NuRoll" hidden />
+                                    <input asp-for="Subject.Id" hidden />
+                                    <input asp-for="Name" hidden />
+                                    
                                     <button type="submit" class="btn btn-info btn-block">
                                         Confirm
                                     </button>

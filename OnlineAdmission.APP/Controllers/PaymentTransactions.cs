@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using OnlineAdmission.APP.Utilities.NagadSetting;
+using OnlineAdmission.APP.Utilities.SMS;
 using OnlineAdmission.BLL.IManager;
 using OnlineAdmission.Entity;
 
@@ -25,15 +26,17 @@ namespace OnlineAdmission.APP.Controllers
         private readonly IAppliedStudentManager appliedStudentManager;
         private readonly ISubjectManager subjectManager;
         private readonly IStudentManager studentManager;
+        private readonly ISMSManager _smsManager;
 
         public PaymentTransactions(IMeritStudentManager meritStudentManager, IPaymentTransactionManager paymentTransactionManager, IAppliedStudentManager appliedStudentManager,
-            ISubjectManager subjectManager, IStudentManager studentManager)
+            ISubjectManager subjectManager, IStudentManager studentManager, ISMSManager sMSManager)
         {
             this.meritStudentManager = meritStudentManager;
             this.paymentTransactionManager = paymentTransactionManager;
             this.appliedStudentManager = appliedStudentManager;
             this.subjectManager = subjectManager;
             this.studentManager = studentManager;
+            _smsManager = sMSManager;
         }
         [HttpGet]
         [AllowAnonymous]
@@ -116,6 +119,28 @@ namespace OnlineAdmission.APP.Controllers
                 meritStudent.PaymentStatus = true;
                 meritStudent.PaymentTransactionId = newPayment.Id;
                 await meritStudentManager.UpdateAsync(meritStudent);
+
+                //////////////////Code for SMS Sending and Saving
+                ///
+                AppliedStudent newStudent = await appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll);
+                bool SentSMS = false;
+                string phoneNum = newStudent.MobileNo.ToString();
+                string msgText = "Congratulations! " + newStudent.ApplicantName + ", your admission payment is successfully paid";
+                SentSMS = await ESMS.SendSMS("0" + phoneNum, msgText);
+                SMSModel newSMS = new SMSModel()
+                {
+                    MobileList = phoneNum,
+                    Text = msgText,
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = "College",
+                    Description = "Admission Fee"
+                };
+
+                if (SentSMS == true)
+                {
+                    await _smsManager.AddAsync(newSMS);
+                }
+
 
 
                 // string site = "https://localhost:44356/";

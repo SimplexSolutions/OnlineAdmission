@@ -37,8 +37,9 @@ namespace OnlineAdmission.APP.Controllers
         private readonly IDistrictManager _districtManager;
         private readonly ISubjectManager _subjectManager;
         private readonly ISecurityKey _securityKey;
+        private readonly ISMSManager _smsManager;
 
-        public StudentsController(IStudentManager studentManager, IWebHostEnvironment host, IMeritStudentManager meritStudentManager, IMapper mapper, IDistrictManager districtManager, ISubjectManager subjectManager, IAppliedStudentManager appliedStudentManager, IPaymentTransactionManager paymentTransactionManager, ISecurityKey securityKey)
+        public StudentsController(IStudentManager studentManager, IWebHostEnvironment host, IMeritStudentManager meritStudentManager, IMapper mapper, IDistrictManager districtManager, ISubjectManager subjectManager, IAppliedStudentManager appliedStudentManager, IPaymentTransactionManager paymentTransactionManager, ISecurityKey securityKey, ISMSManager smsManager)
         {
             _studentManager = studentManager;
             _host = host;
@@ -49,6 +50,7 @@ namespace OnlineAdmission.APP.Controllers
             _appliedStudentManager = appliedStudentManager;
             _paymentTransactionManager = paymentTransactionManager;
             _securityKey = securityKey;
+            _smsManager = smsManager;
         }
 
         ApplicationAPI _api = new ApplicationAPI();
@@ -242,14 +244,26 @@ namespace OnlineAdmission.APP.Controllers
                     newStudent.CreatedBy = "Online User"; /*HttpContext.Session.GetString("User")*/
                     
                     await _studentManager.AddAsync(newStudent);
+
+
+                    //////////////////Code for SMS Sending and Saving
                     bool SentSMS = false;
                     string phoneNum = newStudent.StudentMobile.ToString();
                     string msgText = "Congratulations! "+newStudent.Name+", your admission process is completely done. Your college roll is "+newStudent.CollegeRoll;
                     SentSMS = await ESMS.SendSMS("0"+phoneNum, msgText);
-                    if (SentSMS)
+                    SMSModel newSMS = new SMSModel() {
+                        MobileList = phoneNum,
+                        Text = msgText,
+                        CreatedAt = DateTime.Now,
+                        CreatedBy = "College",
+                        Description = "Form Fillup"
+                    };
+                    
+                    if (SentSMS==true)
                     {
-
+                        await _smsManager.AddAsync(newSMS);
                     }
+
                     return RedirectToAction("StudentApply", new { id = newStudent.Id });
                 }
             }
@@ -495,7 +509,7 @@ namespace OnlineAdmission.APP.Controllers
                 transactionInfo.NuRoll = meritStudent.NUAdmissionRoll;
                 transactionInfo.Amount = admissinoFee;
                 transactionInfo.SubjectName = subject.SubjectName;
-
+                transactionInfo.Subject = subject;
                 return View(transactionInfo);
             }
 
@@ -519,9 +533,9 @@ namespace OnlineAdmission.APP.Controllers
                 var guid = Guid.NewGuid();
                 newPayment.TransactionId = guid.ToString();
                 newPayment.ReferenceNo = model.PaymentTransaction.ReferenceNo;
-
+                newPayment.SubjectId = model.Subject.Id;
+                newPayment.ApplicantName = model.Name;
                 await _paymentTransactionManager.AddAsync(newPayment);
-
 
                 MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(model.PaymentTransaction.ReferenceNo);
                 if (meritStudent != null)
@@ -533,6 +547,30 @@ namespace OnlineAdmission.APP.Controllers
                         meritStudent.PaymentTransactionId = paymentTransaction.Id;
                         await _meritStudentManager.UpdateAsync(meritStudent);
                         TempData["msg"] = "Congratulations! Payment Successful.";
+
+
+                        //////////////////Code for SMS Sending and Saving
+                        ///
+                        AppliedStudent newStudent = await _appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll);
+                        bool SentSMS = false;
+                        string phoneNum = newStudent.MobileNo.ToString();
+                        string msgText = "Congratulations! " + newStudent.ApplicantName + ", your admission payment is successfully paid";
+                        SentSMS = await ESMS.SendSMS("0" + phoneNum, msgText);
+                        SMSModel newSMS = new SMSModel()
+                        {
+                            MobileList = phoneNum,
+                            Text = msgText,
+                            CreatedAt = DateTime.Now,
+                            CreatedBy = "College",
+                            Description = "Admission Fee"
+                        };
+
+                        if (SentSMS == true)
+                        {
+                            await _smsManager.AddAsync(newSMS);
+                        }
+
+
                         return RedirectToAction("Search", new { nuAdmissionRoll = model.PaymentTransaction.ReferenceNo });
                     }
                 }

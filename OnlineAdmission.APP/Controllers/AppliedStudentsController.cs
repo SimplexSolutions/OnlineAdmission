@@ -78,9 +78,9 @@ namespace OnlineAdmission.APP.Controllers
         {
             if (ModelState.IsValid)
             {
-                AppliedStudent meritStudent = _mapper.Map<AppliedStudent>(vModel);
+                AppliedStudent aStudent = _mapper.Map<AppliedStudent>(vModel);
 
-                await _appliedStudentManager.AddAsync(meritStudent);
+                await _appliedStudentManager.AddAsync(aStudent);
                 return RedirectToAction("Index");
             }
             return View();
