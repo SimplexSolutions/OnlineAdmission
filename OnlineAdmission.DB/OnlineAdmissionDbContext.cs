@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineAdmission.Entity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace OnlineAdmission.DB
         public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<AppliedStudent> AppliedStudents { get; set; }
+        public DbSet<SMSModel> SMSModels { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

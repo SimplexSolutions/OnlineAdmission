@@ -125,6 +125,9 @@ namespace OnlineAdmission.APP.Controllers
                 //return Redirect(site);
                 // return Ok();
                 //return RedirectToAction("search","students",new { notification=notification});
+
+
+
                 return RedirectToAction("PaymentConfirmation", "Students",new { NuAdmissionRoll = newPayment.ReferenceNo,notification= successNotification});
             }
 
