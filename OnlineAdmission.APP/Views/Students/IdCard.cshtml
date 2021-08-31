@@ -1,0 +1,336 @@
+﻿@model IEnumerable<OnlineAdmission.Entity.Student>
+
+@{
+    ViewData["Title"] = "IdCard";
+}
+
+<h1>IdCard</h1>
+
+@section Styles{ 
+    <link href="~/css/IDCard/IDCardStyle.css" rel="stylesheet" />
+}
+@if (Model != null)
+{
+<div class="row col-md-12">
+    @foreach (var student in Model)
+    {
+        <div class="fullCard m-2 p-2">
+            <div class="text-center">
+                <img src="~/Images/Collge/logo.png" alt="Alternate Text" style="width:50px" /><br />
+                <span class="h6">Tejgaon College, Dhaka</span>
+            </div>
+            <div class="text-center">
+                <img class="card-img-top" src="~/Images/Students/@student.Photo" alt="Card image cap" style="width:75.6px; height:94.5px">
+            </div>
+            <div class="pl-4">
+                <p>@student.Name</p>
+                <p>Roll No : @student.CollegeRoll</p>
+                <p>Session : 2020-2021</p>
+                <p>Cell : 0@(student.StudentMobile)</p>
+                <p>Department of @student.Subject.SubjectName</p>
+            </div>
+        </div>
+
+    }
+
+</div>
+
+}
+
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.NUAdmissionRoll)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Photo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FatherName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FatherOccupation)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MotherName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MotherOccupation)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GuardianName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GuardianOccupation)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nationality)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Gender)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BloodGroup)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PresentAddress1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PresentAddress2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PermanentAddress1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PermanentAddress2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MailingVillage)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MailingPO)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MailingPostCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MailingPS)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StudentMobile)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GuardianMobile)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FatherMobile)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MotherMobile)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Birthday)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Religion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HSCRoll)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SSCRoll)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HSCGPA)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SSCGPA)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CollegeRoll)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SSCPassingYear)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HSCPassingYear)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SSCBoard)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HSCBoard)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SSCRemark)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HSCRemark)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Subject)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PresentDistrict)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PermanentDistrict)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MailingDistrict)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedAt)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UpdatedAt)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UpdatedBy)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NUAdmissionRoll)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Photo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FatherName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FatherOccupation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MotherName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MotherOccupation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GuardianName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GuardianOccupation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nationality)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gender)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BloodGroup)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PresentAddress1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PresentAddress2)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PermanentAddress1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PermanentAddress2)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MailingVillage)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MailingPO)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MailingPostCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MailingPS)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudentMobile)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GuardianMobile)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FatherMobile)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MotherMobile)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Birthday)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Religion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HSCRoll)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SSCRoll)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HSCGPA)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SSCGPA)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CollegeRoll)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SSCPassingYear)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HSCPassingYear)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SSCBoard)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HSCBoard)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SSCRemark)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HSCRemark)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subject.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PresentDistrict.DistrictName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PermanentDistrict.DistrictName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MailingDistrict.DistrictName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedBy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UpdatedAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UpdatedBy)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>*@

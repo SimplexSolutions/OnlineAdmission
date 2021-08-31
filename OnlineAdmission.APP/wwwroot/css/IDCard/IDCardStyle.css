@@ -1,0 +1,11 @@
+﻿.fullCard {
+    width: 240px;
+    height: 336px;
+    background-color: lavender;
+    border: 1px solid black;
+}
+
+p{
+    margin:0;
+    padding:0;
+}

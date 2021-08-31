@@ -353,6 +353,12 @@ namespace OnlineAdmission.APP.Controllers
             }
         }
 
+        public async Task<ActionResult> IdCard()
+        {
+            var student = await _studentManager.GetAllAsync();
+            return View(student);
+        }
+
 
         [HttpGet]
         [AllowAnonymous]
