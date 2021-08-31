@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OnlineAdmission.BLL.IManager;
 using OnlineAdmission.Entity;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,17 @@ namespace OnlineAdmission.APP.Controllers
 {
     public class SMSController : Controller
     {
-        // GET: SMSController
-        public ActionResult Index()
+        private readonly ISMSManager _smsManager;
+
+        public SMSController(ISMSManager smsManager)
         {
-            return View();
+            _smsManager = smsManager;
+        }
+        // GET: SMSController
+        public async Task<ActionResult> Index()
+        {
+            var sms = await _smsManager.GetAllAsync();
+            return View(sms);
         }
 
         // GET: SMSController/Details/5
