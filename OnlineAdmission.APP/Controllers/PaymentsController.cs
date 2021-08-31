@@ -38,7 +38,17 @@ namespace OnlineAdmission.APP.Controllers
                 ViewBag.msg = TempData["msg"].ToString();
             }
 
-            IQueryable<PaymentTransaction> transactions = _paymentTransactionManager.GetIQueryableData();
+
+            IQueryable<PaymentReceiptVM> paymentReceiptVMs = from t in _paymentTransactionManager.GetIQueryableData()
+                                                             from m in _meritStudentManager.GetIQueryableData().Where(a => a.NUAdmissionRoll==t.ReferenceNo)
+                                                             from sub in _subjectManager.GetIQueryableData().Where(a => a.Code == m.SubjectCode)
+                                                             from s in _appliedStudentManager.GetIQueryableData().Where(a=>a.NUAdmissionRoll == t.ReferenceNo)
+                                                             select new PaymentReceiptVM{
+                                                                 PaymentTransaction = t,
+                                                                 MeritStudent = m,
+                                                                 Subject = sub,
+                                                                 AppliedStudent = s
+                                                             };
 
             ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
 
@@ -46,16 +56,15 @@ namespace OnlineAdmission.APP.Controllers
             switch (sortRoll)
             {
                 case "desc":
-                    transactions = transactions.OrderByDescending(m => m.ReferenceNo);
+                    paymentReceiptVMs = paymentReceiptVMs.OrderByDescending(m => m.PaymentTransaction.Id);
                     break;
                 default:
-                    transactions = transactions.OrderBy(m => m.ReferenceNo);
+                    paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.PaymentTransaction.Id);
                     break;
             }
 
 
-            ViewBag.searchingText = searchingText;
-            ViewBag.count = transactions.Count();
+            ViewBag.data = searchingText;
 
             int pageSize = pagesize <= 0 ? 10 : pagesize;
             if (page <= 0) page = 1;
@@ -64,12 +73,12 @@ namespace OnlineAdmission.APP.Controllers
             {
                 searchingText = searchingText.Trim().ToLower();
 
-                transactions = transactions.Where(m => m.ReferenceNo.ToString().ToLower() == searchingText || m.TransactionDate.ToString().ToLower() == searchingText || m.Amount.ToString().ToLower() == searchingText || m.AdmissionFee.ToString().ToLower() == searchingText);
+                paymentReceiptVMs = paymentReceiptVMs.Where(m => m.AppliedStudent.ApplicantName.ToLower().Contains(searchingText) || m.PaymentTransaction.AccountNo.ToLower() == searchingText || m.PaymentTransaction.TransactionId.ToLower() == searchingText || m.AppliedStudent.NUAdmissionRoll.ToString().ToLower() == searchingText || m.Subject.SubjectName.ToLower() == searchingText || m.PaymentTransaction.Amount.ToString().ToLower() == searchingText);
 
-                return View(await PaginatedList<PaymentTransaction>.CreateAsync(transactions, page, pageSize));
+                return View(await PaginatedList<PaymentReceiptVM>.CreateAsync(paymentReceiptVMs, page, pageSize));
             }
 
-            return View(await PaginatedList<PaymentTransaction>.CreateAsync(transactions, page, pageSize));
+            return View(await PaginatedList<PaymentReceiptVM>.CreateAsync(paymentReceiptVMs, page, pageSize));
 
         }
 

@@ -1,5 +1,5 @@
-﻿@model PaginatedList<OnlineAdmission.Entity.PaymentTransaction>
-
+﻿@*@model PaginatedList<OnlineAdmission.Entity.PaymentTransaction>*@
+@model PaginatedList<OnlineAdmission.APP.ViewModels.PaymentReceiptVM>
 @{
     ViewData["Title"] = "Index";
     int sl = 0;
@@ -19,91 +19,113 @@
         <span>Total found @ViewBag.count</span>
     }
     @*@if (ViewBag.msg!=null)
+        {
+            <br />
+            <span id="notFoundMSG" class="text-danger h4">@ViewBag.msg</span>
+        }*@
+    @if (Model.Any())
     {
-        <br />
-        <span id="notFoundMSG" class="text-danger h4">@ViewBag.msg</span>
-    }*@
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    #
-                </th>
-                <th>
-                    Amount
-                </th>
-                <th>
-                    Name
-                </th>
-                <th>
-                    NU Roll
-                </th>
-                <th>
-                    Session
-                </th>
-                <th>
-                    Mobile
-                </th>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Tr.Amount
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Session
+                    </th>
+                    <th>
+                        Account No
+                    </th>
+                    <th>
+                        Mobile
+                    </th>
+                    <th>
+                        Transaction Id
+                    </th>
 
-                <th>
-                    Transaction Id
-                </th>
-                <th>
-                    Subject
-                </th>
-                <th>
-                    Payment Date
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-            <tr>
-                <td>
-                    @(++sl)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Amount)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ApplicantName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ReferenceNo)
-                </td>
-                <td>
-                    @*@Html.DisplayFor(modelItem => item.ReferenceNo)*@
-                    2021-2022
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MobileNo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TransactionId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SubjectId)
-                </td>
-                <td>
-                    @item.TransactionDate.ToString("dd MMM yyyy")
-                </td>
+                    <th>
+                        Roll No
+                    </th>
+                    <th>
+                        Subject
+                    </th>
+                    <th>
+                        Payment Date
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @(i).
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PaymentTransaction.Amount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AppliedStudent.ApplicantName)
+                        </td>
+                        <td>
+                            2021-2022
+                        </td>
+                        <td>
+                            @item.PaymentTransaction.MobileNo
+                        </td>
+                        <td>
+                            @(item.AppliedStudent.MobileNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PaymentTransaction.TransactionId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AppliedStudent.NUAdmissionRoll)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Subject.SubjectName)
+                        </td>
+                        <td>
+                            @item.PaymentTransaction.TransactionDate.ToString("dd MMM yyyy")
+                        </td>
 
-                <td>
-                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
+                        <td>
+                            @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
+                            <a asp-action="Details" asp-route-id="@item.PaymentTransaction.Id">Details</a>
+                            @*<a asp-action="Delete" asp-route-id="@item.PaymentTransaction.Id">Delete</a>*@
+                        </td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
 
-    <partial name="~/Views/PartialViews/_paging.cshtml" model="@Model" />
+        <partial name="~/Views/PartialViews/_paging.cshtml" model="@Model" />
+
+    }
+    else
+    {
+        <hr />
+        <span class="alert text-danger">
+            Your search - @ViewBag.data - did not match any documents.
+        </span>
 
 
-    @section Scripts{ 
+
+    }
+
+
+
+
+    @section Scripts{
         <script>
             $(document).ready(function () {
                 //$("#msgId").fadeOut(6000);

@@ -26,8 +26,9 @@ namespace OnlineAdmission.APP.Controllers
         private readonly IAppliedStudentManager _appliedStudentManager;
         private readonly IMeritStudentManager _meritStudentManager;
         private readonly IStudentManager _studentManager;
+        private readonly ISubjectManager _subjectManager;
 
-        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment host, IPaymentTransactionManager paymentTransactionManager, IAppliedStudentManager appliedStudentManager, IMeritStudentManager meritStudentManager, IStudentManager studentManager)
+        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment host, IPaymentTransactionManager paymentTransactionManager, IAppliedStudentManager appliedStudentManager, IMeritStudentManager meritStudentManager, IStudentManager studentManager, ISubjectManager subjectManager)
         {
             _logger = logger;
             _host = host;
@@ -35,6 +36,7 @@ namespace OnlineAdmission.APP.Controllers
             _appliedStudentManager = appliedStudentManager;
             _meritStudentManager = meritStudentManager;
             _studentManager = studentManager;
+            _subjectManager = subjectManager;
         }
 
         public async Task<IActionResult> Index()
@@ -44,7 +46,7 @@ namespace OnlineAdmission.APP.Controllers
             var appliedStudents = await _appliedStudentManager.GetAllAsync();
             var meritStudents = await _meritStudentManager.GetAllAsync();
             var admittedStudents = await _studentManager.GetAllAsync();
-
+            
             students.AppliedStudents = appliedStudents;
             students.MeritStudents = meritStudents;
             students.Students = admittedStudents;
