@@ -132,8 +132,8 @@ namespace OnlineAdmission.APP.Controllers
                     MobileList = phoneNum,
                     Text = msgText,
                     CreatedAt = DateTime.Now,
-                    CreatedBy = "College",
-                    Description = "Admission Fee"
+                    CreatedBy = "Payment Getway",
+                    Description = "Payment Success"
                 };
 
                 if (SentSMS == true)

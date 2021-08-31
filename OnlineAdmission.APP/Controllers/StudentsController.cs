@@ -256,7 +256,7 @@ namespace OnlineAdmission.APP.Controllers
                         Text = msgText,
                         CreatedAt = DateTime.Now,
                         CreatedBy = "College",
-                        Description = "Form Fillup"
+                        Description = "Admission Success"
                     };
                     
                     if (SentSMS==true)
@@ -562,7 +562,7 @@ namespace OnlineAdmission.APP.Controllers
                             Text = msgText,
                             CreatedAt = DateTime.Now,
                             CreatedBy = "College",
-                            Description = "Admission Fee"
+                            Description = "Payment Success"
                         };
 
                         if (SentSMS == true)
