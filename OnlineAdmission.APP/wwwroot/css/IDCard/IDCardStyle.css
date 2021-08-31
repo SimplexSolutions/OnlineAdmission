@@ -1,11 +1,52 @@
 ﻿.fullCard {
-    width: 240px;
-    height: 336px;
-    background-color: lavender;
-    border: 1px solid black;
+    width: 260px;
+    height: 400px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    color: #000000;
+    background-image: linear-gradient(to right, #3A6C91,#ffffff,#C1655E);
+}
+.part1 {
+    margin-top: 2px;
+    padding: 2px;
+    background-image: linear-gradient(to right, #3A6C91,#ffffff ,#C1655E);
+    color:#000000;
+    font-weight:bold;
+}
+.part2{
+    background-color:white;
+    margin-top:1px;
+}
+.studentPhoto {
+    border: 3px solid #ede1e1;
+}
+.part3 {
+    background-color: white;
 }
 
-p{
-    margin:0;
-    padding:0;
+
+.myTable {
+}
+
+.myTable tr {
+    border-bottom: 1px solid black;
+}
+.studentName{
+    font-weight:bold;
+}
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.principalArea{
+    padding-top:35px;
+    background-color: #3A6C91;
+    color:#ffffff;
+}
+
+.principal {
+    margin-top:35px;
+    border-top: 1px solid black;
+    margin-right:5px;
 }

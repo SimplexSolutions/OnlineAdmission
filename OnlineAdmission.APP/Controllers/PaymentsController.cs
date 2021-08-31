@@ -28,7 +28,6 @@ namespace OnlineAdmission.APP.Controllers
             _subjectManager = subjectManager;
             _meritStudentManager = meritStudentManager;
             _appliedStudentManager = appliedStudentManager;
-
         }
 
         // GET: Payments
