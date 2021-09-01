@@ -12,7 +12,7 @@ using OnlineAdmission.Entity;
 
 namespace OnlineAdmission.APP.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="Admin,SuperAdmin")]
     public class SubjectsController : Controller
     {
         private readonly ISubjectManager _subjectManager;

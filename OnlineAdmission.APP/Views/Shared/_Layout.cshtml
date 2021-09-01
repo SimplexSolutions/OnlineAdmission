@@ -40,45 +40,54 @@
 
                 @if (signInManager.IsSignedIn(User))
                 {
-                    <ul class="list-unstyled components mb-5">
-                        <li class="active">
-                            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Students</a>
-                            <ul class="collapse list-unstyled" id="homeSubmenu">
-                                <li>
-                                    <a asp-action="Index" asp-controller="AppliedStudents">Applied Students</a>
-                                </li>
-                                <li>
-                                    <a asp-action="Index" asp-controller="MeritStudents">Selected Students</a>
-                                </li>
-                                <li>
-                                    <a asp-action="Index" asp-controller="Students">Admitted Students</a>
-                                </li>
-                            </ul>
+            <ul class="list-unstyled components mb-5">
+                <li class="active">
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Students</a>
+                    <ul class="collapse list-unstyled" id="homeSubmenu">
+                        <li>
+                            <a asp-action="Index" asp-controller="AppliedStudents">Applied Students</a>
                         </li>
                         <li>
-                            <a asp-action="Index" asp-controller="Payments">Payments</a>
+                            <a asp-action="Index" asp-controller="MeritStudents">Selected Students</a>
                         </li>
                         <li>
-                            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Setup</a>
-                            <ul class="collapse list-unstyled" id="pageSubmenu">
-                                <li>
-                                    <a asp-action="Index" asp-controller="Subjects">Subject</a>
-                                </li>
-                                <li>
-                                    <a asp-action="userList" asp-controller="Administrations">Users</a>
-                                </li>
-                                <li>
-                                    <a asp-action="roleList" asp-controller="Administrations">Roles</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a asp-controller="SMS" asp-action="Index" >SMS</a>
-                        </li>
-                        <li>
-                            <a asp-controller="Students" asp-action="IdCard">ID Card</a>
+                            <a asp-action="Index" asp-controller="Students">Admitted Students</a>
                         </li>
                     </ul>
+                </li>
+                @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("Accounts"))
+                {
+                    <li>
+                        <a asp-action="Index" asp-controller="Payments">Payments</a>
+                    </li>
+                }
+                    
+                @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+
+                {
+                    <li>
+                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Setup</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu">
+                            <li>
+                                <a asp-action="Index" asp-controller="Subjects">Subject</a>
+                            </li>
+                            <li>
+                                <a asp-action="userList" asp-controller="Administrations">Users</a>
+                            </li>
+                            <li>
+                                <a asp-action="roleList" asp-controller="Administrations">Roles</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a asp-controller="SMS" asp-action="Index">SMS</a>
+                    </li>
+                }
+                <li>
+                    <a asp-controller="Students" asp-action="IdCard">ID Card</a>
+                </li>
+            </ul>
                 }
 
                 <div class="footer">

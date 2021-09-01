@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineAdmission.APP.ViewModels.Administrative;
 using System;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace OnlineAdmission.APP.Controllers
 {
+    [Authorize(Roles = "Admin,SuperAdmin")]
     public class AdministrationsController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;

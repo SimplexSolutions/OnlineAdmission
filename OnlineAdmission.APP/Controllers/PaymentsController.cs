@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using OnlineAdmission.Entity;
 
 namespace OnlineAdmission.APP.Controllers
 {
+    [Authorize(Roles ="Admin, SuperAdmin, Accounts")]
     public class PaymentsController : Controller
     {
         private readonly IPaymentTransactionManager _paymentTransactionManager;

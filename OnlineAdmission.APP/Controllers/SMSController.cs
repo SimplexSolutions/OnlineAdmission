@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineAdmission.BLL.IManager;
 using OnlineAdmission.Entity;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace OnlineAdmission.APP.Controllers
 {
+    [Authorize(Roles = "Admin,SuperAdmin")]
     public class SMSController : Controller
     {
         private readonly ISMSManager _smsManager;
