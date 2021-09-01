@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineAdmission.DB;
 
 namespace OnlineAdmission.DB.Migrations
 {
     [DbContext(typeof(OnlineAdmissionDbContext))]
-    partial class OnlineAdmissionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210901082138_PaymentTransactionClassModified")]
+    partial class PaymentTransactionClassModified
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

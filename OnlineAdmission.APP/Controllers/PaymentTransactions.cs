@@ -109,9 +109,9 @@ namespace OnlineAdmission.APP.Controllers
                 newPayment.ReferenceNo =Convert.ToInt32(GlobalVariables.nuRoll);
                 newPayment.AdmissionFee = MerchantInfo.AdmissionFee;
                 newPayment.ServiceCharge = MerchantInfo.ServiceCharge;
-                newPayment.ApplicantName = MerchantInfo.StudentName;
-                newPayment.MobileNo = MerchantInfo.MobileNo;
-                newPayment.SubjectId = MerchantInfo.SubjectId;
+                //newPayment.ApplicantName = MerchantInfo.StudentName;
+                //newPayment.MobileNo = MerchantInfo.MobileNo;
+                //newPayment.SubjectId = MerchantInfo.SubjectId;
 
                 await paymentTransactionManager.AddAsync(newPayment);
 

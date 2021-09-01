@@ -16,7 +16,11 @@
             <h4>Applied</h4>
         </div>
         <div class="card-body">
-            <h5 class="card-title">Total <span class="text-info font-weight-bold">@Model.AppliedStudents.Count</span>  Students</h5>
+            
+            <a asp-controller="AppliedStudents" asp-action="index">
+                <h5 class="card-title">Total <span class="text-info font-weight-bold">@Model.AppliedStudents.Count</span>  Students</h5>
+            </a>
+            
             <p class="card-text">
                 
             </p>
@@ -74,7 +78,10 @@
             <h4>Admitted</h4>
         </div>
         <div class="card-body">
-            <h5 class="card-title">Total <span class="text-info font-weight-bold">@Model.Students.Count</span>  Students</h5>
+            <a asp-controller="Students" asp-action="index">
+                <h5 class="card-title">Total <span class="text-info font-weight-bold">@Model.Students.Count</span>  Students</h5>
+            </a>
+            
             <p class="card-text">
 
             </p>
