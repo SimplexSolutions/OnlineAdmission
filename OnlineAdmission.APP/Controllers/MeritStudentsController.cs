@@ -181,9 +181,10 @@ namespace OnlineAdmission.APP.Controllers
                             HSCRoll = Convert.ToInt32(reader.GetValue(1).ToString()),
                             MeritPosition = Convert.ToInt32(reader.GetValue(2).ToString()),
                             SubjectCode = Convert.ToInt32(reader.GetValue(3).ToString()),
-                            PaymentStatus = Convert.ToBoolean(reader.GetValue(4).ToString()),
-                            //PaidAmaount = Convert.ToDouble(reader.GetValue(5).ToString()),
-                            Comments = reader.GetValue(6).ToString()
+                            Comments = reader.GetValue(4).ToString(),
+                            //PaymentStatus = false,
+                            //DeductedAmaount = 0.00,
+                            
                         });
 
                     }
