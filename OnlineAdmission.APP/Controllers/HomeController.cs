@@ -46,10 +46,12 @@ namespace OnlineAdmission.APP.Controllers
             var appliedStudents = await _appliedStudentManager.GetAllAsync();
             var meritStudents = await _meritStudentManager.GetAllAsync();
             var admittedStudents = await _studentManager.GetAllAsync();
+            var subjects = await _subjectManager.GetAllAsync();
             
             students.AppliedStudents = appliedStudents;
             students.MeritStudents = meritStudents;
             students.Students = admittedStudents;
+            students.Subjects = subjects;
 
             return View(students);
         }

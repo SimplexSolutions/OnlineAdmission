@@ -3,6 +3,59 @@
 @{
     ViewData["Title"] = "Home Page";
     var paymentCompletedStudent = Model.MeritStudents.Where(m => m.PaymentStatus == true).ToList();
+
+}
+@{ 
+
+    List<string> paidSubList = new List<string>();
+    if (Model.Students != null)
+    {
+        foreach (var student in paymentCompletedStudent)
+        {
+            foreach (var subject in Model.Subjects)
+            {
+                if (student.SubjectCode == subject.Code)
+                {
+                    paidSubList.Add(subject.SubjectName);
+                }
+            }
+        }
+    }
+    var paidSubGroup = paidSubList.GroupBy(i => i);
+
+
+    List<string> meritSubList = new List<string>();
+    if (Model.Students != null)
+    {
+        foreach (var student in Model.MeritStudents)
+        {
+            foreach (var subject in Model.Subjects)
+            {
+                if (student.SubjectCode == subject.Code)
+                {
+                    meritSubList.Add(subject.SubjectName);
+                }
+            }
+        }
+    }
+    var meritSubGroup = meritSubList.GroupBy(i => i);
+
+
+    List<string> admitttedSubList = new List<string>();
+    if (Model.Students!=null)
+    {
+        foreach (var student in Model.Students)
+        {
+            foreach (var subject in Model.Subjects)
+            {
+                if (student.SubjectId == subject.Id)
+                {
+                    admitttedSubList.Add(subject.SubjectName);
+                }
+            }
+        }
+    }
+    var AdmittedSubGroup = admitttedSubList.GroupBy(i => i);
 }
 
 <div class="text-center">
@@ -36,9 +89,25 @@
         </div>
         <div class="card-body">
             <h5 class="card-title">Total <span class="text-info font-weight-bold">@Model.MeritStudents.Count</span>  Students</h5>
-            <p class="card-text">
 
-            </p>
+            <table class="table table-bordered table-striped">
+                <thead class="bg-primary">
+                    <tr>
+                        <td>Subjects</td>
+                        <td>Students</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sub in meritSubGroup)
+                    {
+                        <tr>
+                            <td>@sub.Key</td>
+                            <td>@sub.Count()</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
         </div>
         @*<div class="card-footer">
             <small class="text-muted"></small>
@@ -56,12 +125,24 @@
                 <h5 class="card-title">Total <span class="text-info font-weight-bold">@paymentCompletedStudent.Count</span>  Students </h5>
                 <h4></h4>
 
-                foreach (var merits in Model.MeritStudents)
-                {
-                    <table>
-                        <tr></tr>
-                    </table>
-                }
+                <table class="table table-bordered table-striped">
+                    <thead class="bg-success">
+                        <tr>
+                            <td>Subjects</td>
+                            <td>Students</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sub in paidSubGroup)
+                        {
+                            <tr>
+                                <td>@sub.Key</td>
+                                <td>@sub.Count()</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
             }
             else
             {
@@ -82,6 +163,24 @@
                 <h5 class="card-title">Total <span class="text-info font-weight-bold">@Model.Students.Count</span>  Students</h5>
             </a>
             
+                <table class="table table-bordered table-striped">
+                    <thead class="bg-warning">
+                        <tr>
+                            <td>Subjects</td>
+                            <td>Students</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sub in AdmittedSubGroup)
+                        {
+                            <tr>
+                                <td>@sub.Key</td>
+                                <td>@sub.Count()</td>
+                            </tr>
+                         }
+                        </tbody>
+                </table>
+           
             <p class="card-text">
 
             </p>
