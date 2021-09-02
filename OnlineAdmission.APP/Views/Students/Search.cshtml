@@ -4,8 +4,8 @@
 @inject UserManager<IdentityUser> userManager
 
 @{
-
-    Layout = User.IsInRole("Admin") ? "~/Views/Shared/_Layout.cshtml" : "~/Views/Shared/_LayoutStudent.cshtml";
+    //Layout = User.IsInRole("Admin") ? "~/Views/Shared/_Layout.cshtml" : "~/Views/Shared/_LayoutStudent.cshtml";
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
 }
 <div class="">
     <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">
@@ -83,10 +83,7 @@
                         </div>
                         <div class="col-md-4 offset-4 pt-3" id="bankingId" style="display:none;">
                             <div class="card-deck">
-                                @*<div class="card">
-                                        <a asp-action="BkashPayment" asp-controller="Students"><img class="card-img-top" src="~/Images/Payment/Bkash.png" alt="Bkash Logo"></a>
-                                    </div>*@
-                                <div class="card border-0">
+                                 <div class="card border-0">
                                     <form asp-action="NagadPayment" asp-controller="Students" method="get">
                                         <input name="nuRoll" value="@Model.MeritStudent.NUAdmissionRoll" type="hidden" />
                                         <button type="submit">
@@ -106,9 +103,6 @@
                                         </form>
                                     </div>
                                 }
-                                @*<div class="card">
-                                        <a asp-action="RocketPayment" asp-controller="Students"><img class="card-img-top" src="~/Images/Payment/rocket.png" alt="Rocket Logo"></a>
-                                    </div>*@
                             </div>
                         </div>
                     }
@@ -171,21 +165,33 @@
 
     </div>
 </div>
-@section Scripts{
-    <script>
-        $(document).ready(function () {
-            $('#msgId').fadeOut(10000);
-            $('#notifyId').fadeOut(10000);
+@*<div class="">
+    <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">
 
-            $('#paymentId').click(function () {
-                let isHidden = $('#bankingId').is(':hidden');
-                if (isHidden == true) {
-                    $('#bankingId').show();
-                }
-                else {
-                    $('#bankingId').hide();
-                }
+        <div class="card text-center col-md-12">
+            <div class="card-header">
+                <h3 style="color:deepskyblue">This Admission Portal will be open very soon today. Please wait........</h3>
+            </div>
+        </div>
+        </div>
+    </div>*@
+
+
+    @section Scripts{
+        <script>
+            $(document).ready(function () {
+                $('#msgId').fadeOut(10000);
+                $('#notifyId').fadeOut(10000);
+
+                $('#paymentId').click(function () {
+                    let isHidden = $('#bankingId').is(':hidden');
+                    if (isHidden == true) {
+                        $('#bankingId').show();
+                    }
+                    else {
+                        $('#bankingId').hide();
+                    }
+                });
             });
-        });
-    </script>
-}
+        </script>
+    }

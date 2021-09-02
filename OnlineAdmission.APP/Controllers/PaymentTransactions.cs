@@ -44,7 +44,8 @@ namespace OnlineAdmission.APP.Controllers
         {
             // Status Check
             //Call Status Check API with Payment Ref ID
-            var paymentDetails = "http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs//verify/payment/" + payment_ref_id;
+            var paymentDetails = "https://api.mynagad.com/api/dfs/verify/payment/" + payment_ref_id;
+            //var paymentDetails = "http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs//verify/payment/" + payment_ref_id;
             httpClient = new HttpClient(); 
             var responseContent =  await httpClient.GetAsync(paymentDetails);
             var  br_ResponseContent = await responseContent.Content.ReadAsStringAsync();
@@ -52,7 +53,7 @@ namespace OnlineAdmission.APP.Controllers
 
             if (status.ToLower() == "success")
             {
-              string  successNotification = "Congratulations! Payment Completed (BDT: " + responsevalue.amount+".00/-)";
+              string  successNotification = "Congratulations! Payment Completed (BDT: " + responsevalue.amount+"/-)";
                 //Guid guid = new Guid();
                 //{"merchantId":"683002007104225",
                 //                "orderId":"3001639025135",
@@ -122,24 +123,24 @@ namespace OnlineAdmission.APP.Controllers
 
                 //////////////////Code for SMS Sending and Saving
                 ///
-                AppliedStudent newStudent = await appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll);
-                bool SentSMS = false;
-                string phoneNum = newStudent.MobileNo.ToString();
-                string msgText = "Congratulations! " + newStudent.ApplicantName + ", your admission payment is successfully paid";
-                SentSMS = await ESMS.SendSMS("0" + phoneNum, msgText);
-                SMSModel newSMS = new SMSModel()
-                {
-                    MobileList = phoneNum,
-                    Text = msgText,
-                    CreatedAt = DateTime.Now,
-                    CreatedBy = "Payment Getway",
-                    Description = "Payment Success"
-                };
+                //AppliedStudent newStudent = await appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll);
+                //bool SentSMS = false;
+                //string phoneNum = newStudent.MobileNo.ToString();
+                //string msgText = "Congratulations! " + newStudent.ApplicantName + ", your admission payment is successfully paid";
+                //SentSMS = await ESMS.SendSMS("0" + phoneNum, msgText);
+                //SMSModel newSMS = new SMSModel()
+                //{
+                //    MobileList = phoneNum,
+                //    Text = msgText,
+                //    CreatedAt = DateTime.Now,
+                //    CreatedBy = "Payment Getway",
+                //    Description = "Payment Success"
+                //};
 
-                if (SentSMS == true)
-                {
-                    await _smsManager.AddAsync(newSMS);
-                }
+                //if (SentSMS == true)
+                //{
+                //    await _smsManager.AddAsync(newSMS);
+                //}
 
 
 

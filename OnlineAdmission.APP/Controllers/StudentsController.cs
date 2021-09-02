@@ -25,7 +25,7 @@ using System.Threading.Tasks;
 
 namespace OnlineAdmission.APP.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="Admin,SuperAdmin")]
     public class StudentsController : Controller
     {
         private readonly IStudentManager _studentManager;
@@ -670,7 +670,7 @@ namespace OnlineAdmission.APP.Controllers
 
                 using (var httpClient = new HttpClient())
                 {
-                    httpClient.DefaultRequestHeaders.Add("X-KM-IP-V4", "192.168.0.1");
+                    httpClient.DefaultRequestHeaders.Add("X-KM-IP-V4", "127.0.0.1");
                     httpClient.DefaultRequestHeaders.Add("X-KM-MC-Id", GlobalVariables.MerchantId);
                     httpClient.DefaultRequestHeaders.Add("X-KM-Client-Type", "PC_WEB");
                     httpClient.DefaultRequestHeaders.Add("X-KM-Api-Version", "v-0.2.0");
@@ -748,7 +748,8 @@ namespace OnlineAdmission.APP.Controllers
 
 
             //string merchantCallbackURL = "http://sandbox.mynagad.com:10707/merchant-server/web/confirm"; //merchant Callback URL - as you want
-            string merchantCallbackURL = "http://115.127.26.3:4356/api/PaymentTransactions"; //merchant Callback URL - as you want
+            //string merchantCallbackURL = "http://115.127.26.3:4356/api/PaymentTransactions"; //merchant Callback URL - as you want
+            string merchantCallbackURL = "http://115.127.26.3:80/api/PaymentTransactions"; //merchant Callback URL - as you want
             //string merchantCallbackURL = "https://localhost:44356/api/PaymentTransactions"; //merchant Callback URL - as you want
 
             //Additional Merchant JSON Info
@@ -789,7 +790,9 @@ namespace OnlineAdmission.APP.Controllers
 
                 using (var br_httpClient = new HttpClient())
                 {
-                    br_httpClient.DefaultRequestHeaders.Add("X-KM-IP-V4", "192.168.0.1");
+                    //br_httpClient.DefaultRequestHeaders.Add("X-KM-IP-V4", "115.127.26.3");
+                    //br_httpClient.DefaultRequestHeaders.Add("X-KM-IP-V4", "192.168.0.1");
+                    br_httpClient.DefaultRequestHeaders.Add("X-KM-IP-V4", "127.0.0.1");
                     br_httpClient.DefaultRequestHeaders.Add("X-KM-MC-Id", GlobalVariables.MerchantId);
                     br_httpClient.DefaultRequestHeaders.Add("X-KM-Client-Type", "PC_WEB");
                     br_httpClient.DefaultRequestHeaders.Add("X-KM-Api-Version", "v-0.2.0");

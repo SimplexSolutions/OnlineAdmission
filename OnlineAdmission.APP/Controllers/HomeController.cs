@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace OnlineAdmission.APP.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,SuperAdmin")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

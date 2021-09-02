@@ -28,16 +28,20 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 
                         <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
+                            @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                            {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="AppliedStudents" asp-action="Index">Applied Students</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="MeritStudents" asp-action="Index">Marit Students</a>
-                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link text-dark" asp-area="" asp-controller="AppliedStudents" asp-action="Index">Applied Students</a>
+                                            </li>
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link text-dark" asp-area="" asp-controller="MeritStudents" asp-action="Index">Marit Students</a>
+                                                                </li>
+                             }
+
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="Search">Check</a>
                             </li>
