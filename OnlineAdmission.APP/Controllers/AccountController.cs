@@ -85,5 +85,12 @@ namespace OnlineAdmission.APP.Controllers
             await signInManager.SignOutAsync();
             return RedirectToAction("Search", "Students");
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }
