@@ -61,10 +61,16 @@ namespace OnlineAdmission.APP.Controllers
             foreach (var item in meritStudents)
             {
                 SpecialOfferVM specialOfferVM = new SpecialOfferVM();
-                specialOfferVM.AppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(item.NUAdmissionRoll);
-                specialOfferVM.Subject = await _subjectManager.GetByCodeAsync(item.SubjectCode);
-                specialOfferVM.MeritStudent = item;
-                specialOfferVMList.Add(specialOfferVM);
+                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(item.NUAdmissionRoll);
+                if (appliedStudent!=null)
+                {
+                    specialOfferVM.AppliedStudent = appliedStudent;
+                    specialOfferVM.Subject = await _subjectManager.GetByCodeAsync(item.SubjectCode);
+                    specialOfferVM.MeritStudent = item;
+                    specialOfferVMList.Add(specialOfferVM);
+                }
+                
+                
 
             }
             
@@ -73,7 +79,7 @@ namespace OnlineAdmission.APP.Controllers
                                                      {
                                                          Id = s.MeritStudent.Id,
                                                          FullName = s.AppliedStudent.ApplicantName +"("+ s.MeritStudent.NUAdmissionRoll+")"
-                                                     }), "Id", "FullName", null);
+                                                     }), "Id", "FullName");
 
             return View();
         }
