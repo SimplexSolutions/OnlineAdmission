@@ -53,7 +53,7 @@ namespace OnlineAdmission.APP.Controllers
             ViewBag.searchingText = searchingText;
             ViewBag.count = meritStudentList.Count();
             
-            int pageSize = pagesize <= 0 ? 10 : pagesize;
+            int pageSize = pagesize <= 0 ? 20 : pagesize;
             if (page <= 0) page = 1;
 
             if (!string.IsNullOrEmpty(searchingText))

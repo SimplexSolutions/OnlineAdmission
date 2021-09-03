@@ -6,8 +6,8 @@
 }
 
 
-<table class="table table-hover table-striped table-bordered" id="studentTable">
-    <thead class="table-info">
+<table class="table" id="table_id">
+    <thead>
         <tr>
             <th>#</th>
             <th>
@@ -79,12 +79,7 @@
 
     <script>
         $(document).ready(function () {
-            $('#studentTable').DataTable({
-                ordering: false,
-                fixedHeader: true,
-                "pageLength": 50,
-                "lengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
-            });
+            $('#table_id').DataTable();
         });
     </script>
 }
