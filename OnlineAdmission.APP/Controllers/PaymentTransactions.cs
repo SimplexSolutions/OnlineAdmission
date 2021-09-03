@@ -123,24 +123,24 @@ namespace OnlineAdmission.APP.Controllers
 
                 //////////////////Code for SMS Sending and Saving
                 ///
-                //AppliedStudent newStudent = await appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll);
-                //bool SentSMS = false;
-                //string phoneNum = newStudent.MobileNo.ToString();
-                //string msgText = "Congratulations! " + newStudent.ApplicantName + ", your admission payment is successfully paid";
-                //SentSMS = await ESMS.SendSMS("0" + phoneNum, msgText);
-                //SMSModel newSMS = new SMSModel()
-                //{
-                //    MobileList = phoneNum,
-                //    Text = msgText,
-                //    CreatedAt = DateTime.Now,
-                //    CreatedBy = "Payment Getway",
-                //    Description = "Payment Success"
-                //};
+                AppliedStudent newStudent = await appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll);
+                bool SentSMS = false;
+                string phoneNum = newStudent.MobileNo.ToString();
+                string msgText = "Congratulations! " + newStudent.ApplicantName + "(NU Roll:" + newStudent.NUAdmissionRoll + ") , your admission payment is successfully paid";
+                SentSMS = await ESMS.SendSMS(phoneNum, msgText);
+                SMSModel newSMS = new SMSModel()
+                {
+                    MobileList = phoneNum,
+                    Text = msgText,
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = "Payment Getway",
+                    Description = "Payment Success"
+                };
 
-                //if (SentSMS == true)
-                //{
-                //    await _smsManager.AddAsync(newSMS);
-                //}
+                if (SentSMS == true)
+                {
+                    await _smsManager.AddAsync(newSMS);
+                }
 
 
 

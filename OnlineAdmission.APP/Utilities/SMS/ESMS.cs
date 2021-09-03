@@ -15,19 +15,19 @@ namespace OnlineAdmission.APP.Utilities.SMS
         {
             try
             {
-                var values = new Dictionary<string, string>
-                {
-                   //{ "token", "b6f7a999a5c3fab2bb343262c7a1e0a1" },
-                   { "to", "01717678134" },
-                   { "message", "Hello we are testing our sms solution from inhouse testing team. Allah Hafiz." }
-                };
-
                 //var values = new Dictionary<string, string>
                 //{
-                //   { "token", "b6f7a999a5c3fab2bb343262c7a1e0a1" },
-                //   { "to", no },
-                //   { "message", msg }
+                //   { "token", "6a856059febeaab128231564cdace6ff" },
+                //   { "to", "01717678134" },
+                //   { "message", "Hello we are testing our sms solution from inhouse testing team. Allah Hafiz." }
                 //};
+
+                var values = new Dictionary<string, string>
+                {
+                   { "token", "6a856059febeaab128231564cdace6ff" },
+                   { "to", no },
+                   { "message", msg }
+                };
 
                 var content = new FormUrlEncodedContent(values);
                 var response = await client.PostAsync("http://api.greenweb.com.bd/api.php?", content);
