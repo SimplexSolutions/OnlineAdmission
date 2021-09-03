@@ -67,7 +67,7 @@ namespace OnlineAdmission.APP.Controllers
 
 
             ViewBag.data = searchingText;
-
+            
             int pageSize = pagesize <= 0 ? 10 : pagesize;
             if (page <= 0) page = 1;
 
@@ -76,10 +76,10 @@ namespace OnlineAdmission.APP.Controllers
                 searchingText = searchingText.Trim().ToLower();
 
                 paymentReceiptVMs = paymentReceiptVMs.Where(m => m.AppliedStudent.ApplicantName.ToLower().Contains(searchingText) || m.PaymentTransaction.AccountNo.ToLower() == searchingText || m.PaymentTransaction.TransactionId.ToLower() == searchingText || m.AppliedStudent.NUAdmissionRoll.ToString().ToLower() == searchingText || m.Subject.SubjectName.ToLower() == searchingText || m.PaymentTransaction.Amount.ToString().ToLower() == searchingText || m.PaymentTransaction.TransactionDate.ToString().Contains(searchingText));
-
+                ViewBag.count = paymentReceiptVMs.Count();
                 return View(await PaginatedList<PaymentReceiptVM>.CreateAsync(paymentReceiptVMs, page, pageSize));
             }
-
+            ViewBag.count = paymentReceiptVMs.Count();
             return View(await PaginatedList<PaymentReceiptVM>.CreateAsync(paymentReceiptVMs, page, pageSize));
 
         }
