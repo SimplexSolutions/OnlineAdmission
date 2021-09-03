@@ -92,7 +92,7 @@
                                     </form>
 
                                 </div>
-                                @if (signInManager.IsSignedIn(User))
+                                @if (User.IsInRole("Admin, SuperAdmin"))
                                 {
                                     <div class="card border-0">
                                         <form asp-action="CollegePayment" asp-controller="Students" method="get">
