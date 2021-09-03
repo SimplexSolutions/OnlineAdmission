@@ -539,6 +539,7 @@ namespace OnlineAdmission.APP.Controllers
                 var guid = Guid.NewGuid();
                 newPayment.TransactionId = guid.ToString();
                 newPayment.ReferenceNo = model.PaymentTransaction.ReferenceNo;
+                newPayment.AdmissionFee = model.Amount;
                 //newPayment.SubjectId = model.Subject.Id;
                 //newPayment.ApplicantName = model.Name;
                 await _paymentTransactionManager.AddAsync(newPayment);

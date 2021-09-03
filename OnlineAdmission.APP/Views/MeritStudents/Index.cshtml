@@ -2,7 +2,6 @@
 @model PaginatedList<OnlineAdmission.Entity.MeritStudent>
 @{
     ViewData["Title"] = "Index";
-    int sl = 0;
 
     int i = (Model.PageIndex - 1) * Model.PageSize + 1;
     ViewBag.pagesize = Model.PageSize;
@@ -82,11 +81,9 @@
                 <tr>
                     <td>@i.</td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.NUAdmissionRoll)
+                        @item.NUAdmissionRoll
                     </td>
-                    @*<td>
-                            @Html.DisplayFor(modelItem => item.ApplicantName)
-                        </td>*@
+
                     <td>
                         @Html.DisplayFor(modelItem => item.HSCRoll)
                     </td>

@@ -128,7 +128,7 @@
                             @item.PaymentTransaction.TransactionDate.ToString("yyyy/MM/dd")
                         </td>
                         <td class="text-md-right">
-                            @Html.DisplayFor(modelItem => item.PaymentTransaction.Amount)
+                            @Math.Round(item.PaymentTransaction.AdmissionFee, 2)
                         </td>
                         <td class="noPrint">
                             @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
@@ -137,11 +137,11 @@
                         </td>
                     </tr>
                     i++;
-                    total = total + item.PaymentTransaction.Amount;
+                    total = total + item.PaymentTransaction.AdmissionFee;
                 }
                 <tr class="" style="background-color:#f7f0f0">
                     <td colspan="9" class="text-md-right">TOTAL</td>
-                    <td class="text-md-right font-weight-bold">@total</td>
+                    <td class="text-md-right font-weight-bold">@Math.Round(total, 2)</td>
                     <td></td>
                 </tr>
             </tbody>
