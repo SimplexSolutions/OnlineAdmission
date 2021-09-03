@@ -23,7 +23,8 @@
     <link href="~/lib/alertify.js/alertify.default.css" rel="stylesheet" />
 
     @*Select2*@
-    <link href="~/lib/select2/dist/css/select2.css" rel="stylesheet" />
+    <link href="~/lib/Select2/css/select2.min.css" rel="stylesheet" />
+
 
 </head>
 <body>
@@ -40,54 +41,54 @@
 
                 @if (signInManager.IsSignedIn(User))
                 {
-            <ul class="list-unstyled components mb-5">
-                <li class="active">
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Students</a>
-                    <ul class="collapse list-unstyled" id="homeSubmenu">
-                        <li>
-                            <a asp-action="Index" asp-controller="AppliedStudents">Applied Students</a>
+                    <ul class="list-unstyled components mb-5">
+                        <li class="active">
+                            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Students</a>
+                            <ul class="collapse list-unstyled" id="homeSubmenu">
+                                <li>
+                                    <a asp-action="Index" asp-controller="AppliedStudents">Applied Students</a>
+                                </li>
+                                <li>
+                                    <a asp-action="Index" asp-controller="MeritStudents">Selected Students</a>
+                                </li>
+                                <li>
+                                    <a asp-action="Index" asp-controller="Students">Admitted Students</a>
+                                </li>
+                            </ul>
                         </li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("Accounts"))
+                        {
+                            <li>
+                                <a asp-action="Index" asp-controller="Payments">Payments</a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+
+                        {
+                            <li>
+                                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Setup</a>
+                                <ul class="collapse list-unstyled" id="pageSubmenu">
+                                    <li>
+                                        <a asp-action="Index" asp-controller="Subjects">Subject</a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="userList" asp-controller="Administrations">Users</a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="roleList" asp-controller="Administrations">Roles</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <a asp-controller="SMS" asp-action="Index">SMS</a>
+                            </li>
+                        }
                         <li>
-                            <a asp-action="Index" asp-controller="MeritStudents">Selected Students</a>
-                        </li>
-                        <li>
-                            <a asp-action="Index" asp-controller="Students">Admitted Students</a>
+                            <a asp-controller="Students" asp-action="IdCard">ID Card</a>
                         </li>
                     </ul>
-                </li>
-                @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("Accounts"))
-                {
-                    <li>
-                        <a asp-action="Index" asp-controller="Payments">Payments</a>
-                    </li>
-                }
-                    
-                @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
-
-                {
-                    <li>
-                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Setup</a>
-                        <ul class="collapse list-unstyled" id="pageSubmenu">
-                            <li>
-                                <a asp-action="Index" asp-controller="Subjects">Subject</a>
-                            </li>
-                            <li>
-                                <a asp-action="userList" asp-controller="Administrations">Users</a>
-                            </li>
-                            <li>
-                                <a asp-action="roleList" asp-controller="Administrations">Roles</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a asp-controller="SMS" asp-action="Index">SMS</a>
-                    </li>
-                }
-                <li>
-                    <a asp-controller="Students" asp-action="IdCard">ID Card</a>
-                </li>
-            </ul>
                 }
 
                 <div class="footer">
@@ -145,109 +146,17 @@
     <script src="~/theme/js/jquery.min.js"></script>
     <script src="~/theme/js/popper.js"></script>
     <script src="~/theme/js/bootstrap.min.js"></script>
+    <script src="~/lib/Select2/js/select2.min.js"></script>
     <script src="~/theme/js/main.js"></script>
-    <script src="~/lib/select2/dist/js/select2.js"></script>
     <script src="~/lib/sweetalert/sweetalert.min.js"></script>
     <script src="~/lib/alertify.js/alertify.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     @RenderSection("Styles", required: false)
-
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2();
+        });
+    </script>
 </body>
 </html>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@*<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] Online Admission</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
-
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-info border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Online Admission</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        @if (signInManager.IsSignedIn(User))
-                        {
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Subjects" asp-action="Index">Subjects</a>
-            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="AppliedStudents" asp-action="Index">Applied Students</a>
-                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link text-dark" asp-area="" asp-controller="MeritStudents" asp-action="Index">Marit Students</a>
-                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="Index">Admitted Students</a>
-                                                            </li>}
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="Search">Check</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav">
-                        <partial name="_LoginPartial" />
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-    <br /><br />
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - OnlineAdmission.APP - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
-</html>*@

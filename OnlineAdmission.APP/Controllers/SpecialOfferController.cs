@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineAdmission.APP.ViewModels.SpecialOffer;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace OnlineAdmission.APP.Controllers
 {
+    [Authorize(Roles ="Admin, SuperAdmin")]
     public class SpecialOfferController : Controller
     {
         private readonly IMeritStudentManager _meritStudentManager;

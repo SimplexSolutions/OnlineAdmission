@@ -30,6 +30,7 @@
     <ProjectReference Include="..\OnlineAdmission.DB\OnlineAdmission.DB.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="wwwroot\lib\Select2\" />
     <Folder Include="wwwroot\Theme\" />
   </ItemGroup>
 </Project>
