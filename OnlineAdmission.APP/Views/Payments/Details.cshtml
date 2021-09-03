@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "Details";
-    string[] copy = { "College Copy","Ledger", "Student Copy" };
+    string[] copy = { "College Copy","Ledger Copy", "Student Copy" };
 }
 @section Styles{
 
@@ -97,10 +97,10 @@
                                 @Html.DisplayFor(model => model.PaymentTransaction.Description)
                             </dd>
                             <dt class="col-md-4">
-                                @Html.DisplayNameFor(model => model.PaymentTransaction.Amount)
+                                @Html.DisplayNameFor(model => model.PaymentTransaction.AdmissionFee)
                             </dt>
                             <dd class="col-md-8">
-                                @Html.DisplayFor(model => model.PaymentTransaction.Amount)TK
+                                @Html.DisplayFor(model => model.PaymentTransaction.AdmissionFee)TK
                             </dd>
                             <dt class="col-md-4">
                                 @Html.DisplayNameFor(model => model.PaymentTransaction.TransactionDate)
