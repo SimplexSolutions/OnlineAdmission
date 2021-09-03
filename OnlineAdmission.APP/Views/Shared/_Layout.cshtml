@@ -41,21 +41,26 @@
 
                 @if (signInManager.IsSignedIn(User))
                 {
+                    
                     <ul class="list-unstyled components mb-5">
-                        <li class="active">
-                            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Students</a>
-                            <ul class="collapse list-unstyled" id="homeSubmenu">
-                                <li>
-                                    <a asp-action="Index" asp-controller="AppliedStudents">Applied Students</a>
-                                </li>
-                                <li>
-                                    <a asp-action="Index" asp-controller="MeritStudents">Selected Students</a>
-                                </li>
-                                <li>
-                                    <a asp-action="Index" asp-controller="Students">Admitted Students</a>
-                                </li>
-                            </ul>
-                        </li>
+                    @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("Accounts"))
+                        {
+                            <li class="active">
+                                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Students</a>
+                                <ul class="collapse list-unstyled" id="homeSubmenu">
+                                    <li>
+                                        <a asp-action="Index" asp-controller="AppliedStudents">Applied Students</a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="Index" asp-controller="MeritStudents">Selected Students</a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="Index" asp-controller="Students">Admitted Students</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        
                         @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("Accounts"))
                         {
                             <li>
@@ -85,9 +90,13 @@
                                 <a asp-controller="SMS" asp-action="Index">SMS</a>
                             </li>
                         }
-                        <li>
-                            <a asp-controller="Students" asp-action="IdCard">ID Card</a>
-                        </li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("Teacher") )
+                        {
+                            <li>
+                                <a asp-controller="Students" asp-action="IdCard">ID Card</a>
+                            </li>
+                        }
+                    
                     </ul>
                 }
 
@@ -128,10 +137,13 @@
                             </li>
                             @if (signInManager.IsSignedIn(User))
                             {
-
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-action="Index" asp-controller="SpecialOffer">Special</a>
-                                </li>
+                                if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-action="Index" asp-controller="SpecialOffer">Special</a>
+                                    </li>
+                                }
+                                
                             }
                         </ul>
                     </div>

@@ -2,7 +2,6 @@
 @model PaginatedList<OnlineAdmission.Entity.AppliedStudent>
 @{
     ViewData["Title"] = "Index";
-    int sl = 0;
     int i = (Model.PageIndex - 1) * Model.PageSize + 1;
     ViewBag.pagesize = Model.PageSize;
 

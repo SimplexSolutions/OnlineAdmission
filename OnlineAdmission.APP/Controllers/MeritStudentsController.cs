@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace OnlineAdmission.APP.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="Admin, SuperAdmin")]
     public class MeritStudentsController : Controller
     {
         private readonly IMeritStudentManager _meritStudentManager;

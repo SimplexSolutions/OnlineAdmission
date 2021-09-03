@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace OnlineAdmission.APP.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="Admin, SuperAdmin")]
     public class AppliedStudentsController : Controller
     {
         private readonly IAppliedStudentManager _appliedStudentManager;
@@ -30,8 +30,6 @@ namespace OnlineAdmission.APP.Controllers
         }
         public async Task<IActionResult> Index(string searchingText, string sortRoll, string sortHSCRoll, int page, int pagesize)
         {
-
-
 
             IQueryable<AppliedStudent> appliedStudentList = _appliedStudentManager.GetIQueryableData();
             ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
@@ -48,21 +46,21 @@ namespace OnlineAdmission.APP.Controllers
             }
 
 
-            ViewBag.searchingText = searchingText;
-            ViewBag.count = appliedStudentList.Count();
+            ViewBag.data = searchingText;
+            
 
-            int pageSize = pagesize <= 0 ? 10 : pagesize;
+            int pageSize = pagesize <= 0 ? 20 : pagesize;
             if (page <= 0) page = 1;
 
             if (!string.IsNullOrEmpty(searchingText))
             {
                 searchingText = searchingText.Trim().ToLower();
 
-                appliedStudentList = appliedStudentList.Where(m => m.NUAdmissionRoll.ToString().ToLower() == searchingText || m.ApplicantName.ToString().ToLower() == searchingText || m.MobileNo.ToString().ToLower() == searchingText || m.HSCGroup.ToString().ToLower() == searchingText);
-
+                appliedStudentList = appliedStudentList.Where(m => m.NUAdmissionRoll.ToString().ToLower().Trim() == searchingText || m.ApplicantName.ToLower().Trim().Contains(searchingText) || m.MobileNo.ToLower().Trim() == searchingText || m.HSCGroup.ToLower().Trim() == searchingText || m.FatherName.ToLower().Trim().Contains(searchingText) || m.MotherName.ToLower().Trim().Contains(searchingText));
+                ViewBag.count = appliedStudentList.Count();
                 return View(await PaginatedList<AppliedStudent>.CreateAsync(appliedStudentList, page, pageSize));
             }
-
+                ViewBag.count = appliedStudentList.Count();
             return View(await PaginatedList<AppliedStudent>.CreateAsync(appliedStudentList, page, pageSize));
 
 
