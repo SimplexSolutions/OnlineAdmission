@@ -69,13 +69,28 @@ namespace OnlineAdmission.APP.Controllers
             int pageSize = pagesize <= 0 ? 20 : pagesize;
             if (page <= 0) page = 1;
 
-            if (fromdate != null && todate != null)
+            if (fromdate != null || todate != null)
             {
-                paymentReceiptVMs = from a in paymentReceiptVMs
-                                    where (a.PaymentTransaction.TransactionDate.Date >= fromdate && a.PaymentTransaction.TransactionDate.Date <= todate)
-                                    select a;
-
+                if (fromdate != null && todate != null)
+                {
+                    paymentReceiptVMs = from a in paymentReceiptVMs
+                                        where (a.PaymentTransaction.TransactionDate.Date >= fromdate && a.PaymentTransaction.TransactionDate.Date <= todate)
+                                        select a;
+                }
+                else if (fromdate != null && todate == null)
+                {
+                    paymentReceiptVMs = from a in paymentReceiptVMs
+                                        where (a.PaymentTransaction.TransactionDate.Date >= fromdate)
+                                        select a;
+                }
+                else if (fromdate == null && todate != null)
+                {
+                    paymentReceiptVMs = from a in paymentReceiptVMs
+                                        where (a.PaymentTransaction.TransactionDate.Date <= todate)
+                                        select a;
+                }
             }
+
             if (!string.IsNullOrEmpty(searchingText))
             {
                 searchingText = searchingText.Trim().ToLower();

@@ -18,6 +18,10 @@
         <div class="col-md-6">
             <div class="float-md-right">
                 @*<h4 class="text-primary"> @ViewBag.count</h4>*@
+                @if (ViewBag.count != null)
+                {
+                    <span>Total found @ViewBag.count</span>
+                }
 
                 <input type="text" name="searchingText" value="@ViewBag.data" class="form-control" placeholder="Search...." />
 
