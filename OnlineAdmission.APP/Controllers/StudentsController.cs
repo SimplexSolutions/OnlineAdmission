@@ -955,6 +955,7 @@ namespace OnlineAdmission.APP.Controllers
             student.Subject = sub;
             student.PresentDistrict = await _districtManager.GetByIdAsync(student.PresentDistrictId);
             student.PermanentDistrict = await _districtManager.GetByIdAsync(student.PermanentDistrictId);
+            student.MailingDistrict = await _districtManager.GetByIdAsync(student.MailingDistrictId);
             if (student == null)
             {
                 return NotFound();
