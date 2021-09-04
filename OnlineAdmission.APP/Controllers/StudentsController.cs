@@ -140,11 +140,7 @@ namespace OnlineAdmission.APP.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Create(StudentCreateVM student, IFormFile photo)
         {
-
-
             student.DistrictList = new SelectList(await _districtManager.GetAllAsync(), "Id", "DistrictName").ToList();
-
-
 
             string msg = "";
             var existingSubject = await _subjectManager.GetByIdAsync(student.SubjectId);

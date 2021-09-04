@@ -15,7 +15,6 @@
     <title>@ViewData["Title"] Online Admission</title>
     @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
     <link rel="stylesheet" href="~/css/site.css" />
-    <link href="~/lib/datatable/css/datatable.min.css" rel="stylesheet" />
 
     @*Alertify*@
     <link href="~/lib/alertify/css/alertify.min.css" rel="stylesheet" />
@@ -23,6 +22,10 @@
 
     @*Select2*@
     <link href="~/lib/Select2/css/select2.min.css" rel="stylesheet" />
+
+    @*datatable*@
+    <link href="~/lib/datatable/datatables.min.css" rel="stylesheet" />
+
 
 
 </head>
@@ -159,7 +162,8 @@
     <script src="~/theme/js/bootstrap.min.js"></script>
     <script src="~/lib/Select2/js/select2.min.js"></script>
     <script src="~/theme/js/main.js"></script>
-    <script src="~/lib/datatable/js/datatable.min.js"></script>
+    <script src="~/lib/datatable/datatables.min.js"></script>
+
     <script src="~/lib/alertify/alertify.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     @RenderSection("Styles", required: false)
