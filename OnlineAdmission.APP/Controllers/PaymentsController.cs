@@ -45,13 +45,16 @@ namespace OnlineAdmission.APP.Controllers
                                                              from m in _meritStudentManager.GetIQueryableData().Where(a => a.NUAdmissionRoll==t.ReferenceNo)
                                                              from sub in _subjectManager.GetIQueryableData().Where(a => a.Code == m.SubjectCode)
                                                              from s in _appliedStudentManager.GetIQueryableData().Where(a=>a.NUAdmissionRoll == t.ReferenceNo)
+                                                             join stu in _studentManager.GetIQueryableData() on m.NUAdmissionRoll equals stu.NUAdmissionRoll into myList
+                                                             from subList in myList.DefaultIfEmpty()
                                                              select new PaymentReceiptVM{
                                                                  PaymentTransaction = t,
                                                                  MeritStudent = m,
                                                                  Subject = sub,
-                                                                 AppliedStudent = s
+                                                                 AppliedStudent = s,
+                                                                 Student = subList
                                                              };
-
+ 
             ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
 
 

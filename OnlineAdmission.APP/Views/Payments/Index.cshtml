@@ -67,7 +67,10 @@
                         Name
                     </th>
                     <th>
-                        Roll No
+                        NU Roll
+                    </th>
+                    <th>
+                        College Roll
                     </th>
                     <th>
                         Session
@@ -106,6 +109,16 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.AppliedStudent.NUAdmissionRoll)
                         </td>
+                        <td class="text-md-center">
+                            @if (item.Student != null)
+                            {
+                                @Html.DisplayFor(modelItem => item.Student.CollegeRoll)
+                            }
+                            else
+                            {
+                                <span>N/A</span>
+                            }
+                        </td>
                         <td>
                             2021-2022
                         </td>
@@ -124,7 +137,7 @@
                         <td>
                             @item.PaymentTransaction.TransactionDate.ToString("yyyy-MM-dd")
                         </td>
-                        <td class="text-md-right">
+                        <td class="text-right">
                             @Math.Round(item.PaymentTransaction.AdmissionFee, 2)
                         </td>
                         <td class="noPrint">
@@ -137,8 +150,8 @@
                     total = total + item.PaymentTransaction.AdmissionFee;
                 }
                 <tr class="" style="background-color:#f7f0f0">
-                    <td colspan="9" class="text-md-right">TOTAL</td>
-                    <td class="text-md-right font-weight-bold">@Math.Round(total, 2)</td>
+                    <td colspan="10" class="text-md-right">TOTAL</td>
+                    <td class="text-right font-weight-bold">@Math.Round(total, 2)</td>
                     <td></td>
                 </tr>
             </tbody>
