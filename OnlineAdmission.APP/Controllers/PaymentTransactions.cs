@@ -53,7 +53,7 @@ namespace OnlineAdmission.APP.Controllers
 
             if (status.ToLower() == "success")
             {
-              string  successNotification = "Congratulations! Payment Completed (BDT: " + responsevalue.amount+"/-)";
+                string successNotification = "Congratulations! Payment Completed (BDT: " + responsevalue.amount + "/-)";
                 //Guid guid = new Guid();
                 //{"merchantId":"683002007104225",
                 //                "orderId":"3001639025135",
@@ -72,44 +72,16 @@ namespace OnlineAdmission.APP.Controllers
                 var additionalMerchantInfo = (responsevalue.additionalMerchantInfo).Value;
                 dynamic MerchantInfo = JObject.Parse(additionalMerchantInfo);
 
-                //var existingMeritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(GlobalVariables.nuRoll));
-                //var existingAppliedStudent = await appliedStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(GlobalVariables.nuRoll));
-                //var existingSubject = await subjectManager.GetByCodeAsync(existingMeritStudent.SubjectCode);
-
-                //string year = DateTime.Today.ToString("yyyy");
-                //int subjectCode = existingSubject.Code;
-                //int count = await studentManager.GetCountAsync(existingSubject.Id);
-                //string sl = "";
-                //if (count < 100)
-                //{
-                //    if (count == 0)
-                //    {
-                //        sl = "001";
-                //    }
-                //    else if (count < 10)
-                //    {
-                //        sl = "00" + count.ToString();
-                //    }
-                //    else if (count < 100 && count > 9)
-                //    {
-                //        sl = "0" + count.ToString();
-                //    }
-                //}
-                //else
-                //{
-                //    sl = count.ToString();
-                //}
-
-                PaymentTransaction newPayment = new PaymentTransaction();
                 
-                newPayment.Amount = responsevalue.amount;
-                newPayment.TransactionDate = DateTime.Today;
-                newPayment.Balance = 0;
-                newPayment.AccountNo = responsevalue.clientMobileNo;
-                newPayment.TransactionId = responsevalue.orderId;
-                newPayment.ReferenceNo =Convert.ToInt32(GlobalVariables.nuRoll);
-                newPayment.AdmissionFee = MerchantInfo.AdmissionFee;
-                newPayment.ServiceCharge = MerchantInfo.ServiceCharge;
+                PaymentTransaction newPayment = new PaymentTransaction{
+                Amount = responsevalue.amount,
+                TransactionDate = DateTime.Today,
+                Balance = 0,
+                AccountNo = responsevalue.clientMobileNo,
+                TransactionId = responsevalue.orderId,
+                ReferenceNo = Convert.ToInt32(GlobalVariables.nuRoll),
+                AdmissionFee = MerchantInfo.AdmissionFee,
+                ServiceCharge = MerchantInfo.ServiceCharge};
                 //newPayment.ApplicantName = MerchantInfo.StudentName;
                 //newPayment.MobileNo = MerchantInfo.MobileNo;
                 //newPayment.SubjectId = MerchantInfo.SubjectId;
