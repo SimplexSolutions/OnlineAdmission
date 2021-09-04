@@ -91,7 +91,7 @@
                                         </button>
                                     </form>
                                 </div>
-                                @if (User.IsInRole("Admin, SuperAdmin"))
+                                @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                                 {
                                     <div class="card border-0">
                                         <form asp-action="CollegePayment" asp-controller="Students" method="get">
