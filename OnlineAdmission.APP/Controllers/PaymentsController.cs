@@ -33,7 +33,7 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         // GET: Payments
-        public async Task<IActionResult> Index(string searchingText, string sortRoll, string sortHSCRoll, int page, int pagesize)
+        public async Task<IActionResult> Index(string searchingText, string sortRoll, string sortHSCRoll, int page, int pagesize, DateTime? fromdate, DateTime? todate)
         {
             if (TempData["msg"]!=null)
             {
@@ -64,19 +64,25 @@ namespace OnlineAdmission.APP.Controllers
                     paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.PaymentTransaction.Id);
                     break;
             }
-
-
             ViewBag.data = searchingText;
             
-            int pageSize = pagesize <= 0 ? 10 : pagesize;
+            int pageSize = pagesize <= 0 ? 20 : pagesize;
             if (page <= 0) page = 1;
 
+            if (fromdate != null && todate != null)
+            {
+                paymentReceiptVMs = from a in paymentReceiptVMs
+                                    where (a.PaymentTransaction.TransactionDate.Date >= fromdate && a.PaymentTransaction.TransactionDate.Date <= todate)
+                                    select a;
+
+            }
             if (!string.IsNullOrEmpty(searchingText))
             {
                 searchingText = searchingText.Trim().ToLower();
 
                 paymentReceiptVMs = paymentReceiptVMs.Where(m => m.AppliedStudent.ApplicantName.ToLower().Contains(searchingText) || m.PaymentTransaction.AccountNo.ToLower() == searchingText || m.PaymentTransaction.TransactionId.ToLower() == searchingText || m.AppliedStudent.NUAdmissionRoll.ToString().ToLower() == searchingText || m.Subject.SubjectName.ToLower() == searchingText || m.PaymentTransaction.Amount.ToString().ToLower() == searchingText || m.PaymentTransaction.TransactionDate.ToString().Contains(searchingText));
                 ViewBag.count = paymentReceiptVMs.Count();
+                
                 return View(await PaginatedList<PaymentReceiptVM>.CreateAsync(paymentReceiptVMs, page, pageSize));
             }
             ViewBag.count = paymentReceiptVMs.Count();

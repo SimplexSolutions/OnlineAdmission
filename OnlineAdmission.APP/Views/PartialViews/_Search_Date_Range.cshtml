@@ -1,0 +1,30 @@
+﻿
+<div class="">
+
+    <form asp-action="Index" class="form-inline" method="post">
+        <div class="col-md-6">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label class="col-md-2">From</label>
+                    <input type="date" name="fromdate" class="form-control-sm">
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <label class="col-md-2">To</label>
+                    <input type="date" class="form-control-sm" name="todate">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="float-md-right">
+                @*<h4 class="text-primary"> @ViewBag.count</h4>*@
+
+                <input type="text" name="searchingText" value="@ViewBag.data" class="form-control" placeholder="Search...." />
+
+                <button class="btn-info form-control" type="submit">Search</button>
+            </div>
+                    </div>
+    </form>
+
+
+</div>
