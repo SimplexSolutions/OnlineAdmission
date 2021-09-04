@@ -23,9 +23,61 @@ namespace OnlineAdmission.APP.Controllers
         
         public IActionResult UserList()
         {
+
+            if (TempData["success"] !=null)
+            {
+                ViewBag.success = TempData["success"].ToString();
+            }
+            if(TempData["error"] !=null)
+            {
+                ViewBag.error = TempData["error"].ToString();
+            }
+            if(TempData["warning"] !=null)
+            {
+                ViewBag.warning = TempData["warning"].ToString();
+            }
             var users = _userManager.Users;
             return View(users);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+   
+            var appUser = await _userManager.FindByIdAsync(id);
+
+            return View(appUser);
+        }
+
+        public async Task<IActionResult> DeleteConfirmed(string id, IdentityUser user)
+        {
+            if (id!=user.Id)
+            {
+                return null;
+            }
+            
+            IdentityUser identityUser = await _userManager.FindByIdAsync(id);
+            var isRoleAssingned =await _userManager.GetRolesAsync(identityUser);
+            if (isRoleAssingned.Count()>=1)
+            {
+                TempData["warning"] = user.UserName+" is in a role.";
+            }
+            else
+            {
+                var deleted = await _userManager.DeleteAsync(identityUser);
+                if (deleted.Succeeded)
+                {
+                    TempData["success"] = user.UserName + " is Deleted.";
+                }
+                else
+                {
+                    TempData["error"] = "Delete failed.";
+                }
+            }
+            
+            return RedirectToAction("UserList");
+        }
+
 
         [HttpGet]
         public IActionResult RoleList()
