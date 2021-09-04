@@ -207,7 +207,7 @@ namespace OnlineAdmission.APP.Controllers
                     {
                         string year = DateTime.Today.ToString("yyyy");
                         int subjectCode = existingSubject.Code;
-                        int count = await _studentManager.GetCountAsync(existingSubject.Id);
+                        int count = await _studentManager.GetCountAsync(existingSubject.Id)+1;
                         string sl = "";
                         if (count < 100)
                         {
