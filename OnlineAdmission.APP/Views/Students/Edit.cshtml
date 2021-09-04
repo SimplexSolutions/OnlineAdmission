@@ -11,7 +11,8 @@
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-
+            <input type="hidden" asp-for="NuAdmissionRoll" />
+            
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group row">
                 <label asp-for="SubjectId" class="col-form-label col-md-2 text-md-right text-left">Subject: </label>

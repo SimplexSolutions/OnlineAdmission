@@ -321,6 +321,8 @@ namespace OnlineAdmission.APP.Controllers
                     student.Photo = attachFile;
                 }
                 Student existStudent = _mapper.Map<Student>(student);
+                existStudent.UpdatedAt = DateTime.Now;
+                existStudent.UpdatedBy = HttpContext.Session.GetString("User");
                 await _studentManager.UpdateAsync(existStudent);
                 return RedirectToAction("Index");
             }
