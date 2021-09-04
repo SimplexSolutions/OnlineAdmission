@@ -79,7 +79,7 @@ namespace OnlineAdmission.APP.Controllers
                 Balance = 0,
                 AccountNo = responsevalue.clientMobileNo,
                 TransactionId = responsevalue.orderId,
-                ReferenceNo = Convert.ToInt32(GlobalVariables.nuRoll),
+                ReferenceNo = MerchantInfo.NuAdmissionRoll,
                 AdmissionFee = MerchantInfo.AdmissionFee,
                 ServiceCharge = MerchantInfo.ServiceCharge};
                 //newPayment.ApplicantName = MerchantInfo.StudentName;
@@ -88,7 +88,7 @@ namespace OnlineAdmission.APP.Controllers
 
                 await paymentTransactionManager.AddAsync(newPayment);
 
-                MeritStudent meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(GlobalVariables.nuRoll));
+                MeritStudent meritStudent = await meritStudentManager.GetByAdmissionRollAsync(MerchantInfo.NuAdmissionRoll);
                 meritStudent.PaymentStatus = true;
                 meritStudent.PaymentTransactionId = newPayment.Id;
                 await meritStudentManager.UpdateAsync(meritStudent);

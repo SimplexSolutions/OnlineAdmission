@@ -690,6 +690,7 @@ namespace OnlineAdmission.APP.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+               
             }
 
             
@@ -765,7 +766,8 @@ namespace OnlineAdmission.APP.Controllers
                 AdmissionFee = amount,
                 StudentName= appliedStudent.ApplicantName,
                 MobileNo = appliedStudent.MobileNo,
-                SubjectId = subject.Id
+                SubjectId = subject.Id,
+                NuAdmissionRoll = nuRoll
             };
 
             var paymentFinalJSON = new
@@ -824,7 +826,7 @@ namespace OnlineAdmission.APP.Controllers
             string site = co_Response.callBackUrl;
             if (co_Response.status == "Success")
             {
-                GlobalVariables.nuRoll = nuRoll.ToString();
+                //GlobalVariables.nuRoll = nuRoll.ToString();
                 //GlobalVariables.AdmissionFee = co_Response.paymentMarchantInfo.AdmissionFee;
                 //GlobalVariables.ServiceCharge = serviceCharge;
                 return Redirect(site);

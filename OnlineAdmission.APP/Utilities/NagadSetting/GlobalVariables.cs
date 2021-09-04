@@ -9,7 +9,7 @@ namespace OnlineAdmission.APP.Utilities.NagadSetting
     {
         public static string MerchantId = "687231533088220";
         //public static string MerchantId = "683002007104225";
-        public static string nuRoll = "";
+        //public static string nuRoll = "";
         //public static double AdmissionFee = 0.00;
         //public static double ServiceCharge = 0.00;
 
