@@ -15,6 +15,7 @@
 				<th>#</th>
 				<th>Id</th>
 				<th>User Name</th>
+				<th>Action</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -24,6 +25,9 @@
 					<td>@(++sl)</td>
 					<td>@user.Id</td>
 					<td>@user.UserName</td>
+					<td>
+                        <a asp-action="Delete" asp-controller="Administrations" class="btn btn-danger" asp-route-id="@user.Id">Delete</a>
+					</td>
 				</tr>
             }
 		</tbody>
@@ -35,3 +39,24 @@ else
 			<h4>Not any user created yet</h4>
 		</div>	
 	}
+
+@section Scripts{ 
+	<script>
+		$(document).ready(function () {
+			let success = '@ViewBag.success';
+			let error = '@ViewBag.error';
+			let warning = '@ViewBag.warning';
+
+            if (success !== '') {
+                alertify.success(success);
+            }
+            if (error !== '') {
+                alertify.error(error);
+            }
+            if (warning !== '') {
+                alertify.warning(warning);
+            }
+            
+        });
+	</script>
+}
