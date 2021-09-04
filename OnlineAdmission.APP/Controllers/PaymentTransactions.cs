@@ -88,7 +88,7 @@ namespace OnlineAdmission.APP.Controllers
 
                 await paymentTransactionManager.AddAsync(newPayment);
 
-                MeritStudent meritStudent = await meritStudentManager.GetByAdmissionRollAsync(MerchantInfo.NuAdmissionRoll);
+                MeritStudent meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
                 meritStudent.PaymentStatus = true;
                 meritStudent.PaymentTransactionId = newPayment.Id;
                 await meritStudentManager.UpdateAsync(meritStudent);
