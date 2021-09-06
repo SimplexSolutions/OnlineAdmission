@@ -209,35 +209,35 @@ namespace OnlineAdmission.APP.Controllers
                     {
                         msg = "Please upload an image";
                     }
-                    if (student.CollegeRoll == 0)
+                    
+
+
+                    string year = DateTime.Today.ToString("yyyy");
+                    int subjectCode = existingSubject.Code;
+                    int count = await _studentManager.GetCountAsync(existingSubject.Id)+1;
+                    string sl = "";
+                    if (count < 100)
                     {
-                        string year = DateTime.Today.ToString("yyyy");
-                        int subjectCode = existingSubject.Code;
-                        int count = await _studentManager.GetCountAsync(existingSubject.Id)+1;
-                        string sl = "";
-                        if (count < 100)
+                        if (count == 0)
                         {
-                            if (count == 0)
-                            {
-                                sl = "001";
-                            }
-                            else if (count < 10)
-                            {
-                                sl = "00" + count.ToString();
-                            }
-                            else if (count < 100 && count > 9)
-                            {
-                                sl = "0" + count.ToString();
-                            }
+                            sl = "001";
                         }
-                        else
+                        else if (count < 10)
                         {
-                            sl = count.ToString();
+                            sl = "00" + count.ToString();
                         }
-
-
-                        student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + subjectCode + "" + sl);
+                        else if (count < 100 && count > 9)
+                        {
+                            sl = "0" + count.ToString();
+                        }
                     }
+                    else
+                    {
+                        sl = count.ToString();
+                    }
+
+                    student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + subjectCode + "" + sl);
+                    
                     
                     
                     Student newStudent = _mapper.Map<Student>(student);
@@ -602,7 +602,6 @@ namespace OnlineAdmission.APP.Controllers
 
             return View();
         }
-
 
 
         //[AllowAnonymous]

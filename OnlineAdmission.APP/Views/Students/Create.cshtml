@@ -391,8 +391,6 @@
                 <a class="btn btn-danger" asp-action="Search">Cancel</a>
             </div>
         </form>
-
-
     </div>
 </div>
 <br /><br />
@@ -428,19 +426,14 @@
                     if (picsize > 200000) {
                         $('#error2').slideDown("slow");
                         a = 0;
-                    } else {
+                    }
+                    else {
                         a = 1;
                         $('#error2').slideUp("slow");
                     }
                     $('#error1').slideUp("slow");
-                    
                 }
             });
-
-
-
-
-
 
 
             $("#msgId").fadeOut(12000);
