@@ -292,6 +292,12 @@ namespace OnlineAdmission.APP.Controllers
             {
                 if (photo != null)
                 {
+                    int allowedImgSize = 200000;
+                    if (photo.Length > allowedImgSize)
+                    {
+                        ViewBag.msg = "File size should not more than 200 KB.";
+                        return View(student);
+                    }
 
                     string[] supportedExt = { ".jpg", ".jpeg", ".png" };
                     bool validImage = false;
@@ -322,7 +328,7 @@ namespace OnlineAdmission.APP.Controllers
                 }
                 Student existStudent = _mapper.Map<Student>(student);
                 existStudent.UpdatedAt = DateTime.Now;
-                existStudent.UpdatedBy = HttpContext.Session.GetString("User");
+                //existStudent.UpdatedBy = HttpContext.Session.GetString("User");
                 await _studentManager.UpdateAsync(existStudent);
                 return RedirectToAction("Index");
             }
