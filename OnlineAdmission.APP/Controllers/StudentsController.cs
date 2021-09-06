@@ -299,6 +299,12 @@ namespace OnlineAdmission.APP.Controllers
             {
                 if (photo != null)
                 {
+                    int allowedImgSize = 200000;
+                    if (photo.Length > allowedImgSize)
+                    {
+                        ViewBag.msg = "File size should not more than 200 KB.";
+                        return View(student);
+                    }
 
                     string[] supportedExt = { ".jpg", ".jpeg", ".png" };
                     bool validImage = false;
