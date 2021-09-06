@@ -142,7 +142,7 @@
             <div class="form-group row">
                 <label asp-for="Birthday" class="text-right col-form-label col-md-2"></label>
                 <div class="col-md-5">
-                    <input asp-for="Birthday" class="form-control" />
+                    <input asp-for="Birthday" class="form-control" min="1991-09-06" max="2018-12-31" />
                     <span asp-validation-for="Birthday" class="text-danger"></span>
                 </div>
 
@@ -413,23 +413,30 @@
             //Image validation
             
             var a = 0;
+            $("#submitButton").attr("disabled", true);
             //binds to onchange event of your input field
             $('#imageUpload').bind('change', function () {
+
                 
                 var ext = $('#imageUpload').val().split('.').pop().toLowerCase();
                 if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
                     $('#error1').slideDown("slow");
                     $('#error2').slideUp("slow");
+                    $("#submitButton").attr("disabled", true);
                     a = 0;
-                } else {
+                }
+                else {
                     var picsize = (this.files[0].size);
                     if (picsize > 200000) {
                         $('#error2').slideDown("slow");
+                        $("#submitButton").attr("disabled", true);
                         a = 0;
+
                     }
                     else {
                         a = 1;
                         $('#error2').slideUp("slow");
+                        $("#submitButton").attr("disabled", false);
                     }
                     $('#error1').slideUp("slow");
                 }
