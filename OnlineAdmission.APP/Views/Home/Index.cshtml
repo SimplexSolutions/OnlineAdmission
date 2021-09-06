@@ -98,7 +98,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var sub in meritSubGroup)
+                    @foreach (var sub in meritSubGroup.OrderBy(m => m.Key))
                     {
                         <tr>
                             <td>@sub.Key</td>
@@ -133,7 +133,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var sub in paidSubGroup)
+                        @foreach (var sub in paidSubGroup.OrderBy(m => m.Key))
                         {
                             <tr>
                                 <td>@sub.Key</td>
@@ -171,7 +171,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var sub in AdmittedSubGroup)
+                        @foreach (var sub in AdmittedSubGroup.OrderBy(m => m.Key))
                         {
                             <tr>
                                 <td>@sub.Key</td>
