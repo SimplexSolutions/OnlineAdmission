@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineAdmission.APP.ViewModels.User;
@@ -60,6 +61,7 @@ namespace OnlineAdmission.APP.Controllers
                 var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
+                    
                     return RedirectToAction("Search", "Students");
 
                     //if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
@@ -38,8 +39,9 @@ namespace OnlineAdmission.APP.Controllers
         private readonly ISubjectManager _subjectManager;
         private readonly ISecurityKey _securityKey;
         private readonly ISMSManager _smsManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public StudentsController(IStudentManager studentManager, IWebHostEnvironment host, IMeritStudentManager meritStudentManager, IMapper mapper, IDistrictManager districtManager, ISubjectManager subjectManager, IAppliedStudentManager appliedStudentManager, IPaymentTransactionManager paymentTransactionManager, ISecurityKey securityKey, ISMSManager smsManager)
+        public StudentsController(IStudentManager studentManager, IWebHostEnvironment host, IMeritStudentManager meritStudentManager, IMapper mapper, IDistrictManager districtManager, ISubjectManager subjectManager, IAppliedStudentManager appliedStudentManager, IPaymentTransactionManager paymentTransactionManager, ISecurityKey securityKey, ISMSManager smsManager, UserManager<IdentityUser> userManager)
         {
             _studentManager = studentManager;
             _host = host;
@@ -51,6 +53,7 @@ namespace OnlineAdmission.APP.Controllers
             _paymentTransactionManager = paymentTransactionManager;
             _securityKey = securityKey;
             _smsManager = smsManager;
+            _userManager = userManager;
         }
 
         ApplicationAPI _api = new ApplicationAPI();
@@ -59,6 +62,9 @@ namespace OnlineAdmission.APP.Controllers
         // GET: StudentsController
         public async Task<IActionResult> Index()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            HttpContext.Session.SetString("UserId", user.Id);
+
             var AdmittedStudents = await _studentManager.GetAllAsync();
             return View(AdmittedStudents);
 
@@ -273,6 +279,7 @@ namespace OnlineAdmission.APP.Controllers
         // GET: StudentsController/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
+            //HttpContext.Session.SetString("UserId");
             var student = await _studentManager.GetByIdAsync(id);
 
             var subject = await _subjectManager.GetByIdAsync(student.SubjectId);
@@ -322,7 +329,7 @@ namespace OnlineAdmission.APP.Controllers
                 }
                 Student existStudent = _mapper.Map<Student>(student);
                 existStudent.UpdatedAt = DateTime.Now;
-                existStudent.UpdatedBy = HttpContext.Session.GetString("User");
+                existStudent.UpdatedBy = HttpContext.Session.GetString("UserId");
                 await _studentManager.UpdateAsync(existStudent);
                 return RedirectToAction("Index");
             }
@@ -360,7 +367,7 @@ namespace OnlineAdmission.APP.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Search(string notification)
+        public async Task<IActionResult> Search(string notification)
         {
 
             if (TempData["msg"]!=null)
@@ -368,6 +375,12 @@ namespace OnlineAdmission.APP.Controllers
                 ViewBag.msg = TempData["msg"].ToString();
             }
             ViewBag.notify = notification;
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user!=null)
+            {
+                HttpContext.Session.SetString("UserId", user.Id);
+            }
+            
             return View();
         }
 

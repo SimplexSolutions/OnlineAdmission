@@ -110,6 +110,8 @@ namespace OnlineAdmission.APP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
         {
+
+            //collection.UpdatedBy = HttpContext.Session.GetString("UserId");
             try
             {
                 return RedirectToAction(nameof(Index));

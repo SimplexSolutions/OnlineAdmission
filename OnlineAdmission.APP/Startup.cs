@@ -40,7 +40,10 @@ namespace OnlineAdmission.APP
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
             });
+            
 
             services.AddDbContext<OnlineAdmissionDbContext>(options =>
                 options.UseSqlServer(
@@ -122,7 +125,7 @@ namespace OnlineAdmission.APP
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthentication();
@@ -139,8 +142,8 @@ namespace OnlineAdmission.APP
             //{
             //    endpoints.MapControllerRoute(
             //        name: "default",
-            //        //pattern: "{controller=Students}/{action=Search}/{id?}");
-            //        pattern: "{controller=Home}/{action=Index}/{id?}");
+            //        pattern: "{controller=Students}/{action=Search}/{id?}");
+            //        //pattern: "{controller=Home}/{action=Index}/{id?}");
             //});
         }
     }
