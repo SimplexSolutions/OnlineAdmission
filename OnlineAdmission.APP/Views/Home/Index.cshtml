@@ -68,7 +68,7 @@
         <div class="card-header bg-info border-info text-center">
             <h4>Applied</h4>
         </div>
-        <div class="card-body">
+        <div class="">
             
             <a asp-controller="AppliedStudents" asp-action="index">
                 <h5 class="card-title">Total <span class="text-info font-weight-bold">@Model.AppliedStudents.Count</span>  Students</h5>
@@ -87,7 +87,7 @@
         <div class="card-header bg-primary border-primary text-center">
             <h4>Selected</h4>
         </div>
-        <div class="card-body">
+        <div class="">
             <h5 class="card-title">Total <span class="text-info font-weight-bold">@Model.MeritStudents.Count</span>  Students</h5>
 
             <table class="table table-bordered table-striped">
@@ -116,9 +116,9 @@
 
     <div class="card">
         <div class="card-header bg-success border-success text-center">
-            <h4>Payment Completed</h4>
+            <h4>Paid</h4>
         </div>
-        <div class="card-body">
+        <div class="">
             
             @if (Model.MeritStudents!=null)
             {
@@ -158,7 +158,7 @@
         <div class="card-header bg-warning border-warning text-center">
             <h4>Admitted</h4>
         </div>
-        <div class="card-body">
+        <div class="">
             <a asp-controller="Students" asp-action="index">
                 <h5 class="card-title">Total <span class="text-info font-weight-bold">@Model.Students.Count</span>  Students</h5>
             </a>
