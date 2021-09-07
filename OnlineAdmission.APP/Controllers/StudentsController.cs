@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 
 namespace OnlineAdmission.APP.Controllers
 {
-    [Authorize(Roles ="Admin,SuperAdmin")]
+    [Authorize(Roles ="Admin,SuperAdmin,Teacher")]
     public class StudentsController : Controller
     {
         private readonly IStudentManager _studentManager;
@@ -60,6 +60,7 @@ namespace OnlineAdmission.APP.Controllers
         NagadAPI _nagadAPI = new NagadAPI();
 
         // GET: StudentsController
+        [Authorize(Roles = "Admin,SuperAdmin,Teacher")]
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
@@ -277,6 +278,8 @@ namespace OnlineAdmission.APP.Controllers
 
         }
         // GET: StudentsController/Edit/5
+
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<ActionResult> Edit(int id)
         {
             //HttpContext.Session.SetString("UserId");
@@ -292,6 +295,7 @@ namespace OnlineAdmission.APP.Controllers
         // POST: StudentsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<ActionResult> Edit(int id, StudentEditVM student, IFormFile photo)
         {
             string msg = "";
@@ -344,6 +348,7 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         // GET: StudentsController/Delete/5
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public ActionResult Delete(int id)
         {
             return View();
@@ -508,6 +513,7 @@ namespace OnlineAdmission.APP.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<ActionResult> CollegePayment(int nuRoll)
         {
             MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll);
@@ -541,6 +547,7 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<ActionResult> CollegePayment(TransactionInfo model)
         {
 

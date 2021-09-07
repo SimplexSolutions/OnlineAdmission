@@ -12,5 +12,7 @@ namespace OnlineAdmission.DAL.IRepository
         Task<Student> GetStudentByHSCRollAsync(int hscRoll);
         Task<Student> GetStudentBySSCRollAsync(int sscRoll);
         Task<int> GetCountAsync(int subId);
+        Task<Student> GetByAdmissionRollAsync(int NURoll);
+
     }
 }

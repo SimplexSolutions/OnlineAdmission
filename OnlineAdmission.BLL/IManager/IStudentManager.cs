@@ -13,5 +13,6 @@ namespace OnlineAdmission.BLL.IManager
         Task<Student> GetStudentByHSCRollAsync(int hscRoll);
         Task<Student> GetStudentBySSCRollAsync(int hscRoll);
         Task<int> GetCountAsync(int subjectCode);
+        Task<Student> GetByAdmissionRollAsync(int NURoll);
     }
 }

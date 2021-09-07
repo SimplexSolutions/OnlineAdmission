@@ -1,5 +1,4 @@
-﻿
-@model OnlineAdmission.APP.ViewModels.PaymentReceiptVM
+﻿@model OnlineAdmission.APP.ViewModels.PaymentReceiptVM
 
 @{
     ViewData["Title"] = "Details";
@@ -45,8 +44,7 @@
                             <div class="col-md-8 text-md-left">
                                 <p>
                                     <span class="h5 font-weight-bold">Tejgaon College</span><br />
-                                                                                            
-                                                                           <span class="h6"> 16 Indira Rd, Dhaka 1215</span>
+                                    <span class="h6"> 16 Indira Rd, Dhaka 1215</span>
                                 </p>
                             </div>
                         </div>
@@ -69,6 +67,15 @@
                             <dd class="col-md-8">
                                 @Html.DisplayFor(model => model.AppliedStudent.ApplicantName)
                             </dd>
+                            @if (Model.Student != null)
+                            {
+                                <dt class="col-md-4">
+                                    @Html.DisplayNameFor(model => model.Student.CollegeRoll)
+                                </dt>
+                                <dd class="col-md-8">
+                                    @Html.DisplayFor(model => model.Student.CollegeRoll)
+                                </dd>
+                            }
                             <dt class="col-md-4">
                                 @Html.DisplayNameFor(model => model.AppliedStudent.NUAdmissionRoll)
                             </dt>

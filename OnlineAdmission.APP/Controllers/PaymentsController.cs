@@ -121,12 +121,14 @@ namespace OnlineAdmission.APP.Controllers
             var existMeritStudent = await _meritStudentManager.GetByAdmissionRollAsync(paymentTransaction.ReferenceNo);
             var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(paymentTransaction.ReferenceNo);
             var existSubject = await _subjectManager.GetByCodeAsync(existMeritStudent.SubjectCode);
+            var student = await _studentManager.GetByAdmissionRollAsync(existMeritStudent.NUAdmissionRoll);
 
             PaymentReceiptVM paymentReceiptVM = new PaymentReceiptVM();
             paymentReceiptVM.PaymentTransaction = paymentTransaction;
             paymentReceiptVM.MeritStudent = existMeritStudent;
             paymentReceiptVM.AppliedStudent = appliedStudent;
             paymentReceiptVM.Subject = existSubject;
+            paymentReceiptVM.Student = student;
 
             TempData["msg"] = "Student Not Found";
 

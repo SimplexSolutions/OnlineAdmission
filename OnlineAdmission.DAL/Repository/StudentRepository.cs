@@ -14,7 +14,6 @@ namespace OnlineAdmission.DAL.Repository
     {
         public StudentRepository(OnlineAdmissionDbContext context) : base(context)
         {
-           
         }
 
         public override async Task<Student> GetByIdAsync(int id)
@@ -45,6 +44,12 @@ namespace OnlineAdmission.DAL.Repository
         {
             var count =await _context.Students.Where(s => s.SubjectId == subId).CountAsync();
             return count;
+        }
+
+        public async Task<Student> GetByAdmissionRollAsync(int NURoll)
+        {
+            var student = await _context.Students.FirstOrDefaultAsync(s => s.NUAdmissionRoll == NURoll);
+            return student;
         }
     }
 }
