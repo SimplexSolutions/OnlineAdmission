@@ -983,17 +983,19 @@ namespace OnlineAdmission.APP.Controllers
             student.PresentDistrict = await _districtManager.GetByIdAsync(student.PresentDistrictId);
             student.PermanentDistrict = await _districtManager.GetByIdAsync(student.PermanentDistrictId);
             student.MailingDistrict = await _districtManager.GetByIdAsync(student.MailingDistrictId);
+            MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(student.NUAdmissionRoll);
             if (student == null)
             {
                 return NotFound();
             }
-
-            return View(student);
+            StudentDetailsVM stuDetails = new StudentDetailsVM();
+            stuDetails.Student = student;
+            stuDetails.MeritStudent = meritStudent;
+            return View(stuDetails);
         }
 
 
         //Nagad Addition Code here=======================================
-
 
         #region Helper Functions
 
