@@ -12,6 +12,7 @@ namespace OnlineAdmission.Entity
         public int Id { get; set; }
 
         [Display(Name = "NU Roll")]
+
         [Required]
         public int NUAdmissionRoll { get; set; }
 

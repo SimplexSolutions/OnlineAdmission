@@ -1,0 +1,62 @@
+﻿@inject SignInManager<IdentityUser> signInManager
+@inject UserManager<IdentityUser> userManager
+
+@{
+    //Layout = User.IsInRole("Admin") ? "~/Views/Shared/_Layout.cshtml" : "~/Views/Shared/_LayoutStudent.cshtml";
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+}
+<div class="">
+    <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">
+        <div class="card-body">
+            <form asp-action="ProfessionalSearch" asp-controller="Students" method="post">
+                <div class="form-group row">
+                    <label class="col-md-2 text-md-right text-left col-form-label">Roll</label>
+                    <div class="col-md-6">
+                        @if (ViewBag.nuRoll != null)
+                        {
+                            <input type="number" name="professionalRoll" value="@ViewBag.nuRoll" class="form-control" />
+                        }
+                        else
+                        {
+                            <input type="number" name="professionalRoll" class="form-control" />
+                        }
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2">Search</button>
+                </div>
+            </form>
+        </div>
+        @if (ViewBag.isPaid != null)
+        {
+            if (ViewBag.isPaid == true)
+            {
+                <span>Already Paid</span>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <form asp-action="NagadPayment" asp-controller="Students">
+                            <input type="hidden" name="studentType" value="1" />
+                            <div class="form-group row">
+                                <label class="col-md-2 text-md-right text-left col-form-label">Name : </label>
+                                <div class="col-md-4">
+                                    <input type="text" name="name" class="form-control" />
+                                </div>
+
+                                <label class="col-md-2 text-md-right text-left col-form-label">Mobile : </label>
+                                <div class="col-md-4">
+                                    <input type="number" name="mobile" class="form-control" />
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary mb-2">Make Payment</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        }
+
+    </div>
+
+
+</div>

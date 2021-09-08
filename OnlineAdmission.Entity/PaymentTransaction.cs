@@ -32,5 +32,9 @@ namespace OnlineAdmission.Entity
         public double ServiceCharge { get; set; }
 
         public string Description { get; set; }
+
+        //StudentType = null = hon's Student
+        //StudentType = 1 = professional Student
+        public int? StudentType { get; set; }  
     }
 }

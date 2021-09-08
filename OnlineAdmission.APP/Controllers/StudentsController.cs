@@ -407,16 +407,20 @@ namespace OnlineAdmission.APP.Controllers
                 var meritStudent =await _meritStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll);
                 var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll);
                 
+
+
                 if (meritStudent==null)
                 {
                     ViewBag.msg = "You are not applied yet";
                     return View();
                 }
+
                 if (appliedStudent == null)
                 {
                     ViewBag.msg = "You are not eligible";
                     return View();
                 }
+
                 var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
 
                 SelectedStudentVM selectedStudent = new SelectedStudentVM() {
@@ -454,6 +458,34 @@ namespace OnlineAdmission.APP.Controllers
 
             }
             ViewBag.msg = msg;
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ProfessionalSearch()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ProfessionalSearch(int professionalRoll)
+        {
+            bool isPaid = false;
+            ViewBag.nuRoll = professionalRoll;
+            if (professionalRoll>0)
+            {
+                var payment = await _paymentTransactionManager.GetTransactionByNuRollAsync(professionalRoll);
+                if (payment!=null)
+                {
+                    isPaid = true;
+                    ViewBag.isPaid = isPaid;
+
+                    return View();
+                }
+                ViewBag.isPaid = isPaid;
+            }
             return View();
         }
 
@@ -643,12 +675,22 @@ namespace OnlineAdmission.APP.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult> NagadPayment(int nuRoll)
+        public async Task<ActionResult> NagadPayment(int nuRoll, int studentType)
         {
-            var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
-            var meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll);
-            var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
-            string OrderId = meritStudent.NUAdmissionRoll + "" + meritStudent.SubjectCode + "" + DateTime.Now.ToString("HHmmss");
+            string OrderId = "";
+            if (studentType == 1)
+            {
+                OrderId = "";
+            }
+            else
+            {
+                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+                var meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll);
+                var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
+                OrderId = meritStudent.NUAdmissionRoll + "" + meritStudent.SubjectCode + "" + DateTime.Now.ToString("HHmmss");
+            }
+            
+
 
             
 
