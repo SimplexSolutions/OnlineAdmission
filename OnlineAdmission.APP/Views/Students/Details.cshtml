@@ -1,4 +1,4 @@
-﻿@model OnlineAdmission.Entity.Student
+﻿@model OnlineAdmission.APP.ViewModels.Student.StudentDetailsVM
 
 @{
     Layout = User.IsInRole("Admin")
@@ -58,7 +58,7 @@
             <div class="col-md-2 align-text-bottom">
 
                 <div id="imageBox">
-                    <img id="blah" src="~/Images/Students/@Model.Photo" alt="your image" style="width:140px;" />
+                    <img id="blah" src="~/Images/Students/@Model.Student.Photo" alt="your image" style="width:140px;" />
                 </div>
             </div>
             <hr />
@@ -68,13 +68,22 @@
         <div class="col-md-12 p-3 mb-2 bg-white rounded  text-dark">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group row">
-                <label asp-for="SubjectId" class="col-form-label col-md-2 text-right">Subject: </label>
-                <div class="col-md-5">
-                    <input asp-for="Subject.SubjectName" disabled readonly class="form-control-plaintext font-weight-bold" />
+                <label asp-for="Student.SubjectId" class="col-form-label col-md-2 text-right">Subject : </label>
+                <div class="col-md-2">
+                    <input asp-for="Student.Subject.SubjectName" disabled readonly class="form-control-plaintext font-weight-bold" />
                 </div>
-                <label asp-for="CollegeRoll" class="col-form-label col-md-2 text-right">College Roll: </label>
-                <div class="col-md-3">
-                    <input asp-for="CollegeRoll" disabled readonly class="form-control-plaintext font-weight-bold" />
+                @if (Model.MeritStudent != null)
+                {
+                    <label asp-for="MeritStudent.MeritPosition" class="col-form-label col-md-2 text-right">Merit Position : </label>
+                    <div class="col-md-1">
+                        <input asp-for="MeritStudent.MeritPosition" disabled readonly class="form-control-plaintext font-weight-bold" />
+                    </div>
+                }
+
+
+                <label asp-for="Student.CollegeRoll" class="col-form-label col-md-2 text-right">College Roll : </label>
+                <div class="col-md-2">
+                    <input asp-for="Student.CollegeRoll" disabled readonly class="form-control-plaintext font-weight-bold" />
                 </div>
             </div>
 
@@ -83,114 +92,114 @@
                 </div>*@
 
             <div class="form-group row pt-2">
-                <label asp-for="Name" class="col-form-label col-md-2 text-right"></label>
+                <label asp-for="Student.Name" class="col-form-label col-md-2 text-right"></label>
                 <div class="col-md-5">
-                    <input asp-for="Name" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.Name" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
 
-                <label asp-for="NUAdmissionRoll" class="col-form-label col-md-2 text-right">NU Roll</label>
+                <label asp-for="Student.NUAdmissionRoll" class="col-form-label col-md-2 text-right">NU Roll</label>
                 <div class="col-md-3">
-                    <input asp-for="NUAdmissionRoll" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.NUAdmissionRoll" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
             </div>
             <div class="form-group row">
-                <label asp-for="FatherName" class="col-form-label col-md-2 text-right"></label>
+                <label asp-for="Student.FatherName" class="col-form-label col-md-2 text-right"></label>
                 <div class="col-md-5">
-                    <input asp-for="FatherName" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.FatherName" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
-                <label asp-for="FatherOccupation" class="col-form-label col-md-2 text-right"></label>
+                <label asp-for="Student.FatherOccupation" class="col-form-label col-md-2 text-right"></label>
                 <div class="col-md-3">
-                    <input asp-for="FatherOccupation" class="form-control-plaintext font-weight-bold" readonly disabled />
+                    <input asp-for="Student.FatherOccupation" class="form-control-plaintext font-weight-bold" readonly disabled />
                 </div>
             </div>
             <div class="form-group row">
-                <label asp-for="MotherName" class="col-form-label col-md-2 text-right"></label>
+                <label asp-for="Student.MotherName" class="col-form-label col-md-2 text-right"></label>
                 <div class="col-md-5">
-                    <input asp-for="MotherName" class="form-control-plaintext font-weight-bold" readonly disabled />
+                    <input asp-for="Student.MotherName" class="form-control-plaintext font-weight-bold" readonly disabled />
                 </div>
-                <label asp-for="MotherOccupation" class="col-form-label col-md-2 text-right"></label>
+                <label asp-for="Student.MotherOccupation" class="col-form-label col-md-2 text-right"></label>
                 <div class="col-md-3">
-                    <input asp-for="MotherOccupation" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.MotherOccupation" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
             </div>
             <div class="form-group row">
-                <label asp-for="GuardianName" class="col-form-label col-md-2 text-right"></label>
+                <label asp-for="Student.GuardianName" class="col-form-label col-md-2 text-right"></label>
                 <div class="col-md-5">
-                    <input asp-for="GuardianName" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.GuardianName" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
-                <label asp-for="GuardianOccupation" class="col-form-label col-md-2 text-right"></label>
+                <label asp-for="Student.GuardianOccupation" class="col-form-label col-md-2 text-right"></label>
                 <div class="col-md-3">
-                    <input asp-for="GuardianOccupation" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.GuardianOccupation" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
             </div>
             <div class="form-group row">
-                <label asp-for="Nationality" class="col-form-label col-md-2 text-right"></label>
+                <label asp-for="Student.Nationality" class="col-form-label col-md-2 text-right"></label>
                 <div class="col-md-5">
-                    <input asp-for="Nationality" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.Nationality" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
-                <label asp-for="BloodGroup" class="col-form-label col-md-2 text-right"></label>
+                <label asp-for="Student.BloodGroup" class="col-form-label col-md-2 text-right"></label>
                 <div class="col-md-3">
-                    <input asp-for="BloodGroup" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.BloodGroup" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
             </div>
             <div class="form-group row">
-                <label asp-for="Birthday" class="text-right col-form-label col-md-2"></label>
+                <label asp-for="Student.Birthday" class="text-right col-form-label col-md-2"></label>
                 <div class="col-md-5">
-                    <input asp-for="Birthday" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.Birthday" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
 
-                <label asp-for="Gender" class="col-form-label col-md-2 text-right"></label>
+                <label asp-for="Student.Gender" class="col-form-label col-md-2 text-right"></label>
                 <div class="col-md-3">
-                    <input asp-for="Gender" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.Gender" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
 
 
             </div>
             <div class="form-group row">
-                <label asp-for="Email" class="col-form-label text-right col-md-2"></label>
+                <label asp-for="Student.Email" class="col-form-label text-right col-md-2"></label>
                 <div class="col-md-5">
-                    <input asp-for="Email" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.Email" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
 
-                <label asp-for="Religion" class="col-form-label text-right col-md-2"></label>
+                <label asp-for="Student.Religion" class="col-form-label text-right col-md-2"></label>
                 <div class="col-md-3">
-                    <input asp-for="Religion" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.Religion" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
             </div>
             @*<div class="row bg-success p-1 d-block">
                     <h5 class="text-center text-white">Student's Address Info</h5>
                 </div>*@
             <div class="form-group row pt-1">
-                <label asp-for="PresentAddress1" class="col-form-label col-md-2 text-right"></label>
+                <label asp-for="Student.PresentAddress1" class="col-form-label col-md-2 text-right"></label>
                 <div class="col-md-10">
-                    <input asp-for="PresentAddress1" class=" form-control-plaintext font-weight-bold" readonly disabled />
+                    <input asp-for="Student.PresentAddress1" class=" form-control-plaintext font-weight-bold" readonly disabled />
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-md-6 offset-2">
-                    <input asp-for="PresentAddress2" class="form-control-plaintext font-weight-bold" readonly disabled />
+                    <input asp-for="Student.PresentAddress2" class="form-control-plaintext font-weight-bold" readonly disabled />
                 </div>
 
-                <label asp-for="PresentDistrictId" class="col-form-label col-md-1 text-right"></label>
+                <label asp-for="Student.PresentDistrictId" class="col-form-label col-md-1 text-right"></label>
                 <div class="col-md-3">
-                    <input class="form-control-plaintext font-weight-bold" readonly disabled asp-for="PresentDistrict.DistrictName" />
+                    <input class="form-control-plaintext font-weight-bold" readonly disabled asp-for="Student.PresentDistrict.DistrictName" />
                 </div>
 
             </div>
             <div class="form-group row">
-                <label asp-for="PermanentAddress1" class="col-form-label col-md-2 text-right"></label>
+                <label asp-for="Student.PermanentAddress1" class="col-form-label col-md-2 text-right"></label>
                 <div class="col-md-10">
-                    <input asp-for="PermanentAddress1" class="form-control-plaintext font-weight-bold" readonly disabled />
+                    <input asp-for="Student.PermanentAddress1" class="form-control-plaintext font-weight-bold" readonly disabled />
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-md-6 offset-2">
-                    <input asp-for="PermanentAddress2" class="form-control-plaintext font-weight-bold" readonly disabled />
+                    <input asp-for="Student.PermanentAddress2" class="form-control-plaintext font-weight-bold" readonly disabled />
                 </div>
 
-                <label asp-for="PermanentDistrictId" class="col-form-label col-md-1 text-right"></label>
+                <label asp-for="Student.PermanentDistrictId" class="col-form-label col-md-1 text-right"></label>
                 <div class="col-md-3">
-                    <input asp-for="PermanentDistrict.DistrictName" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.PermanentDistrict.DistrictName" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
             </div>
 
@@ -198,60 +207,60 @@
                     <h5 class="text-center text-dark font-weight-bolder">Mailing Address Information</h5><hr />
                 </div>
             <div class="form-group row pt-1">
-                <label asp-for="MailingVillage" class="col-form-label col-md-2 text-right"></label>
+                <label asp-for="Student.MailingVillage" class="col-form-label col-md-2 text-right"></label>
                 <div class="col-md-6">
-                    <input asp-for="MailingVillage" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.MailingVillage" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
-                <label asp-for="MailingPO" class="col-form-label col-md-1 text-right"></label>
+                <label asp-for="Student.MailingPO" class="col-form-label col-md-1 text-right"></label>
                 <div class="col-md-3">
-                    <input asp-for="MailingPO" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.MailingPO" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
             </div>
 
             <div class="form-group row">
-                <label asp-for="MailingPostCode" class="col-form-label col-md-2 text-right"></label>
+                <label asp-for="Student.MailingPostCode" class="col-form-label col-md-2 text-right"></label>
                 <div class="col-md-2">
-                    <input asp-for="MailingPostCode" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.MailingPostCode" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
-                <label asp-for="MailingPS" class="col-form-label col-md-1 text-right"></label>
+                <label asp-for="Student.MailingPS" class="col-form-label col-md-1 text-right"></label>
                 <div class="col-md-3">
-                    <input asp-for="MailingPS" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.MailingPS" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
-                <label asp-for="MailingDistrictId" class="col-form-label text-right col-md-1"></label>
+                <label asp-for="Student.MailingDistrictId" class="col-form-label text-right col-md-1"></label>
                 <div class="col-md-3">
-                    <input asp-for="MailingDistrict.DistrictName" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.MailingDistrict.DistrictName" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
             </div>
             <div class="form-group row">
-                <label asp-for="FatherMobile" class="col-form-label text-right col-md-2"></label>
+                <label asp-for="Student.FatherMobile" class="col-form-label text-right col-md-2"></label>
                 <div class="col-md-4">
                     @{
-                        string fMob = "0" + Model.FatherMobile;
+                        string fMob = "0" + Model.Student.FatherMobile;
                     }
-                    <input asp-for="FatherMobile" value="@fMob" class="form-control-plaintext font-weight-bold"  disabled readonly/>
+                    <input asp-for="Student.FatherMobile" value="@fMob" class="form-control-plaintext font-weight-bold"  disabled readonly/>
                 </div>
-                <label asp-for="MotherMobile" class="col-form-label text-right col-md-2"></label>
+                <label asp-for="Student.MotherMobile" class="col-form-label text-right col-md-2"></label>
                 <div class="col-md-4">
                     @{
-                        string mMob = "0" + Model.MotherMobile.ToString();
+                        string mMob = "0" + Model.Student.MotherMobile.ToString();
                     }
-                    <input asp-for="MotherMobile" class="form-control-plaintext font-weight-bold" value="@mMob"  disabled readonly/>
+                    <input asp-for="Student.MotherMobile" class="form-control-plaintext font-weight-bold" value="@mMob"  disabled readonly/>
                 </div>
             </div>
             <div class="form-group row">
-                <label asp-for="StudentMobile" class="col-form-label text-right col-md-2"></label>
+                <label asp-for="Student.StudentMobile" class="col-form-label text-right col-md-2"></label>
                 <div class="col-md-4">
                     @{
-                        string sMob = "0" + Model.StudentMobile;
+                        string sMob = "0" + Model.Student.StudentMobile;
                     }
-                    <input asp-for="StudentMobile" value="@sMob" class="form-control-plaintext font-weight-bold" disabled readonly />
+                    <input asp-for="Student.StudentMobile" value="@sMob" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
-                <label asp-for="GuardianMobile" class="col-form-label text-right col-md-2"></label>
+                <label asp-for="Student.GuardianMobile" class="col-form-label text-right col-md-2"></label>
                 <div class="col-md-4">
                     @{
-                        string gMob = "0" + Model.GuardianMobile.ToString();
+                        string gMob = "0" + Model.Student.GuardianMobile.ToString();
                     }
-                    <input asp-for="GuardianMobile" class="form-control-plaintext font-weight-bold" value="@gMob"  disabled readonly/>
+                    <input asp-for="Student.GuardianMobile" class="form-control-plaintext font-weight-bold" value="@gMob"  disabled readonly/>
                 </div>
             </div>
 
@@ -274,37 +283,37 @@
                         <tr class="font-weight-bold">
                             <td>HSC</td>
                             <td>
-                                @Model.HSCRoll
+                                @Model.Student.HSCRoll
                             </td>
                             <td>
-                                @Model.HSCGPA
+                                @Model.Student.HSCGPA
                             </td>
                             <td>
-                                @Model.HSCPassingYear
+                                @Model.Student.HSCPassingYear
                             </td>
                             <td>
-                                @Model.HSCBoard
+                                @Model.Student.HSCBoard
                             </td>
                             <td>
-                                @Model.HSCRemark
+                                @Model.Student.HSCRemark
                             </td>
                         </tr>
                         <tr class="font-weight-bold">
                             <td>SSC</td>
                             <td>
-                                @Model.SSCRoll
+                                @Model.Student.SSCRoll
                             </td>
                             <td>
-                                @Model.SSCGPA
+                                @Model.Student.SSCGPA
                             </td>
                             <td>
-                                @Model.SSCPassingYear
+                                @Model.Student.SSCPassingYear
                             </td>
                             <td>
-                                @Model.SSCBoard
+                                @Model.Student.SSCBoard
                             </td>
                             <td>
-                                @Model.SSCRemark
+                                @Model.Student.SSCRemark
                             </td>
                         </tr>
                     </tbody>
