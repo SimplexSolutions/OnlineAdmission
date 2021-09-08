@@ -33,7 +33,7 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         // GET: Payments
-        public async Task<IActionResult> Index(string searchingText, string sortRoll, string sortHSCRoll, int page, int pagesize, DateTime? fromdate, DateTime? todate)
+        public async Task<IActionResult> Index(string usrtext, string sortRoll, string sortHSCRoll, int page, int pagesize, DateTime? fromdate, DateTime? todate)
         {
             if (TempData["msg"]!=null)
             {
@@ -67,9 +67,9 @@ namespace OnlineAdmission.APP.Controllers
                     paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.PaymentTransaction.Id);
                     break;
             }
-            ViewBag.data = searchingText;
+            ViewBag.data = usrtext;
             
-            int pageSize = pagesize <= 0 ? 20 : pagesize;
+            int pageSize = pagesize <= 0 ? 50 : pagesize;
             if (page <= 0) page = 1;
 
             if (fromdate != null || todate != null)
@@ -94,11 +94,11 @@ namespace OnlineAdmission.APP.Controllers
                 }
             }
 
-            if (!string.IsNullOrEmpty(searchingText))
+            if (!string.IsNullOrEmpty(usrtext))
             {
-                searchingText = searchingText.Trim().ToLower();
+                usrtext = usrtext.Trim().ToLower();
 
-                paymentReceiptVMs = paymentReceiptVMs.Where(m => m.AppliedStudent.ApplicantName.ToLower().Contains(searchingText) || m.PaymentTransaction.AccountNo.ToLower() == searchingText || m.PaymentTransaction.TransactionId.ToLower() == searchingText || m.AppliedStudent.NUAdmissionRoll.ToString().ToLower() == searchingText || m.Subject.SubjectName.ToLower() == searchingText || m.PaymentTransaction.Amount.ToString().ToLower() == searchingText || m.PaymentTransaction.TransactionDate.ToString().Contains(searchingText));
+                paymentReceiptVMs = paymentReceiptVMs.Where(m => m.AppliedStudent.ApplicantName.ToLower().Contains(usrtext) || m.PaymentTransaction.AccountNo.ToLower() == usrtext || m.PaymentTransaction.TransactionId.ToLower() == usrtext || m.AppliedStudent.NUAdmissionRoll.ToString().ToLower() == usrtext || m.Subject.SubjectName.ToLower() == usrtext || m.PaymentTransaction.Amount.ToString().ToLower() == usrtext || m.PaymentTransaction.TransactionDate.ToString().Contains(usrtext));
                 ViewBag.count = paymentReceiptVMs.Count();
                 
                 return View(await PaginatedList<PaymentReceiptVM>.CreateAsync(paymentReceiptVMs, page, pageSize));

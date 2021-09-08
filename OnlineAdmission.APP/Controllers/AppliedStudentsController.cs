@@ -28,7 +28,7 @@ namespace OnlineAdmission.APP.Controllers
             _mapper = mapper;
             _host = host;
         }
-        public async Task<IActionResult> Index(string searchingText, string sortRoll, string sortHSCRoll, int page, int pagesize)
+        public async Task<IActionResult> Index(string usrtext, string sortRoll, string sortHSCRoll, int page, int pagesize)
         {
 
             IQueryable<AppliedStudent> appliedStudentList = _appliedStudentManager.GetIQueryableData();
@@ -46,17 +46,17 @@ namespace OnlineAdmission.APP.Controllers
             }
 
 
-            ViewBag.data = searchingText;
+            ViewBag.data = usrtext;
             
 
-            int pageSize = pagesize <= 0 ? 20 : pagesize;
+            int pageSize = pagesize <= 0 ? 50 : pagesize;
             if (page <= 0) page = 1;
 
-            if (!string.IsNullOrEmpty(searchingText))
+            if (!string.IsNullOrEmpty(usrtext))
             {
-                searchingText = searchingText.Trim().ToLower();
+                usrtext = usrtext.Trim().ToLower();
 
-                appliedStudentList = appliedStudentList.Where(m => m.NUAdmissionRoll.ToString().ToLower().Trim() == searchingText || m.ApplicantName.ToLower().Trim().Contains(searchingText) || m.MobileNo.ToLower().Trim() == searchingText || m.HSCGroup.ToLower().Trim() == searchingText || m.FatherName.ToLower().Trim().Contains(searchingText) || m.MotherName.ToLower().Trim().Contains(searchingText));
+                appliedStudentList = appliedStudentList.Where(m => m.NUAdmissionRoll.ToString().ToLower().Trim() == usrtext || m.ApplicantName.ToLower().Trim().Contains(usrtext) || m.MobileNo.ToLower().Trim() == usrtext || m.HSCGroup.ToLower().Trim() == usrtext || m.FatherName.ToLower().Trim().Contains(usrtext) || m.MotherName.ToLower().Trim().Contains(usrtext));
                 ViewBag.count = appliedStudentList.Count();
                 return View(await PaginatedList<AppliedStudent>.CreateAsync(appliedStudentList, page, pageSize));
             }
