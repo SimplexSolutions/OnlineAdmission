@@ -85,7 +85,6 @@ namespace OnlineAdmission.Entity
         [Range(1300000000, 1999999999), Display(Name = "Mother's mobile"), Required(ErrorMessage = "Mobile Number Required")]
         public int MotherMobile { get; set; }
 
-        //[MinimumAge(18)]
         [DataType(DataType.Date), Display(Name = "Date Of Birth")]
         public DateTime Birthday { get; set; }
 
