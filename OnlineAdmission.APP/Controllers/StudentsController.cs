@@ -23,6 +23,7 @@ using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Dynamic;
 
 namespace OnlineAdmission.APP.Controllers
 {
@@ -463,8 +464,10 @@ namespace OnlineAdmission.APP.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult ProfessionalSearch()
+        public IActionResult ProfessionalSearch(int professionalRoll, string notification)
         {
+            ViewBag.Roll = professionalRoll;
+            ViewBag.notification = notification;
             return View();
         }
 
@@ -486,6 +489,7 @@ namespace OnlineAdmission.APP.Controllers
                 }
                 ViewBag.isPaid = isPaid;
             }
+            ViewBag.nuRoll = professionalRoll;
             return View();
         }
 
@@ -675,28 +679,36 @@ namespace OnlineAdmission.APP.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult> NagadPayment(int nuRoll, int studentType)
+        public async Task<ActionResult> NagadPayment(int nuRoll, int? studentType, string mobileNum, string studentName)
         {
-            string OrderId = "";
+            string OrderId;
+            AppliedStudent appliedStudent;
+            MeritStudent meritStudent;
+            Subject subject;
             if (studentType == 1)
             {
-                OrderId = "";
+                OrderId = nuRoll.ToString() + "Pro" + DateTime.Now.ToString("HHmmss");
+
+                //Code to be change
+                meritStudent = new MeritStudent();
+                appliedStudent = new AppliedStudent();
+                subject = new Subject();
             }
             else
             {
-                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
-                var meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll);
-                var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
+                appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+                meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll);
+                subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
                 OrderId = meritStudent.NUAdmissionRoll + "" + meritStudent.SubjectCode + "" + DateTime.Now.ToString("HHmmss");
             }
-            
 
 
-            
 
-            #region Initialize API Data Preparation
-            ///////////////////////////////////////////////////////// Create JSON Object
-            var initializeJSON = new
+
+
+        #region Initialize API Data Preparation
+        ///////////////////////////////////////////////////////// Create JSON Object
+        var initializeJSON = new
             {
                 merchantId = GlobalVariables.MerchantId,
                 orderId = OrderId,
@@ -779,7 +791,7 @@ namespace OnlineAdmission.APP.Controllers
             var v = Verify(decryptedSensitiveData, returnedSignature, SecurityKey.nagadPublicKey, Encoding.UTF8, HashAlgorithmName.SHA256);
             if (!v)
             {
-                //Console.WriteLine("Signature Verification Failed");
+                
                 ViewBag.msg = "Signature Verification Failed";
                 return View();
             }
@@ -788,11 +800,18 @@ namespace OnlineAdmission.APP.Controllers
             dynamic responsevalue = JObject.Parse(decryptedSensitiveData);
             string challenge = responsevalue.challenge;
             string paymentRefId = responsevalue.paymentReferenceId;
-            //string amountOriginal = subject.AdmissionFee.ToString();
-            //string amountWaiver = meritStudent.DeductedAmaount.ToString();
-            //string amount = (Convert.ToInt32(amountOriginal) -Convert.ToInt32( amountWaiver)).ToString();
-            double amount = subject.AdmissionFee - meritStudent.DeductedAmaount;
-            double serviceCharge = ((subject.AdmissionFee - meritStudent.DeductedAmaount) * .015);
+            double amount = 0;
+            if (studentType == 1) //For Professional Student
+            {
+                amount = 300;
+            }
+            else
+            {
+                amount = subject.AdmissionFee - meritStudent.DeductedAmaount;
+            }
+            //double amount = subject.AdmissionFee - meritStudent.DeductedAmaount;
+            //double serviceCharge = ((subject.AdmissionFee - meritStudent.DeductedAmaount) * .015);
+            double serviceCharge = (amount * .015);
             double totalAmount = amount + serviceCharge;
 
             // Create JSON Object
@@ -818,22 +837,49 @@ namespace OnlineAdmission.APP.Controllers
             //string merchantCallbackURL = "http://115.127.26.3:4356/api/PaymentTransactions"; //merchant Callback URL - as you want
             string merchantCallbackURL = "http://115.127.26.3:80/api/PaymentTransactions"; //merchant Callback URL - as you want
             //string merchantCallbackURL = "https://localhost:44356/api/PaymentTransactions"; //merchant Callback URL - as you want
-
-            //Additional Merchant JSON Info
-            //var paymentMarchantInfo = new
+            dynamic additionalMerchantInfo;
+            //dynamic additionalMerchantInfo = new
             //{
-            //    charge:charge
+            //    ServiceCharge = serviceCharge,
+            //    AdmissionFee = 0.0,
+            //    StudentName = "",
+            //    MobileNo = "",
+            //    SubjectId = 0,
+            //    NuAdmissionRoll = nuRoll,
+            //    StudentType = studentType
             //};
-            // Prepare Final JSON for Payment API
-            var additionalMerchantInfo = new
+
+
+
+            //Code tobe Modify
+            if (studentType == 1)
             {
-                ServiceCharge = serviceCharge,
-                AdmissionFee = amount,
-                StudentName= appliedStudent.ApplicantName,
-                MobileNo = appliedStudent.MobileNo,
-                SubjectId = subject.Id,
-                NuAdmissionRoll = nuRoll
-            };
+                additionalMerchantInfo = new
+                {
+                    ServiceCharge = serviceCharge,
+                    AdmissionFee = 0.0,
+                    StudentName = studentName,
+                    MobileNo = mobileNum,
+                    SubjectId = 0,
+                    NuAdmissionRoll = nuRoll,
+                    StudentType = studentType
+                };
+            }
+            else
+            {
+
+                additionalMerchantInfo = new
+                {
+                    ServiceCharge = serviceCharge,
+                    AdmissionFee = amount,
+                    StudentName = appliedStudent.ApplicantName,
+                    MobileNo = appliedStudent.MobileNo,
+                    SubjectId = subject.Id,
+                    NuAdmissionRoll = nuRoll,
+                    StudentType = studentType
+                };
+    
+            }
 
             var paymentFinalJSON = new
             {
@@ -891,51 +937,19 @@ namespace OnlineAdmission.APP.Controllers
             string site = co_Response.callBackUrl;
             if (co_Response.status == "Success")
             {
-                //GlobalVariables.nuRoll = nuRoll.ToString();
-                //GlobalVariables.AdmissionFee = co_Response.paymentMarchantInfo.AdmissionFee;
-                //GlobalVariables.ServiceCharge = serviceCharge;
+
                 return Redirect(site);
                 
             }
 
-            //Console.WriteLine("Customer is redirecting to following Site:" + co_Response.callBackUrl + "\n");
+            
             else
             {
-                //Console.WriteLine("Failed");
+                
                 return View();
             }
                 
             #endregion
-
-
-
-
-
-            //MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll);
-            //Subject subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
-            //AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
-            //TransactionInfo transactionInfo = new TransactionInfo();
-
-            //double admissinoFee = 0;
-            //if (meritStudent != null)
-            //{
-            //    var deductionAmount = meritStudent.DeductedAmaount;
-            //    if (deductionAmount >= 0)
-            //    {
-            //        admissinoFee = subject.AdmissionFee - deductionAmount;
-            //    }
-            //    else
-            //    {
-            //        admissinoFee = subject.AdmissionFee;
-            //    }
-
-            //    transactionInfo.Name = appliedStudent.ApplicantName;
-            //    transactionInfo.NuRoll = meritStudent.NUAdmissionRoll;
-            //    transactionInfo.Amount = admissinoFee;
-            //    transactionInfo.SubjectName = subject.SubjectName;
-
-            //    return View(transactionInfo);
-            //}
 
         }
         
@@ -946,8 +960,9 @@ namespace OnlineAdmission.APP.Controllers
             
             if (ModelState.IsValid)
             {
+                
                 MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(model.PaymentTransaction.ReferenceNo);
-                //HttpClient client = _api.Initial();
+
                 HttpClient client = _nagadAPI.Initial();
 
                 var postTask = client.PostAsJsonAsync<TransactionInfo>("remote-payment-gateway-1.0/api/dfs/check-out/initialize/"+model.merchantId+"/", model);

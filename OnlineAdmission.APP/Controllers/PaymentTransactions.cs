@@ -54,21 +54,7 @@ namespace OnlineAdmission.APP.Controllers
             if (status.ToLower() == "success")
             {
                 string successNotification = "Congratulations! Payment Completed (BDT: " + responsevalue.amount + "/-)";
-                //Guid guid = new Guid();
-                //{"merchantId":"683002007104225",
-                //                "orderId":"3001639025135",
-                //"paymentRefId":"MDgyNTE0NTEzNTQ1Ni42ODMwMDIwMDcxMDQyMjUuMzAwMTYzOTAyNTEzNS44MjcyM2EzZmU2N2NmM2M3MjNlNQ==",
-                //"amount":"5",
-                //"clientMobileNo":"016****7504",
-                //"merchantMobileNo":"01300200710",
-                //"orderDateTime":"2021-08-25 14:51:35.0",
-                //"issuerPaymentDateTime":"2021-08-25 14:51:56.0",
-                //"issuerPaymentRefNo":"0000Z1DW",
-                //"additionalMerchantInfo":null,
-                //"status":"Success",
-                //"statusCode":"000",
-                //"cancelIssuerDateTime":null,7
-                //"cancelIssuerRefNo":null}
+
                 var additionalMerchantInfo = (responsevalue.additionalMerchantInfo).Value;
                 dynamic MerchantInfo = JObject.Parse(additionalMerchantInfo);
 
@@ -81,28 +67,44 @@ namespace OnlineAdmission.APP.Controllers
                 TransactionId = responsevalue.orderId,
                 ReferenceNo = MerchantInfo.NuAdmissionRoll,
                 AdmissionFee = MerchantInfo.AdmissionFee,
-                ServiceCharge = MerchantInfo.ServiceCharge};
+                ServiceCharge = MerchantInfo.ServiceCharge,
+                StudentType = MerchantInfo.StudentType
+                };
                 //newPayment.ApplicantName = MerchantInfo.StudentName;
                 //newPayment.MobileNo = MerchantInfo.MobileNo;
                 //newPayment.SubjectId = MerchantInfo.SubjectId;
 
                 await paymentTransactionManager.AddAsync(newPayment);
-
+                
                 MeritStudent meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
-                meritStudent.PaymentStatus = true;
-                meritStudent.PaymentTransactionId = newPayment.Id;
-                await meritStudentManager.UpdateAsync(meritStudent);
+                string phoneNumber = "";
+                string msgText = "";
+
+
+                if (newPayment.StudentType == 1)
+                {
+                    phoneNumber = MerchantInfo.MobileNo;
+                    msgText = "Congratulations! your payment is successfully paid";
+                }
+                else
+                {
+                    meritStudent.PaymentStatus = true;
+                    meritStudent.PaymentTransactionId = newPayment.Id;
+                    await meritStudentManager.UpdateAsync(meritStudent);  
+                    AppliedStudent newStudent = await appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll);
+                    phoneNumber = newStudent.MobileNo.ToString();
+                    msgText = "Congratulations! " + newStudent.ApplicantName + "(NU Roll:" + newStudent.NUAdmissionRoll + ") , your admission payment is successfully paid";
+                }
+                
 
                 //////////////////Code for SMS Sending and Saving
                 ///
-                AppliedStudent newStudent = await appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll);
+                
                 bool SentSMS = false;
-                string phoneNum = newStudent.MobileNo.ToString();
-                string msgText = "Congratulations! " + newStudent.ApplicantName + "(NU Roll:" + newStudent.NUAdmissionRoll + ") , your admission payment is successfully paid";
-                SentSMS = await ESMS.SendSMS(phoneNum, msgText);
+                SentSMS = await ESMS.SendSMS(phoneNumber, msgText);
                 SMSModel newSMS = new SMSModel()
                 {
-                    MobileList = phoneNum,
+                    MobileList = phoneNumber,
                     Text = msgText,
                     CreatedAt = DateTime.Now,
                     CreatedBy = "Payment Getway",
@@ -125,7 +127,10 @@ namespace OnlineAdmission.APP.Controllers
                 //return RedirectToAction("search","students",new { notification=notification});
 
 
-
+                if (MerchantInfo.StudentType==1)
+                {
+                    return RedirectToAction("ProfessionalSearch", "Students", new { professionalRoll = newPayment.ReferenceNo, notification = successNotification });
+                }
                 return RedirectToAction("PaymentConfirmation", "Students",new { NuAdmissionRoll = newPayment.ReferenceNo,notification= successNotification});
             }
 
