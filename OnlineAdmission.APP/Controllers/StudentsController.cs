@@ -160,7 +160,7 @@ namespace OnlineAdmission.APP.Controllers
                 ViewBag.msg = msg;
                 return View(student);
             }
-            existStudent = await _studentManager.GetStudentBySSCRollAsync(student.SSCRoll);
+            existStudent = await _studentManager.GetStudentBySSCRollAsync(student.SSCRoll, student.SSCBoard);
             if (existStudent != null)
             {
                 msg = "SSC Roll is already Exist";

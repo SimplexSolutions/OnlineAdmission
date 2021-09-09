@@ -34,9 +34,9 @@ namespace OnlineAdmission.DAL.Repository
             return student;
         }
 
-        public async Task<Student> GetStudentBySSCRollAsync(int sscRoll)
+        public async Task<Student> GetStudentBySSCRollAsync(int sscRoll, string boardName)
         {
-            var student = await _context.Students.Include(s => s.Subject).FirstOrDefaultAsync(s => s.SSCRoll == sscRoll);
+            var student = await _context.Students.Include(s => s.Subject).FirstOrDefaultAsync(s => s.SSCRoll == sscRoll && s.SSCBoard.Trim() == boardName.Trim());
             return student;
         }
 

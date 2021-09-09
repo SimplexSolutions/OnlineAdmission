@@ -10,7 +10,7 @@ namespace OnlineAdmission.DAL.IRepository
     public interface IStudentRepository : IRepository<Student>
     {
         Task<Student> GetStudentByHSCRollAsync(int hscRoll);
-        Task<Student> GetStudentBySSCRollAsync(int sscRoll);
+        Task<Student> GetStudentBySSCRollAsync(int sscRoll, string boardName);
         Task<int> GetCountAsync(int subId);
         Task<Student> GetByAdmissionRollAsync(int NURoll);
 
