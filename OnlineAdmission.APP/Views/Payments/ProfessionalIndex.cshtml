@@ -1,5 +1,5 @@
-﻿@*@model PaginatedList<OnlineAdmission.Entity.PaymentTransaction>*@
-@model PaginatedList<OnlineAdmission.APP.ViewModels.PaymentReceiptVM>
+﻿@model PaginatedList<OnlineAdmission.Entity.PaymentTransaction>
+
 @{
     ViewData["Title"] = "Index";
     int i = (Model.PageIndex - 1) * Model.PageSize + 1;
@@ -76,9 +76,6 @@
                     <th>
                         Mobile
                     </th>
-                    <th>
-                        Subject
-                    </th>
                     <th class="text-md-right">
                         Transaction Id
                     </th>
@@ -102,44 +99,41 @@
                             @(i).
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.AppliedStudent.ApplicantName)
+                            @Html.DisplayFor(modelItem => item. StudentName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.AppliedStudent.NUAdmissionRoll)
+                            @Html.DisplayFor(modelItem => item.ReferenceNo)
                         </td>
 
                         <td>
                             2021-2022
                         </td>
                         <td>
-                            @(item.AppliedStudent.MobileNo)
+                            @(item.MobileNumber)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Subject.SubjectName)
+                            @Html.DisplayFor(modelItem => item.TransactionId)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.PaymentTransaction.TransactionId)
+                            @item.AccountNo
                         </td>
                         <td>
-                            @item.PaymentTransaction.AccountNo
-                        </td>
-                        <td>
-                            @item.PaymentTransaction.TransactionDate.ToString("yyyy-MM-dd")
+                            @item.TransactionDate.ToString("yyyy-MM-dd")
                         </td>
                         <td class="text-right">
-                            @Math.Round(item.PaymentTransaction.AdmissionFee, 2)
+                            @Math.Round(item.Amount, 2)
                         </td>
                         <td class="noPrint">
                             @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
-                            <a asp-action="Details" asp-route-id="@item.PaymentTransaction.Id">Details</a>
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                             @*<a asp-action="Delete" asp-route-id="@item.PaymentTransaction.Id">Delete</a>*@
                         </td>
                     </tr>
                     i++;
-                    total = total + item.PaymentTransaction.AdmissionFee;
+                    total = total + item.Amount;
                 }
                 <tr class="" style="background-color:#f7f0f0">
-                    <td colspan="10" class="text-md-right">TOTAL</td>
+                    <td colspan="8" class="text-md-right">TOTAL</td>
                     <td class="text-right font-weight-bold">@Math.Round(total, 2)</td>
                     <td></td>
                 </tr>
@@ -149,7 +143,6 @@
         <partial name="~/Views/PartialViews/_paging.cshtml" model="@Model" />
         <div class="row noPrint">
             <div class="col-md-12 text-md-right">
-                @*<button class="btn btn-success" onclick="printContent('PrintArea')"><i class="fa fa-print"></i> Print</button>*@
                 <button onclick="window.print()" class="btn btn-success"><i class="fa fa-print"></i> Print</button>
             </div>
         </div>
@@ -165,8 +158,6 @@
 
 
     }
-
-
 
 
     @section Scripts{

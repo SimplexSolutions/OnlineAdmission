@@ -109,28 +109,17 @@ namespace OnlineAdmission.APP.Controllers
         }
 
 
-        public async Task<IActionResult> ProfessionalIndex(string usrtext, string sortRoll, string sortHSCRoll, int page, int pagesize, DateTime? fromdate, DateTime? todate)
+        public async Task<IActionResult> ProfessionalIndex(string usrtext, string sortRoll, int page, int pagesize, DateTime? fromdate, DateTime? todate)
         {
             if (TempData["msg"] != null)
             {
                 ViewBag.msg = TempData["msg"].ToString();
             }
 
+            IQueryable<PaymentTransaction> paymentTransactions = _paymentTransactionManager.GetIQueryableData().Where(p => p.StudentType == 1);
 
-            IQueryable<PaymentReceiptVM> paymentReceiptVMs = from t in _paymentTransactionManager.GetIQueryableData().Where( p => p.StudentType == 1)
-                                                             from m in _meritStudentManager.GetIQueryableData().Where(a => a.NUAdmissionRoll == t.ReferenceNo)
-                                                             from sub in _subjectManager.GetIQueryableData().Where(a => a.Code == m.SubjectCode)
-                                                             from s in _appliedStudentManager.GetIQueryableData().Where(a => a.NUAdmissionRoll == t.ReferenceNo)
-                                                             join stu in _studentManager.GetIQueryableData() on m.NUAdmissionRoll equals stu.NUAdmissionRoll into myList
-                                                             from subList in myList.DefaultIfEmpty()
-                                                             select new PaymentReceiptVM
-                                                             {
-                                                                 PaymentTransaction = t,
-                                                                 MeritStudent = m,
-                                                                 Subject = sub,
-                                                                 AppliedStudent = s,
-                                                                 Student = subList
-                                                             };
+
+           
 
             ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
 
@@ -138,35 +127,35 @@ namespace OnlineAdmission.APP.Controllers
             switch (sortRoll)
             {
                 case "desc":
-                    paymentReceiptVMs = paymentReceiptVMs.OrderByDescending(m => m.PaymentTransaction.Id);
+                    paymentTransactions = paymentTransactions.OrderByDescending(m => m.ReferenceNo);
                     break;
                 default:
-                    paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.PaymentTransaction.Id);
+                    paymentTransactions = paymentTransactions.OrderBy(m => m.ReferenceNo);
                     break;
             }
             ViewBag.data = usrtext;
 
-            int pageSize = pagesize <= 0 ? 1000 : pagesize;
+            int pageSize = pagesize <= 0 ? 50 : pagesize;
             if (page <= 0) page = 1;
 
             if (fromdate != null || todate != null)
             {
                 if (fromdate != null && todate != null)
                 {
-                    paymentReceiptVMs = from a in paymentReceiptVMs
-                                        where (a.PaymentTransaction.TransactionDate.Date >= fromdate && a.PaymentTransaction.TransactionDate.Date <= todate)
+                    paymentTransactions = from a in paymentTransactions
+                                          where (a.TransactionDate.Date >= fromdate && a.TransactionDate.Date <= todate)
                                         select a;
                 }
                 else if (fromdate != null && todate == null)
                 {
-                    paymentReceiptVMs = from a in paymentReceiptVMs
-                                        where (a.PaymentTransaction.TransactionDate.Date >= fromdate)
+                    paymentTransactions = from a in paymentTransactions
+                                          where (a.TransactionDate.Date >= fromdate)
                                         select a;
                 }
                 else if (fromdate == null && todate != null)
                 {
-                    paymentReceiptVMs = from a in paymentReceiptVMs
-                                        where (a.PaymentTransaction.TransactionDate.Date <= todate)
+                    paymentTransactions = from a in paymentTransactions
+                                          where (a.TransactionDate.Date <= todate)
                                         select a;
                 }
             }
@@ -175,13 +164,13 @@ namespace OnlineAdmission.APP.Controllers
             {
                 usrtext = usrtext.Trim().ToLower();
 
-                paymentReceiptVMs = paymentReceiptVMs.Where(m => m.AppliedStudent.ApplicantName.ToLower().Contains(usrtext) || m.PaymentTransaction.AccountNo.ToLower() == usrtext || m.PaymentTransaction.TransactionId.ToLower() == usrtext || m.AppliedStudent.NUAdmissionRoll.ToString().ToLower() == usrtext || m.Subject.SubjectName.ToLower() == usrtext || m.PaymentTransaction.Amount.ToString().ToLower() == usrtext || m.PaymentTransaction.TransactionDate.ToString().Contains(usrtext));
-                ViewBag.count = paymentReceiptVMs.Count();
+                paymentTransactions = paymentTransactions.Where(m => m.StudentName.ToLower().Contains(usrtext) || m.AccountNo.ToLower() == usrtext || m.TransactionId.ToLower() == usrtext || m.ReferenceNo.ToString().ToLower() == usrtext || m.Amount.ToString().ToLower() == usrtext || m.TransactionDate.ToString().Contains(usrtext));
+                ViewBag.count = paymentTransactions.Count();
 
-                return View(await PaginatedList<PaymentReceiptVM>.CreateAsync(paymentReceiptVMs, page, pageSize));
+                return View(await PaginatedList<PaymentTransaction>.CreateAsync(paymentTransactions, page, pageSize));
             }
-            ViewBag.count = paymentReceiptVMs.Count();
-            return View(await PaginatedList<PaymentReceiptVM>.CreateAsync(paymentReceiptVMs, page, pageSize));
+            ViewBag.count = paymentTransactions.Count();
+            return View(await PaginatedList<PaymentTransaction>.CreateAsync(paymentTransactions, page, pageSize));
 
         }
 

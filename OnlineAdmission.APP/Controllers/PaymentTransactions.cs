@@ -60,16 +60,18 @@ namespace OnlineAdmission.APP.Controllers
 
                 
                 PaymentTransaction newPayment = new PaymentTransaction{
-                Amount = responsevalue.amount,
-                TransactionDate = DateTime.Today,
-                Balance = 0,
-                AccountNo = responsevalue.clientMobileNo,
-                TransactionId = responsevalue.orderId,
-                ReferenceNo = MerchantInfo.NuAdmissionRoll,
-                AdmissionFee = MerchantInfo.AdmissionFee,
-                ServiceCharge = MerchantInfo.ServiceCharge,
-                StudentType = MerchantInfo.StudentType
-                };
+                    Amount = responsevalue.amount,
+                    TransactionDate = DateTime.Today,
+                    Balance = 0,
+                    AccountNo = responsevalue.clientMobileNo,
+                    TransactionId = responsevalue.orderId,
+                    ReferenceNo = MerchantInfo.NuAdmissionRoll,
+                    AdmissionFee = MerchantInfo.AdmissionFee,
+                    ServiceCharge = MerchantInfo.ServiceCharge,
+                    StudentName = MerchantInfo.studentName,
+                    MobileNumber = MerchantInfo.MobileNo,
+                    StudentType = MerchantInfo.StudentType
+                    };
                 //newPayment.ApplicantName = MerchantInfo.StudentName;
                 //newPayment.MobileNo = MerchantInfo.MobileNo;
                 //newPayment.SubjectId = MerchantInfo.SubjectId;

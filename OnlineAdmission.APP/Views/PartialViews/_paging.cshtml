@@ -86,7 +86,7 @@
             <li class="float-right">
                 <form id="frm" class="form-inline" asp-action="@ViewBag.action" method="post">
 
-                    <select id="pagesize" name="pagesize" class="form-control">
+                    <select id="pagesize" name="pagesize" class="form-control select2">
                         @foreach (var item in pgsize)
                         {
                             if (item == ViewBag.pagesize)

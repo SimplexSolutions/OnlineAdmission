@@ -938,9 +938,7 @@ namespace OnlineAdmission.APP.Controllers
             string site = co_Response.callBackUrl;
             if (co_Response.status == "Success")
             {
-
                 return Redirect(site);
-                
             }
 
             
