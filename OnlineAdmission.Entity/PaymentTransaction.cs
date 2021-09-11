@@ -12,6 +12,12 @@ namespace OnlineAdmission.Entity
         public int Id { get; set; }
         public double Amount { get; set; }
 
+        [Display(Name = "Student Name")]
+        public string StudentName { get; set; }
+
+        [Display(Name = "Mobile")]
+        public string MobileNumber { get; set; }
+
         [Display(Name ="Paid Date")]
         public DateTime TransactionDate { get; set; }
         public double Balance { get; set; }
