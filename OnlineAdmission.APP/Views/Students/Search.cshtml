@@ -86,6 +86,7 @@
                                  <div class="card border-0">
                                     <form asp-action="NagadPayment" asp-controller="Students" method="get">
                                         <input name="nuRoll" value="@Model.MeritStudent.NUAdmissionRoll" type="hidden" />
+                                        <input name="studentType" value="0" type="hidden" />
                                         <button type="submit">
                                             <img class="card-img-top" src="~/Images/Payment/Nagad.png" alt="Nagad Logo" style="width:80px;">
                                         </button>

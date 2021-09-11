@@ -835,9 +835,9 @@ namespace OnlineAdmission.APP.Controllers
 
             //string merchantCallbackURL = "http://sandbox.mynagad.com:10707/merchant-server/web/confirm"; //merchant Callback URL - as you want
             //string merchantCallbackURL = "http://115.127.26.3:4356/api/PaymentTransactions"; //merchant Callback URL - as you want
-            //string merchantCallbackURL = "http://115.127.26.3:80/api/PaymentTransactions"; //merchant Callback URL - as you want
+            string merchantCallbackURL = "http://115.127.26.3:80/api/PaymentTransactions"; //merchant Callback URL - as you want
             //string merchantCallbackURL = "https://localhost:44356/api/PaymentTransactions"; //merchant Callback URL - as you want
-            string merchantCallbackURL = "http://onlineadmission.eiimsbd.com/api/PaymentTransactions"; //merchant Callback URL - as you want
+            //string merchantCallbackURL = "http://onlineadmission.eiimsbd.com/api/PaymentTransactions"; //merchant Callback URL - as you want
             dynamic additionalMerchantInfo;
             //dynamic additionalMerchantInfo = new
             //{

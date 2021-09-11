@@ -7,11 +7,12 @@ namespace OnlineAdmission.APP.Utilities.NagadSetting
 {
     class GlobalVariables
     {
+        //LIVE NAGAD
         public static string MerchantId = "687231533088220";
+
+        //SANDBOX NAGAD
         //public static string MerchantId = "683002007104225";
-        //public static string nuRoll = "";
-        //public static double AdmissionFee = 0.00;
-        //public static double ServiceCharge = 0.00;
+
 
 
         private static DateTime DateTime = DateTime.Now;

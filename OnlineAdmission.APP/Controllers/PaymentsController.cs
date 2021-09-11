@@ -69,7 +69,7 @@ namespace OnlineAdmission.APP.Controllers
             }
             ViewBag.data = usrtext;
             
-            int pageSize = pagesize <= 0 ? 50 : pagesize;
+            int pageSize = pagesize <= 0 ? 1000 : pagesize;
             if (page <= 0) page = 1;
 
             if (fromdate != null || todate != null)
