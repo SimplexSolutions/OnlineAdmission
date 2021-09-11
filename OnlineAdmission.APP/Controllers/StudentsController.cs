@@ -412,13 +412,14 @@ namespace OnlineAdmission.APP.Controllers
 
                 if (meritStudent==null)
                 {
-                    ViewBag.msg = "You are not applied yet";
+                    ViewBag.msg = "You are not eligible";
+                    
                     return View();
                 }
 
                 if (appliedStudent == null)
                 {
-                    ViewBag.msg = "You are not eligible";
+                    ViewBag.msg = "You are not applied yet";
                     return View();
                 }
 
