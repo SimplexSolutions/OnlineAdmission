@@ -66,7 +66,16 @@
                         @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("Accounts"))
                         {
                             <li>
-                                <a asp-action="Index" asp-controller="Payments">Payments</a>
+                                <a href="#paymentSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Payments</a>
+                                <ul class="collapse list-unstyled" id="paymentSubMenu">
+
+                                    <li>
+                                        <a asp-action="Index" asp-controller="Payments">Hon's Payments</a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="ProfessionalIndex" asp-controller="Payments">Professional Payments</a>
+                                    </li>
+                                </ul>
                             </li>
                         }
 
