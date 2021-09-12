@@ -44,7 +44,7 @@ namespace OnlineAdmission.APP.Controllers
             }
 
 
-            IQueryable<PaymentReceiptVM> paymentReceiptVMs = from t in _paymentTransactionManager.GetIQueryableData().OrderBy(m => m.ReferenceNo)
+            IQueryable<PaymentReceiptVM> paymentReceiptVMs = from t in _paymentTransactionManager.GetIQueryableData()
                                                              from m in _meritStudentManager.GetIQueryableData().Where(a => a.NUAdmissionRoll==t.ReferenceNo)
                                                              from sub in _subjectManager.GetIQueryableData().Where(a => a.Code == m.SubjectCode)
                                                              from s in _appliedStudentManager.GetIQueryableData().Where(a=>a.NUAdmissionRoll == t.ReferenceNo)
@@ -57,19 +57,94 @@ namespace OnlineAdmission.APP.Controllers
                                                                  AppliedStudent = s,
                                                                  Student = subList
                                                              };
- 
-            ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
-
-
-            switch (sortRoll)
+            //paymentReceiptVMs = paymentReceiptVMs.OrderBy(m=>m.PaymentTransaction.ReferenceNo);
+            if (sortRoll == null && sortNURoll == null)
             {
-                case "desc":
-                    paymentReceiptVMs = paymentReceiptVMs.OrderByDescending(m => m.Student.CollegeRoll);
-                    break;
-                default:
-                    paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.Student.CollegeRoll);
-                    break;
+                ViewBag.sortNURoll = string.IsNullOrEmpty(sortNURoll) ? "desc" : "";
+                ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : "";
+                switch (sortNURoll)
+                {
+                    case "desc":
+                        paymentReceiptVMs = paymentReceiptVMs.OrderByDescending(m => m.PaymentTransaction.ReferenceNo);
+                        break;
+                    default:
+                        paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.PaymentTransaction.ReferenceNo);
+                        break;
+                }
             }
+            else if (sortNURoll == "desc" && sortRoll == null)
+            {
+                ViewBag.sortNURoll = string.IsNullOrEmpty(sortNURoll) ? "desc" : "";
+                ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : "";
+                switch (sortNURoll)
+                {
+                    case "desc":
+                        paymentReceiptVMs = paymentReceiptVMs.OrderByDescending(m => m.PaymentTransaction.ReferenceNo);
+                        break;
+                    default:
+                        paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.PaymentTransaction.ReferenceNo);
+                        break;
+                }
+                //switch (sortRoll)
+                //{
+                //    case "desc":
+                //        paymentReceiptVMs = paymentReceiptVMs.OrderByDescending(m => m.Student.CollegeRoll);
+                //        break;
+                //    default:
+                //        paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.Student.CollegeRoll);
+                //        break;
+                //}
+            }
+            else if (sortNURoll == "desc")
+            {
+                ViewBag.sortNURoll = string.IsNullOrEmpty(sortNURoll) ? "desc" : "";
+                ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : "";
+                switch (sortNURoll)
+                {
+                    case "desc":
+                        paymentReceiptVMs = paymentReceiptVMs.OrderByDescending(m => m.PaymentTransaction.ReferenceNo);
+                        break;
+                    default:
+                        paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.PaymentTransaction.ReferenceNo);
+                        break;
+                }
+            }
+            else if (sortRoll == "desc" || sortRoll == "asc")
+            {
+                ViewBag.sortNURoll = string.IsNullOrEmpty(sortNURoll) ? "desc" : "";
+                switch (sortRoll)
+                {
+                    case "desc":
+                        paymentReceiptVMs = paymentReceiptVMs.OrderByDescending(m => m.Student.CollegeRoll);
+                        ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : "asc";
+                        break;
+                    default:
+                        paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.Student.CollegeRoll);
+                        ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "asc" : "desc";
+                        break;
+                }
+            }
+            else
+            {
+                ViewBag.sortNURoll = string.IsNullOrEmpty(sortNURoll) ? "desc" : "";
+                ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : "";
+                switch (sortRoll)
+                {
+                    case "desc":
+                        paymentReceiptVMs = paymentReceiptVMs.OrderByDescending(m => m.Student.CollegeRoll);
+                        break;
+                    default:
+                        paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.Student.CollegeRoll);
+                        break;
+                }
+
+            }
+                         
+            
+ 
+           
+
+            
 
             ViewBag.data = usrtext;
             int pageSize = pagesize <= 0 ? 50 : pagesize;
