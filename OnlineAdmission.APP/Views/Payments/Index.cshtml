@@ -5,8 +5,9 @@
     int i = (Model.PageIndex - 1) * Model.PageSize + 1;
     ViewBag.pagesize = Model.PageSize;
 
-    ViewBag.controller = "Payments";
-    ViewBag.action = "index";
+    string actionName = ViewBag.action != null ? ViewBag.action : "Index";
+    string controllerName = ViewBag.controller != null ? ViewBag.controller : "Payments";
+
     ViewBag.search = ViewBag.data;
     double total = 0;
 }
@@ -70,7 +71,8 @@
                         NU Roll
                     </th>
                     <th>
-                        College Roll
+                        <a asp-action="@actionName" asp-controller="@controllerName" asp-route-sortRoll="@ViewBag.sortByRoll">College Roll</a>
+                        
                     </th>
                     <th>
                         Session
