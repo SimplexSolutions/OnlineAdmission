@@ -1,7 +1,13 @@
-﻿
+﻿@{ 
+    string actionName = "Index";
+}
+@if (ViewBag.action != null)
+{
+    actionName = ViewBag.action;
+}
 <div class="">
 
-    <form asp-action="Index" class="form-inline" method="post">
+    <form asp-action="@actionName" class="form-inline" method="post">
         <div class="col-md-6">
             <div class="form-inline">
                 <div class="form-group">

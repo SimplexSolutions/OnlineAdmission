@@ -51,6 +51,10 @@ namespace OnlineAdmission.APP.Controllers
 
             int pageSize = pagesize <= 0 ? 50 : pagesize;
             if (page <= 0) page = 1;
+            if (pageSize == 5001)
+            {
+                pageSize = appliedStudentList.Count();
+            }
 
             if (!string.IsNullOrEmpty(usrtext))
             {
@@ -58,6 +62,10 @@ namespace OnlineAdmission.APP.Controllers
 
                 appliedStudentList = appliedStudentList.Where(m => m.NUAdmissionRoll.ToString().ToLower().Trim() == usrtext || m.ApplicantName.ToLower().Trim().Contains(usrtext) || m.MobileNo.ToLower().Trim() == usrtext || m.HSCGroup.ToLower().Trim() == usrtext || m.FatherName.ToLower().Trim().Contains(usrtext) || m.MotherName.ToLower().Trim().Contains(usrtext));
                 ViewBag.count = appliedStudentList.Count();
+                if (pageSize == 5001)
+                {
+                    pageSize = appliedStudentList.Count();
+                }
                 return View(await PaginatedList<AppliedStudent>.CreateAsync(appliedStudentList, page, pageSize));
             }
                 ViewBag.count = appliedStudentList.Count();

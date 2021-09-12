@@ -17,7 +17,8 @@
     string pagecontroller = ViewBag.controller == null ? "home" : ViewBag.controller; ;
     string pageaction = ViewBag.action == null ? "index" : ViewBag.action;
 
-    int[] pgsize = { 20, 50, 100, 250, 500 };
+    int[] pgsize = { 50, 100, 500, 1000, 5000 };
+
 
 }
 
@@ -84,9 +85,9 @@
                    class="page-link">Last</a>
             </li>
             <li class="float-right">
-                <form id="frm" class="form-inline" asp-action="@ViewBag.action" method="post">
+                <form id="frm" class="form-inline" asp-action="@pageaction" method="post">
 
-                    <select id="pagesize" name="pagesize" class="form-control select2">
+                    <select id="pagesize" name="pagesize" class="form-control">
                         @foreach (var item in pgsize)
                         {
                             if (item == ViewBag.pagesize)
@@ -98,6 +99,7 @@
                                 <option value="@item">@item</option>
                             }
                         }
+                        <option value="5001">All</option>
                     </select>
                     <button class="page-link"> Entries </button>
                 </form>

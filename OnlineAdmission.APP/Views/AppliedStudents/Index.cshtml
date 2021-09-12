@@ -4,9 +4,7 @@
     ViewData["Title"] = "Index";
     int i = (Model.PageIndex - 1) * Model.PageSize + 1;
     ViewBag.pagesize = Model.PageSize;
-
-    ViewBag.controller = "AppliedStudents";
-    ViewBag.action = "index";
+    
     ViewBag.search = ViewBag.data;
 }
 

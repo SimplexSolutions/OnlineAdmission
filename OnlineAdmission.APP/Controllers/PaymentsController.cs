@@ -35,6 +35,9 @@ namespace OnlineAdmission.APP.Controllers
         // GET: Payments
         public async Task<IActionResult> Index(string usrtext, string sortRoll, string sortHSCRoll, int page, int pagesize, DateTime? fromdate, DateTime? todate)
         {
+            ViewBag.action = "Index";
+            ViewBag.controller = "Payments";
+
             if (TempData["msg"]!=null)
             {
                 ViewBag.msg = TempData["msg"].ToString();
@@ -61,17 +64,21 @@ namespace OnlineAdmission.APP.Controllers
             switch (sortRoll)
             {
                 case "desc":
-                    paymentReceiptVMs = paymentReceiptVMs.OrderByDescending(m => m.PaymentTransaction.Id);
+                    paymentReceiptVMs = paymentReceiptVMs.OrderByDescending(m => m.Student.CollegeRoll);
                     break;
                 default:
-                    paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.PaymentTransaction.Id);
+                    paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.Student.CollegeRoll);
                     break;
             }
             ViewBag.data = usrtext;
+            int pageSize = pagesize <= 0 ? 50 : pagesize;
             
-            int pageSize = pagesize <= 0 ? 1000 : pagesize;
             if (page <= 0) page = 1;
 
+            if (pageSize == 5001)
+            {
+                pageSize = paymentReceiptVMs.Count();
+            }
             if (fromdate != null || todate != null)
             {
                 if (fromdate != null && todate != null)
@@ -92,6 +99,11 @@ namespace OnlineAdmission.APP.Controllers
                                         where (a.PaymentTransaction.TransactionDate.Date <= todate)
                                         select a;
                 }
+                if (pageSize == 5001)
+                {
+                    pageSize = paymentReceiptVMs.Count();
+                }
+
             }
 
             if (!string.IsNullOrEmpty(usrtext))
@@ -100,10 +112,17 @@ namespace OnlineAdmission.APP.Controllers
 
                 paymentReceiptVMs = paymentReceiptVMs.Where(m => m.AppliedStudent.ApplicantName.ToLower().Contains(usrtext) || m.PaymentTransaction.AccountNo.ToLower() == usrtext || m.PaymentTransaction.TransactionId.ToLower() == usrtext || m.AppliedStudent.NUAdmissionRoll.ToString().ToLower() == usrtext || m.Subject.SubjectName.ToLower() == usrtext || m.PaymentTransaction.Amount.ToString().ToLower() == usrtext || m.PaymentTransaction.TransactionDate.ToString().Contains(usrtext));
                 ViewBag.count = paymentReceiptVMs.Count();
-                
+                if (pageSize == 5001)
+                {
+                    pageSize = paymentReceiptVMs.Count();
+                }
                 return View(await PaginatedList<PaymentReceiptVM>.CreateAsync(paymentReceiptVMs, page, pageSize));
             }
             ViewBag.count = paymentReceiptVMs.Count();
+            if (pageSize == 5001)
+            {
+                pageSize = paymentReceiptVMs.Count();
+            }
             return View(await PaginatedList<PaymentReceiptVM>.CreateAsync(paymentReceiptVMs, page, pageSize));
 
         }
@@ -111,6 +130,9 @@ namespace OnlineAdmission.APP.Controllers
 
         public async Task<IActionResult> ProfessionalIndex(string usrtext, string sortRoll, int page, int pagesize, DateTime? fromdate, DateTime? todate)
         {
+            ViewBag.action = "ProfessionalIndex";
+            ViewBag.controller = "Payments";
+
             if (TempData["msg"] != null)
             {
                 ViewBag.msg = TempData["msg"].ToString();
