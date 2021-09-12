@@ -467,6 +467,10 @@ namespace OnlineAdmission.APP.Controllers
         [AllowAnonymous]
         public IActionResult ProfessionalSearch(int professionalRoll, string notification)
         {
+            if (TempData["miss"]!=null)
+            {
+                ViewBag.miss = TempData["miss"].ToString();
+            }
             ViewBag.Roll = professionalRoll;
             ViewBag.notification = notification;
             return View();
@@ -688,6 +692,11 @@ namespace OnlineAdmission.APP.Controllers
             Subject subject;
             if (studentType == 1)
             {
+                if (mobileNum==null || studentName ==null)
+                {
+                    TempData["miss"] = "Mobile Number and Name is mendatory";
+                    return RedirectToAction("ProfessionalSearch", "Students");
+                }
                 OrderId = nuRoll.ToString() + "Pro" + DateTime.Now.ToString("HHmmss");
 
                 //Code to be change

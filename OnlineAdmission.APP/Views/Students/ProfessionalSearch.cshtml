@@ -24,6 +24,13 @@
                     <button type="submit" class="btn btn-primary mb-2">Search</button>
                 </div>
             </form>
+
+            @if (ViewBag.miss != null)
+            {
+                <div class="form-group row" id="missText">
+                    <span class="alert alert-danger">@ViewBag.miss</span>
+                </div>
+            }
         </div>
         @if (ViewBag.notification!=null)
         {
@@ -43,7 +50,7 @@
                     <div class="col-md-8 offset-md-2">
                         <form asp-action="NagadPayment" asp-controller="Students" method="get">
                             <input type="hidden" name="studentType" value="1" />
-                            <input type="hidden"  name="nuRoll" value="@ViewBag.nuRoll" />
+                            <input type="hidden" name="nuRoll" value="@ViewBag.nuRoll" />
                             <div class="form-group row">
                                 <label class="col-md-2 text-md-right text-left col-form-label">Name : </label>
                                 <div class="col-md-4">
@@ -55,7 +62,6 @@
                                     <input required type="number" name="mobileNum" class="form-control" />
                                 </div>
                             </div>
-
                             <button type="submit" class="btn btn-primary mb-2">Make Payment</button>
                         </form>
                     </div>
@@ -67,3 +73,10 @@
 
 
 </div>
+@section Scripts{ 
+<script>
+    $(document).ready(function () {
+        $("#missText").fadeOut(10000);
+    });
+</script>
+}
