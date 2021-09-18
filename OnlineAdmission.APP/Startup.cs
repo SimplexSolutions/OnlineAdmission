@@ -39,8 +39,8 @@ namespace OnlineAdmission.APP
 
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
-                options.Cookie.HttpOnly = true;
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                //options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
             

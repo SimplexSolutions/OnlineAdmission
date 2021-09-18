@@ -369,7 +369,7 @@ namespace OnlineAdmission.APP.Controllers
                 return View();
             }
         }
-
+        [Authorize(Roles = "Admin,SuperAdmin,Teacher")]
         public async Task<ActionResult> IdCard()
         {
             var student = await _studentManager.GetAllAsync();
@@ -821,7 +821,7 @@ namespace OnlineAdmission.APP.Controllers
             }
             //double amount = subject.AdmissionFee - meritStudent.DeductedAmaount;
             //double serviceCharge = ((subject.AdmissionFee - meritStudent.DeductedAmaount) * .015);
-            double serviceCharge = (amount * .015);
+            double serviceCharge = 5.00;// (amount * .015);
             double totalAmount = amount + serviceCharge;
 
             // Create JSON Object
