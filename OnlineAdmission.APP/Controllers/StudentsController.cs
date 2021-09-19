@@ -467,10 +467,10 @@ namespace OnlineAdmission.APP.Controllers
         [AllowAnonymous]
         public IActionResult ProfessionalSearch(int professionalRoll, string notification)
         {
-            if (TempData["miss"]!=null)
-            {
-                ViewBag.miss = TempData["miss"].ToString();
-            }
+            //if (TempData["miss"]!=null)
+            //{
+            //    ViewBag.miss = TempData["miss"].ToString();
+            //}
             ViewBag.Roll = professionalRoll;
             ViewBag.notification = notification;
             return View();
@@ -967,11 +967,11 @@ namespace OnlineAdmission.APP.Controllers
             string OrderId="";
             if (studentType == 1)
             {
-                if (mobileNum == null || studentName == null)
-                {
-                    TempData["miss"] = "Mobile Number and Name is mendatory";
-                    return RedirectToAction("ProfessionalSearch", "Students");
-                }
+                //if (mobileNum == null || studentName == null)
+                //{
+                //    TempData["miss"] = "Mobile Number and Name is mendatory";
+                //    return RedirectToAction("ProfessionalSearch", "Students");
+                //}
                 OrderId = nuRoll.ToString() + "" + "Pro" + "" + DateTime.Now.ToString("HHmmss");
         }
       
@@ -1100,8 +1100,8 @@ namespace OnlineAdmission.APP.Controllers
 
             //string merchantCallbackURL = "http://sandbox.mynagad.com:10707/merchant-server/web/confirm"; //merchant Callback URL - as you want
             //string merchantCallbackURL = "http://115.127.26.3:4356/api/PaymentTransactions"; //merchant Callback URL - as you want
-            //string merchantCallbackURL = "http://115.127.26.3:80/api/PaymentTransactions"; //merchant Callback URL - as you want
-            string merchantCallbackURL = "https://localhost:44356/api/PaymentTransactions"; //merchant Callback URL - as you want
+            string merchantCallbackURL = "http://115.127.26.3:80/api/PaymentTransactions"; //merchant Callback URL - as you want
+            //string merchantCallbackURL = "https://localhost:44356/api/PaymentTransactions"; //merchant Callback URL - as you want
             //string merchantCallbackURL = "http://onlineadmission.eiimsbd.com/api/PaymentTransactions"; //merchant Callback URL - as you want
             //dynamic additionalMerchantInfo;
 
