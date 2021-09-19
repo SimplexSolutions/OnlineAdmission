@@ -60,7 +60,7 @@ namespace OnlineAdmission.APP.Controllers
             {
                 usrtext = usrtext.Trim().ToLower();
 
-                meritStudentList = meritStudentList.Where(m => m.NUAdmissionRoll.ToString().ToLower() == usrtext || m.HSCRoll.ToString().ToLower() == usrtext || m.MeritPosition.ToString().ToLower() == usrtext || m.SubjectCode.ToString().ToLower() == usrtext);
+                meritStudentList = meritStudentList.Where(m => m.NUAdmissionRoll.ToString() == usrtext || m.HSCRoll.ToString() == usrtext || m.MeritPosition.ToString() == usrtext || m.SubjectCode.ToString() == usrtext || m.Comments.ToLower().Trim().Contains(usrtext));
 
                 return View(await PaginatedList<MeritStudent>.CreateAsync(meritStudentList, page, pageSize));
             }
