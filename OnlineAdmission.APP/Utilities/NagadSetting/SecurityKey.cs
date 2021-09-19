@@ -33,6 +33,6 @@ namespace OnlineAdmission.APP.Utilities.NagadSetting
         public static string InitializeAPI = "https://api.mynagad.com/api/dfs/check-out/initialize/";
 
         //Initialize API URL SANDBOX
-       // public static string InitializeAPI = "http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs/check-out/initialize/";
+        //public static string InitializeAPI = "http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs/check-out/initialize/";
     }
 }
