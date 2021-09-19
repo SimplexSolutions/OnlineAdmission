@@ -81,9 +81,16 @@
                         <div class="text-center">
                             <button class="text-center btn btn-info" id="paymentId">Make Payment</button>
                         </div>
+
+                        <div class="note bg-danger mt-1 mb-1 p-1">
+                            <span class="text-justify text-light">
+                                [শিক্ষার্থীকে জাতীয় বিশ্ববিদ্যালয়ের ভর্তি বিষয়ক ওয়েবসাইটের (www.nu.ac.bd/admissions) Applicant Login অপশনে Honours Login লিংকে গিয়ে সঠিক রোল নম্বর ও পিন এন্ট্রি দিয়ে ৩০-০৯-২০২১ তারিখের মধ্যে চূড়ান্ত ভর্তি ফরম পূরণ করতে হবে। জাঃ বিঃ-র চুড়ান্ত ফরম পূরণ না করলে ভর্তি নিশ্চিত হবে না।]
+                            </span>
+                        </div>
+
                         <div class="col-md-4 offset-4 pt-3" id="bankingId" style="display:none;">
                             <div class="card-deck">
-                                 <div class="card border-0">
+                                <div class="card border-0">
                                     <form asp-action="NagadPayment" asp-controller="Students" method="get">
                                         <input name="nuRoll" value="@Model.MeritStudent.NUAdmissionRoll" type="hidden" />
                                         @*<input name="studentType" value="0" type="hidden" />*@
