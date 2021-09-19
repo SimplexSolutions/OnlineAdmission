@@ -31,7 +31,7 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         // GET: MeritStudentsController
-        public async Task<ActionResult> Index(string searchingText, string sortRoll, string sortHSCRoll, int page, int pagesize)
+        public async Task<ActionResult> Index(string usrtext, string sortRoll, string sortHSCRoll, int page, int pagesize)
         {
 
             IQueryable<MeritStudent> meritStudentList = _meritStudentManager.GetMeritStudents();
@@ -50,17 +50,17 @@ namespace OnlineAdmission.APP.Controllers
             }
 
             
-            ViewBag.searchingText = searchingText;
+            ViewBag.searchingText = usrtext;
             ViewBag.count = meritStudentList.Count();
             
             int pageSize = pagesize <= 0 ? 20 : pagesize;
             if (page <= 0) page = 1;
 
-            if (!string.IsNullOrEmpty(searchingText))
+            if (!string.IsNullOrEmpty(usrtext))
             {
-                searchingText = searchingText.Trim().ToLower();
+                usrtext = usrtext.Trim().ToLower();
 
-                meritStudentList = meritStudentList.Where(m => m.NUAdmissionRoll.ToString().ToLower() == searchingText || m.HSCRoll.ToString().ToLower() == searchingText || m.MeritPosition.ToString().ToLower() == searchingText || m.SubjectCode.ToString().ToLower() == searchingText);
+                meritStudentList = meritStudentList.Where(m => m.NUAdmissionRoll.ToString().ToLower() == usrtext || m.HSCRoll.ToString().ToLower() == usrtext || m.MeritPosition.ToString().ToLower() == usrtext || m.SubjectCode.ToString().ToLower() == usrtext);
 
                 return View(await PaginatedList<MeritStudent>.CreateAsync(meritStudentList, page, pageSize));
             }
