@@ -443,8 +443,6 @@ namespace OnlineAdmission.APP.Controllers
                     }
                     else
                     {
-
-                        
                         return View(selectedStudent);
                     }
                 }
