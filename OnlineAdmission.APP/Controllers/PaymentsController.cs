@@ -300,6 +300,7 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         // GET: Payments/Create
+        [Authorize(Roles = "SuperAdmin")]
         public IActionResult Create()
         {
             return View();
@@ -310,6 +311,7 @@ namespace OnlineAdmission.APP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Create( PaymentTransaction paymentTransaction)
         {
             if (ModelState.IsValid)
@@ -317,7 +319,13 @@ namespace OnlineAdmission.APP.Controllers
                 await _paymentTransactionManager.AddAsync(paymentTransaction);
                 var meritStudent =await _meritStudentManager.GetByAdmissionRollAsync(paymentTransaction.ReferenceNo);
                 meritStudent.PaymentStatus = true;
-                return RedirectToAction(nameof(Index));
+                meritStudent.PaymentTransactionId = paymentTransaction.Id;
+                bool isSaved = await _meritStudentManager.UpdateAsync(meritStudent);
+                if (isSaved)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                
             }
             return View(paymentTransaction);
         }

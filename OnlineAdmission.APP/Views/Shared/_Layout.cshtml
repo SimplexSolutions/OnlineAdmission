@@ -63,22 +63,29 @@
                             </li>
                         }
 
-                        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("Accounts"))
-                        {
-                            <li>
-                                <a href="#paymentSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Payments</a>
-                                <ul class="collapse list-unstyled" id="paymentSubMenu">
 
+                        <li>
+                            <a href="#paymentSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Payments</a>
+                            <ul class="collapse list-unstyled" id="paymentSubMenu">
+                                @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("Accounts"))
+                                {
                                     <li>
                                         <a asp-action="Index" asp-controller="Payments">Hon's Payments</a>
                                     </li>
                                     <li>
                                         <a asp-action="ProfessionalIndex" asp-controller="Payments">Professional Payments</a>
                                     </li>
-                                </ul>
-                            </li>
-                        }
+                                }
+                                @if (User.IsInRole("SuperAdmin"))
+                                {
+                                    <li>
+                                        <a asp-action="Create" asp-controller="Payments">Add Payments</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
 
+                        
                         @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
 
                         {
