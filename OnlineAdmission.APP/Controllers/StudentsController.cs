@@ -40,9 +40,10 @@ namespace OnlineAdmission.APP.Controllers
         private readonly ISubjectManager _subjectManager;
         private readonly ISecurityKey _securityKey;
         private readonly ISMSManager _smsManager;
+        private readonly INagadManager _nagadManager;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public StudentsController(IStudentManager studentManager, IWebHostEnvironment host, IMeritStudentManager meritStudentManager, IMapper mapper, IDistrictManager districtManager, ISubjectManager subjectManager, IAppliedStudentManager appliedStudentManager, IPaymentTransactionManager paymentTransactionManager, ISecurityKey securityKey, ISMSManager smsManager, UserManager<IdentityUser> userManager)
+        public StudentsController(IStudentManager studentManager, IWebHostEnvironment host, IMeritStudentManager meritStudentManager, IMapper mapper, IDistrictManager districtManager, ISubjectManager subjectManager, IAppliedStudentManager appliedStudentManager, IPaymentTransactionManager paymentTransactionManager, ISecurityKey securityKey, ISMSManager smsManager, UserManager<IdentityUser> userManager, INagadManager nagadManager)
         {
             _studentManager = studentManager;
             _host = host;
@@ -55,6 +56,7 @@ namespace OnlineAdmission.APP.Controllers
             _securityKey = securityKey;
             _smsManager = smsManager;
             _userManager = userManager;
+            _nagadManager = nagadManager;
         }
 
         ApplicationAPI _api = new ApplicationAPI();
@@ -705,10 +707,15 @@ namespace OnlineAdmission.APP.Controllers
             //}
             //else
             //{
-            AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
-            MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll);
-            Subject subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
-                OrderId = meritStudent.NUAdmissionRoll + "" + meritStudent.SubjectCode + "" + DateTime.Now.ToString("HHmmss");
+            //AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+            //MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll);
+            //Subject subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
+
+            AppliedStudent appliedStudent = await _nagadManager.GetAppliedStudentByNURollNagad(nuRoll);
+            MeritStudent meritStudent = await _nagadManager.GetMeritStudentByNURollNagad(nuRoll);
+            Subject subject = await _nagadManager.GetSubjectByCodeNagad(meritStudent.SubjectCode);
+
+            OrderId = meritStudent.NUAdmissionRoll + "" + meritStudent.SubjectCode + "" + DateTime.Now.ToString("HHmmss");
             //}
 
 
