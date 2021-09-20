@@ -310,11 +310,13 @@ namespace OnlineAdmission.APP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Amount,TransactionDate,Balance,AccountNo,TransactionId,ReferenceNo,AdmissionFee,ServiceCharge")] PaymentTransaction paymentTransaction)
+        public async Task<IActionResult> Create( PaymentTransaction paymentTransaction)
         {
             if (ModelState.IsValid)
             {
                 await _paymentTransactionManager.AddAsync(paymentTransaction);
+                var meritStudent =await _meritStudentManager.GetByAdmissionRollAsync(paymentTransaction.ReferenceNo);
+                meritStudent.PaymentStatus = true;
                 return RedirectToAction(nameof(Index));
             }
             return View(paymentTransaction);

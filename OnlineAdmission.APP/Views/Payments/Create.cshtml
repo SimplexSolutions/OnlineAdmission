@@ -9,48 +9,65 @@
 <h4>PaymentTransaction</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-10">
         <form asp-action="Create">
+            @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Amount" class="control-label"></label>
-                <input asp-for="Amount" class="form-control" />
-                <span asp-validation-for="Amount" class="text-danger"></span>
+            <div class="form-group row">
+                <label asp-for="Amount" class="control-label col-md-2 text-md-right"></label>
+                <div class="col-md-6">
+                    <input asp-for="Amount" class="form-control" />
+                    <span asp-validation-for="Amount" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="TransactionDate" class="control-label"></label>
-                <input asp-for="TransactionDate" class="form-control" />
-                <span asp-validation-for="TransactionDate" class="text-danger"></span>
+            <div class="form-group row">
+                <label asp-for="TransactionDate" class="control-label col-md-2 text-md-right"></label>
+                <div class="col-md-6">
+                    <input asp-for="TransactionDate" class="form-control" type="date" />
+                    <span asp-validation-for="TransactionDate" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Balance" class="control-label"></label>
-                <input asp-for="Balance" class="form-control" />
-                <span asp-validation-for="Balance" class="text-danger"></span>
+            <div class="form-group row">
+                <label asp-for="Balance" class="control-label col-md-2 text-md-right"></label>
+                <div class="col-md-6">
+                    <input asp-for="Balance" class="form-control" />
+                    <span asp-validation-for="Balance" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="AccountNo" class="control-label"></label>
-                <input asp-for="AccountNo" class="form-control" />
-                <span asp-validation-for="AccountNo" class="text-danger"></span>
+            <div class="form-group row">
+                <label asp-for="AccountNo" class="control-label col-md-2 text-md-right"></label>
+                <div class="col-md-6">
+                    <input asp-for="AccountNo" class="form-control" />
+                    <span asp-validation-for="AccountNo" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="TransactionId" class="control-label"></label>
-                <input asp-for="TransactionId" class="form-control" />
-                <span asp-validation-for="TransactionId" class="text-danger"></span>
+            <div class="form-group row">
+                <label asp-for="TransactionId" class="control-label col-md-2 text-md-right"></label>
+                <div class="col-md-6">
+                    <input asp-for="TransactionId" class="form-control" />
+                    <span asp-validation-for="TransactionId" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ReferenceNo" class="control-label"></label>
-                <input asp-for="ReferenceNo" class="form-control" />
-                <span asp-validation-for="ReferenceNo" class="text-danger"></span>
+            <div class="form-group row">
+                <label asp-for="ReferenceNo" class="control-label col-md-2 text-md-right"></label>
+                <div class="col-md-6">
+                    <input asp-for="ReferenceNo" class="form-control" />
+                    <span asp-validation-for="ReferenceNo" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="AdmissionFee" class="control-label"></label>
-                <input asp-for="AdmissionFee" class="form-control" />
-                <span asp-validation-for="AdmissionFee" class="text-danger"></span>
+            <div class="form-group row">
+                <label asp-for="AdmissionFee" class="control-label col-md-2 text-md-right"></label>
+                <div class="col-md-6">
+                    <input asp-for="AdmissionFee" class="form-control" />
+                    <span asp-validation-for="AdmissionFee" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ServiceCharge" class="control-label"></label>
-                <input asp-for="ServiceCharge" class="form-control" />
-                <span asp-validation-for="ServiceCharge" class="text-danger"></span>
+            <div class="form-group row">
+                <label asp-for="ServiceCharge" class="control-label col-md-2 text-md-right"></label>
+                <div class="col-md-6">
+                    <input asp-for="ServiceCharge" class="form-control" />
+                    <span asp-validation-for="ServiceCharge" class="text-danger"></span>
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
