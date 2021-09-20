@@ -243,6 +243,7 @@ namespace OnlineAdmission.APP.Controllers
                     
                     
                     Student newStudent = _mapper.Map<Student>(student);
+                    newStudent.Status = true;
                     newStudent.Photo = student.Photo;
                     newStudent.CreatedAt = DateTime.Now;
                     newStudent.CreatedBy = "Online User"; /*HttpContext.Session.GetString("User")*/
@@ -1280,6 +1281,64 @@ namespace OnlineAdmission.APP.Controllers
             return View(stuDetails);
         }
 
+        
+        public async Task<IActionResult> SubjectChange()
+        {
+            SubjectChangedVM subjectChangedVM = new SubjectChangedVM();
+            subjectChangedVM.StudentList = new SelectList(await _studentManager.GetAllAsync(), "Id", "Name").ToList();
+            subjectChangedVM.SubjectList = new SelectList(await _subjectManager.GetAllAsync(), "Id", "SubjectName").ToList();
+            return View(subjectChangedVM);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> SubjectChange(SubjectChangedVM model)
+        {
+            Student previousStudent = await _studentManager.GetByIdAsync(model.StudentId);
+            Subject newSubject = await _subjectManager.GetByIdAsync(model.SubjectId);
+            
+            previousStudent.PreviousCollegeRoll = previousStudent.CollegeRoll;
+            previousStudent.SubjectId = model.SubjectId;
+            previousStudent.Status = true;
+            previousStudent.UpdatedAt = DateTime.Now;
+            previousStudent.UpdatedBy = HttpContext.Session.GetString("UserId");
+            previousStudent.StudentType = 1;
+
+            
+            int count = await _studentManager.GetCountAsync(model.SubjectId) + 1;
+            string sl = "";
+            if (count < 100)
+            {
+                if (count == 0)
+                {
+                    sl = "001";
+                }
+                else if (count < 10)
+                {
+                    sl = "00" + count.ToString();
+                }
+                else if (count < 100 && count > 9)
+                {
+                    sl = "0" + count.ToString();
+                }
+            }
+            else
+            {
+                sl = count.ToString();
+            }
+            string year = DateTime.Today.ToString("yyyy");
+            previousStudent.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + newSubject.Code + "" + sl);
+
+            bool isUpdated = await _studentManager.UpdateAsync(previousStudent);
+            if (isUpdated)
+            {
+                return RedirectToAction("Index");
+            }
+
+            SubjectChangedVM subjectChangedVM = new SubjectChangedVM();
+            subjectChangedVM.StudentList = new SelectList(await _studentManager.GetAllAsync(), "Id", "Name").ToList();
+            subjectChangedVM.SubjectList = new SelectList(await _subjectManager.GetAllAsync(), "Id", "SubjectName").ToList();
+            return View(subjectChangedVM);
+        }
 
         //Nagad Addition Code here=======================================
 

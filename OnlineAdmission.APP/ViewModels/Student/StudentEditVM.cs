@@ -133,6 +133,7 @@ namespace OnlineAdmission.APP.ViewModels.Student
         public string HSCRemark { get; set; }
 
         public int NuAdmissionRoll { get; set; }
+        public bool Status { get; set; }
 
         public ICollection<SelectListItem> DistrictList { get; set; }
         public ICollection<SelectListItem> SubjectList { get; set; }

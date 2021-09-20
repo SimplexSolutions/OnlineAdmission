@@ -124,6 +124,16 @@ namespace OnlineAdmission.Entity
         public string SSCRemark { get; set; }
         public string HSCRemark { get; set; }
 
+        
+        // 0/null=Regular Student, 1=SubjectChanged
+        public int? StudentType { get; set; } 
+
+        //null=Regular Student
+        public int? PreviousCollegeRoll { get; set; }
+
+        //null/0/false =Inactive, 1/true = active
+        public bool? Status { get; set; } 
+
         //Navigation Properties
         [Display(Name = "Subject")]
         public int SubjectId { get; set; }
