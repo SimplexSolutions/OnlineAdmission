@@ -23,25 +23,32 @@ namespace OnlineAdmission.APP.Controllers
         private readonly IMeritStudentManager meritStudentManager;
         private readonly IPaymentTransactionManager paymentTransactionManager;
         private HttpClient httpClient;
-        private readonly IAppliedStudentManager appliedStudentManager;
-        private readonly ISubjectManager subjectManager;
-        private readonly IStudentManager studentManager;
+        //private readonly IAppliedStudentManager appliedStudentManager;
+        //private readonly ISubjectManager subjectManager;
+        //private readonly IStudentManager studentManager;
+        private readonly INagadManager nagadManager;
+        
+
+
         private readonly ISMSManager _smsManager;
 
-        public PaymentTransactions(IMeritStudentManager meritStudentManager, IPaymentTransactionManager paymentTransactionManager, IAppliedStudentManager appliedStudentManager,
-            ISubjectManager subjectManager, IStudentManager studentManager, ISMSManager sMSManager)
+        public PaymentTransactions(IMeritStudentManager meritStudentManager,IPaymentTransactionManager paymentTransactionManager, ISMSManager sMSManager,INagadManager nagadManager)
         {
             this.meritStudentManager = meritStudentManager;
             this.paymentTransactionManager = paymentTransactionManager;
-            this.appliedStudentManager = appliedStudentManager;
-            this.subjectManager = subjectManager;
-            this.studentManager = studentManager;
+            //this.appliedStudentManager = appliedStudentManager;
+            //this.subjectManager = subjectManager;
+            //this.studentManager = studentManager;
+            this.nagadManager = nagadManager;
             _smsManager = sMSManager;
         }
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Get(string status,string payment_ref_id)
         {
+            //AppliedStudent appliedStudent = await nagadManager.GetAppliedStudentByNURollNagad(nuRoll);
+            //MeritStudent meritStudent = await nagadManager.GetMeritStudentByNURollNagad(nuRoll);
+            //Subject subject = await nagadManager.GetSubjectByCodeNagad(meritStudent.SubjectCode);
             // Status Check
             //Call Status Check API with Payment Ref ID
             var paymentDetails = "https://api.mynagad.com/api/dfs/verify/payment/" + payment_ref_id;
@@ -78,9 +85,10 @@ namespace OnlineAdmission.APP.Controllers
 
                 await paymentTransactionManager.AddAsync(newPayment);
                 
-                MeritStudent meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
-                string phoneNumber = "";
-                string msgText = "";
+                //MeritStudent meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
+                MeritStudent meritStudent = await nagadManager.GetMeritStudentByNURollNagad(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
+                string phoneNumber ;
+                string msgText;
 
 
                 if (newPayment.StudentType == 1)
@@ -93,7 +101,8 @@ namespace OnlineAdmission.APP.Controllers
                     meritStudent.PaymentStatus = true;
                     meritStudent.PaymentTransactionId = newPayment.Id;
                     await meritStudentManager.UpdateAsync(meritStudent);  
-                    AppliedStudent newStudent = await appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll);
+                    //AppliedStudent newStudent = await appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll);
+                    AppliedStudent newStudent = await nagadManager.GetAppliedStudentByNURollNagad(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
                     phoneNumber = newStudent.MobileNo.ToString();
                     msgText = "Congratulations! " + newStudent.ApplicantName + "(NU Roll:" + newStudent.NUAdmissionRoll + ") , your admission payment is successfully paid";
                 }
@@ -119,16 +128,6 @@ namespace OnlineAdmission.APP.Controllers
                 }
 
 
-
-                // string site = "https://localhost:44356/";
-                //string mySite = "http://115.127.26.3:4356/";
-                //string param = "students/search?notification="+notification;
-                //return Redirect(mySite + param);
-                //return Redirect(site);
-                // return Ok();
-                //return RedirectToAction("search","students",new { notification=notification});
-
-
                 if (MerchantInfo.StudentType==1)
                 {
                     return RedirectToAction("ProfessionalSearch", "Students", new { professionalRoll = newPayment.ReferenceNo, notification = successNotification });
@@ -137,9 +136,6 @@ namespace OnlineAdmission.APP.Controllers
             }
 
             return  Ok();
-            //string site = "http://115.127.26.3:4356/";
-            //string site = "https://localhost:44356/";
-            //return Redirect(site);
         }
 
         
