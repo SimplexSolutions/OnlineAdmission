@@ -45,10 +45,10 @@ namespace OnlineAdmission.APP.Controllers
 
 
             IQueryable<PaymentReceiptVM> paymentReceiptVMs = from t in _paymentTransactionManager.GetIQueryableData()
-                                                             from m in _meritStudentManager.GetIQueryableData().Where(a => a.NUAdmissionRoll==t.ReferenceNo)
+                                                             from m in _meritStudentManager.GetIQueryableData().Where(a => a.NUAdmissionRoll==t.ReferenceNo && a.PaymentStatus==true)
                                                              from sub in _subjectManager.GetIQueryableData().Where(a => a.Code == m.SubjectCode)
                                                              from s in _appliedStudentManager.GetIQueryableData().Where(a=>a.NUAdmissionRoll == t.ReferenceNo)
-                                                             join stu in _studentManager.GetIQueryableData() on m.NUAdmissionRoll equals stu.NUAdmissionRoll into myList
+                                                             join stu in _studentManager.GetIQueryableData().Where(a=>a.Status==true) on m.NUAdmissionRoll equals stu.NUAdmissionRoll  into myList
                                                              from subList in myList.DefaultIfEmpty()
                                                              select new PaymentReceiptVM{
                                                                  PaymentTransaction = t,
