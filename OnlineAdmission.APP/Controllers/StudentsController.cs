@@ -70,7 +70,7 @@ namespace OnlineAdmission.APP.Controllers
             HttpContext.Session.SetString("UserId", user.Id);
 
             var AdmittedStudents = await _studentManager.GetAllAsync();
-            return View(AdmittedStudents);
+            return View(AdmittedStudents.Where(s => s.Status==true));
 
             //Code for API Consuming
             //List<Student> students = new List<Student>();
@@ -1292,58 +1292,99 @@ namespace OnlineAdmission.APP.Controllers
         public async Task<IActionResult> SubjectChange()
         {
             SubjectChangedVM subjectChangedVM = new SubjectChangedVM();
-            subjectChangedVM.StudentList = new SelectList(await _studentManager.GetAllAsync(), "Id", "Name").ToList();
-            subjectChangedVM.SubjectList = new SelectList(await _subjectManager.GetAllAsync(), "Id", "SubjectName").ToList();
+            
+            subjectChangedVM.StudentList = new SelectList((from stu in await _studentManager.GetAllAsync()
+                                                           where stu.Status == true && (stu.PreviousCollegeRoll == null || stu.PreviousCollegeRoll == 0)
+                                                      select new
+                                                      {
+                                                          Id = stu.Id,
+                                                          Name = stu.CollegeRoll +" - "+ stu.Name +" [" + stu.Subject.SubjectName + "] "+ " ( " + stu.NUAdmissionRoll + " ) "
+                                                      }), "Id", "Name").ToList();
+            var subList = await _subjectManager.GetAllAsync();
+            subjectChangedVM.SubjectList = new SelectList((from sub in subList.OrderBy(s => s.Code)
+                                                      select new
+                                                      {
+                                                          Id = sub.Id,
+                                                          Name = sub.Code +" - "+ sub.SubjectName
+                                                      }), "Id", "Name").ToList();
+
             return View(subjectChangedVM);
         }
         
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> SubjectChange(SubjectChangedVM model)
         {
             Student previousStudent = await _studentManager.GetByIdAsync(model.StudentId);
             Subject newSubject = await _subjectManager.GetByIdAsync(model.SubjectId);
-            
-            previousStudent.PreviousCollegeRoll = previousStudent.CollegeRoll;
-            previousStudent.SubjectId = model.SubjectId;
-            previousStudent.Status = true;
-            previousStudent.UpdatedAt = DateTime.Now;
-            previousStudent.UpdatedBy = HttpContext.Session.GetString("UserId");
-            previousStudent.StudentType = 1;
 
-            
-            int count = await _studentManager.GetCountAsync(model.SubjectId) + 1;
-            string sl = "";
-            if (count < 100)
+            if (ModelState.IsValid)
             {
-                if (count == 0)
-                {
-                    sl = "001";
-                }
-                else if (count < 10)
-                {
-                    sl = "00" + count.ToString();
-                }
-                else if (count < 100 && count > 9)
-                {
-                    sl = "0" + count.ToString();
-                }
-            }
-            else
-            {
-                sl = count.ToString();
-            }
-            string year = DateTime.Today.ToString("yyyy");
-            previousStudent.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + newSubject.Code + "" + sl);
 
-            bool isUpdated = await _studentManager.UpdateAsync(previousStudent);
-            if (isUpdated)
-            {
-                return RedirectToAction("Index");
+                previousStudent.UpdatedAt = DateTime.Now;
+                previousStudent.UpdatedBy = HttpContext.Session.GetString("UserId");
+
+                previousStudent.Status = false;
+                previousStudent.StudentType = 0;
+                await _studentManager.UpdateAsync(previousStudent);
+
+
+                Student student = new Student();
+                student = previousStudent;
+                student.Id = 0;
+                int count = await _studentManager.GetCountAsync(model.SubjectId) + 1;
+                string sl = "";
+                if (count < 100)
+                {
+                    if (count == 0)
+                    {
+                        sl = "001";
+                    }
+                    else if (count < 10)
+                    {
+                        sl = "00" + count.ToString();
+                    }
+                    else if (count < 100 && count > 9)
+                    {
+                        sl = "0" + count.ToString();
+                    }
+                }
+                else
+                {
+                    sl = count.ToString();
+                }
+                
+                student.PreviousCollegeRoll = previousStudent.CollegeRoll;
+                string year = DateTime.Today.ToString("yyyy");
+                student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + newSubject.Code + "" + sl);
+                student.Status = true;
+                student.StudentType = 1;
+                student.SubjectId = model.SubjectId;
+                student.CreatedAt = DateTime.Now;
+                student.CreatedBy = HttpContext.Session.GetString("UserId");
+                bool isSaved = await _studentManager.AddAsync(student);
+                if (isSaved)
+                {
+                    return RedirectToAction("Index");
+                }
             }
 
             SubjectChangedVM subjectChangedVM = new SubjectChangedVM();
-            subjectChangedVM.StudentList = new SelectList(await _studentManager.GetAllAsync(), "Id", "Name").ToList();
-            subjectChangedVM.SubjectList = new SelectList(await _subjectManager.GetAllAsync(), "Id", "SubjectName").ToList();
+            subjectChangedVM.StudentList = new SelectList((from stu in await _studentManager.GetAllAsync()
+                                                           where stu.Status == true
+                                                           select new
+                                                           {
+                                                               Id = stu.Id,
+                                                               Name = stu.CollegeRoll + " - " + stu.Name + " ( " + stu.NUAdmissionRoll + " )"
+                                                           }), "Id", "Name").ToList();
+
+            subjectChangedVM.SubjectList = new SelectList((from sub in await _subjectManager.GetAllAsync()
+                                                           select new
+                                                           {
+                                                               Id = sub.Id,
+                                                               Name = sub.Code + " - " + sub.SubjectName
+                                                           }), "Id", "Name").ToList();
+
             return View(subjectChangedVM);
         }
 
