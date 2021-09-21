@@ -44,7 +44,7 @@
     List<string> admitttedSubList = new List<string>();
     if (Model.Students!=null)
     {
-        foreach (var student in Model.Students)
+        foreach (var student in Model.Students.Where(s => s.Status == true))
         {
             foreach (var subject in Model.Subjects)
             {
@@ -160,7 +160,7 @@
         </div>
         <div class="">
             <a asp-controller="Students" asp-action="index">
-                <h5 class="card-title">Total <span class="text-info font-weight-bold">@Model.Students.Count</span>  Students</h5>
+                <h5 class="card-title">Total <span class="text-info font-weight-bold">@Model.Students.Where(s => s.Status ==true).ToList().Count</span>  Students</h5>
             </a>
             
                 <table class="table table-bordered table-striped">

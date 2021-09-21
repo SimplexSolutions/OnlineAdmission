@@ -4,16 +4,17 @@
         <div class="col-md-12">
             <div class="jumbotron">
                 <form asp-action="SubjectChange" method="post">
+                    @Html.AntiForgeryToken()
                     <div class="form-group row">
-                        <label asp-for="StudentId" class="col-md-2 text-md-right col-form-label"></label>
+                        <label asp-for="StudentId" class="col-md-2 text-md-right col-form-label">Student</label>
                         <div class="col-md-4">
-                            <select asp-for="StudentId" class="form-control" asp-items="Model.StudentList">
+                            <select asp-for="StudentId" class="form-control select2" asp-items="Model.StudentList">
                                 <option selected disabled>Select Student</option>
                             </select>
                         </div>
-                        <label asp-for="SubjectId" class="col-md-2 text-md-right col-form-label"></label>
+                        <label asp-for="SubjectId" class="col-md-2 text-md-right col-form-label">Subject</label>
                         <div class="col-md-4">
-                            <select asp-for="SubjectId" class="form-control" asp-items="Model.SubjectList">
+                            <select asp-for="SubjectId" class="form-control select2" asp-items="Model.SubjectList">
                                 <option selected disabled>Select Subject</option>
                             </select>
                         </div>
