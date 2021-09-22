@@ -24,6 +24,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Dynamic;
+using Microsoft.Extensions.Logging;
 
 namespace OnlineAdmission.APP.Controllers
 {
@@ -42,8 +43,9 @@ namespace OnlineAdmission.APP.Controllers
         private readonly ISMSManager _smsManager;
         private readonly INagadManager _nagadManager;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ILogger<StudentsController> _logger;
 
-        public StudentsController(IStudentManager studentManager, IWebHostEnvironment host, IMeritStudentManager meritStudentManager, IMapper mapper, IDistrictManager districtManager, ISubjectManager subjectManager, IAppliedStudentManager appliedStudentManager, IPaymentTransactionManager paymentTransactionManager, ISecurityKey securityKey, ISMSManager smsManager, UserManager<IdentityUser> userManager, INagadManager nagadManager)
+        public StudentsController(IStudentManager studentManager, IWebHostEnvironment host, IMeritStudentManager meritStudentManager, IMapper mapper, IDistrictManager districtManager, ISubjectManager subjectManager, IAppliedStudentManager appliedStudentManager, IPaymentTransactionManager paymentTransactionManager, ISecurityKey securityKey, ISMSManager smsManager, UserManager<IdentityUser> userManager, INagadManager nagadManager, ILogger<StudentsController> logger)
         {
             _studentManager = studentManager;
             _host = host;
@@ -57,6 +59,7 @@ namespace OnlineAdmission.APP.Controllers
             _smsManager = smsManager;
             _userManager = userManager;
             _nagadManager = nagadManager;
+            _logger = logger;
         }
 
         ApplicationAPI _api = new ApplicationAPI();
