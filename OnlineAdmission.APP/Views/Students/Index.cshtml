@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Index";
     int sl = 0;
+    string bgColor = "";
 }
 
 
@@ -38,7 +39,11 @@
         {
             @foreach (var item in Model)
             {
-                <tr>
+                if (item.StudentType==1)
+                {
+                    bgColor = "bg-info text-light";
+                }
+                <tr class="@bgColor">
                     <td>
                         @(++sl).
                     </td>
@@ -50,7 +55,7 @@
                     </td>
 
                     <td>
-                        @Html.DisplayFor(modelItem => item.CollegeRoll)
+                        @Html.DisplayFor(modelItem => item.CollegeRoll) <span>(@item.PreviousCollegeRoll)</span>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.NUAdmissionRoll)
