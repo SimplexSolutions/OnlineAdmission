@@ -71,6 +71,15 @@
                 <label asp-for="Student.SubjectId" class="col-form-label col-md-2 text-right">Subject : </label>
                 <div class="col-md-2">
                     <input asp-for="Student.Subject.SubjectName" disabled readonly class="form-control-plaintext font-weight-bold" />
+                    @if (Model.Student.StudentType == 1)
+                    {
+                        if (Model.PreviousSubject!=null)
+                        {
+                                <span>(@Model.PreviousSubject.SubjectName)</span>
+                        }
+                        
+                    }
+
                 </div>
                 @if (Model.MeritStudent != null)
                 {
@@ -79,11 +88,19 @@
                         <input asp-for="MeritStudent.MeritPosition" disabled readonly class="form-control-plaintext font-weight-bold" />
                     </div>
                 }
+                else
+                {
+                    <div class="offset-md-3"></div>
+                }
 
 
                 <label asp-for="Student.CollegeRoll" class="col-form-label col-md-2 text-right">College Roll : </label>
                 <div class="col-md-2">
                     <input asp-for="Student.CollegeRoll" disabled readonly class="form-control-plaintext font-weight-bold" />
+                    @if (Model.Student.StudentType==1)
+                    {
+                        <span>(@Model.Student.PreviousCollegeRoll)</span>
+                    }
                 </div>
             </div>
 

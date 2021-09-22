@@ -55,7 +55,12 @@
                     </td>
 
                     <td>
-                        @Html.DisplayFor(modelItem => item.CollegeRoll) <span>(@item.PreviousCollegeRoll)</span>
+                        @Html.DisplayFor(modelItem => item.CollegeRoll) 
+                        @if (item.StudentType==1)
+                        {
+                        <span>(@item.PreviousCollegeRoll)</span>
+                        }
+                        
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.NUAdmissionRoll)

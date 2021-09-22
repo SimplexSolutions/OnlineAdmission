@@ -1300,12 +1300,19 @@ namespace OnlineAdmission.APP.Controllers
             student.PermanentDistrict = await _districtManager.GetByIdAsync(student.PermanentDistrictId);
             student.MailingDistrict = await _districtManager.GetByIdAsync(student.MailingDistrictId);
             MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(student.NUAdmissionRoll);
-            
+
             
 
             StudentDetailsVM stuDetails = new StudentDetailsVM();
             stuDetails.Student = student;
             stuDetails.MeritStudent = meritStudent;
+            if (student.StudentType == 1)
+            {
+                Student previouseStudent = await _studentManager.GetByCollegeRollAsync((int)student.PreviousCollegeRoll);
+                Subject previousSubject = await _subjectManager.GetByIdAsync(previouseStudent.SubjectId);
+                stuDetails.PreviousSubject = previousSubject;
+            }
+            
             return View(stuDetails);
         }
 
