@@ -69,6 +69,7 @@ namespace OnlineAdmission.APP.Controllers
         [Authorize(Roles = "Admin,SuperAdmin,Teacher")]
         public async Task<IActionResult> Index()
         {
+            
             var user = await _userManager.GetUserAsync(HttpContext.User);
             HttpContext.Session.SetString("UserId", user.Id);
 
@@ -406,6 +407,7 @@ namespace OnlineAdmission.APP.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Search(int NuAdmissionRoll)
         {
+
             ViewBag.nuRoll = NuAdmissionRoll;
             string msg = "";
             string nuRoll = NuAdmissionRoll.ToString();

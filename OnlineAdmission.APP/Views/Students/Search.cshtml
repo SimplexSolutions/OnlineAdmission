@@ -16,11 +16,13 @@
                     <div class="col-md-6">
                         @if (ViewBag.nuRoll != null)
                         {
-                            <input type="text" name="NuAdmissionRoll" value="@ViewBag.nuRoll" class="form-control" />
+                            <input type="number" name="NuAdmissionRoll" value="@ViewBag.nuRoll" class="form-control" />
+                            
+                            
                         }
                         else
                         {
-                            <input type="text" name="NuAdmissionRoll" class="form-control" placeholder="NU Admission Roll" />
+                            <input type="number" name="NuAdmissionRoll" class="form-control" placeholder="NU Admission Roll" />
                         }
 
                     </div>
