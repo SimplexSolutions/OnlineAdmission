@@ -13,6 +13,6 @@ namespace OnlineAdmission.DAL.IRepository
         Task<Student> GetStudentBySSCRollAsync(int sscRoll, string boardName);
         Task<int> GetCountAsync(int subId);
         Task<Student> GetByAdmissionRollAsync(int NURoll);
-
+        Task<Student> GetByCollegeRollAsync(int CollegeRoll);
     }
 }

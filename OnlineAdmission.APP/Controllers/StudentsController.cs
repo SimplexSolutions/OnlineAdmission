@@ -692,6 +692,13 @@ namespace OnlineAdmission.APP.Controllers
         [HttpGet]
         public async Task<ActionResult> NagadPayment(int nuRoll)
         {
+            if (nuRoll<=0)
+            {
+                return RedirectToAction("Search");
+            }
+
+
+
             string OrderId;
             //AppliedStudent appliedStudent;
             //MeritStudent meritStudent;
@@ -975,6 +982,11 @@ namespace OnlineAdmission.APP.Controllers
         [HttpGet]
         public async Task<ActionResult> NagadPaymentPro(int nuRoll, int? studentType, string mobileNum, string studentName)
         {
+            if (nuRoll <= 0)
+            {
+                return RedirectToAction("ProfessionalSearch");
+            }
+
             string OrderId="";
             if (studentType == 1)
             {
@@ -1277,16 +1289,20 @@ namespace OnlineAdmission.APP.Controllers
             }
 
             var student = await _studentManager.GetByIdAsync((int)id);
+            if (student == null)
+            {
+                return NotFound();
+            }
             var sub = await _subjectManager.GetByIdAsync(student.SubjectId);
+            
             student.Subject = sub;
             student.PresentDistrict = await _districtManager.GetByIdAsync(student.PresentDistrictId);
             student.PermanentDistrict = await _districtManager.GetByIdAsync(student.PermanentDistrictId);
             student.MailingDistrict = await _districtManager.GetByIdAsync(student.MailingDistrictId);
             MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(student.NUAdmissionRoll);
-            if (student == null)
-            {
-                return NotFound();
-            }
+            
+            
+
             StudentDetailsVM stuDetails = new StudentDetailsVM();
             stuDetails.Student = student;
             stuDetails.MeritStudent = meritStudent;

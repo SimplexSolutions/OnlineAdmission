@@ -10,5 +10,6 @@ namespace OnlineAdmission.APP.ViewModels.Student
     {
         public OnlineAdmission.Entity.Student Student { get; set; }
         public MeritStudent MeritStudent { get; set; }
+        public Subject PreviousSubject { get; set; }
     }
 }
