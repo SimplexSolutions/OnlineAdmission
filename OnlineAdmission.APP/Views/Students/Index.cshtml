@@ -43,7 +43,11 @@
                 {
                     bgColor = "bg-info text-light";
                 }
-                <tr class="@bgColor">
+                else
+                {
+                    bgColor = "bg-light";
+                }
+                <tr class=@bgColor>
                     <td>
                         @(++sl).
                     </td>
