@@ -85,7 +85,7 @@
                             </ul>
                         </li>
 
-                        
+
                         @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
 
                         {
@@ -180,7 +180,8 @@
         </div>
     </div>
 
-    <script src="~/theme/js/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    @*<script src="~/theme/js/jquery.min.js"></script>*@
     <script src="~/theme/js/popper.js"></script>
     <script src="~/theme/js/bootstrap.min.js"></script>
     <script src="~/lib/Select2/js/select2.min.js"></script>

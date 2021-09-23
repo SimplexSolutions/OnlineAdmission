@@ -21,5 +21,10 @@ namespace OnlineAdmission.BLL.Manager
         {
             return await subjectRepository.GetByCodeAsync(code);
         }
+
+        public async Task<Subject> GetByStudentIdAsyc(int stuId)
+        {
+            return await subjectRepository.GetByStudentIdAsyc(stuId);
+        }
     }
 }

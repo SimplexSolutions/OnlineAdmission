@@ -10,5 +10,6 @@ namespace OnlineAdmission.DAL.IRepository
     public interface ISubjectRepository : IRepository<Subject>
     {
         Task<Subject> GetByCodeAsync(int code);
+        Task<Subject> GetByStudentIdAsyc(int stuId);
     }
 }

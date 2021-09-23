@@ -15,7 +15,7 @@
                         <label asp-for="SubjectId" class="col-md-2 text-md-right col-form-label">Subject</label>
                         <div class="col-md-4">
                             <select asp-for="SubjectId" class="form-control select2" asp-items="Model.SubjectList">
-                                <option selected disabled>Select Subject</option>
+                                <option selected disabled>Select Subject</option>                                
                             </select>
                         </div>
                     </div>
@@ -29,3 +29,33 @@
             
         </div>
     </div>
+
+
+
+@section Scripts{ 
+<script>
+    $(document).ready(function () {
+        $('#StudentId').change(function () {
+            let id = $('#StudentId option:selected').val();
+
+            $.ajax({
+                url: '/Students/SubjectListByStudentId/' + id,
+                dataType: 'JSON',
+                cache: false,                
+                success: function (data) {
+                    $('#SubjectId').empty();
+                    $('#SubjectId').append('<option selected disabled>Select Subject</option>');
+                    $.each(data, function (i, obj) {
+                        var op = '<option value="' + obj.id + '">' + obj.code+' - '+obj.subjectName + '</option>'
+                        $('#SubjectId').append(op);
+                    });
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+
+        });
+    });
+</script>
+}

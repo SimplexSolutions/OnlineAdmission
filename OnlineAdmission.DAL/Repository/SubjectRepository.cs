@@ -27,6 +27,11 @@ namespace OnlineAdmission.DAL.Repository
             return await _context.Subjects.FirstOrDefaultAsync(s => s.Code == code);
         }
 
-        
+        public async Task<Subject> GetByStudentIdAsyc(int stuId)
+        {
+            var student = await _context.Students.FirstOrDefaultAsync(s => s.Id == stuId);
+            var Subject = await _context.Subjects.FirstOrDefaultAsync(s => s.Id == student.SubjectId);
+            return Subject;
+        }
     }
 }

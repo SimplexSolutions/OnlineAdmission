@@ -473,10 +473,10 @@ namespace OnlineAdmission.APP.Controllers
         [AllowAnonymous]
         public IActionResult ProfessionalSearch(int professionalRoll, string notification)
         {
-            //if (TempData["miss"]!=null)
-            //{
-            //    ViewBag.miss = TempData["miss"].ToString();
-            //}
+            if (TempData["msg"] != null)
+            {
+                ViewBag.miss = TempData["msg"].ToString();
+            }
             ViewBag.Roll = professionalRoll;
             ViewBag.notification = notification;
             return View();
@@ -694,6 +694,7 @@ namespace OnlineAdmission.APP.Controllers
         {
             if (nuRoll<=0)
             {
+                _logger.LogWarning("NU Roll is Invalid");
                 return RedirectToAction("Search");
             }
 
@@ -724,7 +725,17 @@ namespace OnlineAdmission.APP.Controllers
             //Subject subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
 
             AppliedStudent appliedStudent = await _nagadManager.GetAppliedStudentByNURollNagad(nuRoll);
+            if (appliedStudent==null)
+            {
+                _logger.LogWarning("Applied Student Not Found");
+                return RedirectToAction("Search");
+            }
             MeritStudent meritStudent = await _nagadManager.GetMeritStudentByNURollNagad(nuRoll);
+            if (meritStudent == null)
+            {
+                _logger.LogWarning("Merit Student Not Found");
+                return RedirectToAction("Search");
+            }
             Subject subject = await _nagadManager.GetSubjectByCodeNagad(meritStudent.SubjectCode);
 
             OrderId = meritStudent.NUAdmissionRoll + "" + meritStudent.SubjectCode + "" + DateTime.Now.ToString("HHmmss");
@@ -793,6 +804,7 @@ namespace OnlineAdmission.APP.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                _logger.LogWarning(ex.ToString());
                
             }
 
@@ -984,6 +996,7 @@ namespace OnlineAdmission.APP.Controllers
         {
             if (nuRoll <= 0)
             {
+                TempData["msg"] = "Roll Number is not valid";
                 return RedirectToAction("ProfessionalSearch");
             }
 
@@ -1415,6 +1428,21 @@ namespace OnlineAdmission.APP.Controllers
 
             return View(subjectChangedVM);
         }
+
+
+        [AllowAnonymous]
+        public async Task<JsonResult> SubjectListByStudentId(int id)
+        {
+            var subject = await _subjectManager.GetByStudentIdAsyc(id);
+            List <Subject> subList = await _subjectManager.GetAllAsync();
+            var subs = from s in subList.OrderBy(m => m.Code)
+                       where s.Id != subject.Id
+                       select s;
+            return Json(subs);
+        }
+
+
+
 
         //Nagad Addition Code here=======================================
 
