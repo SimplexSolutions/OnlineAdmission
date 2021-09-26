@@ -147,6 +147,8 @@ namespace OnlineAdmission.APP.Controllers
             
 
             ViewBag.data = usrtext;
+            ViewBag.fromdate = fromdate;
+            ViewBag.todate = todate;
             int pageSize = pagesize <= 0 ? 50 : pagesize;
             
             if (page <= 0) page = 1;
@@ -155,6 +157,7 @@ namespace OnlineAdmission.APP.Controllers
             {
                 pageSize = paymentReceiptVMs.Count();
             }
+            ViewBag.pagesize = pageSize;
             if (fromdate != null || todate != null)
             {
                 if (fromdate != null && todate != null)

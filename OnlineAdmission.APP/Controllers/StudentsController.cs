@@ -388,7 +388,6 @@ namespace OnlineAdmission.APP.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Search(string notification)
         {
-
             if (TempData["msg"]!=null)
             {
                 ViewBag.msg = TempData["msg"].ToString();
@@ -407,7 +406,7 @@ namespace OnlineAdmission.APP.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Search(int NuAdmissionRoll)
         {
-
+            
             ViewBag.nuRoll = NuAdmissionRoll;
             string msg = "";
             string nuRoll = NuAdmissionRoll.ToString();
@@ -467,6 +466,11 @@ namespace OnlineAdmission.APP.Controllers
             }
             ViewBag.msg = msg;
             return View();
+        }
+
+        private Exception Exception(string v)
+        {
+            throw new NotImplementedException();
         }
 
         [HttpGet]

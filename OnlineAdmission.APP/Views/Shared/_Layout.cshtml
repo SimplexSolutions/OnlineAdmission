@@ -43,7 +43,6 @@
 
                 @if (signInManager.IsSignedIn(User))
                 {
-
                     <ul class="list-unstyled components mb-5">
                         @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("Accounts") || User.IsInRole("Teacher"))
                         {
@@ -62,7 +61,6 @@
                                 </ul>
                             </li>
                         }
-
 
                         <li>
                             <a href="#paymentSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Payments</a>
@@ -85,9 +83,7 @@
                             </ul>
                         </li>
 
-
                         @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
-
                         {
                             <li>
                                 <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Setup</a>
@@ -114,7 +110,6 @@
                                 <a asp-controller="Students" asp-action="IdCard">ID Card</a>
                             </li>
                         }
-
                     </ul>
                 }
 

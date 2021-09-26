@@ -40,7 +40,7 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         public async Task<IActionResult> Index()
-        {
+        {            
 
             AllStudentVM students = new AllStudentVM();
             var appliedStudents = await _appliedStudentManager.GetAllAsync();
@@ -54,6 +54,11 @@ namespace OnlineAdmission.APP.Controllers
             students.Subjects = subjects;
 
             return View(students);
+        }
+
+        private Exception Exception(string v)
+        {
+            throw new NotImplementedException();
         }
 
         public IActionResult GetTransaction()

@@ -59,9 +59,16 @@ namespace OnlineAdmission.APP.Controllers
             if (ModelState.IsValid)
             {
                 var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+
                 if (result.Succeeded)
                 {
-                    
+                    //var user = await userManager.GetUserAsync(HttpContext.User);
+                    var user = await userManager.FindByEmailAsync(model.Email);
+                    if (user != null)
+                    {
+                        HttpContext.Session.SetString("UserId", user.Id);
+                    }
+
                     return RedirectToAction("Search", "Students");
 
                     //if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))

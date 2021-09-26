@@ -12,8 +12,11 @@
 
     string dprev = Model.HasPreviousPage ? "" : " disabled";
     string dnext = Model.HasNextPage ? "" : " disabled";
+    DateTime newDateTime = new DateTime(2001, 01, 01);
 
-    string searchtext = ViewBag.search == null ? "" : ViewBag.search;
+    string searchtext = ViewBag.data == null ? "" : ViewBag.data;
+    DateTime todate = ViewBag.todate == null ? DateTime.Today : ViewBag.todate;
+    DateTime fromdate = ViewBag.fromdate == null ? newDateTime : ViewBag.fromdate;
     string pagecontroller = ViewBag.controller == null ? "home" : ViewBag.controller; ;
     string pageaction = ViewBag.action == null ? "index" : ViewBag.action;
 
@@ -87,6 +90,9 @@
             <li class="float-right">
                 <form id="frm" class="form-inline" asp-action="@pageaction" method="post">
 
+                    <input type="hidden" name="usrtext" value="@ViewBag.data" class="form-control" placeholder="Search...." />
+                    <input type="datetime" name="fromdate" value="@ViewBag.fromdate" style="display:none"/>
+                    <input type="datetime" name="todate" value="@ViewBag.todate" style="display:none"/>
                     <select id="pagesize" name="pagesize" class="form-control">
                         @foreach (var item in pgsize)
                         {
