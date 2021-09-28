@@ -1,0 +1,87 @@
+﻿@inject SignInManager<IdentityUser> signInManager
+@inject UserManager<IdentityUser> userManager
+
+@{
+    ViewBag.Title = "Masters Admission";
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+}
+<div class="">
+    <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">
+        <div class="card-body">
+            <form asp-action="MastersSearch" asp-controller="Students" method="post">
+                <div class="form-group row">
+                    <label class="col-md-2 text-md-right text-left col-form-label">NU Roll</label>
+                    <div class="col-md-6">
+                        @if (ViewBag.nuRoll != null)
+                        {
+                            <input type="number" name="mastersRoll" value="@ViewBag.nuRoll" class="form-control" min="100000" max="999999" required />
+                        }
+                        else
+                        {
+                            <input type="number" name="mastersRoll" class="form-control" min="100000" max="999999" required />
+                        }
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2">Search</button>
+                </div>
+            </form>
+
+            @if (ViewBag.msg != null)
+            {
+                <div class="form-group row" id="missText">
+                    <span class="alert alert-danger">@ViewBag.msg</span>
+                </div>
+            }
+        </div>
+        @if (ViewBag.notification != null)
+        {
+            <div class="text-md-center">
+                <span class="h2 alert text-success">@ViewBag.notification</span>
+            </div>
+        }
+        @if (ViewBag.isPaid != null)
+        {
+            if (ViewBag.isPaid == true)
+            {
+                <span>Your payment is already completed.</span>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-md-10 offset-1 text-center">
+                        <span class="alert font-weight-bold text-info">Apply for Master's Admission</span><hr />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <form asp-action="NagadPaymentMasters" asp-controller="Students" method="get">
+                            <input type="hidden" name="studentType" value="2" />
+                            <input type="hidden" name="nuRoll" value="@ViewBag.nuRoll" />
+                            <div class="form-group row">
+                                <label class="col-md-2 text-md-right text-left col-form-label">Name : </label>
+                                <div class="col-md-4">
+                                    <input required type="text" name="studentName" class="form-control" />
+                                </div>
+
+                                <label class="col-md-2 text-md-right text-left col-form-label">Mobile : </label>
+                                <div class="col-md-4">
+                                    <input required type="number" name="mobileNum" class="form-control" min="01300000000" max="01999999999" />
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary mb-2">Make Payment</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        }
+
+    </div>
+
+
+</div>
+@section Scripts{
+    <script>
+    $(document).ready(function () {
+        $("#missText").fadeOut(10000);
+    });
+    </script>
+}

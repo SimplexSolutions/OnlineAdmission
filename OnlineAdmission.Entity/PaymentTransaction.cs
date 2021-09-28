@@ -39,8 +39,9 @@ namespace OnlineAdmission.Entity
 
         public string Description { get; set; }
 
-        //StudentType = null = hon's Student
+        //StudentType = null/0 = hon's Student
         //StudentType = 1 = professional Student
+        //StudentType = 2 = Masters
         public int? StudentType { get; set; }  
     }
 }

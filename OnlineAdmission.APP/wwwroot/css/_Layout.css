@@ -1,0 +1,30 @@
+﻿body {
+}
+
+/*Admission Dropdown*/
+#admissionNav{
+    position:relative;
+    display:inline-block;
+}
+#admissionId {
+    list-style: none;
+    position: absolute;
+    width: max-content;
+    display:none;
+    z-index:100;
+}
+
+#admissionNav:hover #admissionId {
+    display: block;
+}
+#admissionId::after{
+    z-index:100;
+}
+#admissionId li{
+    background-color:azure;
+}
+
+#admissionId li a:hover {
+    color: #f8b739;
+    font-weight:bold;
+}

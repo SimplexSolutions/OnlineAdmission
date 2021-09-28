@@ -96,6 +96,11 @@ namespace OnlineAdmission.APP.Controllers
                     phoneNumber = MerchantInfo.MobileNo;
                     msgText = "Congratulations! your payment is successfully paid";
                 }
+                else if (newPayment.StudentType == 2)
+                {
+                    phoneNumber = MerchantInfo.MobileNo;
+                    msgText = "Congratulations! your payment is successfully paid";
+                }
                 else
                 {
                     meritStudent.PaymentStatus = true;
@@ -131,6 +136,10 @@ namespace OnlineAdmission.APP.Controllers
                 if (MerchantInfo.StudentType==1)
                 {
                     return RedirectToAction("ProfessionalSearch", "Students", new { professionalRoll = newPayment.ReferenceNo, notification = successNotification });
+                }
+                if (MerchantInfo.StudentType==2)
+                {
+                    return RedirectToAction("MastersSearch", "Students", new { mastersRoll = newPayment.ReferenceNo, notification = successNotification });
                 }
                 return RedirectToAction("PaymentConfirmation", "Students",new { NuAdmissionRoll = newPayment.ReferenceNo,notification= successNotification});
             }

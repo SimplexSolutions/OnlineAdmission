@@ -26,6 +26,8 @@
     @*datatable*@
     <link href="~/lib/datatable/datatables.min.css" rel="stylesheet" />
 
+    @*Custom Style*@
+    <link href="~/css/_Layout.css" rel="stylesheet" />
 
 
 </head>
@@ -142,12 +144,19 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto">
+                            
+                            <li class="nav-item" id="admissionNav">
+                                <span class="nav-link" id="admissionLink">Admission</span>
+                                <ul id="admissionId">
+                                    <li ><a class="nav-link" asp-action="Search" asp-controller="Students">Honour's Admission</a></li>
+                                    <li ><a class="nav-link" asp-action="ProfessionalSearch" asp-controller="Students">Profession's Admission</a></li>
+                                    <li ><a class="nav-link" asp-action="MastersSearch" asp-controller="Students">Master's Admission</a></li>
+                                </ul>                                
+                            </li>
                             <li class="nav-item active">
                                 <a class="nav-link" asp-action="Index" asp-controller="Home">Home</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-action="Search" asp-controller="Students">Admission</a>
-                            </li>
+
                             @if (signInManager.IsSignedIn(User))
                             {
                                 if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))

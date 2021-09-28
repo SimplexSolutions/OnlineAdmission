@@ -25,6 +25,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Dynamic;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace OnlineAdmission.APP.Controllers
 {
@@ -507,6 +508,43 @@ namespace OnlineAdmission.APP.Controllers
             ViewBag.nuRoll = professionalRoll;
             return View();
         }
+
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult MastersSearch(int mastersRoll, string notification)
+        {
+            if (TempData["msg"] != null)
+            {
+                ViewBag.miss = TempData["msg"].ToString();
+            }
+            ViewBag.Roll = mastersRoll;
+            ViewBag.notification = notification;
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> MastersSearch(int mastersRoll)
+        {
+            bool isPaid = false;
+            ViewBag.nuRoll = mastersRoll;
+            if (mastersRoll > 0)
+            {
+                var payment = await _paymentTransactionManager.GetTransactionByNuRollAsync(mastersRoll);
+                if (payment != null)
+                {
+                    isPaid = true;
+                    ViewBag.isPaid = isPaid;
+
+                    return View();
+                }
+                ViewBag.isPaid = isPaid;
+            }
+            return View();
+        }
+
 
         [HttpGet]
         [AllowAnonymous]
@@ -1225,6 +1263,237 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet]
+        public async Task<ActionResult> NagadPaymentMasters(int nuRoll, int? studentType, string mobileNum, string studentName)
+        {
+            if (nuRoll <= 0)
+            {
+                TempData["msg"] = "Roll Number is not valid";
+                return RedirectToAction("ProfessionalSearch");
+            }
+
+            string OrderId = "";
+            if (studentType == 2)
+            {
+                if (mobileNum == null || studentName == null)
+                {
+                    TempData["miss"] = "Mobile Number and Name is mendatory";
+                    return RedirectToAction("MastersSearch", "Students");
+                }
+                OrderId = nuRoll.ToString() + "" + "MASTER" + "" + DateTime.Now.ToString("HHmmss");
+            }
+            else
+            {
+                return RedirectToAction("MastersSearch", "Students");
+            }
+
+            #region Initialize API Data Preparation
+            ///////////////////////////////////////////////////////// Create JSON Object
+            var initializeJSON = new
+            {
+                merchantId = GlobalVariables.MerchantId,
+                orderId = OrderId,
+                datetime = GlobalVariables.RequestDateTime,
+                challenge = GlobalVariables.RandomNumber
+            };
+            // Serialize JSON data to pass through Initialize API
+            string initializeJsonData = JsonConvert.SerializeObject(initializeJSON);
+
+            // Encrypt the JSON Data
+            string sensitiveData = EncryptWithPublic(initializeJsonData);
+
+            // Generate Signature on JSON Data
+            string signatureValue = SignWithMarchentPrivateKey(initializeJsonData);
+
+
+            // Prepare Final JSON for Initialize API
+            var jSON = new
+            {
+                datetime = GlobalVariables.RequestDateTime,
+                sensitiveData = sensitiveData,
+                signature = signatureValue
+            };
+            // Serialize JSON data to pass through Initialize API
+            string jSonData = JsonConvert.SerializeObject(jSON);
+
+            #endregion
+
+            ///////////////////////////-/-/-/-//////////////////////////////////////////////////////////////////////////////////////////////
+
+            #region Call Initialize API
+
+            var responseContent = "";
+            try
+            {
+                var httpContent = new StringContent(jSonData, Encoding.UTF8, "application/json");
+
+                using (var httpClient = new HttpClient())
+                {
+                    //httpClient.DefaultRequestHeaders.Add("X-KM-IP-V4", "127.0.0.1");
+                    httpClient.DefaultRequestHeaders.Add("X-KM-IP-V4", "192.168.1.196");
+                    httpClient.DefaultRequestHeaders.Add("X-KM-MC-Id", GlobalVariables.MerchantId);
+                    httpClient.DefaultRequestHeaders.Add("X-KM-Client-Type", "PC_WEB");
+                    httpClient.DefaultRequestHeaders.Add("X-KM-Api-Version", "v-0.2.0");
+                    // Do the actual request and await the response
+                    var httpResponse = await httpClient.PostAsync(GlobalVariables.InitializeAPI + GlobalVariables.MerchantId + "/" + OrderId, httpContent);
+
+                    // If the response contains content we want to read it!
+                    if (httpResponse.Content != null)
+                    {
+                        responseContent = await httpResponse.Content.ReadAsStringAsync();
+
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+            }
+
+
+
+
+            Console.WriteLine("Initialize API Response:" + responseContent + "\n");
+            #endregion
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            #region Process Initialize API Returned Values & Verify Signature
+
+            dynamic response = JObject.Parse(responseContent);
+            string returnedSensitiveData = response.sensitiveData;
+
+            string returnedSignature = response.signature;
+
+            //Decrypt Sensitive Data
+            string decryptedSensitiveData = Decrypt(returnedSensitiveData);
+
+            // Initialize API Signature Verification
+            var v = Verify(decryptedSensitiveData, returnedSignature, SecurityKey.nagadPublicKey, Encoding.UTF8, HashAlgorithmName.SHA256);
+            if (!v)
+            {
+
+                ViewBag.msg = "Signature Verification Failed";
+                return View();
+            }
+
+            //Process Decrypted Data
+            dynamic responsevalue = JObject.Parse(decryptedSensitiveData);
+            string challenge = responsevalue.challenge;
+            string paymentRefId = responsevalue.paymentReferenceId;
+            double amount = 300;
+
+            double serviceCharge = 5.00;// (amount * .015);
+            double totalAmount = amount + serviceCharge;
+
+            // Create JSON Object
+            var paymentJSON = new
+            {
+                merchantId = GlobalVariables.MerchantId,
+                orderId = OrderId,
+                currencyCode = "050",
+                amount = totalAmount,
+                challenge = challenge
+            };
+
+            string paymentJsonData = JsonConvert.SerializeObject(paymentJSON);
+
+
+            string paymentSensitiveData = EncryptWithPublic(paymentJsonData);
+
+            // Generate Signature on JSON Data
+            string paymentSignatureValue = SignWithMarchentPrivateKey(paymentJsonData);
+
+
+            //string merchantCallbackURL = "http://sandbox.mynagad.com:10707/merchant-server/web/confirm"; //merchant Callback URL - as you want
+            //string merchantCallbackURL = "http://115.127.26.3:4356/api/PaymentTransactions"; //merchant Callback URL - as you want
+            string merchantCallbackURL = "http://115.127.26.3:80/api/PaymentTransactions"; //merchant Callback URL - as you want
+            //string merchantCallbackURL = "https://localhost:44356/api/PaymentTransactions"; //merchant Callback URL - as you want
+            //string merchantCallbackURL = "http://onlineadmission.eiimsbd.com/api/PaymentTransactions"; //merchant Callback URL - as you want
+            //dynamic additionalMerchantInfo;
+
+            var additionalMerchantInfo = new
+            {
+                ServiceCharge = serviceCharge,
+                StudentName = studentName,
+                MobileNo = mobileNum,
+                NuAdmissionRoll = nuRoll,
+                AdmissionFee = 0,
+                StudentType = studentType
+            };
+
+            var paymentFinalJSON = new
+            {
+                sensitiveData = paymentSensitiveData,
+                signature = paymentSignatureValue,
+                merchantCallbackURL = merchantCallbackURL,
+                additionalMerchantInfo = additionalMerchantInfo
+
+            };
+
+            // Serialize JSON data to pass through Initialize API
+            string finalJSONData = JsonConvert.SerializeObject(paymentFinalJSON);
+
+            #endregion
+            ///////////////////////////////////////
+
+            #region Call Checkout API
+            var br_ResponseContent = "";
+            try
+            {
+                var br_httpContent = new StringContent(finalJSONData, Encoding.UTF8, "application/json");
+
+                using (var br_httpClient = new HttpClient())
+                {
+                    br_httpClient.DefaultRequestHeaders.Add("X-KM-IP-V4", "192.168.1.196");
+                    //br_httpClient.DefaultRequestHeaders.Add("X-KM-IP-V4", "127.0.0.1");
+                    br_httpClient.DefaultRequestHeaders.Add("X-KM-MC-Id", GlobalVariables.MerchantId);
+                    br_httpClient.DefaultRequestHeaders.Add("X-KM-Client-Type", "PC_WEB");
+                    br_httpClient.DefaultRequestHeaders.Add("X-KM-Api-Version", "v-0.2.0");
+                    // Do the actual request and await the response
+                    var httpResponse = await br_httpClient.PostAsync(GlobalVariables.CheckOutAPI + paymentRefId, br_httpContent);
+
+                    // If the response contains content we want to read it!
+                    if (httpResponse.Content != null)
+                    {
+                        br_ResponseContent = await httpResponse.Content.ReadAsStringAsync();
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            Console.WriteLine("Checkout API Response:" + br_ResponseContent + "\n"); //This is area to show the view
+
+
+            #endregion
+            /////////////////////////////////////////////////
+
+            #region Process Checkout API Response
+            dynamic co_Response = JObject.Parse(br_ResponseContent);
+            string site = co_Response.callBackUrl;
+            if (co_Response.status == "Success")
+            {
+                return Redirect(site);
+            }
+
+
+            else
+            {
+
+                return View();
+            }
+
+            #endregion
+
+        }
+
+
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult> NagadPayment(TransactionInfo model)
         {
@@ -1500,6 +1769,7 @@ namespace OnlineAdmission.APP.Controllers
                 throw new Exception("_privateKeyRsaProvider is null");
             }
             string decryptedData = Encoding.UTF8.GetString(rsa.Decrypt(Convert.FromBase64String(plainText), RSAEncryptionPadding.Pkcs1));
+            
             return decryptedData;
         }
         #endregion
