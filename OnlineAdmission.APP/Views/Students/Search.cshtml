@@ -7,10 +7,11 @@
     //Layout = User.IsInRole("Admin") ? "~/Views/Shared/_Layout.cshtml" : "~/Views/Shared/_LayoutStudent.cshtml";
     Layout = "~/Views/Shared/_LayoutStudent.cshtml";
 }
-<div class="">
+@*<div class="">
     <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">
         <div class="card-body">
             <form asp-action="Search" asp-controller="Students" method="post">
+                <label class="col-md-8 text-success font-weight-bolder  text-md-center text-center col-form-label" style="font-size:x-large">Honours Admission</label><br /><br />
                 <div class="form-group row">
                     <label class="col-md-2 text-md-right text-left col-form-label">Roll</label>
                     <div class="col-md-6">
@@ -94,112 +95,112 @@
                                 <div class="card border-0">
                                     <form asp-action="NagadPayment" asp-controller="Students" method="get">
                                         <input name="nuRoll" value="@Model.MeritStudent.NUAdmissionRoll" type="hidden" />
-                                        @*<input name="studentType" value="0" type="hidden" />*@
-                                        <button type="submit">
-                                            <img class="card-img-top" src="~/Images/Payment/Nagad.png" alt="Nagad Logo" style="width:80px;">
-                                        </button>
+                                      @*<input name="studentType" value="0" type="hidden" />*@
+@*<button type="submit">
+    <img class="card-img-top" src="~/Images/Payment/Nagad.png" alt="Nagad Logo" style="width:80px;">
+</button>
                                     </form>
                                 </div>
-                                @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
-                                {
-                                    <div class="card border-0">
-                                        <form asp-action="CollegePayment" asp-controller="Students" method="get">
-                                            <input name="nuRoll" value="@Model.MeritStudent.NUAdmissionRoll" type="hidden" />
-                                            <button type="submit">
-                                                <img class="card-img-top" src="~/Images/Collge/logo.png" alt="College Logo" style="width:60px;">
-                                            </button>
-                                        </form>
-                                    </div>
-                                }
+@if (signInManager.IsSignedIn(User) && User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+{
+    <div class="card border-0">
+        <form asp-action="CollegePayment" asp-controller="Students" method="get">
+            <input name="nuRoll" value="@Model.MeritStudent.NUAdmissionRoll" type="hidden" />
+            <button type="submit">
+                <img class="card-img-top" src="~/Images/Collge/logo.png" alt="College Logo" style="width:60px;">
+            </button>
+        </form>
+    </div>
+}
                             </div>
                         </div>
                     }
                 </div>
             </div>
         }
-        @if (ViewBag.admittedStudent != null)
-        {
-            <div class="row">
-                <div class="card text-center col-md-12">
-                    <div class="card-header">
-                        <h5>You are completed your admission successfully</h5>
+@if (ViewBag.admittedStudent != null)
+{
+    <div class="row">
+        <div class="card text-center col-md-12">
+            <div class="card-header">
+                <h5>You are completed your admission successfully</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        @if (ViewBag.admittedStudent.Photo != null)
+                        {
+                            <img src="~/Images/Students/@ViewBag.admittedStudent.Photo" style="width:150px;" />
+                        }
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                @if (ViewBag.admittedStudent.Photo != null)
-                                {
-                                    <img src="~/Images/Students/@ViewBag.admittedStudent.Photo" style="width:150px;" />
-                                }
-                            </div>
-                            <div class="col-md-8">
-                                <table class="text-left table table-hover border-0 table-striped">
-                                    <tr>
-                                        <td class="" style="width:200px">Applicant Name</td>
-                                        <td>:</td>
-                                        <td class="">@ViewBag.admittedStudent.Name</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="" style="width:200px">Academic Session</td>
-                                        <td>:</td>
-                                        <td class="">2020-2021</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="" style="width:200px">Department</td>
-                                        <td>:</td>
-                                        <td class="">@ViewBag.admittedStudent.Subject.SubjectName</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="" style="width:200px">Class Roll</td>
-                                        <td>:</td>
-                                        <td class="">@ViewBag.admittedStudent.CollegeRoll</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="col-md-6 offset-3">
-                            <a asp-action="Details" asp-controller="Students" asp-route-id="@ViewBag.admittedStudent.Id" class="btn btn-info">View admission form</a>
-                        </div>
+                    <div class="col-md-8">
+                        <table class="text-left table table-hover border-0 table-striped">
+                            <tr>
+                                <td class="" style="width:200px">Applicant Name</td>
+                                <td>:</td>
+                                <td class="">@ViewBag.admittedStudent.Name</td>
+                            </tr>
+                            <tr>
+                                <td class="" style="width:200px">Academic Session</td>
+                                <td>:</td>
+                                <td class="">2020-2021</td>
+                            </tr>
+                            <tr>
+                                <td class="" style="width:200px">Department</td>
+                                <td>:</td>
+                                <td class="">@ViewBag.admittedStudent.Subject.SubjectName</td>
+                            </tr>
+                            <tr>
+                                <td class="" style="width:200px">Class Roll</td>
+                                <td>:</td>
+                                <td class="">@ViewBag.admittedStudent.CollegeRoll</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
-
-
-
             </div>
+            <div class="card-footer">
+                <div class="col-md-6 offset-3">
+                    <a asp-action="Details" asp-controller="Students" asp-route-id="@ViewBag.admittedStudent.Id" class="btn btn-info">View admission form</a>
+                </div>
+            </div>
+        </div>
 
-        }
+
 
     </div>
-</div>
-@*<div class="">
+
+}
+
+    </div>
+</div>*@
+<div class="">
     <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">
 
         <div class="card text-center col-md-12">
             <div class="card-header">
-                <h3 style="color:deepskyblue">This Admission Portal will be open very soon today. Please wait........</h3>
+                <h3 style="color:#ff0000">Honours Admission is now closed for the moment. Please contact again when release slip start...</h3>
             </div>
         </div>
-        </div>
-    </div>*@
+    </div>
+</div>
 
 
-    @section Scripts{
-        <script>
-            $(document).ready(function () {
-                $('#msgId').fadeOut(10000);
-                $('#notifyId').fadeOut(10000);
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#msgId').fadeOut(10000);
+            $('#notifyId').fadeOut(10000);
 
-                $('#paymentId').click(function () {
-                    let isHidden = $('#bankingId').is(':hidden');
-                    if (isHidden == true) {
-                        $('#bankingId').show();
-                    }
-                    else {
-                        $('#bankingId').hide();
-                    }
-                });
+            $('#paymentId').click(function () {
+                let isHidden = $('#bankingId').is(':hidden');
+                if (isHidden == true) {
+                    $('#bankingId').show();
+                }
+                else {
+                    $('#bankingId').hide();
+                }
             });
-        </script>
-    }
+        });
+    </script>
+}

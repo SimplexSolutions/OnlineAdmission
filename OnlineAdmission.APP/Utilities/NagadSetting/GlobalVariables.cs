@@ -14,6 +14,12 @@ namespace OnlineAdmission.APP.Utilities.NagadSetting
         //public static string MerchantId = "683002007104225";
 
 
+        public static string merchantCallbackURL = "http://115.127.26.3:80/api/PaymentTransactions"; //merchant Callback URL - as you want
+      //string merchantCallbackURL = "https://localhost:44356/api/PaymentTransactions"; //merchant Callback URL - as you want
+      //public static string merchantCallbackURL = "http://localhost:37614/api/PaymentTransactions"; //merchant Callback URL - as you want
+
+
+
 
         private static DateTime DateTime = DateTime.Now;
         public static string RequestDateTime = DateTime.ToString("yyyyMMddHHmmss"); //{// Format should be 20200827134915

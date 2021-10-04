@@ -537,7 +537,6 @@ namespace OnlineAdmission.APP.Controllers
                 {
                     isPaid = true;
                     ViewBag.isPaid = isPaid;
-
                     return View();
                 }
                 ViewBag.isPaid = isPaid;
@@ -743,30 +742,7 @@ namespace OnlineAdmission.APP.Controllers
 
 
             string OrderId;
-            //AppliedStudent appliedStudent;
-            //MeritStudent meritStudent;
-            //Subject subject;
-            //if (studentType == 1)
-            //{
-            //    if (mobileNum==null || studentName ==null)
-            //    {
-            //        TempData["miss"] = "Mobile Number and Name is mendatory";
-            //        return RedirectToAction("ProfessionalSearch", "Students");
-            //    }
-            //    OrderId = nuRoll.ToString()+ "" + "Pro" + "" + DateTime.Now.ToString("HHmmss");
-
-            //    //Code to be change
-            //    meritStudent = new MeritStudent();
-            //    appliedStudent = new AppliedStudent();
-            //    subject = new Subject();
-            //}
-            //else
-            //{
-            //AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
-            //MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll);
-            //Subject subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
-
-            AppliedStudent appliedStudent = await _nagadManager.GetAppliedStudentByNURollNagad(nuRoll);
+                     AppliedStudent appliedStudent = await _nagadManager.GetAppliedStudentByNURollNagad(nuRoll);
             if (appliedStudent==null)
             {
                 _logger.LogWarning("Applied Student Not Found");
@@ -880,17 +856,7 @@ namespace OnlineAdmission.APP.Controllers
             dynamic responsevalue = JObject.Parse(decryptedSensitiveData);
             string challenge = responsevalue.challenge;
             string paymentRefId = responsevalue.paymentReferenceId;
-            double amount;
-            //if (studentType == 1) //For Professional Student
-            //{
-            //    amount = 300;
-            //}
-            //else
-            //{
-                amount = subject.AdmissionFee - meritStudent.DeductedAmaount;
-            //}
-            //double amount = subject.AdmissionFee - meritStudent.DeductedAmaount;
-            //double serviceCharge = ((subject.AdmissionFee - meritStudent.DeductedAmaount) * .015);
+            double amount= subject.AdmissionFee - meritStudent.DeductedAmaount;
             double serviceCharge =  amount * .0157;
             double totalAmount = Math.Round((amount + serviceCharge),2); 
 
@@ -912,10 +878,12 @@ namespace OnlineAdmission.APP.Controllers
             // Generate Signature on JSON Data
             string paymentSignatureValue = SignWithMarchentPrivateKey(paymentJsonData);
 
+            // Merchant Callback URL
+            string merchantCallbackURL = GlobalVariables.merchantCallbackURL;
 
             //string merchantCallbackURL = "http://sandbox.mynagad.com:10707/merchant-server/web/confirm"; //merchant Callback URL - as you want
             //string merchantCallbackURL = "http://115.127.26.3:4356/api/PaymentTransactions"; //merchant Callback URL - as you want
-            string merchantCallbackURL = "http://115.127.26.3:80/api/PaymentTransactions"; //merchant Callback URL - as you want
+            //string merchantCallbackURL = "http://115.127.26.3:80/api/PaymentTransactions"; //merchant Callback URL - as you want
             //string merchantCallbackURL = "https://localhost:44356/api/PaymentTransactions"; //merchant Callback URL - as you want
            
             //dynamic additionalMerchantInfo;
@@ -931,36 +899,6 @@ namespace OnlineAdmission.APP.Controllers
             };
 
 
-
-            //Code to be Modify
-            //if (studentType == 1)
-            //{
-            //    additionalMerchantInfo = new
-            //    {
-            //        ServiceCharge = serviceCharge,
-            //        AdmissionFee = 0.0,
-            //        StudentName = studentName,
-            //        MobileNo = mobileNum,
-            //        SubjectId = 0,
-            //        NuAdmissionRoll = nuRoll,
-            //        StudentType = studentType
-            //    };
-            //}
-            //else
-            //{
-
-            //    additionalMerchantInfo = new
-            //    {
-            //        ServiceCharge = serviceCharge,
-            //        AdmissionFee = amount,
-            //        StudentName = appliedStudent.ApplicantName,
-            //        MobileNo = appliedStudent.MobileNo,
-            //        SubjectId = subject.Id,
-            //        NuAdmissionRoll = nuRoll,
-            //        StudentType = studentType
-            //    };
-    
-            //}
 
             var paymentFinalJSON = new
             {
@@ -1045,13 +983,8 @@ namespace OnlineAdmission.APP.Controllers
             string OrderId="";
             if (studentType == 1)
             {
-                //if (mobileNum == null || studentName == null)
-                //{
-                //    TempData["miss"] = "Mobile Number and Name is mendatory";
-                //    return RedirectToAction("ProfessionalSearch", "Students");
-                //}
                 OrderId = nuRoll.ToString() + "" + "Pro" + "" + DateTime.Now.ToString("HHmmss");
-        }
+            }
       
             #region Initialize API Data Preparation
             ///////////////////////////////////////////////////////// Create JSON Object
@@ -1149,11 +1082,6 @@ namespace OnlineAdmission.APP.Controllers
             string challenge = responsevalue.challenge;
             string paymentRefId = responsevalue.paymentReferenceId;
             double amount = 300;
-            //double amount=0.00;
-            //if (studentType == 1) //For Professional Student
-            //{
-            //    amount = 300;
-            //}
             double serviceCharge = 5.00;// (amount * .015);
             double totalAmount = amount + serviceCharge;
 
@@ -1175,13 +1103,8 @@ namespace OnlineAdmission.APP.Controllers
             // Generate Signature on JSON Data
             string paymentSignatureValue = SignWithMarchentPrivateKey(paymentJsonData);
 
-
-            //string merchantCallbackURL = "http://sandbox.mynagad.com:10707/merchant-server/web/confirm"; //merchant Callback URL - as you want
-            //string merchantCallbackURL = "http://115.127.26.3:4356/api/PaymentTransactions"; //merchant Callback URL - as you want
-            string merchantCallbackURL = "http://115.127.26.3:80/api/PaymentTransactions"; //merchant Callback URL - as you want
-            //string merchantCallbackURL = "https://localhost:44356/api/PaymentTransactions"; //merchant Callback URL - as you want
-            //string merchantCallbackURL = "http://onlineadmission.eiimsbd.com/api/PaymentTransactions"; //merchant Callback URL - as you want
-            //dynamic additionalMerchantInfo;
+            // Merchant Callback URL
+            string merchantCallbackURL = GlobalVariables.merchantCallbackURL;
 
             var additionalMerchantInfo = new
             {
@@ -1280,7 +1203,7 @@ namespace OnlineAdmission.APP.Controllers
                     TempData["miss"] = "Mobile Number and Name is mendatory";
                     return RedirectToAction("MastersSearch", "Students");
                 }
-                OrderId = nuRoll.ToString() + "" + "MASTER" + "" + DateTime.Now.ToString("HHmmss");
+                OrderId = nuRoll.ToString() + "" + "promba" + "" + DateTime.Now.ToString("HHmmss");
             }
             else
             {
@@ -1405,13 +1328,8 @@ namespace OnlineAdmission.APP.Controllers
             // Generate Signature on JSON Data
             string paymentSignatureValue = SignWithMarchentPrivateKey(paymentJsonData);
 
-
-            //string merchantCallbackURL = "http://sandbox.mynagad.com:10707/merchant-server/web/confirm"; //merchant Callback URL - as you want
-            //string merchantCallbackURL = "http://115.127.26.3:4356/api/PaymentTransactions"; //merchant Callback URL - as you want
-            string merchantCallbackURL = "http://115.127.26.3:80/api/PaymentTransactions"; //merchant Callback URL - as you want
-            //string merchantCallbackURL = "https://localhost:44356/api/PaymentTransactions"; //merchant Callback URL - as you want
-            //string merchantCallbackURL = "http://onlineadmission.eiimsbd.com/api/PaymentTransactions"; //merchant Callback URL - as you want
-            //dynamic additionalMerchantInfo;
+            // Merchant Callback URL
+            string merchantCallbackURL = GlobalVariables.merchantCallbackURL;
 
             var additionalMerchantInfo = new
             {

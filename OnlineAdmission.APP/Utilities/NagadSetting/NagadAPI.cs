@@ -11,7 +11,8 @@ namespace OnlineAdmission.APP.Utilities.NagadSetting
         public HttpClient Initial()
         {
             var client = new HttpClient();
-            client.BaseAddress = new Uri(" http://sandbox.mynagad.com:10080");
+            client.BaseAddress = new Uri("http://sandbox.mynagad.com:10080");
+            //client.BaseAddress = new Uri("https://api.mynagad.com");
             return client;
         }
     }
