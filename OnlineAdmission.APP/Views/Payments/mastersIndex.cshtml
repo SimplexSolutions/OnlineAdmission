@@ -1,0 +1,170 @@
+﻿@model PaginatedList<OnlineAdmission.Entity.PaymentTransaction>
+
+@{
+    ViewData["Title"] = "Master's Payment";
+    int i = (Model.PageIndex - 1) * Model.PageSize + 1;
+    ViewBag.pagesize = Model.PageSize;
+
+    ViewBag.controller = "Payments";
+    ViewBag.action = "mastersIndex";
+    ViewBag.search = ViewBag.data;
+    double total = 0;
+}
+
+
+@section Styles{
+
+    <style media="print" type="text/css">
+
+        @@page {
+            size: A4 landscape;
+        }
+
+        html, body {
+            height: 99%;
+        }
+
+        @@media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #section-to-print, #section-to-print * {
+                visibility: visible;
+                color: black;
+            }
+
+            #section-to-print {
+                position: absolute;
+                left: 0;
+                top: 20px;
+            }
+
+            .noPrint {
+                visibility: hidden;
+            }
+        }
+    </style>
+}
+
+<h4>Student's Payment</h4>
+
+<partial name="~/Views/PartialViews/_Search_Date_Range.cshtml">
+
+    @*@if (ViewBag.msg!=null)
+        {
+            <br />
+            <span id="notFoundMSG" class="text-danger h4">@ViewBag.msg</span>
+        }*@
+    @if (Model.Any())
+    {
+        <table class="table table-bordered" id="section-to-print">
+            <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        NU Roll
+                    </th>
+                    <th>
+                        Session
+                    </th>
+                    <th>
+                        Mobile
+                    </th>
+                    <th class="text-md-right">
+                        Transaction Id
+                    </th>
+                    <th>
+                        Account No
+                    </th>
+                    <th>
+                        Payment Date
+                    </th>
+                    <th>
+                        Tr.Amount
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @(i).
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StudentName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReferenceNo)
+                        </td>
+
+                        <td>
+                            2021-2022
+                        </td>
+                        <td>
+                            @(item.MobileNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TransactionId)
+                        </td>
+                        <td>
+                            @item.AccountNo
+                        </td>
+                        <td>
+                            @item.TransactionDate.ToString("yyyy-MM-dd")
+                        </td>
+                        <td class="text-right">
+                            @Math.Round(item.Amount, 2)
+                        </td>
+                        <td class="noPrint">
+                            @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            @*<a asp-action="Delete" asp-route-id="@item.PaymentTransaction.Id">Delete</a>*@
+                        </td>
+                    </tr>
+                    i++;
+                    total = total + item.Amount;
+                }
+                <tr class="" style="background-color:#f7f0f0">
+                    <td colspan="8" class="text-md-right">TOTAL</td>
+                    <td class="text-right font-weight-bold">@Math.Round(total, 2)</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <partial name="~/Views/PartialViews/_paging.cshtml" model="@Model" />
+        <div class="row noPrint">
+            <div class="col-md-12 text-md-right">
+                <button onclick="window.print()" class="btn btn-success"><i class="fa fa-print"></i> Print</button>
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <hr />
+        <span class="alert text-danger">
+            Your search - @ViewBag.data - did not match any documents.
+        </span>
+
+
+
+    }
+
+
+    @section Scripts{
+        <script>
+            $(document).ready(function () {
+                //$("#msgId").fadeOut(6000);
+                $("#notFoundMSG").fadeOut("slow");
+            });
+        </script>
+    }

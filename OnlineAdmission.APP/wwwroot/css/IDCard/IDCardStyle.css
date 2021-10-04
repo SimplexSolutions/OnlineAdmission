@@ -1,4 +1,10 @@
-﻿.fullCard {
+﻿@media print {
+    #pageTopArea {
+        display: none;
+    }
+}
+
+.fullCard {
     width: 260px;
     height: 400px;
     border-radius: 5px;
@@ -40,13 +46,26 @@ p {
 }
 
 .principalArea{
-    padding-top:35px;
+    padding-top:10px;
     background-color: #3A6C91;
     color:#ffffff;
 }
 
 .principal {
     margin-top:35px;
-    border-top: 1px solid black;
-    margin-right:5px;
+    border-top: 1px solid #ffffff;
+    margin-right:10px;
+}
+.sign {
+    -webkit-filter: brightness(0) invert(1);
+    filter: brightness(0) invert(1);
+    margin-right:10px;
+}
+
+.backpart {
+    width: 260px;
+    height: 400px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    color: #000000;
 }
