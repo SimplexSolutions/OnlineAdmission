@@ -1,4 +1,10 @@
-﻿.fullCard {
+﻿@media print {
+    #pageTopArea {
+        display: none;
+    }
+}
+
+.fullCard {
     width: 260px;
     height: 400px;
     border-radius: 5px;
