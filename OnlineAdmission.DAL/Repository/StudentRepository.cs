@@ -24,7 +24,7 @@ namespace OnlineAdmission.DAL.Repository
 
         public override async Task<List<Student>> GetAllAsync()
         {
-            var students = await _context.Students.Include(s => s.Subject).ToListAsync();
+            var students = await _context.Students.Include(s => s.Subject).Where(s => s.Status == true).ToListAsync();
             return students;
         }
 

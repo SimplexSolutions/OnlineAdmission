@@ -378,9 +378,23 @@ namespace OnlineAdmission.APP.Controllers
             }
         }
         [Authorize(Roles = "Admin,SuperAdmin,Teacher")]
-        public async Task<ActionResult> IdCard()
+        public async Task<ActionResult> IdCard(string studentMeritType)
         {
             var student = await _studentManager.GetAllAsync();
+            List<MeritStudent> meritStudents = new List<MeritStudent>();
+            foreach (var item in student)
+            {
+                var mStudent = await _meritStudentManager.GetByAdmissionRollAsync(item.NUAdmissionRoll);
+                meritStudents.Add(mStudent);
+            }
+            if (studentMeritType!=null )
+            {
+                student = (from s in student
+                          join a in meritStudents on s.NUAdmissionRoll equals a.NUAdmissionRoll
+                          where a.Comments.ToLower().Trim() == studentMeritType.ToLower().Trim()
+                          select s).ToList();
+
+            }
             return View(student);
         }
 

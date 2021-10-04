@@ -4,7 +4,27 @@
     ViewData["Title"] = "IdCard";
 }
 
-<h1>IdCard</h1>
+<h1>Id Card</h1>
+<div class="row">
+    <div class="col-md-6 col-sm-12 col-xl-6"></div>
+    <div class="col-md-6 col-sm-12 col-xl-6">
+        <form asp-action="IdCard">
+            <div class="input-group mb-3">
+                <select name="studentMeritType" type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <option selected disabled >Select Merit List</option>
+                    <option value="1st Merit List">First Merit List</option>
+                    <option value="2nd Merit List">Seconed Merit List</option>
+                </select>
+                <div class="input-group-append">
+                    <button class="btn p-0" type="submit">
+                        <span class="input-group-text" id="basic-addon2"> Search </span>
+                    </button>
+                    
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 @section Styles{ 
     <link href="~/css/IDCard/IDCardStyle.css" rel="stylesheet" />
@@ -16,7 +36,7 @@
     {
         <div class="fullCard m-2">
             <div class="text-center part1">
-                <img src="~/Images/Collge/logo.png" alt="Alternate Text" style="width:50px" /><br />
+                <img src="~/Images/Collge/Logo2.png" alt="Alternate Text" style="width:50px" /><br />
                 <span class="h6">TEJGAON COLLEGE, DHAKA</span>
             </div>
             <div class="text-center  part2">
@@ -52,10 +72,13 @@
                 <p>Department of @student.Subject.SubjectName</p>
             </div>
             <div class="text-right principalArea">
+                <span class="sign"><img src="~/Images/Collge/sign.png" alt="Alternate Text" style="width:20%; color:white" /></span><br />
                 <span class="principal">Principal</span>
             </div>
         </div>
-
+        <div class="backpart m-2">
+            <img src="~/Images/Collge/Logo2.png" alt="Alternate Text" style="width:50px" /><br />
+        </div>
     }
 
 </div>
