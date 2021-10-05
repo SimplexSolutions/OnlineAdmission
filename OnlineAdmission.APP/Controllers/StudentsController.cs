@@ -395,6 +395,7 @@ namespace OnlineAdmission.APP.Controllers
                           select s).ToList();
 
             }
+            ViewBag.count = student.Count;
             return View(student);
         }
 
