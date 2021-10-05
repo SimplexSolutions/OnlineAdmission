@@ -49,35 +49,43 @@
                 <span class="h6">TEJGAON COLLEGE, DHAKA</span>
             </div>
             <div class="text-center  part2">
-                <img class="card-img-top studentPhoto" src="~/Images/Students/@student.Photo" alt="Card image cap">
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4 text-lg-right">
+                        <img class="card-img-top studentPhoto" src="~/Images/Students/@student.Photo" alt="Card image cap">
+                    </div>
+                    <div class="col-md-4 text-left">
+                        <p class="honsText" >HONOURS</p>
+                    </div>
+                </div>
             </div>
             <div class="pl-3 pr-3 part3">
                 <table class="myTable">
-                    <tr class="text-center">
+                    <tr class="">
                         @if (student.Name.Length > 28)
                         {
-                            <td colspan="3" class="studentName text-center" style="font-size:x-small">@student.Name</td>
+                            <td colspan="3" class="studentName" style="font-size:x-small">@student.Name</td>
                         }
                         else
                         {
-                            <td colspan="3" class="studentName text-center">@student.Name</td>
+                            <td colspan="3" class="studentName">@student.Name</td>
                         }
                     </tr>
-                    <tr>
-                        <td class="text-center" colspan="3">Bachelor Program</td>
-                    </tr>
+                    @*<tr>
+                        <td class="" colspan="3">Bachelor Program</td>
+                    </tr>*@
                     <tr>
                         @if (departmentName.Length > 30 && departmentName.Length < 39)
                         {
-                            <td class="text-center" colspan="3" style="font-size:x-small">Department of @departmentName</td>
+                            <td class="" colspan="3" style="font-size:x-small">Department of @departmentName</td>
                         }
                         else if (departmentName.Length > 38)
                         {
-                            <td class="text-center" colspan="3" style="font-size:xx-small">Department of @departmentName</td>
+                            <td class="" colspan="3" style="font-size:xx-small">Department of @departmentName</td>
                         }
                         else
                         {
-                            <td class="text-center" colspan="3">Department of @departmentName</td>
+                            <td class="" colspan="3">Department of @departmentName</td>
                         }
                     </tr>
                     <tr>

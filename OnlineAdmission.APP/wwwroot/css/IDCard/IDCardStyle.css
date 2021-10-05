@@ -5,13 +5,15 @@
 }
 
 .fullCard {
-    font-size:12px;
+    font-size: 12px;
     width: 260px;
     height: 400px;
     border-radius: 5px;
     border: 1px solid #ddd;
     color: #000000;
     background-image: linear-gradient(to right, #3A6C91,#ffffff,#C1655E);
+    display: flex;
+    flex-direction:column;
 }
 .part1 {
     margin-top: 2px;
@@ -31,11 +33,23 @@
     height: 85.6px;
     width: 75.6px;
 }
+
 .studentPhoto {
     border: 3px solid #ede1e1;
 }
+.honsText{
+    writing-mode:vertical-rl;
+    text-orientation:upright;
+    margin:0px 0px 0px 0px;
+    padding:0px 0px 0px 0px;
+    font-size:9px;
+    color:blue;
+    font-weight:bold;
+}
+
 .part3 {
     background-color: white;
+    padding-bottom:10px;
 }
 
 
@@ -54,6 +68,7 @@
 }
 
 .principalArea{
+    margin-top:auto;
     padding-top:10px;
     background-color: #3A6C91;
     color:#ffffff;
