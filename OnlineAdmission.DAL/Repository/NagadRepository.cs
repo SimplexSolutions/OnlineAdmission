@@ -33,7 +33,7 @@ namespace OnlineAdmission.DAL.Repository
 
         public async Task<MeritStudent> GetMeritStudentByNURollNagad(int nuRoll)
         {
-            var merit = await db.MeritStudents.FirstOrDefaultAsync(a => a.NUAdmissionRoll == nuRoll && (a.Comments.Trim().ToLower() == "2nd Merit List".Trim().ToLower()
+            var merit = await db.MeritStudents.FirstOrDefaultAsync(a => a.NUAdmissionRoll == nuRoll && (a.Comments.Trim().ToLower() == "Quota Merit List".Trim().ToLower()
             || a.PaymentStatus == true));
 
             return merit;
