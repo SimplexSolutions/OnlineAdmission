@@ -125,10 +125,7 @@ namespace OnlineAdmission.APP.Controllers
                 {
                     sl = count.ToString();
                 }
-
-
-                //student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + subjectCode + "" + sl);
-
+                
                 StudentCreateVM student = new StudentCreateVM();
                 student.Name = existingAppliedStudent.ApplicantName;
                 student.FatherName = existingAppliedStudent.FatherName;
@@ -138,7 +135,14 @@ namespace OnlineAdmission.APP.Controllers
                 student.SubjectId = existingSubject.Id;
                 student.Subject = existingSubject;
                 student.NuAdmissionRoll = nuAdmissionRoll;
-                student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + subjectCode + "" + sl);
+                if (subjectCode < 10)
+                {
+                    student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "0" + subjectCode + "" + sl);
+                }
+                else
+                {
+                    student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + subjectCode + "" + sl);
+                }
 
                 student.DistrictList = new SelectList(await _districtManager.GetAllAsync(), "Id", "DistrictName").ToList();
                 return View(student);
@@ -244,8 +248,16 @@ namespace OnlineAdmission.APP.Controllers
                     {
                         sl = count.ToString();
                     }
-
-                    student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + subjectCode + "" + sl);
+                    
+                    if (subjectCode<10)
+                    {
+                        student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "0" + subjectCode + "" + sl);
+                    }
+                    else
+                    {
+                        student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + subjectCode + "" + sl);
+                    }
+                    
                     
                     
                     
@@ -506,19 +518,51 @@ namespace OnlineAdmission.APP.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ProfessionalSearch(int professionalRoll)
         {
-            bool isPaid = false;
+            bool applicationIsPaid = false;
+            bool addmissionIsPaid = false;
+            bool admitted = false;
+            bool selected = false;
             ViewBag.nuRoll = professionalRoll;
             if (professionalRoll>0)
             {
-                var payment = await _paymentTransactionManager.GetTransactionByNuRollAsync(professionalRoll);
-                if (payment!=null)
+                var student = await _studentManager.GetByAdmissionRollAsync(professionalRoll);
+                if (student!=null)
                 {
-                    isPaid = true;
-                    ViewBag.isPaid = isPaid;
-
+                    admitted = true;
+                    ViewBag.admitted = admitted;
+                    ViewBag.student = student;
                     return View();
                 }
-                ViewBag.isPaid = isPaid;
+                var AdmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(professionalRoll);
+
+                if (AdmissionPayment == null)
+                {
+                    var applicationPayment = await _paymentTransactionManager.GetTransactionByNuRollAsync(professionalRoll);
+                    if (applicationPayment!=null)
+                    {
+                        applicationIsPaid = true;
+                        ViewBag.applicationIsPaid = applicationIsPaid;
+                        var selectedStudent = await _meritStudentManager.GetByAdmissionRollAsync(professionalRoll);
+                        if (selectedStudent!=null)
+                        {
+                            //Link for admission fee
+                            selected = true;
+                            ViewBag.selected = selected;
+                        }
+                        
+                    }
+                    
+                    return View();
+                }
+                else 
+                {
+                    addmissionIsPaid = true;
+                    ViewBag.addmissionIsPaid = addmissionIsPaid;
+                    applicationIsPaid = true;
+                }
+
+                ViewBag.addmissionIsPaid = addmissionIsPaid;
+                ViewBag.applicationIsPaid = applicationIsPaid;
             }
             ViewBag.nuRoll = professionalRoll;
             return View();
@@ -987,7 +1031,7 @@ namespace OnlineAdmission.APP.Controllers
         
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult> NagadPaymentPro(int nuRoll, int? studentType, string mobileNum, string studentName)
+        public async Task<ActionResult> NagadPaymentPro(int nuRoll, int? studentType, string mobileNum, string studentName, int paymentType)
         {
             if (nuRoll <= 0)
             {
@@ -996,9 +1040,23 @@ namespace OnlineAdmission.APP.Controllers
             }
 
             string OrderId="";
+
+            MeritStudent meritStudent = await _nagadManager.GetMeritStudentByNURollNagad(nuRoll);
+            if (meritStudent == null)
+            {
+                _logger.LogWarning("Merit Student Not Found");
+                return RedirectToAction("ProfessionalSearch");
+            }
+            Subject subject = await _nagadManager.GetSubjectByCodeNagad(meritStudent.SubjectCode);
+            if (subject==null)
+            {
+                _logger.LogWarning("Subject Not Found");
+                return RedirectToAction("ProfessionalSearch");
+            }
             if (studentType == 1)
             {
-                OrderId = nuRoll.ToString() + "" + "Pro" + "" + DateTime.Now.ToString("HHmmss");
+                //OrderId = meritStudent.NUAdmissionRoll + "" + meritStudent.SubjectCode + "" + DateTime.Now.ToString("HHmmss");
+                OrderId = nuRoll.ToString() + "ProAdm" + DateTime.Now.ToString("HHmmss");
             }
       
             #region Initialize API Data Preparation
@@ -1096,9 +1154,18 @@ namespace OnlineAdmission.APP.Controllers
             dynamic responsevalue = JObject.Parse(decryptedSensitiveData);
             string challenge = responsevalue.challenge;
             string paymentRefId = responsevalue.paymentReferenceId;
-            double amount = 300;
-            double serviceCharge = 5.00;// (amount * .015);
-            double totalAmount = amount + serviceCharge;
+            double amount = subject.AdmissionFee - meritStudent.DeductedAmaount;
+            double serviceCharge = amount * .0157;
+            double totalAmount = Math.Round((amount + serviceCharge), 2);
+
+
+
+
+
+
+
+
+
 
             // Create JSON Object
             var paymentJSON = new
@@ -1128,7 +1195,8 @@ namespace OnlineAdmission.APP.Controllers
                 MobileNo = mobileNum,
                 NuAdmissionRoll = nuRoll,
                 AdmissionFee = 0,
-                StudentType = studentType
+                StudentType = studentType,
+                PaymentType = paymentType
             };
 
             var paymentFinalJSON = new

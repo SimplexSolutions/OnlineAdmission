@@ -20,6 +20,7 @@ namespace OnlineAdmission.DAL.Repository
         public async Task<PaymentTransaction> GetTransactionByNuRollAsync(int nuRoll)
         {
             return await _context.PaymentTransactions.FirstOrDefaultAsync(p => p.ReferenceNo == nuRoll);
+            //return await _context.PaymentTransactions.FirstOrDefaultAsync(p => p.ReferenceNo == nuRoll && p.PaymentType == 1);
         }
 
         public async Task<bool> GetTransaction(List<PaymentTransaction> paymentTransactions)
@@ -27,6 +28,11 @@ namespace OnlineAdmission.DAL.Repository
             await _context.PaymentTransactions.AddRangeAsync(paymentTransactions);
             return await _context.SaveChangesAsync() > 0;
             
+        }
+
+        public async Task<PaymentTransaction> GetAdmissionTrByNuRoll(int nuRoll)
+        {
+            return await _context.PaymentTransactions.FirstOrDefaultAsync(p => p.ReferenceNo == nuRoll && p.PaymentType == 1);
         }
     }
 }

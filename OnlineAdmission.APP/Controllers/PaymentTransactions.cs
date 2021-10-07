@@ -77,7 +77,8 @@ namespace OnlineAdmission.APP.Controllers
                     ServiceCharge = MerchantInfo.ServiceCharge,
                     StudentName = MerchantInfo.studentName,
                     MobileNumber = MerchantInfo.MobileNo,
-                    StudentType = MerchantInfo.StudentType
+                    StudentType = MerchantInfo.StudentType,
+                    PaymentType = MerchantInfo.PaymentType
                     };
                 //newPayment.ApplicantName = MerchantInfo.StudentName;
                 //newPayment.MobileNo = MerchantInfo.MobileNo;

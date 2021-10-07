@@ -11,5 +11,6 @@ namespace OnlineAdmission.BLL.IManager
     {
         Task<bool> GetTransaction(List<PaymentTransaction> paymentTransactions);
         Task<PaymentTransaction> GetTransactionByNuRollAsync(int nuRoll);
+        Task<PaymentTransaction> GetAdmissionTrByNuRoll(int nuRoll);
     }
 }

@@ -4,13 +4,14 @@
 @{
     //Layout = User.IsInRole("Admin") ? "~/Views/Shared/_Layout.cshtml" : "~/Views/Shared/_LayoutStudent.cshtml";
     Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+
 }
 <div class="">
     <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">
         
     @*main area Start here*@
         <div>
-            @*<div class="card-body">
+            <div class="card-body">
                 <form asp-action="ProfessionalSearch" asp-controller="Students" method="post">
                     <label class="col-md-8 text-success font-weight-bolder text-center col-form-label" style="font-size:x-large">Professional Admission (Under Graduate)</label><br /><br />
                     <div class="form-group row">
@@ -42,41 +43,62 @@
                     <span class="h2 alert text-success">@ViewBag.notification</span>
                 </div>
             }
-            @if (ViewBag.isPaid != null)
+            @if (ViewBag.admitted == true)
             {
-                if (ViewBag.isPaid == true)
+                <span>You are already admitted. Go for <a asp-action="Details" asp-controller="Students" asp-route-id="@ViewBag.student.Id">details</a></span>
+            }
+            else
+            {
+
+                if (ViewBag.selected == true)
                 {
-                    <span>Your payment is already completed.</span>
+                    if (ViewBag.addmissionIsPaid == true && ViewBag.applicationIsPaid == true)
+                    {
+                        <h4>Congratulations!</h4>
+                        <span>You are applied and paid your admission fee. Go for <a class="btn btn-outline-info" asp-action="Create" asp-controller="Students" asp-route-nuAdmissionRoll="@ViewBag.nuRoll">Admission Form</a></span>
+                    }
+                    else if ((ViewBag.addmissionIsPaid == false || ViewBag.addmissionIsPaid == null) && ViewBag.applicationIsPaid == true)
+                    {
+                        <form asp-action="NagadPaymentPro" asp-controller="Students" method="get">
+                            <input type="hidden" name="studentType" value="1" />
+                            <input type="hidden" name="nuRoll" value="@ViewBag.nuRoll" />
+                            <input type="hidden" name="paymentType" value="1" />
+                            @*<div class="form-group row">
+                            <label class="col-md-2 text-md-right text-left col-form-label">Name : </label>
+                            <div class="col-md-4">
+                                <input required type="text" name="studentName" class="form-control" />
+                            </div>
+
+                            <label class="col-md-2 text-md-right text-left col-form-label">Mobile : </label>
+                            <div class="col-md-4">
+                                <input required type="number" name="mobileNum" class="form-control" min="01300000000" max="01999999999" />
+                            </div>
+                        </div>*@
+                            <span class="alert alert-success h3">You are selected for admission</span><br /><br />
+                            <button type="submit" class="btn btn-primary mb-2 p-2">Make Payment for Admission</button>
+                        </form>
+                    }
                 }
                 else
                 {
-                    <div class="row">
-                        <div class="col-md-8 offset-md-2">
-                            <form asp-action="NagadPaymentPro" asp-controller="Students" method="get">
-                                <input type="hidden" name="studentType" value="1" />
-                                <input type="hidden" name="nuRoll" value="@ViewBag.nuRoll" />
-                                <div class="form-group row">
-                                    <label class="col-md-2 text-md-right text-left col-form-label">Name : </label>
-                                    <div class="col-md-4">
-                                        <input required type="text" name="studentName" class="form-control" />
-                                    </div>
-
-                                    <label class="col-md-2 text-md-right text-left col-form-label">Mobile : </label>
-                                    <div class="col-md-4">
-                                        <input required type="number" name="mobileNum" class="form-control" min="01300000000" max="01999999999" />
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary mb-2">Make Payment</button>
-                            </form>
-                        </div>
-                    </div>
+                    if (ViewBag.applicationIsPaid == false || ViewBag.applicationIsPaid == null)
+                    {
+                        <span>Sorry! You are not Applied.</span>
+                    }
+                    else
+                    {
+                        <span>Sorry! You are not selected.</span>
+                    }
+                    
                 }
-            }*@
+            }
+
+
 
         </div> @*main area Close here*@
 
 
-    <span class="alert alert-danger h3">Professional Admission (Under Graduate) will start within a moment. Please wait....</span>
+    @*<span class="alert alert-danger h3">Professional Admission (Under Graduate) will start within a moment. Please wait....</span>*@
     </div>
 </div>
 
