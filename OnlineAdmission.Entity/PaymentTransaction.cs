@@ -42,6 +42,10 @@ namespace OnlineAdmission.Entity
         //StudentType = null/0 = hon's Student
         //StudentType = 1 = professional Student
         //StudentType = 2 = Masters
-        public int? StudentType { get; set; }  
+        public int? StudentType { get; set; }
+
+        //Application Fee = null/0
+        //Addmission Fee = 1
+        public int? PaymentType { get; set; }
     }
 }

@@ -7,73 +7,81 @@
 }
 <div class="">
     <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">
-        <div class="card-body">
-            <form asp-action="ProfessionalSearch" asp-controller="Students" method="post">
-                <label class="col-md-8 text-success font-weight-bolder text-center col-form-label" style="font-size:x-large">Professional Admission (Under Graduate)</label><br /><br />
-                <div class="form-group row">
-                    <label class="col-md-2 text-md-right text-left col-form-label">NU Roll</label>
-                    <div class="col-md-6">
-                        @if (ViewBag.nuRoll != null)
-                        {
-                            <input type="number" name="professionalRoll" value="@ViewBag.nuRoll" class="form-control" min="100000" max="999999" required />
-                        }
-                        else
-                        {
-                            <input type="number" name="professionalRoll" class="form-control" min="100000" max="999999" required />
-                        }
+        
+    @*main area Start here*@
+        <div>
+            @*<div class="card-body">
+                <form asp-action="ProfessionalSearch" asp-controller="Students" method="post">
+                    <label class="col-md-8 text-success font-weight-bolder text-center col-form-label" style="font-size:x-large">Professional Admission (Under Graduate)</label><br /><br />
+                    <div class="form-group row">
+                        <label class="col-md-2 text-md-right text-left col-form-label">NU Roll</label>
+                        <div class="col-md-6">
+                            @if (ViewBag.nuRoll != null)
+                            {
+                                <input type="number" name="professionalRoll" value="@ViewBag.nuRoll" class="form-control" min="100000" max="999999" required />
+                            }
+                            else
+                            {
+                                <input type="number" name="professionalRoll" class="form-control" min="100000" max="999999" required />
+                            }
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-2">Search</button>
                     </div>
-                    <button type="submit" class="btn btn-primary mb-2">Search</button>
-                </div>
-            </form>
+                </form>
 
-            @if (ViewBag.msg != null)
-            {
-                <div class="form-group row" id="missText">
-                    <span class="alert alert-danger">@ViewBag.msg</span>
-                </div>
-            }
-        </div>
-        @if (ViewBag.notification!=null)
-        {
-            <div class="text-md-center">
-                <span class="h2 alert text-success">@ViewBag.notification</span>
+                @if (ViewBag.msg != null)
+                {
+                    <div class="form-group row" id="missText">
+                        <span class="alert alert-danger">@ViewBag.msg</span>
+                    </div>
+                }
             </div>
-        }
-        @if (ViewBag.isPaid != null)
-        {
-            if (ViewBag.isPaid == true)
+            @if (ViewBag.notification != null)
             {
-                <span>Your payment is already completed.</span>
-            }
-            else
-            {
-                <div class="row">
-                    <div class="col-md-8 offset-md-2">
-                        <form asp-action="NagadPaymentPro" asp-controller="Students" method="get">
-                            <input type="hidden" name="studentType" value="1" />
-                            <input type="hidden" name="nuRoll" value="@ViewBag.nuRoll" />
-                            <div class="form-group row">
-                                <label class="col-md-2 text-md-right text-left col-form-label">Name : </label>
-                                <div class="col-md-4">
-                                    <input required type="text" name="studentName" class="form-control" />
-                                </div>
-
-                                <label class="col-md-2 text-md-right text-left col-form-label">Mobile : </label>
-                                <div class="col-md-4">
-                                    <input required type="number" name="mobileNum" class="form-control" min="01300000000" max="01999999999" />
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary mb-2">Make Payment</button>
-                        </form>
-                    </div>
+                <div class="text-md-center">
+                    <span class="h2 alert text-success">@ViewBag.notification</span>
                 </div>
             }
-        }
+            @if (ViewBag.isPaid != null)
+            {
+                if (ViewBag.isPaid == true)
+                {
+                    <span>Your payment is already completed.</span>
+                }
+                else
+                {
+                    <div class="row">
+                        <div class="col-md-8 offset-md-2">
+                            <form asp-action="NagadPaymentPro" asp-controller="Students" method="get">
+                                <input type="hidden" name="studentType" value="1" />
+                                <input type="hidden" name="nuRoll" value="@ViewBag.nuRoll" />
+                                <div class="form-group row">
+                                    <label class="col-md-2 text-md-right text-left col-form-label">Name : </label>
+                                    <div class="col-md-4">
+                                        <input required type="text" name="studentName" class="form-control" />
+                                    </div>
 
+                                    <label class="col-md-2 text-md-right text-left col-form-label">Mobile : </label>
+                                    <div class="col-md-4">
+                                        <input required type="number" name="mobileNum" class="form-control" min="01300000000" max="01999999999" />
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary mb-2">Make Payment</button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            }*@
+
+        </div> @*main area Close here*@
+
+
+    <span class="alert alert-danger h3">Professional Admission (Under Graduate) will start within a moment. Please wait....</span>
     </div>
-
-
 </div>
+
+
+
 @section Scripts{ 
 <script>
     $(document).ready(function () {
