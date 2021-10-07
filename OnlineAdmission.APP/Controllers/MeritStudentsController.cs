@@ -50,7 +50,7 @@ namespace OnlineAdmission.APP.Controllers
             }
 
             
-            ViewBag.searchingText = usrtext;
+            ViewBag.data = usrtext;
             ViewBag.count = meritStudentList.Count();
             
             int pageSize = pagesize <= 0 ? 20 : pagesize;

@@ -31,6 +31,7 @@ namespace OnlineAdmission.BLL.Manager
         public async Task<MeritStudent> GetByAdmissionRollAsync(int NURoll)
         {
             var existStudent = await _meritStudentRepository.GetByAdmissionRollAsync(NURoll);
+            
             return existStudent;
         }
 
