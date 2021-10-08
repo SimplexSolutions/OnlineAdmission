@@ -55,7 +55,7 @@
                     if (ViewBag.addmissionIsPaid == true && ViewBag.applicationIsPaid == true)
                     {
                         <h4>Congratulations!</h4>
-                        <span>You are applied and paid your admission fee. Go for <a class="btn btn-outline-info" asp-action="Create" asp-controller="Students" asp-route-nuAdmissionRoll="@ViewBag.nuRoll">Admission Form</a></span>
+                        <span>You applied and paid your admission fee. Go for <a class="btn btn-outline-info" asp-action="Create" asp-controller="Students" asp-route-nuAdmissionRoll="@ViewBag.nuRoll">Admission Form</a></span>
                     }
                     else if ((ViewBag.addmissionIsPaid == false || ViewBag.addmissionIsPaid == null) && ViewBag.applicationIsPaid == true)
                     {
@@ -81,15 +81,19 @@
                 }
                 else
                 {
-                    if (ViewBag.applicationIsPaid == false || ViewBag.applicationIsPaid == null)
+                    if (ViewBag.applicationIsPaid == false)
                     {
-                        <span>Sorry! You are not Applied.</span>
+                        <span>Sorry! You did not Apply.</span>
                     }
                     else
                     {
-                        <span>Sorry! You are not selected.</span>
+                        if (ViewBag.selected == false)
+                        {
+                            <span>Sorry! You are not selected.</span>
+                        }
+
                     }
-                    
+
                 }
             }
 

@@ -23,6 +23,7 @@ namespace OnlineAdmission.APP.Controllers
         private readonly IMeritStudentManager meritStudentManager;
         private readonly IPaymentTransactionManager paymentTransactionManager;
         private HttpClient httpClient;
+       
         //private readonly IAppliedStudentManager appliedStudentManager;
         //private readonly ISubjectManager subjectManager;
         //private readonly IStudentManager studentManager;
@@ -101,6 +102,13 @@ namespace OnlineAdmission.APP.Controllers
                 {
                     phoneNumber = MerchantInfo.MobileNo;
                     msgText = "Congratulations! your payment is successfully paid";
+                    //var AdmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(professionalRoll);
+                    if (meritStudent != null) 
+                    {
+                        meritStudent.PaymentStatus = true;
+                        meritStudent.PaymentTransactionId = newPayment.Id;
+                        await meritStudentManager.UpdateAsync(meritStudent);
+                    }
                 }
                 else
                 {

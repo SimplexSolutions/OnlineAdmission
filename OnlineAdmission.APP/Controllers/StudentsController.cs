@@ -518,10 +518,10 @@ namespace OnlineAdmission.APP.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ProfessionalSearch(int professionalRoll)
         {
-            bool applicationIsPaid = false;
-            bool addmissionIsPaid = false;
-            bool admitted = false;
-            bool selected = false;
+            bool applicationIsPaid;
+            bool addmissionIsPaid ;
+            bool admitted;
+            bool selected ;
             ViewBag.nuRoll = professionalRoll;
             if (professionalRoll>0)
             {
@@ -540,13 +540,13 @@ namespace OnlineAdmission.APP.Controllers
                     var applicationPayment = await _paymentTransactionManager.GetTransactionByNuRollAsync(professionalRoll);
                     if (applicationPayment!=null)
                     {
-                        applicationIsPaid = true;
+                         applicationIsPaid = true;
                         ViewBag.applicationIsPaid = applicationIsPaid;
                         var selectedStudent = await _meritStudentManager.GetByAdmissionRollAsync(professionalRoll);
                         if (selectedStudent!=null)
                         {
                             //Link for admission fee
-                            selected = true;
+                           selected = true;
                             ViewBag.selected = selected;
                         }
                         
@@ -1159,14 +1159,6 @@ namespace OnlineAdmission.APP.Controllers
             double totalAmount = Math.Round((amount + serviceCharge), 2);
 
 
-
-
-
-
-
-
-
-
             // Create JSON Object
             var paymentJSON = new
             {
@@ -1194,7 +1186,7 @@ namespace OnlineAdmission.APP.Controllers
                 StudentName = studentName,
                 MobileNo = mobileNum,
                 NuAdmissionRoll = nuRoll,
-                AdmissionFee = 0,
+                AdmissionFee = amount,
                 StudentType = studentType,
                 PaymentType = paymentType
             };
