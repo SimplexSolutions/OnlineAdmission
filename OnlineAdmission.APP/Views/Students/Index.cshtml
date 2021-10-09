@@ -14,6 +14,7 @@
                 <label class="col-md-3 col-form-label text-md-right">Class of Student</label>
                 <div class="col-md-8">
                     <select class="form-control" asp-for="StudentCategory" asp-items="@ViewBag.StudentCategoryList" name="studentCategory" id="studentCategory" data-categoryId="@ViewBag.category">
+                        <option value="-1">All Student</option>
                         <option value="0">Hon's Student</option>
                     </select>
                 </div>
@@ -59,8 +60,7 @@
     <tbody>
         @if (Model != null)
         {
-           
-                foreach (var item in Model.Students)
+          foreach (var item in Model.Students)
                 {
                     if (item.StudentType == 1)
                     {
@@ -104,8 +104,6 @@
                         </td>
                     </tr>
                 }
-
-           
         }
     </tbody>
 </table>

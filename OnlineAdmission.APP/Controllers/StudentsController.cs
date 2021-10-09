@@ -29,7 +29,7 @@ using Serilog;
 
 namespace OnlineAdmission.APP.Controllers
 {
-    [Authorize(Roles ="Admin,SuperAdmin,Teacher")]
+    [Authorize(Roles = "Admin,SuperAdmin,Teacher")]
     public class StudentsController : Controller
     {
         private readonly IStudentManager _studentManager;
@@ -78,22 +78,26 @@ namespace OnlineAdmission.APP.Controllers
 
             var AdmittedStudents = await _studentManager.GetAllAsync();
             var studentCategoryFromSession = HttpContext.Session.GetString("studentCategory");
-            
 
-            if (studentCategory!=null || studentCategoryFromSession!=null)
+
+            if ( studentCategory != null && studentCategory>=0)
             {
-                if (studentCategory!=null)
-                {
-                    ViewBag.category = studentCategory;
-                    HttpContext.Session.SetString("studentCategory", studentCategory.ToString());
-                    AdmittedStudents = AdmittedStudents.Where(s => s.StudentCategory == studentCategory).ToList();
-                }
-                else if (studentCategoryFromSession!=null)
-                {
-                    ViewBag.category = Convert.ToInt32(studentCategoryFromSession);
-                    HttpContext.Session.SetString("studentCategory", studentCategoryFromSession);
-                    AdmittedStudents = AdmittedStudents.Where(s => s.StudentCategory == Convert.ToInt32(studentCategoryFromSession)).ToList();
-                }                
+                ViewBag.category = studentCategory;
+                HttpContext.Session.SetString("studentCategory", studentCategory.ToString());
+                AdmittedStudents = AdmittedStudents.Where(s => s.StudentCategory == studentCategory).ToList();
+            }
+            else if (studentCategory == -1)
+            {
+                HttpContext.Session.SetString("studentCategory", studentCategory.ToString());
+            }
+            else if (!string.IsNullOrEmpty(studentCategoryFromSession))
+            {
+                ViewBag.category = Convert.ToInt32(studentCategoryFromSession);                
+                AdmittedStudents = AdmittedStudents.Where(s => s.StudentCategory == Convert.ToInt32(studentCategoryFromSession)).ToList();
+            }
+            else
+            {
+                HttpContext.Session.SetString("studentCategory", "");
             }
 
             StudentIndexVM studentIndexVM = new StudentIndexVM();

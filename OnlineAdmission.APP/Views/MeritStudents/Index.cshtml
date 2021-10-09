@@ -15,6 +15,23 @@
 <p>
     <a class="btn btn-info" asp-action="GetMeritStudentList">Add Merit Student's Excel File</a>
 </p>
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Index" asp-controller="MeritStudents">
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label text-md-right">Class of Student</label>
+                <div class="col-md-8">
+                    <select class="form-control" asp-items="@ViewBag.StudentCategoryList" name="studentCategory" id="studentCategory" data-categoryId="@ViewBag.category">
+                        <option value="-1">All Student</option>
+                        <option value="0">Hon's Student</option>
+                    </select>
+                </div>
+                <button class="col-md-1 btn-block btn-info">Show</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <partial name="~/Views/PartialViews/_SearchCreateBtn.cshtml">
     @if (ViewBag.count != null)
     {

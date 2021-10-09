@@ -22,19 +22,40 @@ namespace OnlineAdmission.APP.Controllers
         private readonly IMeritStudentManager _meritStudentManager;
         private readonly IWebHostEnvironment _host;
         private readonly IAppliedStudentManager _appliedStudentManager;
+        private readonly IStudentCategoryManager _studentCategoryManager;
 
-        public MeritStudentsController(IMeritStudentManager meritStudentManager, IWebHostEnvironment host, IAppliedStudentManager appliedStudentManager)
+        public MeritStudentsController(IMeritStudentManager meritStudentManager, IWebHostEnvironment host, IAppliedStudentManager appliedStudentManager, IStudentCategoryManager studentCategoryManager)
         {
             _meritStudentManager = meritStudentManager;
             _host = host;
             _appliedStudentManager = appliedStudentManager;
+            _studentCategoryManager = studentCategoryManager;
         }
 
         // GET: MeritStudentsController
-        public async Task<ActionResult> Index(string usrtext, string sortRoll, string sortHSCRoll, int page, int pagesize)
+        public async Task<ActionResult> Index(string usrtext, string sortRoll, string sortHSCRoll, int page, int pagesize, int? studentCategory)
         {
 
             IQueryable<MeritStudent> meritStudentList = _meritStudentManager.GetMeritStudents();
+            var studentCategoryFromSession = HttpContext.Session.GetString("studentCategoryMerit");
+            if (studentCategory!=null)
+            {
+                HttpContext.Session.SetString("studentCategoryMerit", studentCategory.ToString());
+                meritStudentList = meritStudentList.Where(s => s.StudentCategory == studentCategory);
+            }
+            
+            else if (studentCategory==-1)
+            {
+                HttpContext.Session.SetString("studentCategoryMerit", "-1");
+            }
+            else if (!string.IsNullOrEmpty(studentCategoryFromSession))
+            {
+                meritStudentList = meritStudentList.Where(s => s.StudentCategory == Convert.ToInt32(studentCategoryFromSession));
+            }
+            else
+            {
+                HttpContext.Session.SetString("studentCategoryMerit", "");
+            }
 
             ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
 
@@ -55,13 +76,14 @@ namespace OnlineAdmission.APP.Controllers
             
             int pageSize = pagesize <= 0 ? 20 : pagesize;
             if (page <= 0) page = 1;
-
+            ViewBag.StudentCategoryList = new SelectList(await _studentCategoryManager.GetAllAsync(), "Id", "CategoryName");
             if (!string.IsNullOrEmpty(usrtext))
             {
                 usrtext = usrtext.Trim().ToLower();
 
                 meritStudentList = meritStudentList.Where(m => m.NUAdmissionRoll.ToString() == usrtext || m.HSCRoll.ToString() == usrtext || m.MeritPosition.ToString() == usrtext || m.SubjectCode.ToString() == usrtext || m.Comments.ToLower().Trim().Contains(usrtext));
 
+                ViewBag.count = meritStudentList.Count();
                 return View(await PaginatedList<MeritStudent>.CreateAsync(meritStudentList, page, pageSize));
             }
 
