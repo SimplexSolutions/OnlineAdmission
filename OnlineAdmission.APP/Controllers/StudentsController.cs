@@ -43,10 +43,11 @@ namespace OnlineAdmission.APP.Controllers
         private readonly ISecurityKey _securityKey;
         private readonly ISMSManager _smsManager;
         private readonly INagadManager _nagadManager;
+        private readonly IStudentCategoryManager _studentCategoryManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<StudentsController> _logger;
 
-        public StudentsController(IStudentManager studentManager, IWebHostEnvironment host, IMeritStudentManager meritStudentManager, IMapper mapper, IDistrictManager districtManager, ISubjectManager subjectManager, IAppliedStudentManager appliedStudentManager, IPaymentTransactionManager paymentTransactionManager, ISecurityKey securityKey, ISMSManager smsManager, UserManager<IdentityUser> userManager, INagadManager nagadManager, ILogger<StudentsController> logger)
+        public StudentsController(IStudentManager studentManager, IWebHostEnvironment host, IMeritStudentManager meritStudentManager, IMapper mapper, IDistrictManager districtManager, ISubjectManager subjectManager, IAppliedStudentManager appliedStudentManager, IPaymentTransactionManager paymentTransactionManager, ISecurityKey securityKey, ISMSManager smsManager, UserManager<IdentityUser> userManager, INagadManager nagadManager, IStudentCategoryManager studentCategoryManager, ILogger<StudentsController> logger)
         {
             _studentManager = studentManager;
             _host = host;
@@ -60,6 +61,7 @@ namespace OnlineAdmission.APP.Controllers
             _smsManager = smsManager;
             _userManager = userManager;
             _nagadManager = nagadManager;
+            _studentCategoryManager = studentCategoryManager;
             _logger = logger;
         }
 
@@ -93,7 +95,10 @@ namespace OnlineAdmission.APP.Controllers
                     AdmittedStudents = AdmittedStudents.Where(s => s.StudentCategory == Convert.ToInt32(studentCategoryFromSession)).ToList();
                 }                
             }
-            ViewBag.StudentCategoryList = await
+
+            
+
+            ViewBag.StudentCategoryList = new SelectList(await _studentCategoryManager.GetAllAsync(), "Id", "CategoryName");
             return View(AdmittedStudents.Where(s => s.Status==true));
         }
 
