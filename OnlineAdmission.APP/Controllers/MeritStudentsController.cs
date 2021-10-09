@@ -38,22 +38,26 @@ namespace OnlineAdmission.APP.Controllers
 
             IQueryable<MeritStudent> meritStudentList = _meritStudentManager.GetMeritStudents();
             var studentCategoryFromSession = HttpContext.Session.GetString("studentCategoryMerit");
-            if (studentCategory!=null)
+            if (studentCategory!=null && studentCategory >= 0)
             {
+                ViewBag.studentCategory = studentCategory;
                 HttpContext.Session.SetString("studentCategoryMerit", studentCategory.ToString());
-                meritStudentList = meritStudentList.Where(s => s.StudentCategory == studentCategory);
+                meritStudentList = meritStudentList.Where(m => m.StudentCategory == studentCategory);
             }
             
             else if (studentCategory==-1)
             {
+                ViewBag.studentCategory = -1;
                 HttpContext.Session.SetString("studentCategoryMerit", "-1");
             }
             else if (!string.IsNullOrEmpty(studentCategoryFromSession))
             {
+                ViewBag.studentCategory = studentCategoryFromSession;
                 meritStudentList = meritStudentList.Where(s => s.StudentCategory == Convert.ToInt32(studentCategoryFromSession));
             }
             else
             {
+                ViewBag.studentCategory = "";
                 HttpContext.Session.SetString("studentCategoryMerit", "");
             }
 

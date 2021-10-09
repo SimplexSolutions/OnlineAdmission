@@ -21,7 +21,12 @@
             <div class="form-group row">
                 <label class="col-md-3 col-form-label text-md-right">Class of Student</label>
                 <div class="col-md-8">
+                    @if (ViewBag.studentCategory!=null)
+                    {
+                        <input type="hidden" id="studentCategoryValue" value="@ViewBag.studentCategory" />
+                    }
                     <select class="form-control" asp-items="@ViewBag.StudentCategoryList" name="studentCategory" id="studentCategory" data-categoryId="@ViewBag.category">
+                        <option selected disabled>-Select-</option>
                         <option value="-1">All Student</option>
                         <option value="0">Hon's Student</option>
                     </select>
@@ -154,6 +159,10 @@
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
         <script>
             $(document).ready(function () {
+                let catVal = $('#studentCategoryValue').val();
+                $('#studentCategory  option[value="' + catVal + '"]').prop("selected", true);
+
+
                 $('#myTable').DataTable({
                     "pageLength": 50
                 });
