@@ -370,7 +370,7 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         // GET: Payments/Create
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, Admin")]
         public IActionResult Create()
         {
             return View();
@@ -379,7 +379,7 @@ namespace OnlineAdmission.APP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> Create( PaymentTransaction paymentTransaction)
         {
             if (ModelState.IsValid)

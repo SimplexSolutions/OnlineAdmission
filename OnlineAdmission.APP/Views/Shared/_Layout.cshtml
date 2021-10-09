@@ -79,7 +79,7 @@
                                         <a asp-action="mastersIndex" asp-controller="Payments">Master's Payments</a>
                                     </li>
                                 }
-                                @if (User.IsInRole("SuperAdmin"))
+                                @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
                                 {
                                     <li>
                                         <a asp-action="Create" asp-controller="Payments">Add Payments</a>

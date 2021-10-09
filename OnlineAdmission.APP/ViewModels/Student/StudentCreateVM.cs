@@ -16,7 +16,7 @@ namespace OnlineAdmission.APP.ViewModels.Student
         public Subject Subject { get; set; }
         //[Display(Name = "District")]
         //public int DistrictId { get; set; }
-
+        public int StudentCategory { get; set; }
         [Required, StringLength(150)]
         public string Name { get; set; }
 

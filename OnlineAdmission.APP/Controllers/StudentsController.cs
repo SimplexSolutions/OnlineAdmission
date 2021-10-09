@@ -115,8 +115,9 @@ namespace OnlineAdmission.APP.Controllers
         {
             if (nuAdmissionRoll>0)
             {
-
+                
                 var existingMeritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuAdmissionRoll);
+
                 var existingAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuAdmissionRoll);
                 var existingSubject = await _subjectManager.GetByCodeAsync(existingMeritStudent.SubjectCode);
 
@@ -153,6 +154,7 @@ namespace OnlineAdmission.APP.Controllers
                 student.SubjectId = existingSubject.Id;
                 student.Subject = existingSubject;
                 student.NuAdmissionRoll = nuAdmissionRoll;
+                student.StudentCategory = (int)existingMeritStudent.StudentCategory;
                 if (subjectCode < 10)
                 {
                     student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "0" + subjectCode + "" + sl);
@@ -279,7 +281,7 @@ namespace OnlineAdmission.APP.Controllers
                     
                     
                     
-                    Student newStudent = _mapper.Map<Student>(student);
+                    Student newStudent = _mapper.Map<Student>(student);                    
                     newStudent.Status = true;
                     newStudent.Photo = student.Photo;
                     newStudent.CreatedAt = DateTime.Now;
@@ -565,20 +567,22 @@ namespace OnlineAdmission.APP.Controllers
                         {
                             //Link for admission fee
                            selected = true;
-                            ViewBag.selected = selected;
-                        }
-                        
+                           ViewBag.selected = selected;
+                            return View();
+                        }                        
                     }
-                    
+                    ViewBag.msg = "You are not applied";
                     return View();
                 }
                 else 
                 {
+                    selected = true;
                     addmissionIsPaid = true;
                     ViewBag.addmissionIsPaid = addmissionIsPaid;
                     applicationIsPaid = true;
                 }
 
+                ViewBag.selected = selected;
                 ViewBag.addmissionIsPaid = addmissionIsPaid;
                 ViewBag.applicationIsPaid = applicationIsPaid;
             }
