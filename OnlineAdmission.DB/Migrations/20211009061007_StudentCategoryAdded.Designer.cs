@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineAdmission.DB;
 
 namespace OnlineAdmission.DB.Migrations
 {
     [DbContext(typeof(OnlineAdmissionDbContext))]
-    partial class OnlineAdmissionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211009061007_StudentCategoryAdded")]
+    partial class StudentCategoryAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -603,9 +605,6 @@ namespace OnlineAdmission.DB.Migrations
 
                     b.Property<bool?>("Status")
                         .HasColumnType("bit");
-
-                    b.Property<int?>("StudentCategory")
-                        .HasColumnType("int");
 
                     b.Property<int>("StudentMobile")
                         .HasColumnType("int");

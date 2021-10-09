@@ -6,6 +6,23 @@
     string bgColor = "";
 }
 
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Index" asp-controller="Students">
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label text-md-right">Class of Student</label>
+                <div class="col-md-8">
+                    <select class="form-control" name="studentCategory" id="studentCategory" data-categoryId="@ViewBag.category">
+                        <option value="0">Hon's Student</option>
+                        <option value="1">Hon's(Professional) Student</option>
+                        <option value="2">Master's(MBA) Student</option>
+                    </select>
+                </div>
+                <button class="col-md-1 btn-block btn-info">Show</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 <table class="table" id="table_id">
     <thead>
@@ -91,7 +108,12 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
-        $(document).ready(function () {            
+        $(document).ready(function () {
+            let cat = $('#studentCategory').val();
+            alert(cat);
+
+
+
             $('#table_id').DataTable({
                 "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "All"]]
             });

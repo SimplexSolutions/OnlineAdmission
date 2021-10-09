@@ -44,7 +44,7 @@ namespace OnlineAdmission.Entity
         //StudentCategory = 2 = Masters
         public int? StudentCategory { get; set; }
 
-        //Application Fee = null/0
+        //Application Fee = 0
         //Addmission Fee = 1
         public int? PaymentType { get; set; }
     }

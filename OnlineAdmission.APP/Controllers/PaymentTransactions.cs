@@ -92,7 +92,6 @@ namespace OnlineAdmission.APP.Controllers
                 string phoneNumber ;
                 string msgText;
 
-
                 if (newPayment.StudentCategory == 1)
                 {
                     phoneNumber = MerchantInfo.MobileNo;

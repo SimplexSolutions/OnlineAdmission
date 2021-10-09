@@ -24,6 +24,7 @@ namespace OnlineAdmission.DB
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<AppliedStudent> AppliedStudents { get; set; }
         public DbSet<SMSModel> SMSModels { get; set; }
+        public DbSet<StudentCategory> StudentCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

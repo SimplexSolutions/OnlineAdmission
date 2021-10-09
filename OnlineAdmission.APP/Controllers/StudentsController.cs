@@ -68,27 +68,33 @@ namespace OnlineAdmission.APP.Controllers
 
         // GET: StudentsController
         [Authorize(Roles = "Admin,SuperAdmin,Teacher")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? studentCategory)
         {
-            
+
             var user = await _userManager.GetUserAsync(HttpContext.User);
             HttpContext.Session.SetString("UserId", user.Id);
 
             var AdmittedStudents = await _studentManager.GetAllAsync();
-            return View(AdmittedStudents.Where(s => s.Status==true));
-
-            //Code for API Consuming
-            //List<Student> students = new List<Student>();
-            //HttpClient client = _api.Initial();
-            //HttpResponseMessage res = await client.GetAsync("api/student");
-            //if (res.IsSuccessStatusCode)
-            //{
-            //    var result = res.Content.ReadAsStringAsync().Result;
-            //    students = JsonConvert.DeserializeObject<List<Student>>(result);
-            //}
-            //return View(students);
-
+            var studentCategoryFromSession = HttpContext.Session.GetString("studentCategory");
             
+
+            if (studentCategory!=null || studentCategoryFromSession!=null)
+            {
+                if (studentCategory!=null)
+                {
+                    ViewBag.category = studentCategory;
+                    HttpContext.Session.SetString("studentCategory", studentCategory.ToString());
+                    AdmittedStudents = AdmittedStudents.Where(s => s.StudentCategory == studentCategory).ToList();
+                }
+                else if (studentCategoryFromSession!=null)
+                {
+                    ViewBag.category = Convert.ToInt32(studentCategoryFromSession);
+                    HttpContext.Session.SetString("studentCategory", studentCategoryFromSession);
+                    AdmittedStudents = AdmittedStudents.Where(s => s.StudentCategory == Convert.ToInt32(studentCategoryFromSession)).ToList();
+                }                
+            }
+            ViewBag.StudentCategoryList = await
+            return View(AdmittedStudents.Where(s => s.Status==true));
         }
 
         // GET: StudentsController/Create

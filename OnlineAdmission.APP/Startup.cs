@@ -109,6 +109,9 @@ namespace OnlineAdmission.APP
             services.AddScoped<INagadManager, NagadManager>();
             services.AddScoped<INagadRepository, NagadRepository>();
 
+            services.AddScoped<IStudentCategoryRepository, StudentCategoryRepository>();
+            services.AddScoped<IStudentCategoryManager, StudentCategoryManager>();
+
             services.AddScoped<ISecurityKey, SecurityKey>();
         }
 
