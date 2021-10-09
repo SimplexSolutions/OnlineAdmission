@@ -96,10 +96,13 @@ namespace OnlineAdmission.APP.Controllers
                 }                
             }
 
+            StudentIndexVM studentIndexVM = new StudentIndexVM();
+            studentIndexVM.Students = AdmittedStudents.Where(s => s.Status==true).ToList();
             
 
-            ViewBag.StudentCategoryList = new SelectList(await _studentCategoryManager.GetAllAsync(), "Id", "CategoryName");
-            return View(AdmittedStudents.Where(s => s.Status==true));
+            ViewBag.StudentCategoryList = new SelectList(await _studentCategoryManager.GetAllAsync(), "Id", "CategoryName",studentIndexVM.StudentCategory);
+            //return View(AdmittedStudents.Where(s => s.Status==true));
+            return View(studentIndexVM);
         }
 
         // GET: StudentsController/Create

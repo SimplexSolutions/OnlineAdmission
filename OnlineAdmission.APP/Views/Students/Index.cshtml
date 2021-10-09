@@ -1,4 +1,5 @@
-﻿@model IEnumerable<OnlineAdmission.Entity.Student>
+﻿@*@model IEnumerable<OnlineAdmission.Entity.Student>*@
+@model OnlineAdmission.APP.ViewModels.Student.StudentIndexVM
 
 @{
     ViewData["Title"] = "Index";
@@ -12,10 +13,8 @@
             <div class="form-group row">
                 <label class="col-md-3 col-form-label text-md-right">Class of Student</label>
                 <div class="col-md-8">
-                    <select class="form-control" asp-items="@ViewBag.StudentCategoryList" name="studentCategory" id="studentCategory" data-categoryId="@ViewBag.category">
+                    <select class="form-control" asp-for="StudentCategory" asp-items="@ViewBag.StudentCategoryList" name="studentCategory" id="studentCategory" data-categoryId="@ViewBag.category">
                         <option value="0">Hon's Student</option>
-                        <option value="1">Hon's(Professional) Student</option>
-                        <option value="2">Master's(MBA) Student</option>
                     </select>
                 </div>
                 <button class="col-md-1 btn-block btn-info">Show</button>
@@ -29,22 +28,28 @@
         <tr>
             <th>#</th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @*@Html.DisplayNameFor(model => model.Name)*@
+                Name
             </th>
             <th data-orderable="false">
-                @Html.DisplayNameFor(model => model.Photo)
+                @*@Html.DisplayNameFor(model => model.Photo)*@
+                Photo
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CollegeRoll)
+                @*@Html.DisplayNameFor(model => model.CollegeRoll)*@
+                College Roll
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NUAdmissionRoll)
+                @*@Html.DisplayNameFor(model => model.NUAdmissionRoll)*@
+                NU Roll
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StudentMobile)
+                @*@Html.DisplayNameFor(model => model.StudentMobile)*@
+                Mobile
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Subject)
+                @*@Html.DisplayNameFor(model => model.Subject)*@
+                Subject
             </th>
             <th data-orderable="false">
                 <a class="btn btn-info" asp-action="Create"><i class="fas fa-user-plus"></i> Add Student</a>
@@ -54,50 +59,53 @@
     <tbody>
         @if (Model != null)
         {
-            @foreach (var item in Model)
-            {
-                if (item.StudentType==1)
+           
+                foreach (var item in Model.Students)
                 {
-                    bgColor = "bg-info text-light";
-                }
-                else
-                {
-                    bgColor = "bg-light";
-                }
-                <tr class=@bgColor>
-                    <td>
-                        @(++sl).
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        <img src="~/Images/Students/@item.Photo" alt="Student Image" style="width:100px;" />
-                    </td>
+                    if (item.StudentType == 1)
+                    {
+                        bgColor = "bg-info text-light";
+                    }
+                    else
+                    {
+                        bgColor = "bg-light";
+                    }
+                    <tr class=@bgColor>
+                        <td>
+                            @(++sl).
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            <img src="~/Images/Students/@item.Photo" alt="Student Image" style="width:100px;" />
+                        </td>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CollegeRoll) 
-                        @if (item.StudentType==1)
-                        {
-                        <span>(@item.PreviousCollegeRoll)</span>
-                        }
-                        
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NUAdmissionRoll)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StudentMobile)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Subject.SubjectName)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn  btn-sm btn-primary">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn  btn-sm btn-warning">Details</a>
-                    </td>
-                </tr>
-            }
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CollegeRoll)
+                            @if (item.StudentType == 1)
+                            {
+                                <span>(@item.PreviousCollegeRoll)</span>
+                            }
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NUAdmissionRoll)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StudentMobile)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Subject.SubjectName)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn  btn-sm btn-primary">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn  btn-sm btn-warning">Details</a>
+                        </td>
+                    </tr>
+                }
+
+           
         }
     </tbody>
 </table>
@@ -109,10 +117,8 @@
 
     <script>
         $(document).ready(function () {
-            let cat = $('#studentCategory').val();
-            alert(cat);
-
-
+            //let cat = $('#studentCategory').val();
+            //alert(cat);
 
             $('#table_id').DataTable({
                 "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "All"]]
