@@ -37,9 +37,13 @@ namespace OnlineAdmission.Entity
         public int? PaymentTransactionId { get; set; }
 
         [Display(Name = "Deduction")]
-        public double DeductedAmaount { get; set; } 
-        
+        public double DeductedAmaount { get; set; }        
 
         public PaymentTransaction PaymentTransaction { get; set; }
+
+        //StudentCategory = null/0 = hon's Student
+        //StudentCategory = 1 = professional Student
+        //StudentCategory = 2 = Masters
+        public int? StudentCategory { get; set; }
     }
 }

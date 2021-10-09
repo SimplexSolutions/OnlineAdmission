@@ -568,8 +568,6 @@ namespace OnlineAdmission.APP.Controllers
             return View();
         }
 
-
-
         [HttpGet]
         [AllowAnonymous]
         public IActionResult MastersSearch(int mastersRoll, string notification)
@@ -602,7 +600,6 @@ namespace OnlineAdmission.APP.Controllers
             }
             return View();
         }
-
 
         [HttpGet]
         [AllowAnonymous]
@@ -657,7 +654,6 @@ namespace OnlineAdmission.APP.Controllers
             
             return View();
         }
-
 
         [HttpGet]
         [Authorize(Roles = "Admin,SuperAdmin")]
@@ -954,7 +950,7 @@ namespace OnlineAdmission.APP.Controllers
                 MobileNo = appliedStudent.MobileNo,
                 SubjectId = subject.Id,
                 NuAdmissionRoll = nuRoll,
-                StudentType=0
+                StudentCategory=0
             };
 
 
@@ -1031,7 +1027,7 @@ namespace OnlineAdmission.APP.Controllers
         
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult> NagadPaymentPro(int nuRoll, int? studentType, string mobileNum, string studentName, int paymentType)
+        public async Task<ActionResult> NagadPaymentPro(int nuRoll, int? studentCategory, string mobileNum, string studentName, int paymentType)
         {
             if (nuRoll <= 0)
             {
@@ -1053,7 +1049,7 @@ namespace OnlineAdmission.APP.Controllers
                 _logger.LogWarning("Subject Not Found");
                 return RedirectToAction("ProfessionalSearch");
             }
-            if (studentType == 1)
+            if (studentCategory == 1)
             {
                 //OrderId = meritStudent.NUAdmissionRoll + "" + meritStudent.SubjectCode + "" + DateTime.Now.ToString("HHmmss");
                 OrderId = nuRoll.ToString() + "ProAdm" + DateTime.Now.ToString("HHmmss");
@@ -1113,7 +1109,6 @@ namespace OnlineAdmission.APP.Controllers
                     if (httpResponse.Content != null)
                     {
                         responseContent = await httpResponse.Content.ReadAsStringAsync();
-
                     }
                 }
 
@@ -1187,7 +1182,7 @@ namespace OnlineAdmission.APP.Controllers
                 MobileNo = mobileNum,
                 NuAdmissionRoll = nuRoll,
                 AdmissionFee = amount,
-                StudentType = studentType,
+                StudentCategory = studentCategory,
                 PaymentType = paymentType
             };
 
@@ -1262,7 +1257,7 @@ namespace OnlineAdmission.APP.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult> NagadPaymentMasters(int nuRoll, int? studentType, string mobileNum, string studentName)
+        public async Task<ActionResult> NagadPaymentMasters(int nuRoll, int? StudentCategory, string mobileNum, string studentName)
         {
             if (nuRoll <= 0)
             {
@@ -1271,7 +1266,7 @@ namespace OnlineAdmission.APP.Controllers
             }
 
             string OrderId = "";
-            if (studentType == 2)
+            if (StudentCategory == 2)
             {
                 if (mobileNum == null || studentName == null)
                 {
@@ -1413,7 +1408,7 @@ namespace OnlineAdmission.APP.Controllers
                 MobileNo = mobileNum,
                 NuAdmissionRoll = nuRoll,
                 AdmissionFee = 0,
-                StudentType = studentType
+                StudentCategory = StudentCategory
             };
 
             var paymentFinalJSON = new

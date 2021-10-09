@@ -78,7 +78,7 @@ namespace OnlineAdmission.APP.Controllers
                     ServiceCharge = MerchantInfo.ServiceCharge,
                     StudentName = MerchantInfo.studentName,
                     MobileNumber = MerchantInfo.MobileNo,
-                    StudentType = MerchantInfo.StudentType,
+                    StudentCategory = MerchantInfo.StudentCategory,
                     PaymentType = MerchantInfo.PaymentType
                     };
                 //newPayment.ApplicantName = MerchantInfo.StudentName;
@@ -93,12 +93,12 @@ namespace OnlineAdmission.APP.Controllers
                 string msgText;
 
 
-                if (newPayment.StudentType == 1)
+                if (newPayment.StudentCategory == 1)
                 {
                     phoneNumber = MerchantInfo.MobileNo;
                     msgText = "Congratulations! your payment is successfully paid";
                 }
-                else if (newPayment.StudentType == 2)
+                else if (newPayment.StudentCategory == 2)
                 {
                     phoneNumber = MerchantInfo.MobileNo;
                     msgText = "Congratulations! your payment is successfully paid";

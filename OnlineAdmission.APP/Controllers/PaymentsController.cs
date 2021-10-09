@@ -217,7 +217,7 @@ namespace OnlineAdmission.APP.Controllers
                 ViewBag.msg = TempData["msg"].ToString();
             }
 
-            IQueryable<PaymentTransaction> paymentTransactions = _paymentTransactionManager.GetIQueryableData().Where(p => p.StudentType == 1);
+            IQueryable<PaymentTransaction> paymentTransactions = _paymentTransactionManager.GetIQueryableData().Where(p => p.StudentCategory == 1);
 
 
            
@@ -285,7 +285,7 @@ namespace OnlineAdmission.APP.Controllers
                 ViewBag.msg = TempData["msg"].ToString();
             }
 
-            IQueryable<PaymentTransaction> paymentTransactions = _paymentTransactionManager.GetIQueryableData().Where(p => p.StudentType == 2);
+            IQueryable<PaymentTransaction> paymentTransactions = _paymentTransactionManager.GetIQueryableData().Where(p => p.StudentCategory == 2);
 
 
             ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
@@ -393,7 +393,6 @@ namespace OnlineAdmission.APP.Controllers
                 {
                     return RedirectToAction(nameof(Index));
                 }
-                
             }
             return View(paymentTransaction);
         }
@@ -431,7 +430,6 @@ namespace OnlineAdmission.APP.Controllers
                 try
                 {
                     await _paymentTransactionManager.UpdateAsync(paymentTransaction);
-                   
                 }
                 catch (DbUpdateConcurrencyException)
                 {
