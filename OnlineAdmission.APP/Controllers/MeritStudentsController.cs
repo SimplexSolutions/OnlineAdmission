@@ -42,7 +42,9 @@ namespace OnlineAdmission.APP.Controllers
             {
                 ViewBag.studentCategory = studentCategory;
                 HttpContext.Session.SetString("studentCategoryMerit", studentCategory.ToString());
-                meritStudentList = meritStudentList.Where(m => m.StudentCategory == studentCategory);
+                meritStudentList = (IQueryable<MeritStudent>)(from m in meritStudentList
+                                   where m.StudentCategory == studentCategory
+                                   select m).ToList();
             }
             
             else if (studentCategory==-1)
