@@ -31,7 +31,18 @@ namespace OnlineAdmission.DAL.Repository
 
         public async Task<MeritStudent> GetByAdmissionRollAsync(int NURoll)
         {
-            var existStudent =  await _context.MeritStudents.FirstOrDefaultAsync(m => m.NUAdmissionRoll == NURoll && (m.Comments.Trim().ToLower() == "Quota Merit List".Trim().ToLower() || m.PaymentStatus == true || m.StudentCategory==1));
+            var existStudent =  await _context.MeritStudents.FirstOrDefaultAsync(m => m.NUAdmissionRoll == NURoll && m.StudentCategory==1 && (m.Comments.Trim().ToLower() == "Quota Merit List".Trim().ToLower() || m.PaymentStatus == true));
+            return existStudent;
+        }
+        public async Task<MeritStudent> GetProByAdmissionRollAsync(int NuRoll)
+        {
+            var existStudent = await _context.MeritStudents.FirstOrDefaultAsync(m => m.NUAdmissionRoll == NuRoll &&  m.StudentCategory == 2);
+            return existStudent;
+        }
+
+        public async Task<MeritStudent> GetProMBAByAdmissionRollAsync(int NuRoll)
+        {
+            var existStudent = await _context.MeritStudents.FirstOrDefaultAsync(m => m.NUAdmissionRoll == NuRoll &&  m.PaymentStatus == true && m.StudentCategory == 3);
             return existStudent;
         }
 
@@ -40,7 +51,11 @@ namespace OnlineAdmission.DAL.Repository
             IQueryable<MeritStudent> meritStudents =_context.MeritStudents;
             return meritStudents;
         }
-
+        public IQueryable<MeritStudent> GetMeritStudentsByCategory(int cat)
+        {
+            IQueryable<MeritStudent> meritStudents = _context.MeritStudents.Where(s => s.StudentCategory == cat);
+            return meritStudents;
+        }
         public async Task<List<MeritStudent>> GetSpecialPaymentStudent()
         {
             return await _context.MeritStudents.Where(m => m.DeductedAmaount > 0).ToListAsync();

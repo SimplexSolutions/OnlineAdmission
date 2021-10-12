@@ -55,7 +55,8 @@
                 <div class="row">
                     <div class="col-md-8 offset-md-2">
                         <form asp-action="NagadPaymentMasters" asp-controller="Students" method="get">
-                            <input type="hidden" name="studentType" value="2" />
+                            <input type="hidden" name="studentCategory" value="3" />
+                            <input type="hidden" name="paymentType" value="1" />
                             <input type="hidden" name="nuRoll" value="@ViewBag.nuRoll" />
                             <div class="form-group row">
                                 <label class="col-md-2 text-md-right text-left col-form-label">Name : </label>

@@ -14,8 +14,7 @@
                 <label class="col-md-3 col-form-label text-md-right">Class of Student</label>
                 <div class="col-md-8">
                     <select class="form-control" asp-for="StudentCategory" asp-items="@ViewBag.StudentCategoryList" name="studentCategory" id="studentCategory" data-categoryId="@ViewBag.category">
-                        <option value="-1">All Student</option>
-                        <option value="0">Hon's Student</option>
+                        <option value="0">All Student</option>
                     </select>
                 </div>
                 <button class="col-md-1 btn-block btn-info">Show</button>

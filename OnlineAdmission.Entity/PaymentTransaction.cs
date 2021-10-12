@@ -39,13 +39,13 @@ namespace OnlineAdmission.Entity
 
         public string Description { get; set; }
 
-        //StudentCategory = null/0 = hon's Student
-        //StudentCategory = 1 = professional Student
-        //StudentCategory = 2 = Masters
+        //StudentCategory = 1 = hon's Student
+        //StudentCategory = 2 = professional Student
+        //StudentCategory = 3 = Masters
         public int? StudentCategory { get; set; }
 
-        //Application Fee = 0
-        //Addmission Fee = 1
+        //Application Fee = 1
+        //Addmission Fee = 2
         public int? PaymentType { get; set; }
     }
 }

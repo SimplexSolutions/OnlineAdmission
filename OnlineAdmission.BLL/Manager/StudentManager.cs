@@ -47,5 +47,10 @@ namespace OnlineAdmission.BLL.Manager
         {
             return await _studentRepository.GetStudentBySSCRollAsync(sscRoll, boardName);
         }
+
+        public async Task<List<Student>> GetStudentsByCategoryAsync(int stuCategory)
+        {
+            return await _studentRepository.GetStudentsByCategoryAsync(stuCategory);
+        }
     }
 }

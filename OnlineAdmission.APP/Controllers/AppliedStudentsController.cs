@@ -30,7 +30,6 @@ namespace OnlineAdmission.APP.Controllers
         }
         public async Task<IActionResult> Index(string usrtext, string sortRoll, string sortHSCRoll, int page, int pagesize)
         {
-
             IQueryable<AppliedStudent> appliedStudentList = _appliedStudentManager.GetIQueryableData();
             ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
 

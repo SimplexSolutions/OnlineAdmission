@@ -30,9 +30,14 @@ namespace OnlineAdmission.DAL.Repository
             
         }
 
-        public async Task<PaymentTransaction> GetAdmissionTrByNuRoll(int nuRoll)
+        public async Task<PaymentTransaction> GetApplicationTransactionByNuRollAsync(int nuRoll, int studentCategory)
         {
-            return await _context.PaymentTransactions.FirstOrDefaultAsync(p => p.ReferenceNo == nuRoll && p.PaymentType == 1);
+            return await _context.PaymentTransactions.FirstOrDefaultAsync(p => p.ReferenceNo == nuRoll && p.StudentCategory == studentCategory && p.PaymentType == 1);
+        }
+
+        public async Task<PaymentTransaction> GetAdmissionTrByNuRoll(int nuRoll, int studentCategory)
+        {
+            return await _context.PaymentTransactions.FirstOrDefaultAsync(p => p.ReferenceNo == nuRoll && p.StudentCategory == studentCategory && p.PaymentType == 2);
         }
     }
 }

@@ -11,26 +11,27 @@ namespace OnlineAdmission.BLL.Manager
 {
     public class PaymentTransactionManager : Manager<PaymentTransaction>, IPaymentTransactionManager
     {
-        private readonly IPaymentTransactionRepository paymentTransactionRepository;
+        private readonly IPaymentTransactionRepository _paymentTransactionRepository;
 
         public PaymentTransactionManager(IPaymentTransactionRepository paymentTransactionRepository) : base(paymentTransactionRepository)
         {
-            this.paymentTransactionRepository = paymentTransactionRepository;
+            _paymentTransactionRepository = paymentTransactionRepository;
         }
 
-        public async Task<PaymentTransaction> GetTransactionByNuRollAsync(int nuRoll)
+        public async Task<PaymentTransaction> GetAdmissionTrByNuRoll(int nuRoll, int studentCategory)
         {
-            return await paymentTransactionRepository.GetTransactionByNuRollAsync(nuRoll);
+            return await _paymentTransactionRepository.GetAdmissionTrByNuRoll(nuRoll, studentCategory);
+        }
+
+        public async Task<PaymentTransaction> GetApplicationTransactionByNuRollAsync(int nuRoll, int studentCategory)
+        {
+            return await _paymentTransactionRepository.GetApplicationTransactionByNuRollAsync(nuRoll, studentCategory);
         }
 
         public async Task<bool> GetTransaction(List<PaymentTransaction> paymentTransactions)
         {
-            return await paymentTransactionRepository.GetTransaction(paymentTransactions);
+            return await _paymentTransactionRepository.GetTransaction(paymentTransactions);
         }
 
-        public async Task<PaymentTransaction> GetAdmissionTrByNuRoll(int nuRoll)
-        {
-            return await paymentTransactionRepository.GetAdmissionTrByNuRoll(nuRoll);
-        }
     }
 }

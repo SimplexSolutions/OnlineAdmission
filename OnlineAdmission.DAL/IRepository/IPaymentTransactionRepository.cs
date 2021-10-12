@@ -10,7 +10,7 @@ namespace OnlineAdmission.DAL.IRepository
     public interface IPaymentTransactionRepository : IRepository<PaymentTransaction>
     {
         Task<bool> GetTransaction(List<PaymentTransaction> paymentTransactions);
-        Task<PaymentTransaction> GetTransactionByNuRollAsync(int nuRoll);
-        Task<PaymentTransaction> GetAdmissionTrByNuRoll(int nuRoll);
+        Task<PaymentTransaction> GetApplicationTransactionByNuRollAsync(int nuRoll, int studentCategory);
+        Task<PaymentTransaction> GetAdmissionTrByNuRoll(int nuRoll, int studentCategory);
     }
 }

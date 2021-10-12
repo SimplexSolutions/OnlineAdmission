@@ -4,6 +4,7 @@
 @{
     //Layout = User.IsInRole("Admin") ? "~/Views/Shared/_Layout.cshtml" : "~/Views/Shared/_LayoutStudent.cshtml";
     Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+    int studentCategory = 2;
 
 }
 <div class="">
@@ -32,7 +33,7 @@
 
                 @if (ViewBag.msg != null)
                 {
-                    <div class="form-group row" id="missText">
+                    <div class="form-group row justify-content-center align-items-center" id="missText">
                         <span class="alert alert-danger">@ViewBag.msg</span>
                     </div>
                 }
@@ -45,7 +46,7 @@
             }
             @if (ViewBag.admitted == true)
             {
-                <span>You are already admitted. Go for <a asp-action="Details" asp-controller="Students" asp-route-id="@ViewBag.student.Id">details</a></span>
+                <span>You are already admitted. Go for <a asp-action="Details" asp-controller="Students" asp-route-id="@ViewBag.student.Id" >details</a></span>
             }
             else
             {
@@ -55,14 +56,14 @@
                     if (ViewBag.addmissionIsPaid == true && ViewBag.applicationIsPaid == true)
                     {
                         <h4>Congratulations!</h4>
-                        <span>You applied and paid your admission fee. Go for <a class="btn btn-outline-info" asp-action="Create" asp-controller="Students" asp-route-nuAdmissionRoll="@ViewBag.nuRoll">Admission Form</a></span>
+                        <span>You applied and paid your admission fee. Go for <a class="btn btn-outline-info" asp-action="Create" asp-controller="Students" asp-route-nuAdmissionRoll="@ViewBag.nuRoll" asp-route-studentCategory="@studentCategory">Admission Form</a></span>
                     }
                     else if ((ViewBag.addmissionIsPaid == false || ViewBag.addmissionIsPaid == null) && ViewBag.applicationIsPaid == true)
                     {
                         <form asp-action="NagadPaymentPro" asp-controller="Students" method="get">
-                            <input type="hidden" name="studentCategory" value="1" />
+                            <input type="hidden" name="studentCategory" value="2" />
                             <input type="hidden" name="nuRoll" value="@ViewBag.nuRoll" />
-                            <input type="hidden" name="paymentType" value="1" />
+                            <input type="hidden" name="paymentType" value="2" />
                             @*<div class="form-group row">
                             <label class="col-md-2 text-md-right text-left col-form-label">Name : </label>
                             <div class="col-md-4">

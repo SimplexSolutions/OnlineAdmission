@@ -40,6 +40,21 @@ namespace OnlineAdmission.BLL.Manager
            return _meritStudentRepository.GetMeritStudents();
         }
 
+        public IQueryable<MeritStudent> GetMeritStudentsByCategory(int cat)
+        {
+            return _meritStudentRepository.GetMeritStudentsByCategory(cat);
+        }
+
+        public Task<MeritStudent> GetProByAdmissionRollAsync(int NuRoll)
+        {
+            return _meritStudentRepository.GetProByAdmissionRollAsync(NuRoll);
+        }
+
+        public Task<MeritStudent> GetProMBAByAdmissionRollAsync(int NuRoll)
+        {
+            return _meritStudentRepository.GetProMBAByAdmissionRollAsync(NuRoll);
+        }
+
         public async Task<List<MeritStudent>> GetSpecialPaymentStudent()
         {
             return await _meritStudentRepository.GetSpecialPaymentStudent();

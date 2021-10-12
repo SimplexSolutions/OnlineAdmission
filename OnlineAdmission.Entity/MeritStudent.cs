@@ -41,9 +41,9 @@ namespace OnlineAdmission.Entity
 
         public PaymentTransaction PaymentTransaction { get; set; }
 
-        //StudentCategory = null/0 = hon's Student
-        //StudentCategory = 1 = professional Student
-        //StudentCategory = 2 = Masters
+        //StudentCategory = 1 = hon's Student
+        //StudentCategory = 2 = professional Student
+        //StudentCategory = 3 = Masters
         public int? StudentCategory { get; set; }
     }
 }

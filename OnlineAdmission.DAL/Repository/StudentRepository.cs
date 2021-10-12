@@ -57,5 +57,10 @@ namespace OnlineAdmission.DAL.Repository
             var student = await _context.Students.FirstOrDefaultAsync(s => s.CollegeRoll == CollegeRoll);
             return student;
         }
+        public async Task<List<Student>> GetStudentsByCategoryAsync(int stuCategory)
+        {
+            var result = await _context.Students.Where(s => s.StudentCategory == stuCategory).ToListAsync();
+            return result;
+        }
     }
 }

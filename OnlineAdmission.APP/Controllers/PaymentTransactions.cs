@@ -47,9 +47,7 @@ namespace OnlineAdmission.APP.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Get(string status,string payment_ref_id)
         {
-            //AppliedStudent appliedStudent = await nagadManager.GetAppliedStudentByNURollNagad(nuRoll);
-            //MeritStudent meritStudent = await nagadManager.GetMeritStudentByNURollNagad(nuRoll);
-            //Subject subject = await nagadManager.GetSubjectByCodeNagad(meritStudent.SubjectCode);
+
             // Status Check
             //Call Status Check API with Payment Ref ID
             var paymentDetails = "https://api.mynagad.com/api/dfs/verify/payment/" + payment_ref_id;
@@ -89,36 +87,46 @@ namespace OnlineAdmission.APP.Controllers
                 
                 //MeritStudent meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
                 MeritStudent meritStudent = await nagadManager.GetMeritStudentByNURollNagad(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
+
                 string phoneNumber ;
                 string msgText;
 
-                if (newPayment.StudentCategory == 1)
-                {
-                    phoneNumber = MerchantInfo.MobileNo;
-                    msgText = "Congratulations! your payment is successfully paid";
-                }
-                else if (newPayment.StudentCategory == 2)
-                {
-                    phoneNumber = MerchantInfo.MobileNo;
-                    msgText = "Congratulations! your payment is successfully paid";
-                    //var AdmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(professionalRoll);
-                    if (meritStudent != null) 
-                    {
-                        meritStudent.PaymentStatus = true;
-                        meritStudent.PaymentTransactionId = newPayment.Id;
-                        await meritStudentManager.UpdateAsync(meritStudent);
-                    }
-                }
-                else
+                phoneNumber = MerchantInfo.MobileNo;
+                msgText = "Congratulations! your payment is successfully paid";
+                if (newPayment.StudentCategory == 1) //For Hon's General Student
                 {
                     meritStudent.PaymentStatus = true;
                     meritStudent.PaymentTransactionId = newPayment.Id;
-                    await meritStudentManager.UpdateAsync(meritStudent);  
+                    meritStudent.StudentCategory = newPayment.StudentCategory;
+                    await meritStudentManager.UpdateAsync(meritStudent);
                     //AppliedStudent newStudent = await appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll);
                     AppliedStudent newStudent = await nagadManager.GetAppliedStudentByNURollNagad(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
                     phoneNumber = newStudent.MobileNo.ToString();
                     msgText = "Congratulations! " + newStudent.ApplicantName + "(NU Roll:" + newStudent.NUAdmissionRoll + ") , your admission payment is successfully paid";
                 }
+                else if (newPayment.StudentCategory == 2) //For Hon's Professional Student
+                {
+                    
+                    if (meritStudent != null)
+                    {
+                        meritStudent.PaymentStatus = true;
+                        meritStudent.PaymentTransactionId = newPayment.Id;
+                        meritStudent.StudentCategory = newPayment.StudentCategory;
+                        await meritStudentManager.UpdateAsync(meritStudent);
+                    }
+                }
+                else if (newPayment.StudentCategory == 3) //For Master's MBA
+                {
+                    //var AdmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(professionalRoll);
+                    if (meritStudent != null) 
+                    {
+                        meritStudent.PaymentStatus = true;
+                        meritStudent.PaymentTransactionId = newPayment.Id;
+                        meritStudent.StudentCategory = newPayment.StudentCategory;
+                        await meritStudentManager.UpdateAsync(meritStudent);
+                    }
+                }
+                
                 
 
                 //////////////////Code for SMS Sending and Saving
@@ -140,16 +148,19 @@ namespace OnlineAdmission.APP.Controllers
                     await _smsManager.AddAsync(newSMS);
                 }
 
-
-                if (MerchantInfo.StudentType==1)
+                if (MerchantInfo.StudentType == 1)
                 {
-                    return RedirectToAction("ProfessionalSearch", "Students", new { professionalRoll = newPayment.ReferenceNo, notification = successNotification });
+                    return RedirectToAction("PaymentConfirmation", "Students", new { NuAdmissionRoll = newPayment.ReferenceNo, notification = successNotification });
                 }
                 if (MerchantInfo.StudentType==2)
                 {
+                    return RedirectToAction("ProfessionalSearch", "Students", new { professionalRoll = newPayment.ReferenceNo, notification = successNotification });
+                }
+                if (MerchantInfo.StudentType==3)
+                {
                     return RedirectToAction("MastersSearch", "Students", new { mastersRoll = newPayment.ReferenceNo, notification = successNotification });
                 }
-                return RedirectToAction("PaymentConfirmation", "Students",new { NuAdmissionRoll = newPayment.ReferenceNo,notification= successNotification});
+                
             }
 
             return  Ok();

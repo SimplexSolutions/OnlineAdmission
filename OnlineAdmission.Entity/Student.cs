@@ -125,7 +125,7 @@ namespace OnlineAdmission.Entity
         public string HSCRemark { get; set; }
 
         
-        // 0/null=Regular Student, 1=SubjectChanged, 2 = CollegeChanged
+        // 1=Regular Student, 2=SubjectChanged, 3 = CollegeChanged
         public int? StudentType { get; set; } 
 
         //null=Regular Student
@@ -134,9 +134,9 @@ namespace OnlineAdmission.Entity
         //null/0/false =Inactive, 1/true = active
         public bool? Status { get; set; }
         
-        //StudentCategory = null/0 = hon's Student
-        //StudentCategory = 1 = professional Student
-        //StudentCategory = 2 = Masters
+        //StudentCategory = 1 = hon's Student
+        //StudentCategory = 2 = professional Student
+        //StudentCategory = 3 = Masters
         public int? StudentCategory { get; set; }
 
         //Navigation Properties

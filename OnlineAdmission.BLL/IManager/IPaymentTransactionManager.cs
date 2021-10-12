@@ -10,7 +10,7 @@ namespace OnlineAdmission.BLL.IManager
     public interface IPaymentTransactionManager : IManager<PaymentTransaction>
     {
         Task<bool> GetTransaction(List<PaymentTransaction> paymentTransactions);
-        Task<PaymentTransaction> GetTransactionByNuRollAsync(int nuRoll);
-        Task<PaymentTransaction> GetAdmissionTrByNuRoll(int nuRoll);
+        Task<PaymentTransaction> GetApplicationTransactionByNuRollAsync(int nuRoll, int studentCategory);
+        Task<PaymentTransaction> GetAdmissionTrByNuRoll(int nuRoll, int studentCategory);
     }
 }
