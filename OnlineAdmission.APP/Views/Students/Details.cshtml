@@ -71,11 +71,11 @@
                 <label asp-for="Student.SubjectId" class="col-form-label col-md-2 text-right">Subject : </label>
                 <div class="col-md-2">
                     <input asp-for="Student.Subject.SubjectName" disabled readonly class="form-control-plaintext font-weight-bold" />
-                    @if (Model.Student.StudentType == 1)
+                    @if (Model.Student.StudentType == 2)
                     {
                         if (Model.PreviousSubject!=null)
                         {
-                                <span>(@Model.PreviousSubject.SubjectName)</span>
+                           <span>(@Model.PreviousSubject.SubjectName)</span>
                         }
                         
                     }
