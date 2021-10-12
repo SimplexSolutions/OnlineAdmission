@@ -789,7 +789,6 @@ namespace OnlineAdmission.APP.Controllers
             return View();
         }
 
-
         //[AllowAnonymous]
         //[HttpGet]
         //public async Task<ActionResult> BkashPayment(int NuRoll)
@@ -988,8 +987,6 @@ namespace OnlineAdmission.APP.Controllers
                 PaymentType = paymentType
             };
 
-
-
             var paymentFinalJSON = new
             {
                 sensitiveData = paymentSensitiveData,
@@ -1083,7 +1080,11 @@ namespace OnlineAdmission.APP.Controllers
                 _logger.LogWarning("Subject Not Found");
                 return RedirectToAction("ProfessionalSearch");
             }
-            if (studentCategory == 2)
+            if (studentCategory == 1)
+            {
+                OrderId = nuRoll.ToString() + "ProApp" + DateTime.Now.ToString("HHmmss");
+            }
+            else if (studentCategory == 2)
             {
                 //OrderId = meritStudent.NUAdmissionRoll + "" + meritStudent.SubjectCode + "" + DateTime.Now.ToString("HHmmss");
                 OrderId = nuRoll.ToString() + "ProAdm" + DateTime.Now.ToString("HHmmss");
@@ -1093,7 +1094,12 @@ namespace OnlineAdmission.APP.Controllers
                 _logger.LogError("Student Category is not matched");
                 return RedirectToAction("ProfessionalSearch");
             }
-      
+            if (paymentType==2)
+            {
+                AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+                studentName = appliedStudent.ApplicantName;
+                mobileNum = appliedStudent.MobileNo;
+            }
             #region Initialize API Data Preparation
             ///////////////////////////////////////////////////////// Create JSON Object
             var initializeJSON = new
@@ -1304,6 +1310,7 @@ namespace OnlineAdmission.APP.Controllers
             }
 
             string OrderId = "";
+
             if (studentCategory == 3)
             {
                 if (mobileNum == null || studentName == null)
@@ -1312,10 +1319,21 @@ namespace OnlineAdmission.APP.Controllers
                     return RedirectToAction("MastersSearch", "Students");
                 }
                 OrderId = nuRoll.ToString() + "" + "promba" + "" + DateTime.Now.ToString("HHmmss");
+                if (paymentType==2)
+                {
+                    OrderId = nuRoll.ToString() + "" + "MBAAdm" + "" + DateTime.Now.ToString("HHmmss");
+                }
             }
             else
             {
                 return RedirectToAction("MastersSearch", "Students");
+            }
+
+            if (paymentType == 2)
+            {
+                AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+                studentName = appliedStudent.ApplicantName;
+                mobileNum = appliedStudent.MobileNo;
             }
 
             #region Initialize API Data Preparation
