@@ -61,7 +61,7 @@
         {
           foreach (var item in Model.Students)
                 {
-                    if (item.StudentType == 1)
+                    if (item.StudentType == 2)
                     {
                         bgColor = "bg-info text-light";
                     }
@@ -82,7 +82,7 @@
 
                         <td>
                             @Html.DisplayFor(modelItem => item.CollegeRoll)
-                            @if (item.StudentType == 1)
+                            @if (item.StudentType == 2)
                             {
                                 <span>(@item.PreviousCollegeRoll)</span>
                             }
