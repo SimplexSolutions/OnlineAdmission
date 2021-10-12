@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OnlineAdmission.APP.Controllers
 {
-    [Authorize(Roles = "Admin,SuperAdmin")]
+    //[Authorize(Roles = "Admin,SuperAdmin")]
     public class AdministrationsController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
