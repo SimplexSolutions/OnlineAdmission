@@ -1086,20 +1086,17 @@ namespace OnlineAdmission.APP.Controllers
             }
             else if (paymentType == 2)
             {
-                //OrderId = meritStudent.NUAdmissionRoll + "" + meritStudent.SubjectCode + "" + DateTime.Now.ToString("HHmmss");
                 OrderId = nuRoll.ToString() + "ProAdm" + DateTime.Now.ToString("HHmmss");
+                AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+                studentName = appliedStudent.ApplicantName;
+                mobileNum = appliedStudent.MobileNo;
             }
             else
             {
                 _logger.LogError("Student Category is not matched");
                 return RedirectToAction("ProfessionalSearch");
             }
-            if (paymentType==2)
-            {
-                AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
-                studentName = appliedStudent.ApplicantName;
-                mobileNum = appliedStudent.MobileNo;
-            }
+            
             #region Initialize API Data Preparation
             ///////////////////////////////////////////////////////// Create JSON Object
             var initializeJSON = new
@@ -1322,18 +1319,14 @@ namespace OnlineAdmission.APP.Controllers
                 if (paymentType==2)
                 {
                     OrderId = nuRoll.ToString() + "" + "MBAAdm" + "" + DateTime.Now.ToString("HHmmss");
+                    AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+                    studentName = appliedStudent.ApplicantName;
+                    mobileNum = appliedStudent.MobileNo;
                 }
             }
             else
             {
                 return RedirectToAction("MastersSearch", "Students");
-            }
-
-            if (paymentType == 2)
-            {
-                AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
-                studentName = appliedStudent.ApplicantName;
-                mobileNum = appliedStudent.MobileNo;
             }
 
             #region Initialize API Data Preparation
