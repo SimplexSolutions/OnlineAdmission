@@ -39,5 +39,11 @@ namespace OnlineAdmission.DAL.Repository
         {
             return await _context.PaymentTransactions.FirstOrDefaultAsync(p => p.ReferenceNo == nuRoll && p.StudentCategory == studentCategory && p.PaymentType == 2);
         }
+
+        public async Task<PaymentTransaction> GetPaymentTransactionByTrId(string transactionId)
+        {
+            var existingTransaction = await _context.PaymentTransactions.FirstOrDefaultAsync(t => t.TransactionId.Trim().ToLower() == transactionId);
+            return existingTransaction;
+        }
     }
 }

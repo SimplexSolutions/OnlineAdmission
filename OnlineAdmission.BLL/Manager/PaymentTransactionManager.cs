@@ -28,6 +28,11 @@ namespace OnlineAdmission.BLL.Manager
             return await _paymentTransactionRepository.GetApplicationTransactionByNuRollAsync(nuRoll, studentCategory);
         }
 
+        public async Task<PaymentTransaction> GetPaymentTransactionByTrId(string transactionId)
+        {
+            return await _paymentTransactionRepository.GetPaymentTransactionByTrId(transactionId.Trim().ToLower());
+        }
+
         public async Task<bool> GetTransaction(List<PaymentTransaction> paymentTransactions)
         {
             return await _paymentTransactionRepository.GetTransaction(paymentTransactions);

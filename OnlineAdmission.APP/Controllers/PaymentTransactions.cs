@@ -83,6 +83,23 @@ namespace OnlineAdmission.APP.Controllers
                 //newPayment.MobileNo = MerchantInfo.MobileNo;
                 //newPayment.SubjectId = MerchantInfo.SubjectId;
 
+                PaymentTransaction exPT = await paymentTransactionManager.GetPaymentTransactionByTrId(newPayment.TransactionId);
+                if (exPT!=null)
+                {
+                    if (newPayment.StudentCategory==1)
+                    {
+                        return RedirectToAction("Search", "Students");
+                    }
+                    else if (newPayment.StudentCategory==2)
+                    {
+                        return RedirectToAction("ProfessionalSearch", "Students");
+                    }
+                    else if (newPayment.StudentCategory == 3)
+                    {
+                        return RedirectToAction("MastersSearch", "Students");
+                    }
+                }
+
                 await paymentTransactionManager.AddAsync(newPayment);
                 
                 //MeritStudent meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));

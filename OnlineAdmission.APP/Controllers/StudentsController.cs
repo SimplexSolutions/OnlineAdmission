@@ -1080,11 +1080,11 @@ namespace OnlineAdmission.APP.Controllers
                 _logger.LogWarning("Subject Not Found");
                 return RedirectToAction("ProfessionalSearch");
             }
-            if (studentCategory == 1)
+            if (paymentType == 1)
             {
                 OrderId = nuRoll.ToString() + "ProApp" + DateTime.Now.ToString("HHmmss");
             }
-            else if (studentCategory == 2)
+            else if (paymentType == 2)
             {
                 //OrderId = meritStudent.NUAdmissionRoll + "" + meritStudent.SubjectCode + "" + DateTime.Now.ToString("HHmmss");
                 OrderId = nuRoll.ToString() + "ProAdm" + DateTime.Now.ToString("HHmmss");
@@ -1306,7 +1306,7 @@ namespace OnlineAdmission.APP.Controllers
             if (nuRoll <= 0)
             {
                 TempData["msg"] = "Roll Number is not valid";
-                return RedirectToAction("ProfessionalSearch");
+                return RedirectToAction("MastersSearch");
             }
 
             string OrderId = "";

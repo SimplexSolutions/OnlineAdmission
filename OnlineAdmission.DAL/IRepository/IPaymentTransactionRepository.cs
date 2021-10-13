@@ -11,6 +11,7 @@ namespace OnlineAdmission.DAL.IRepository
     {
         Task<bool> GetTransaction(List<PaymentTransaction> paymentTransactions);
         Task<PaymentTransaction> GetApplicationTransactionByNuRollAsync(int nuRoll, int studentCategory);
-        Task<PaymentTransaction> GetAdmissionTrByNuRoll(int nuRoll, int studentCategory);
+        Task<PaymentTransaction> GetAdmissionTrByNuRoll(int nuRoll, int studentCategory); 
+        Task<PaymentTransaction> GetPaymentTransactionByTrId(string transactionId);
     }
 }
