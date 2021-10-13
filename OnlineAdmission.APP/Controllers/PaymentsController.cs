@@ -44,7 +44,7 @@ namespace OnlineAdmission.APP.Controllers
             }
 
 
-            IQueryable<PaymentReceiptVM> paymentReceiptVMs = from t in _paymentTransactionManager.GetIQueryableData()
+            IQueryable<PaymentReceiptVM> paymentReceiptVMs = from t in _paymentTransactionManager.GetIQueryableData().Where(a=>a.StudentCategory==1)
                                                              from m in _meritStudentManager.GetIQueryableData().Where(a => a.NUAdmissionRoll==t.ReferenceNo && a.PaymentStatus==true)
                                                              from sub in _subjectManager.GetIQueryableData().Where(a => a.Code == m.SubjectCode)
                                                              from s in _appliedStudentManager.GetIQueryableData().Where(a=>a.NUAdmissionRoll == t.ReferenceNo)

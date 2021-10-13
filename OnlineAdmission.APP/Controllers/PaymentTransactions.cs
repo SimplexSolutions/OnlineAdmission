@@ -50,8 +50,8 @@ namespace OnlineAdmission.APP.Controllers
 
             // Status Check
             //Call Status Check API with Payment Ref ID
-            //var paymentDetails = "https://api.mynagad.com/api/dfs/verify/payment/" + payment_ref_id;
-            var paymentDetails = "http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs//verify/payment/" + payment_ref_id;
+            var paymentDetails = "https://api.mynagad.com/api/dfs/verify/payment/" + payment_ref_id;
+            //var paymentDetails = "http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs//verify/payment/" + payment_ref_id;
             httpClient = new HttpClient(); 
             var responseContent =  await httpClient.GetAsync(paymentDetails);
             var  br_ResponseContent = await responseContent.Content.ReadAsStringAsync();
