@@ -217,7 +217,7 @@ namespace OnlineAdmission.APP.Controllers
                 ViewBag.msg = TempData["msg"].ToString();
             }
 
-            IQueryable<PaymentTransaction> paymentTransactions = _paymentTransactionManager.GetIQueryableData().Where(p => p.StudentCategory == 1);
+            IQueryable<PaymentTransaction> paymentTransactions = _paymentTransactionManager.GetIQueryableData().Where(p => p.StudentCategory == 2);
 
 
            
@@ -285,7 +285,7 @@ namespace OnlineAdmission.APP.Controllers
                 ViewBag.msg = TempData["msg"].ToString();
             }
 
-            IQueryable<PaymentTransaction> paymentTransactions = _paymentTransactionManager.GetIQueryableData().Where(p => p.StudentCategory == 2);
+            IQueryable<PaymentTransaction> paymentTransactions = _paymentTransactionManager.GetIQueryableData().Where(p => p.StudentCategory == 3);
 
 
             ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
