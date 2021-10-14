@@ -354,7 +354,9 @@ namespace OnlineAdmission.APP.Controllers
             {
                 usrtext = usrtext.Trim().ToLower();
 
-                paymentTransactions = paymentTransactions.Where(m => m.StudentName.ToLower().Contains(usrtext) || m.AccountNo.ToLower() == usrtext || m.TransactionId.ToLower() == usrtext || m.ReferenceNo.ToString().ToLower() == usrtext || m.Amount.ToString().ToLower() == usrtext || m.TransactionDate.ToString().Contains(usrtext));
+                paymentTransactions = paymentTransactions.Where(m => m.StudentName.ToLower().Contains(usrtext) || m.AccountNo.ToLower() == usrtext 
+                || m.TransactionId.ToLower() == usrtext || m.ReferenceNo.ToString().ToLower() == usrtext 
+                || m.Amount.ToString().ToLower() == usrtext || m.TransactionDate.ToString().Contains(usrtext));
                 ViewBag.count = paymentTransactions.Count();
 
                 return View(await PaginatedList<PaymentTransaction>.CreateAsync(paymentTransactions, page, pageSize));
