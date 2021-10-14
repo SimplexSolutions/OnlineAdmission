@@ -33,30 +33,39 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         // GET: Payments
-        public async Task<IActionResult> Index(string usrtext, string sortRoll, string sortNURoll, int page, int pagesize, DateTime? fromdate, DateTime? todate)
+        public async Task<IActionResult> Index(string usrtext, string sortRoll, string sortNURoll, int page, int pagesize, DateTime? fromdate, DateTime? todate,int paymentType)
         {
             ViewBag.action = "Index";
             ViewBag.controller = "Payments";
+            if (paymentType == 1)
+            {
+                ViewBag.pageTitle = "Hons General Application Payment";
+            }
+            else {
+                ViewBag.pageTitle = "Hons General Admission Payment";
+            }           
+            
 
             if (TempData["msg"]!=null)
             {
                 ViewBag.msg = TempData["msg"].ToString();
             }
-
-
-            IQueryable<PaymentReceiptVM> paymentReceiptVMs = from t in _paymentTransactionManager.GetIQueryableData().Where(a=>a.StudentCategory==1)
-                                                             from m in _meritStudentManager.GetIQueryableData().Where(a => a.NUAdmissionRoll==t.ReferenceNo && a.PaymentStatus==true)
-                                                             from sub in _subjectManager.GetIQueryableData().Where(a => a.Code == m.SubjectCode)
-                                                             from s in _appliedStudentManager.GetIQueryableData().Where(a=>a.NUAdmissionRoll == t.ReferenceNo)
-                                                             join stu in _studentManager.GetIQueryableData().Where(a=>a.Status==true) on m.NUAdmissionRoll equals stu.NUAdmissionRoll  into myList
-                                                             from subList in myList.DefaultIfEmpty()
-                                                             select new PaymentReceiptVM{
-                                                                 PaymentTransaction = t,
-                                                                 MeritStudent = m,
-                                                                 Subject = sub,
-                                                                 AppliedStudent = s,
-                                                                 Student = subList
-                                                             };
+           
+                IQueryable<PaymentReceiptVM> paymentReceiptVMs = from t in _paymentTransactionManager.GetIQueryableData().Where(a => a.StudentCategory == 1 && a.PaymentType == paymentType)
+                                                                 from m in _meritStudentManager.GetIQueryableData().Where(a => a.NUAdmissionRoll == t.ReferenceNo && a.PaymentStatus == true)
+                                                                 from sub in _subjectManager.GetIQueryableData().Where(a => a.Code == m.SubjectCode)
+                                                                 from s in _appliedStudentManager.GetIQueryableData().Where(a => a.NUAdmissionRoll == t.ReferenceNo)
+                                                                 join stu in _studentManager.GetIQueryableData().Where(a => a.Status == true) on m.NUAdmissionRoll equals stu.NUAdmissionRoll into myList
+                                                                 from subList in myList.DefaultIfEmpty()
+                                                                 select new PaymentReceiptVM
+                                                                 {
+                                                                     PaymentTransaction = t,
+                                                                     MeritStudent = m,
+                                                                     Subject = sub,
+                                                                     AppliedStudent = s,
+                                                                     Student = subList
+                                                                 };
+            
             //paymentReceiptVMs = paymentReceiptVMs.OrderBy(m=>m.PaymentTransaction.ReferenceNo);
             if (sortRoll == null && sortNURoll == null)
             {
@@ -207,20 +216,26 @@ namespace OnlineAdmission.APP.Controllers
         }
 
 
-        public async Task<IActionResult> ProfessionalIndex(string usrtext, string sortRoll, int page, int pagesize, DateTime? fromdate, DateTime? todate)
+        public async Task<IActionResult> ProfessionalIndex(string usrtext, string sortRoll, int page, int pagesize, DateTime? fromdate, DateTime? todate, int paymentType)
         {
             ViewBag.action = "ProfessionalIndex";
             ViewBag.controller = "Payments";
+            if (paymentType == 1)
+            {
+                ViewBag.pageTitle = "Hons Professional Application Payment";
+            }
+            else
+            {
+                ViewBag.pageTitle = "Hons Professional Admission Payment";
+            }
 
             if (TempData["msg"] != null)
             {
                 ViewBag.msg = TempData["msg"].ToString();
             }
 
-            IQueryable<PaymentTransaction> paymentTransactions = _paymentTransactionManager.GetIQueryableData().Where(p => p.StudentCategory == 2);
+            IQueryable<PaymentTransaction> paymentTransactions = _paymentTransactionManager.GetIQueryableData().Where(p => p.StudentCategory == 2 && p.PaymentType==paymentType);
 
-
-           
 
             ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
 
@@ -275,17 +290,25 @@ namespace OnlineAdmission.APP.Controllers
 
         }
         
-        public async Task<IActionResult> mastersIndex(string usrtext, string sortRoll, int page, int pagesize, DateTime? fromdate, DateTime? todate)
+        public async Task<IActionResult> mastersIndex(string usrtext, string sortRoll, int page, int pagesize, DateTime? fromdate, DateTime? todate, int paymentType)
         {
-            ViewBag.action = "ProfessionalIndex";
+            ViewBag.action = "mastersIndex";
             ViewBag.controller = "Payments";
+            if (paymentType == 1)
+            {
+                ViewBag.pageTitle = "Masters Professional(MBA) Application Payment";
+            }
+            else
+            {
+                ViewBag.pageTitle = "Masters Professional(MBA) Admission Payment";
+            }
 
             if (TempData["msg"] != null)
             {
                 ViewBag.msg = TempData["msg"].ToString();
             }
 
-            IQueryable<PaymentTransaction> paymentTransactions = _paymentTransactionManager.GetIQueryableData().Where(p => p.StudentCategory == 3);
+            IQueryable<PaymentTransaction> paymentTransactions = _paymentTransactionManager.GetIQueryableData().Where(p => p.StudentCategory == 3 && p.PaymentType==paymentType);
 
 
             ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";

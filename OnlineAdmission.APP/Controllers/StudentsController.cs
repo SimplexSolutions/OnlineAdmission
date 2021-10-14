@@ -584,7 +584,7 @@ namespace OnlineAdmission.APP.Controllers
                         ViewBag.msg = "You are not selected";
                         return View();
                     }
-                    ViewBag.msg = "You are not applied";
+                    ViewBag.msg = "You didn't apply";
                     return View();
                 }
                 else 

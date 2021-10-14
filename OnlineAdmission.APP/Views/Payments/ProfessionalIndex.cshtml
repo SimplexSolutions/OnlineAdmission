@@ -8,6 +8,7 @@
     ViewBag.controller = "Payments";
     ViewBag.action = "ProfessionalIndex";
     ViewBag.search = ViewBag.data;
+    string pageTitle = ViewBag.pageTitle;
     double total = 0;
 }
 
@@ -47,7 +48,7 @@
     </style>
 }
 
-<h4>Student's Payment</h4>
+<h4>@pageTitle</h4>
 
 <partial name="~/Views/PartialViews/_Search_Date_Range.cshtml">
 

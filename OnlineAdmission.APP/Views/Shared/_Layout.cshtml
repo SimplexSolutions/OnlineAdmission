@@ -70,13 +70,22 @@
                                 @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("Accounts"))
                                 {
                                     <li>
-                                        <a asp-action="Index" asp-controller="Payments">Hon's Payments</a>
+                                        <a asp-action="Index" asp-controller="Payments" asp-route-paymentType=1>Hons General (Application)</a>
                                     </li>
                                     <li>
-                                        <a asp-action="ProfessionalIndex" asp-controller="Payments">Professional Payments</a>
+                                        <a asp-action="Index" asp-controller="Payments" asp-route-paymentType=2>Hons General (Admission)</a>
                                     </li>
                                     <li>
-                                        <a asp-action="mastersIndex" asp-controller="Payments">Master's Payments</a>
+                                        <a asp-action="ProfessionalIndex" asp-controller="Payments" asp-route-paymentType=1>Hons Professional (Application)</a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="ProfessionalIndex" asp-controller="Payments" asp-route-paymentType=2>Hons Professional (Admission)</a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="mastersIndex" asp-controller="Payments" asp-route-paymentType=1>Masters Professional(MBA) Application</a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="mastersIndex" asp-controller="Payments" asp-route-paymentType=2>Masters Professional(MBA) Admission</a>
                                     </li>
                                 }
                                 @if (User.IsInRole("SuperAdmin"))
