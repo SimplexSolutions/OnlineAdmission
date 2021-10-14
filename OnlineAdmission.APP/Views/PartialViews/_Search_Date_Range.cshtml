@@ -10,6 +10,7 @@
     {
         todate = ViewBag.todate;
     }
+    int paymentType = ViewBag.paymentType;
 }
 @if (ViewBag.action != null)
 {
@@ -38,7 +39,7 @@
                 {
                     <span>Total found @ViewBag.count</span>
                 }
-
+            <input type="hidden" name="paymentType" value="@paymentType" />
                 <input type="text" name="usrtext" value="@ViewBag.data" class="form-control" placeholder="Search...." />
 
                 <button class="btn-info form-control" type="submit">Search</button>

@@ -37,6 +37,7 @@ namespace OnlineAdmission.APP.Controllers
         {
             ViewBag.action = "Index";
             ViewBag.controller = "Payments";
+            ViewBag.paymentType = paymentType;
             if (paymentType == 1)
             {
                 ViewBag.pageTitle = "Hons General Application Payment";
@@ -148,11 +149,6 @@ namespace OnlineAdmission.APP.Controllers
                 }
 
             }
-                         
-            
- 
-           
-
             
 
             ViewBag.data = usrtext;
@@ -220,6 +216,7 @@ namespace OnlineAdmission.APP.Controllers
         {
             ViewBag.action = "ProfessionalIndex";
             ViewBag.controller = "Payments";
+            ViewBag.paymentType = paymentType;
             if (paymentType == 1)
             {
                 ViewBag.pageTitle = "Hons Professional Application Payment";
@@ -294,6 +291,7 @@ namespace OnlineAdmission.APP.Controllers
         {
             ViewBag.action = "mastersIndex";
             ViewBag.controller = "Payments";
+            ViewBag.paymentType = paymentType;
             if (paymentType == 1)
             {
                 ViewBag.pageTitle = "Masters Professional(MBA) Application Payment";
