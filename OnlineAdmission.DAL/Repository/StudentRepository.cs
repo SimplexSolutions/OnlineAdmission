@@ -30,7 +30,7 @@ namespace OnlineAdmission.DAL.Repository
 
         public async Task<Student> GetStudentByHSCRollAsync(int hscRoll)
         {
-            var student = await _context.Students.Include(s => s.Subject).FirstOrDefaultAsync(s => s.HSCRoll == hscRoll);
+            var student = await _context.Students.Include(s => s.Subject).FirstOrDefaultAsync(s => s.HSCRoll == hscRoll && s.Status==true);
             return student;
         }
 
