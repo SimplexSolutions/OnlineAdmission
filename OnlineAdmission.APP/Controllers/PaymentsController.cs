@@ -366,7 +366,7 @@ namespace OnlineAdmission.APP.Controllers
 
 
         // GET: Payments/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int studentCategory)
         {
             if (id == null)
             {
@@ -375,18 +375,47 @@ namespace OnlineAdmission.APP.Controllers
             var allMeritStudents = await _meritStudentManager.GetAllAsync();
 
             var paymentTransaction = await _paymentTransactionManager.GetByIdAsync((int)id);
-            var existMeritStudent = await _meritStudentManager.GetByAdmissionRollAsync(paymentTransaction.ReferenceNo);
+            ViewBag.paymentType = paymentTransaction.PaymentType;
+            MeritStudent existMeritStudent = new MeritStudent();
+            if (studentCategory==1)
+            {
+                existMeritStudent = await _meritStudentManager.GetByAdmissionRollAsync(paymentTransaction.ReferenceNo);
+                ViewBag.action = "Index";
+            }
+            if (studentCategory==2)
+            {
+                existMeritStudent = await _meritStudentManager.GetProByAdmissionRollAsync(paymentTransaction.ReferenceNo);
+                ViewBag.action = "professionalIndex";
+            }
+            if (studentCategory==3)
+            {
+                existMeritStudent = await _meritStudentManager.GetProMBAByAdmissionRollAsync(paymentTransaction.ReferenceNo);
+                ViewBag.action = "mastersIndex";
+            }
+            
+
             var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(paymentTransaction.ReferenceNo);
-            var existSubject = await _subjectManager.GetByCodeAsync(existMeritStudent.SubjectCode);
-            var student = await _studentManager.GetByAdmissionRollAsync(existMeritStudent.NUAdmissionRoll);
+            Subject existSubject = new Subject();
+            Student student = new Student();
+            if (existMeritStudent!=null)
+            {
+                existSubject = await _subjectManager.GetByCodeAsync(existMeritStudent.SubjectCode);
+                student = await _studentManager.GetByAdmissionRollAsync(existMeritStudent.NUAdmissionRoll);
+            }
 
             PaymentReceiptVM paymentReceiptVM = new PaymentReceiptVM();
             paymentReceiptVM.PaymentTransaction = paymentTransaction;
             paymentReceiptVM.MeritStudent = existMeritStudent;
-            paymentReceiptVM.AppliedStudent = appliedStudent;
+            if (appliedStudent!=null)
+            {
+                paymentReceiptVM.AppliedStudent = appliedStudent;
+            }
             paymentReceiptVM.Subject = existSubject;
-            paymentReceiptVM.Student = student;
-
+            if (student!=null)
+            {
+                paymentReceiptVM.Student = student;
+                
+            }
             TempData["msg"] = "Student Not Found";
 
             return View(paymentReceiptVM);

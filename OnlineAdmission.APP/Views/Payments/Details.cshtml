@@ -150,7 +150,7 @@
     <div class="col-md-12 text-md-right">
         @*<button class="btn btn-success" onclick="printContent('PrintArea')"><i class="fa fa-print"></i> Print</button>*@
         <button onclick="window.print()" class="btn btn-success"><i class="fa fa-print"></i> Print</button>
-        <a asp-controller="Payments" asp-action="Index" class="btn btn-info">Back To List</a>
+        <a asp-controller="Payments" asp-action="@ViewBag.action" asp-route-paymentType="@ViewBag.paymentType" class="btn btn-info">Back To List</a>
     </div>
 </div>
 
