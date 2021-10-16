@@ -416,7 +416,7 @@ namespace OnlineAdmission.APP.Controllers
                 paymentReceiptVM.Student = student;
                 
             }
-            TempData["msg"] = "Student Not Found";
+            
 
             return View(paymentReceiptVM);
         }
