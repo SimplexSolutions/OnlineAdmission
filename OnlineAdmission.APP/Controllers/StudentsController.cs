@@ -1653,6 +1653,7 @@ namespace OnlineAdmission.APP.Controllers
                                                           Name = stu.CollegeRoll +" - "+ stu.Name +" [" + stu.Subject.SubjectName + "] "+ " ( " + stu.NUAdmissionRoll + " ) "
                                                       }), "Id", "Name").ToList();
             var subList = await _subjectManager.GetAllAsync();
+
             subjectChangedVM.SubjectList = new SelectList((from sub in subList.OrderBy(s => s.Code)
                                                       select new
                                                       {
@@ -1667,6 +1668,29 @@ namespace OnlineAdmission.APP.Controllers
         [HttpPost]
         public async Task<IActionResult> SubjectChange(SubjectChangedVM model)
         {
+            if (model.SubjectId<=0 || model.StudentId<=0)
+            {
+                SubjectChangedVM sChangedVM = new SubjectChangedVM();
+
+                sChangedVM.StudentList = new SelectList((from stu in await _studentManager.GetAllAsync()
+                                                               where stu.Status == true && (stu.PreviousCollegeRoll == null || stu.PreviousCollegeRoll == 0)
+                                                               select new
+                                                               {
+                                                                   Id = stu.Id,
+                                                                   Name = stu.CollegeRoll + " - " + stu.Name + " [" + stu.Subject.SubjectName + "] " + " ( " + stu.NUAdmissionRoll + " ) "
+                                                               }), "Id", "Name").ToList();
+                var subList = await _subjectManager.GetAllAsync();
+
+                sChangedVM.SubjectList = new SelectList((from sub in subList.OrderBy(s => s.Code)
+                                                               select new
+                                                               {
+                                                                   Id = sub.Id,
+                                                                   Name = sub.Code + " - " + sub.SubjectName
+                                                               }), "Id", "Name").ToList();
+
+                return View(sChangedVM);
+            }
+            
             Student previousStudent = await _studentManager.GetByIdAsync(model.StudentId);
             Subject newSubject = await _subjectManager.GetByIdAsync(model.SubjectId);
 
@@ -1677,7 +1701,7 @@ namespace OnlineAdmission.APP.Controllers
                 previousStudent.UpdatedBy = HttpContext.Session.GetString("UserId");
 
                 previousStudent.Status = false;
-                previousStudent.StudentType = 0;
+                previousStudent.StudentType = 1;
                 await _studentManager.UpdateAsync(previousStudent);
 
 
@@ -1710,7 +1734,7 @@ namespace OnlineAdmission.APP.Controllers
                 string year = DateTime.Today.ToString("yyyy");
                 student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + newSubject.Code + "" + sl);
                 student.Status = true;
-                student.StudentType = 1;
+                student.StudentType = 2; //For Subject Change
                 student.SubjectId = model.SubjectId;
                 student.CreatedAt = DateTime.Now;
                 student.CreatedBy = HttpContext.Session.GetString("UserId");

@@ -97,7 +97,7 @@
                 <label asp-for="Student.CollegeRoll" class="col-form-label col-md-2 text-right">College Roll : </label>
                 <div class="col-md-2">
                     <input asp-for="Student.CollegeRoll" disabled readonly class="form-control-plaintext font-weight-bold" />
-                    @if (Model.Student.StudentType==1)
+                    @if (Model.Student.StudentType==2)
                     {
                         <span>(@Model.Student.PreviousCollegeRoll)</span>
                     }
