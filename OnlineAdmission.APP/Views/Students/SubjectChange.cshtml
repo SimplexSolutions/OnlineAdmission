@@ -25,6 +25,13 @@
                         </div>
                     </div>
                 </form>
+                @if (ViewBag.msg!=null)
+                {
+                <div class="row text-center" id="msgId">
+                    <br />
+                    <h4 class="alert text-danger">@ViewBag.msg</h4>
+                </div>
+                }
             </div>
             
         </div>
@@ -35,6 +42,9 @@
 @section Scripts{ 
 <script>
     $(document).ready(function () {
+        $('#msgId').fadeOut(8000);
+
+
         $('#StudentId').change(function () {
             let id = $('#StudentId option:selected').val();
 

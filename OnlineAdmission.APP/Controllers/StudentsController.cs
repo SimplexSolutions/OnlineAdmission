@@ -1668,26 +1668,28 @@ namespace OnlineAdmission.APP.Controllers
         [HttpPost]
         public async Task<IActionResult> SubjectChange(SubjectChangedVM model)
         {
+
+            SubjectChangedVM sChangedVM = new SubjectChangedVM();
+
+            sChangedVM.StudentList = new SelectList((from stu in await _studentManager.GetAllAsync()
+                                                     where stu.Status == true && (stu.PreviousCollegeRoll == null || stu.PreviousCollegeRoll == 0)
+                                                     select new
+                                                     {
+                                                         Id = stu.Id,
+                                                         Name = stu.CollegeRoll + " - " + stu.Name + " [" + stu.Subject.SubjectName + "] " + " ( " + stu.NUAdmissionRoll + " ) "
+                                                     }), "Id", "Name").ToList();
+            var subList = await _subjectManager.GetAllAsync();
+
+            sChangedVM.SubjectList = new SelectList((from sub in subList.OrderBy(s => s.Code)
+                                                     select new
+                                                     {
+                                                         Id = sub.Id,
+                                                         Name = sub.Code + " - " + sub.SubjectName
+                                                     }), "Id", "Name").ToList();
+
             if (model.SubjectId<=0 || model.StudentId<=0)
             {
-                SubjectChangedVM sChangedVM = new SubjectChangedVM();
-
-                sChangedVM.StudentList = new SelectList((from stu in await _studentManager.GetAllAsync()
-                                                               where stu.Status == true && (stu.PreviousCollegeRoll == null || stu.PreviousCollegeRoll == 0)
-                                                               select new
-                                                               {
-                                                                   Id = stu.Id,
-                                                                   Name = stu.CollegeRoll + " - " + stu.Name + " [" + stu.Subject.SubjectName + "] " + " ( " + stu.NUAdmissionRoll + " ) "
-                                                               }), "Id", "Name").ToList();
-                var subList = await _subjectManager.GetAllAsync();
-
-                sChangedVM.SubjectList = new SelectList((from sub in subList.OrderBy(s => s.Code)
-                                                               select new
-                                                               {
-                                                                   Id = sub.Id,
-                                                                   Name = sub.Code + " - " + sub.SubjectName
-                                                               }), "Id", "Name").ToList();
-
+                
                 return View(sChangedVM);
             }
             
@@ -1702,12 +1704,13 @@ namespace OnlineAdmission.APP.Controllers
 
                 previousStudent.Status = false;
                 previousStudent.StudentType = 1;
-                await _studentManager.UpdateAsync(previousStudent);
+
+                
 
 
                 Student student = new Student();
                 student = previousStudent;
-                student.Id = 0;
+                
                 int count = await _studentManager.GetCountAsync(model.SubjectId) + 1;
                 string sl = "";
                 if (count < 100)
@@ -1732,7 +1735,16 @@ namespace OnlineAdmission.APP.Controllers
                 
                 student.PreviousCollegeRoll = previousStudent.CollegeRoll;
                 string year = DateTime.Today.ToString("yyyy");
-                student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + newSubject.Code + "" + sl);
+                int colRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + newSubject.Code + "" + sl);
+                student.CollegeRoll = colRoll;
+                var isCollegeRollAssign = await _studentManager.GetByCollegeRollAsync(colRoll);
+                if (isCollegeRollAssign!=null)
+                {
+                    ViewBag.msg = "Subject Change cann't be possible due to duplicate roll, Please Contact your technical support";
+                    return View(sChangedVM);
+                }
+                await _studentManager.UpdateAsync(previousStudent);
+                student.Id = 0;
                 student.Status = true;
                 student.StudentType = 2; //For Subject Change
                 student.SubjectId = model.SubjectId;
