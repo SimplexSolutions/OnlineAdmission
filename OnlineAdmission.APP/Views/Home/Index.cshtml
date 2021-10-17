@@ -5,7 +5,7 @@
     var paymentCompletedStudent = Model.MeritStudents.Where(m => m.PaymentStatus == true).ToList();
 
 }
-@{ 
+@{
 
     List<string> paidSubList = new List<string>();
     if (Model.Students != null)
@@ -42,7 +42,7 @@
 
 
     List<string> admitttedSubList = new List<string>();
-    if (Model.Students!=null)
+    if (Model.Students != null)
     {
         foreach (var student in Model.Students.Where(s => s.Status == true))
         {
@@ -59,9 +59,67 @@
 }
 
 <div class="text-center">
-    
+
 </div>
 
+<div class="row">
+    <div class="col-md-6">
+        <div class="m-1 bg-success p-2">
+            <div class="text-center">
+                <h3 class="text-light">Addmitted Student Count</h3><hr />
+            </div>
+            <div class="card-deck">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Hon's General Student</h5><hr />
+                        <h4>Total: @Model.Students.Where(s => s.StudentCategory == 1 && s.Status == true).Count()</h4>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Hon's Professional Student</h5><hr />
+                        <h4>Total: @Model.Students.Where(s => s.StudentCategory == 2 && s.Status == true).Count()</h4>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Master's(MBA) Student</h5><hr />
+                        <h4>Total: @Model.Students.Where(s => s.StudentCategory == 3 && s.Status == true).Count()</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="m-1 bg-info p-2">
+            <div class="text-center">
+                <h3 class="text-light">Subject Changed Student Count</h3><hr />
+            </div>
+            <div class="card-deck">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Hon's General Subject Changed</h5><hr />
+                        <h4>Total: @Model.Students.Where(s => s.StudentCategory == 1 && s.Status == true && s.StudentType == 2).Count()</h4>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Hon's Professional Subject Changed</h5><hr />
+                        <h4>Total: @Model.Students.Where(s => s.StudentCategory == 2 && s.Status == true && s.StudentType == 2).Count()</h4>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Master's(MBA) Subject Changed</h5><hr />
+                        <h4>Total: @Model.Students.Where(s => s.StudentCategory == 3 && s.Status == true && s.StudentType == 2).Count()</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
 
 <div class="card-deck">
     <div class="card">
@@ -69,18 +127,18 @@
             <h4>Applied</h4>
         </div>
         <div class="">
-            
+
             <a asp-controller="AppliedStudents" asp-action="index">
                 <h5 class="card-title">Total <span class="text-info font-weight-bold">@Model.AppliedStudents.Count</span>  Students</h5>
             </a>
-            
+
             <p class="card-text">
-                
+
             </p>
         </div>
         @*<div class="card-footer">
-            <small class="text-muted"></small>
-        </div>*@
+                <small class="text-muted"></small>
+            </div>*@
     </div>
 
     <div class="card">
@@ -110,8 +168,8 @@
 
         </div>
         @*<div class="card-footer">
-            <small class="text-muted"></small>
-        </div>*@
+                <small class="text-muted"></small>
+            </div>*@
     </div>
 
     <div class="card">
@@ -119,8 +177,8 @@
             <h4>Paid</h4>
         </div>
         <div class="">
-            
-            @if (Model.MeritStudents!=null)
+
+            @if (Model.MeritStudents != null)
             {
                 <h5 class="card-title">Total <span class="text-info font-weight-bold">@paymentCompletedStudent.Count</span>  Students </h5>
                 <h4></h4>
@@ -150,8 +208,8 @@
             }
         </div>
         @*<div class="card-footer">
-            
-        </div>*@
+
+            </div>*@
     </div>
 
     <div class="card">
@@ -160,33 +218,34 @@
         </div>
         <div class="">
             <a asp-controller="Students" asp-action="index">
-                <h5 class="card-title">Total <span class="text-info font-weight-bold">@Model.Students.Where(s => s.Status ==true).ToList().Count</span>  Students</h5>
+                <h5 class="card-title">Total <span class="text-info font-weight-bold">@Model.Students.Where(s => s.Status == true).ToList().Count</span>  Students</h5>
             </a>
-            
-                <table class="table table-bordered table-striped">
-                    <thead class="bg-warning">
+
+            <table class="table table-bordered table-striped">
+                <thead class="bg-warning">
+                    <tr>
+                        <td>Subjects</td>
+                        <td>Students</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sub in AdmittedSubGroup.OrderBy(m => m.Key))
+                    {
                         <tr>
-                            <td>Subjects</td>
-                            <td>Students</td>
+                            <td>@sub.Key</td>
+                            <td>@sub.Count()</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var sub in AdmittedSubGroup.OrderBy(m => m.Key))
-                        {
-                            <tr>
-                                <td>@sub.Key</td>
-                                <td>@sub.Count()</td>
-                            </tr>
-                         }
-                        </tbody>
-                </table>
-           
+                    }
+                </tbody>
+            </table>
+
             <p class="card-text">
 
             </p>
         </div>
         @*<div class="card-footer">
-            <small class="text-muted">Last updated 3 mins ago</small>
-        </div>*@
+                <small class="text-muted">Last updated 3 mins ago</small>
+            </div>*@
     </div>
 </div>
+<br />
