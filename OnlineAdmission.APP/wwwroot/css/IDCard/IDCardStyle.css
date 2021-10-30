@@ -5,29 +5,35 @@
 }
 
 .fullCard {
-    font-size: 12px;
-    width: 202px;
-    height: 326px;
+    font-size: 11px;
+    /* width: 260px;
+    height: 400px;*/
+    /*width: 202px;
+    height: 326px;*/
+    /*height: 400px;*/
+    width: 234px;
+    height: 360px;
     border-radius: 5px;
     border: 1px solid #ddd;
     color: #000000;
     background-image: linear-gradient(to right, #3A6C91,#ffffff,#C1655E);
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
 }
 .part1 {
-    margin-top: 2px;
-    padding: 2px;
+    margin-top: 3px;
+    padding: 1px;
     background-image: linear-gradient(to right, #3A6C91,#ffffff ,#C1655E);
     color:#000000;
     font-weight:bold;
 }
 .part1 img {
+    /*width: 50px;*/
     width: 50px;
 }
 .part2{
     background-color:white;
-    margin-top:1px;
+    margin-top:2px;
 }
 .part2 img {
     height: 85.6px;
@@ -35,7 +41,7 @@
 }
 
 .studentPhoto {
-    border: 3px solid #ede1e1;
+    border: 1px solid #ede1e1;
 }
 .honsText{
     writing-mode:vertical-rl;
@@ -49,7 +55,7 @@
 
 .part3 {
     background-color: white;
-    padding-bottom:10px;
+    padding-bottom:1px;
 }
 
 
@@ -63,16 +69,19 @@
 .myTable tr:last-child{
     border-bottom:none;
 }
+.collegeName {
+    font-weight: bold;
+}
 .studentName{
     font-weight:bold;
 }
 
 .principalArea{
     margin-top:auto;
-    padding-top:10px;
+    padding-top:1px;
     background-color: #3A6C91;
     color:#ffffff;
-    border-radius:0px 0px 5px 5px;
+    border-radius:0px 0px 3px 3px;
 }
 .principalArea img {
     width: 20%;
@@ -80,17 +89,17 @@
 }
 .principal {
     border-top: 1px solid #ffffff;
-    margin-right:10px;
+    margin-right:5px;
 }
 .sign {
     -webkit-filter: brightness(0) invert(1);
     filter: brightness(0) invert(1);
-    margin-right:10px;
+    margin-right:5px;
 }
 
 .backpart {
-    width: 260px;
-    height: 400px;
+    width: 202px;
+    height: 326px;
     border-radius: 5px;
     border: 1px solid #ddd;
     color: #000000;

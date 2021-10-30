@@ -107,6 +107,46 @@ namespace OnlineAdmission.APP.Controllers
             //return View(AdmittedStudents.Where(s => s.Status==true));
             return View(studentIndexVM);
         }
+        //[HttpGet]
+        //[Authorize(Roles = "SuperAdmin")]
+        //public async Task<IActionResult> SendSMS(int studentCategory)
+        //{
+        //    var user = await _userManager.GetUserAsync(HttpContext.User);
+        //    HttpContext.Session.SetString("UserId", user.Id);
+
+        //    //var AdmittedStudents = await _studentManager.GetAllAsync();
+        //    //var studentCategoryFromSession = HttpContext.Session.GetString("studentCategory");
+
+        //   // var AdmittedStudents= new 
+        //    //if (studentCategory > 0)
+        //    //{
+        //    //    ViewBag.category = studentCategory;
+        //    //    HttpContext.Session.SetString("studentCategory", studentCategory.ToString());
+        //      var  AdmittedStudents = await _studentManager.GetStudentsByCategoryAsync(studentCategory);
+        //    //}
+        //    //else if (studentCategory == 0)
+        //    //{
+        //    //    HttpContext.Session.SetString("studentCategory", studentCategory.ToString());
+        //    //}
+        //    //else if (!string.IsNullOrEmpty(studentCategoryFromSession))
+        //    //{
+        //    //    ViewBag.category = Convert.ToInt32(studentCategoryFromSession);
+        //    //    AdmittedStudents = await _studentManager.GetStudentsByCategoryAsync(Convert.ToInt32(studentCategoryFromSession));
+        //    //}
+        //    //else
+        //    //{
+        //    //    HttpContext.Session.SetString("studentCategory", "");
+        //    //}
+        //    //int count = await _studentManager.GetCountAsync(AdmittedStudents..Id);
+
+        //    StudentIndexVM studentIndexVM = new StudentIndexVM();
+        //    studentIndexVM.Students = AdmittedStudents.Where(s => s.Status == true).ToList();
+
+
+        //    //ViewBag.StudentCategoryList = new SelectList(await _studentCategoryManager.GetAllAsync(), "Id", "CategoryName", studentIndexVM.StudentCategory);
+        //    //return View(AdmittedStudents.Where(s => s.Status==true));
+        //    return View(studentIndexVM);
+        //}
 
         // GET: StudentsController/Create
         [AllowAnonymous]
@@ -439,6 +479,57 @@ namespace OnlineAdmission.APP.Controllers
             }
             ViewBag.count = student.Count;
             return View(student);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,SuperAdmin")]
+        public async Task<IActionResult> Sendsms()
+        {
+            int category = 1;
+            var AdmittedStudents = await _studentManager.GetStudentsByCategoryAsync(category);
+            
+            StudentIndexVM studentIndexVM = new StudentIndexVM();
+             studentIndexVM.Students = AdmittedStudents.Where(s => s.Status == true && s.CollegeRoll== 2130001).ToList();
+            
+
+            var StudentCategoryList = new SelectList(studentIndexVM.Students);
+
+           // int count = await _studentManager.GetCountAsync(StudentCategoryList.Items);
+
+            //////////////////Code for SMS Sending and Saving
+            bool SentSMS = false;
+            //studentIndexVM.ToString(). .Students.GetType().GetProperty().
+            // studentIndexVM.Students.ToArray().
+           
+            foreach (var stu in StudentCategoryList.Items)
+            {
+                Student newStudent = _mapper.Map<Student>(stu);
+                 
+                string phoneNum = newStudent.StudentMobile.ToString();
+                string msgText = "Thanks for taking admission in Hon’s 1st year at Tejgaon College  session (2020-21)." +
+                    "Orientation program will be held on 21st October  2021 at 3.00 pm." +
+                    "You are asked to attend the Orientation Program." + Environment.NewLine+
+                    "Principal, Tejgaon College Dhaka.";
+                SentSMS = await ESMS.SendSMS("0" + phoneNum, msgText);
+                SMSModel newSMS = new SMSModel()
+                {
+                    MobileList = phoneNum,
+                    Text = msgText,
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = "College",
+                    Description = "Orientation"
+                };
+
+                if (SentSMS == true)
+                {
+                    await _smsManager.AddAsync(newSMS);
+                }
+            }
+            
+
+            //return View(studentIndexVM);
+            //return RedirectToAction("SMS/Index");
+            return RedirectToAction("Index","SMS");
         }
 
 
