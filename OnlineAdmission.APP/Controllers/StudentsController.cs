@@ -655,6 +655,7 @@ namespace OnlineAdmission.APP.Controllers
                     ViewBag.student = student;
                     return View();
                 }
+                
                 var AdmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(professionalRoll, studentCategory);
 
                 if (AdmissionPayment == null)
@@ -665,7 +666,17 @@ namespace OnlineAdmission.APP.Controllers
                         applicationIsPaid = true;
                         ViewBag.applicationIsPaid = applicationIsPaid;
 
-                        var selectedStudent = await _meritStudentManager.GetProByAdmissionRollAsync(professionalRoll);                        
+                        var selectedStudent = await _meritStudentManager.GetProByAdmissionRollAsync(professionalRoll);
+                        var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(professionalRoll);
+                        var subject = await _subjectManager.GetByCodeAsync(selectedStudent.SubjectCode);
+                        SelectedStudentVM selectedStudentVM = new SelectedStudentVM();
+                        selectedStudentVM.AppliedStudent = appliedStudent;
+                        selectedStudentVM.MeritStudent = selectedStudent;
+                        selectedStudentVM.Subject = subject;
+
+                        ViewBag.allStudentVM = selectedStudentVM;
+
+
                         if (selectedStudent!=null)
                         {
                             selected = true;

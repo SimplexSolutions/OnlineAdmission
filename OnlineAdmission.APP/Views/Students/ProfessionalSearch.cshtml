@@ -14,7 +14,8 @@
         <div>
             <div class="card-body">
                 <form asp-action="ProfessionalSearch" asp-controller="Students" method="post">
-                    <label class="col-md-8 text-success font-weight-bolder text-center col-form-label" style="font-size:x-large">Professional Admission (Under Graduate)</label><br /><br />
+                    <label class="col-md-8 text-success font-weight-bolder text-center col-form-label" style="font-size:x-large">Professional Admission (Under Graduate)</label>
+                    <label class="col-md-8 text-success text-center col-form-label" style="font-size:large">[2nd Merit List]</label>
                     <div class="form-group row">
                         <label class="col-md-2 text-md-right text-left col-form-label">NU Roll</label>
                         <div class="col-md-6">
@@ -60,24 +61,56 @@
                     }
                     else if ((ViewBag.addmissionIsPaid == false || ViewBag.addmissionIsPaid == null) && ViewBag.applicationIsPaid == true)
                     {
-                        <form asp-action="NagadPaymentPro" asp-controller="Students" method="get">
-                            <input type="hidden" name="studentCategory" value="2" />
-                            <input type="hidden" name="nuRoll" value="@ViewBag.nuRoll" />
-                            <input type="hidden" name="paymentType" value="2" />
-                            @*<div class="form-group row">
-                            <label class="col-md-2 text-md-right text-left col-form-label">Name : </label>
-                            <div class="col-md-4">
-                                <input required type="text" name="studentName" class="form-control" />
-                            </div>
+        <form asp-action="NagadPaymentPro" asp-controller="Students" method="get">
+            <input type="hidden" name="studentCategory" value="2" />
+            <input type="hidden" name="nuRoll" value="@ViewBag.nuRoll" />
+            <input type="hidden" name="paymentType" value="2" />
+            @*<div class="form-group row">
+            <label class="col-md-2 text-md-right text-left col-form-label">Name : </label>
+            <div class="col-md-4">
+                <input required type="text" name="studentName" class="form-control" />
+            </div>
 
-                            <label class="col-md-2 text-md-right text-left col-form-label">Mobile : </label>
-                            <div class="col-md-4">
-                                <input required type="number" name="mobileNum" class="form-control" min="01300000000" max="01999999999" />
-                            </div>
-                        </div>*@
-                            <span class="alert alert-success h3">You are selected for admission</span><br /><br />
-                            <button type="submit" class="btn btn-primary mb-2 p-2">Make Payment for Admission</button>
-                        </form>
+            <label class="col-md-2 text-md-right text-left col-form-label">Mobile : </label>
+            <div class="col-md-4">
+                <input required type="number" name="mobileNum" class="form-control" min="01300000000" max="01999999999" />
+            </div>
+        </div>*@
+            @if (ViewBag.allStudentVM != null)
+            {
+                <div class="row ">
+                    <div class="col-md-10 offset-md-1 border-dark">
+                        <table class="table table-hover table-bordered table-striped bg-success">
+                            <tr>
+                                <td class="text-md-right">NU Roll</td>
+                                <td class="text-md-left">@ViewBag.allStudentVM.AppliedStudent.NUAdmissionRoll</td>
+                            </tr>
+                            <tr>
+                                <td class="text-md-right">Student Name</td>
+                                <td class="text-md-left">@ViewBag.allStudentVM.AppliedStudent.ApplicantName</td>
+                            </tr>
+                            <tr>
+                                <td class="text-md-right">Father Name</td>
+                                <td class="text-md-left">@ViewBag.allStudentVM.AppliedStudent.FatherName</td>
+                            </tr>
+                            <tr>
+                                <td class="text-md-right">Subject</td>
+                                <td class="text-md-left">@ViewBag.allStudentVM.Subject.SubjectName</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            }
+
+            <span class="alert alert-success h3">You are selected for admission</span><br /><br />
+            <button type="submit" class="btn btn-primary mb-2 p-2">Make Payment for Admission</button>
+            <div class="note bg-danger mt-1 mb-1 p-1">
+                <span class="text-justify text-light">
+                    [শিক্ষার্থীকে জাতীয় বিশ্ববিদ্যালয়ের ভর্তি বিষয়ক ওয়েবসাইটের (www.nu.ac.bd/admissions) Applicant Login অপশনে Honours Login লিংকে গিয়ে সঠিক রোল নম্বর ও পিন এন্ট্রি দিয়ে 09-11-2021 তারিখের মধ্যে চূড়ান্ত ভর্তি ফরম পূরণ করতে হবে।
+                    <span style="color:#9dfb14">(সর্তকতাঃ জাঃ বিঃ-র ওয়েবসাইট থেকে চূড়ান্ত ভর্তি ফরম পূরণ করে প্রিন্ট কপি সংগ্রহ না করলে ভর্তি নিশ্চিত হবে না। )]</span>
+                </span>
+            </div>
+        </form>
                     }
                 }
                 else
