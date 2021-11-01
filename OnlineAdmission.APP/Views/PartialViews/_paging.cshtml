@@ -19,7 +19,13 @@
     DateTime fromdate = ViewBag.fromdate == null ? newDateTime : ViewBag.fromdate;
     string pagecontroller = ViewBag.controller == null ? "home" : ViewBag.controller; ;
     string pageaction = ViewBag.action == null ? "index" : ViewBag.action;
-    int paymentType = ViewBag.paymentType;
+
+    int paymentType = 0;
+    if (ViewBag.paymentType!=null)
+    {
+        paymentType = ViewBag.paymentType;
+    }
+
 
     int[] pgsize = { 50, 100, 500, 1000, 5000 };
 
