@@ -174,16 +174,25 @@ namespace OnlineAdmission.APP.Controllers
         [HttpPost]
         public async Task<IActionResult> GetMeritStudentList(IFormFile stuList)
         {
-            string fileName = $"{ _host.WebRootPath}\\FIleData\\{ stuList.FileName}";
-            using (FileStream fileStream = System.IO.File.Create(fileName))
+            if (stuList!=null)
             {
-                stuList.CopyTo(fileStream);
-                fileStream.Flush();
-            }
-            //List<StInfoTable> students = this.GetStudentsList(file.FileName);
-            List<MeritStudent> students =await this.GetStudentsList(fileName);
+                string fileName = $"{ _host.WebRootPath}\\FIleData\\{ stuList.FileName}";
+                using (FileStream fileStream = System.IO.File.Create(fileName))
+                {
+                    stuList.CopyTo(fileStream);
+                    fileStream.Flush();
+                }
+                //List<StInfoTable> students = this.GetStudentsList(file.FileName);
+                List<MeritStudent> students =await this.GetStudentsList(fileName);
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ViewBag.msg = "Please select a file before upload.";
+                return View();
+            }
+            
         }
 
 
@@ -205,6 +214,7 @@ namespace OnlineAdmission.APP.Controllers
                             MeritPosition = Convert.ToInt32(reader.GetValue(2).ToString()),
                             SubjectCode = Convert.ToInt32(reader.GetValue(3).ToString()),
                             Comments = reader.GetValue(4).ToString(),
+                            StudentCategory = Convert.ToInt32(reader.GetValue(5).ToString())
                             //PaymentStatus = false,
                             //DeductedAmaount = 0.00,
                             
