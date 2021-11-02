@@ -70,20 +70,16 @@ namespace OnlineAdmission.APP.Controllers
 
         // GET: StudentsController
         [Authorize(Roles = "Admin,SuperAdmin,Teacher")]
-        public async Task<IActionResult> Index(int studentCategory)
+        public async Task<IActionResult> Index(int studentCategory, string usrtext, string sortRoll, int page, int pagesize)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            HttpContext.Session.SetString("UserId", user.Id);
-
-            var AdmittedStudents = await _studentManager.GetAllAsync();
+            IQueryable<Student> students = _studentManager.GetStudents();
             var studentCategoryFromSession = HttpContext.Session.GetString("studentCategory");
-
 
             if (  studentCategory>0)
             {
                 ViewBag.category = studentCategory;
                 HttpContext.Session.SetString("studentCategory", studentCategory.ToString());
-                AdmittedStudents = await _studentManager.GetStudentsByCategoryAsync(studentCategory);
+                students = students.Where(s => s.StudentCategory == studentCategory);
             }
             else if (studentCategory == 0)
             {
@@ -92,20 +88,26 @@ namespace OnlineAdmission.APP.Controllers
             else if (!string.IsNullOrEmpty(studentCategoryFromSession))
             {
                 ViewBag.category = Convert.ToInt32(studentCategoryFromSession);
-                AdmittedStudents = await _studentManager.GetStudentsByCategoryAsync(Convert.ToInt32(studentCategoryFromSession));
+                students = students.Where(s => s.StudentCategory == Convert.ToInt32(studentCategoryFromSession));
             }
             else
             {
                 HttpContext.Session.SetString("studentCategory", "");
             }
+            int pageSize = pagesize <= 0 ? 20 : pagesize;
+            if (page <= 0) page = 1;
 
-            StudentIndexVM studentIndexVM = new StudentIndexVM();
-            studentIndexVM.Students = AdmittedStudents.Where(s => s.Status==true).ToList();
-            
-
-            ViewBag.StudentCategoryList = new SelectList(await _studentCategoryManager.GetAllAsync(), "Id", "CategoryName",studentIndexVM.StudentCategory);
+            if (usrtext!=null)
+            {
+                usrtext = usrtext.Trim();
+                students = students.Where(s => s.Name.Contains(usrtext) || s.CollegeRoll.ToString().Contains(usrtext) || s.NUAdmissionRoll.ToString().Contains(usrtext) || s.Subject.SubjectName.Contains(usrtext) || s.StudentMobile.ToString().Contains(usrtext));
+            }
+            ViewBag.data = usrtext;
+            ViewBag.action = "Index";
+            ViewBag.controller = "Students";
+            ViewBag.StudentCategoryList = new SelectList(await _studentCategoryManager.GetAllAsync(), "Id", "CategoryName",studentCategory);
             //return View(AdmittedStudents.Where(s => s.Status==true));
-            return View(studentIndexVM);
+            return View(await PaginatedList<Student>.CreateAsync(students, page, pageSize));
         }
         //[HttpGet]
         //[Authorize(Roles = "SuperAdmin")]

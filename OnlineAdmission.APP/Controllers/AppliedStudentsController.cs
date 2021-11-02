@@ -32,7 +32,8 @@ namespace OnlineAdmission.APP.Controllers
         {
             IQueryable<AppliedStudent> appliedStudentList = _appliedStudentManager.GetIQueryableData();
             ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
-
+            ViewBag.action = "Index";
+            ViewBag.controller = "AppliedStudents";
 
             switch (sortRoll)
             {

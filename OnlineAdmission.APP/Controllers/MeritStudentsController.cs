@@ -36,6 +36,9 @@ namespace OnlineAdmission.APP.Controllers
         public async Task<ActionResult> Index(string usrtext, string sortRoll, int page, int pagesize, int? studentCategory)
         {
 
+            ViewBag.action = "Index";
+            ViewBag.controller = "MeritStudents";
+
             IQueryable<MeritStudent> meritStudentList = _meritStudentManager.GetMeritStudents();
             var studentCategoryFromSession = HttpContext.Session.GetString("studentCategoryMerit");
             if (studentCategory!=null && studentCategory > 0)

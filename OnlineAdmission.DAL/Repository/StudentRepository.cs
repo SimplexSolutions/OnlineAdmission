@@ -15,6 +15,12 @@ namespace OnlineAdmission.DAL.Repository
         public StudentRepository(OnlineAdmissionDbContext context) : base(context)
         {
         }
+         
+        public IQueryable<Student> GetStudents()
+        {
+            IQueryable<Student> students = _context.Students.Include(s => s.Subject);
+            return students;
+        }
 
         public override async Task<Student> GetByIdAsync(int id)
         {

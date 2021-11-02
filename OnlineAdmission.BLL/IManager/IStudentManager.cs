@@ -16,6 +16,6 @@ namespace OnlineAdmission.BLL.IManager
         Task<Student> GetByAdmissionRollAsync(int NURoll);
         Task<Student> GetByCollegeRollAsync(int CollegeRoll);
         Task<List<Student>> GetStudentsByCategoryAsync(int stuCategory);
-
+        IQueryable<Student> GetStudents();
     }
 }

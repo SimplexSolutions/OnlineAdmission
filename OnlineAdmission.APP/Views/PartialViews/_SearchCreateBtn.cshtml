@@ -1,19 +1,17 @@
 ﻿
 <div class="row">
     <div class="col-md-6">
-        
+        <button class="btn btn-info"><i class="fa fa-print"></i></button>
+        <button class="btn btn-success" id="btnExport"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+        <button class="btn btn-primary"><i class="fas fa-file-csv"></i></button>
     </div>
     <div class="col-md-6">
         <div class="float-md-right">
             @*<h4 class="text-primary"> @ViewBag.count</h4>*@
             <form asp-action="Index" class="form-inline" method="post">
-
                 <input type="text" name="usrtext" value="@ViewBag.data" class="form-control" placeholder="Search...." />
-
                 <button class="btn-info form-control" type="submit">Search</button>
-
             </form>
-
         </div>
     </div>
 </div>

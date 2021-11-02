@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OnlineAdmission.APP.Models;
@@ -27,8 +28,9 @@ namespace OnlineAdmission.APP.Controllers
         private readonly IMeritStudentManager _meritStudentManager;
         private readonly IStudentManager _studentManager;
         private readonly ISubjectManager _subjectManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment host, IPaymentTransactionManager paymentTransactionManager, IAppliedStudentManager appliedStudentManager, IMeritStudentManager meritStudentManager, IStudentManager studentManager, ISubjectManager subjectManager)
+        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment host, IPaymentTransactionManager paymentTransactionManager, IAppliedStudentManager appliedStudentManager, IMeritStudentManager meritStudentManager, IStudentManager studentManager, ISubjectManager subjectManager, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
             _host = host;
@@ -37,10 +39,13 @@ namespace OnlineAdmission.APP.Controllers
             _meritStudentManager = meritStudentManager;
             _studentManager = studentManager;
             _subjectManager = subjectManager;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
-        {            
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            HttpContext.Session.SetString("UserId", user.Id);
 
             AllStudentVM students = new AllStudentVM();
             var appliedStudents = await _appliedStudentManager.GetAllAsync();
