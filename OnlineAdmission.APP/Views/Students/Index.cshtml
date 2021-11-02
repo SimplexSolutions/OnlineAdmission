@@ -2,8 +2,9 @@
 
 @{
     ViewData["Title"] = "Index";
-    int sl = 0;
     string bgColor = "";
+    int i = (Model.PageIndex - 1) * Model.PageSize + 1;
+    ViewBag.pagesize = Model.PageSize;
 }
 
 <div class="row">
@@ -64,7 +65,7 @@
                     }
                     <tr class=@bgColor>
                         <td>
-                            @(++sl).
+                            @(i++).
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Name)
@@ -110,7 +111,7 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
         <script type="text/javascript">
-            $("body").on("click", "#btnExport", function () {
+            $("body").on("click", "#btnPDF", function () {
                 html2canvas($('#tblStudents')[0], {
                     onrendered: function (canvas) {
                         var data = canvas.toDataURL();

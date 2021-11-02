@@ -200,8 +200,9 @@
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     @*<script src="~/theme/js/jquery.min.js"></script>*@
-    <script src="~/theme/js/popper.js"></script>
     <script src="~/theme/js/bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/theme/js/popper.js"></script>
     <script src="~/lib/Select2/js/select2.min.js"></script>
     <script src="~/theme/js/main.js"></script>
 
@@ -216,6 +217,10 @@
     <script>
         $(document).ready(function () {
             $('.select2').select2();
+        });
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
         });
     </script>
 </body>
