@@ -4,6 +4,11 @@
     Layout = User.IsInRole("Admin")
         ? "~/Views/Shared/_Layout.cshtml"
         : "~/Views/Shared/_LayoutStudent.cshtml";
+    string meritPosition = "";
+    @if (Model.MeritStudent!=null)
+    {
+        meritPosition = "(Merit Position: " + Model.MeritStudent.MeritPosition + ")";
+    }
 }
 
 @section Styles{
@@ -49,10 +54,18 @@
         <div class="row bg-white p-3">
             <div class="col-md-10">
                 <div class="text-center">
-                    <h3>Tejgaon College, Dhaka</h3>
-                    <h5>College Code: 6422</h5>
+                    <div class="row">
+                        <div class="col-md-4 text-md-right">
+                            <img src="~/Images/Collge/logo2.png" alt="Alternate Text" class="img-fluid" style="width:85px;" />
+                        </div>
+                        <div class="col-md-8 text-md-left">
+                            <h3> Tejgaon College, Dhaka</h3>
+                            <h5>College Code: 6422</h5>
+                        </div>
+                    </div>
+                    
                     <h5>1st Year Bachelor of Honours 2020-2021</h5><br />
-                    <h3>Student Personal Information Form</h3>
+                    <h3>Student Personal Information Form</h3><hr />
                 </div>
             </div>
             <div class="col-md-2 align-text-bottom">
@@ -69,8 +82,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group row">
                 <label asp-for="Student.SubjectId" class="col-form-label col-md-2 text-right">Subject : </label>
-                <div class="col-md-2">
-                    <input asp-for="Student.Subject.SubjectName" disabled readonly class="form-control-plaintext font-weight-bold" />
+                <div class="col-md-5">
+                    <span class="form-control-plaintext font-weight-bold">@Model.Student.Subject.SubjectName @meritPosition</span>
+                    @*<input asp-for="Student.Subject.SubjectName" disabled readonly class="form-control-plaintext font-weight-bold" />*@
                     @if (Model.Student.StudentType == 2)
                     {
                         if (Model.PreviousSubject!=null)
@@ -79,19 +93,10 @@
                         }
                         
                     }
+                    
 
                 </div>
-                @if (Model.MeritStudent != null)
-                {
-                    <label asp-for="MeritStudent.MeritPosition" class="col-form-label col-md-2 text-right">Merit Position : </label>
-                    <div class="col-md-1">
-                        <input asp-for="MeritStudent.MeritPosition" disabled readonly class="form-control-plaintext font-weight-bold" />
-                    </div>
-                }
-                else
-                {
-                    <div class="offset-md-3"></div>
-                }
+                
 
 
                 <label asp-for="Student.CollegeRoll" class="col-form-label col-md-2 text-right">College Roll : </label>
@@ -189,63 +194,34 @@
             <div class="form-group row pt-1">
                 <label asp-for="Student.PresentAddress1" class="col-form-label col-md-2 text-right"></label>
                 <div class="col-md-10">
-                    <input asp-for="Student.PresentAddress1" class=" form-control-plaintext font-weight-bold" readonly disabled />
+                    <span class="form-control-plaintext font-weight-bold">@Model.Student.PresentAddress1 @Model.Student.PresentAddress2</span>
+                    <span class="form-control-plaintext font-weight-bold">District- @Model.Student.PresentDistrict.DistrictName</span>                    
                 </div>
             </div>
-            <div class="form-group row">
-                <div class="col-md-6 offset-2">
-                    <input asp-for="Student.PresentAddress2" class="form-control-plaintext font-weight-bold" readonly disabled />
-                </div>
 
-                <label asp-for="Student.PresentDistrictId" class="col-form-label col-md-1 text-right"></label>
-                <div class="col-md-3">
-                    <input class="form-control-plaintext font-weight-bold" readonly disabled asp-for="Student.PresentDistrict.DistrictName" />
-                </div>
-
-            </div>
             <div class="form-group row">
                 <label asp-for="Student.PermanentAddress1" class="col-form-label col-md-2 text-right"></label>
                 <div class="col-md-10">
-                    <input asp-for="Student.PermanentAddress1" class="form-control-plaintext font-weight-bold" readonly disabled />
+                    <span class="form-control-plaintext font-weight-bold">@Model.Student.PermanentAddress1 @Model.Student.PermanentAddress2</span>
+                    <span class="form-control-plaintext font-weight-bold">District- @Model.Student.PermanentDistrict.DistrictName</span>
                 </div>
             </div>
-            <div class="form-group row">
-                <div class="col-md-6 offset-2">
-                    <input asp-for="Student.PermanentAddress2" class="form-control-plaintext font-weight-bold" readonly disabled />
-                </div>
 
-                <label asp-for="Student.PermanentDistrictId" class="col-form-label col-md-1 text-right"></label>
-                <div class="col-md-3">
-                    <input asp-for="Student.PermanentDistrict.DistrictName" class="form-control-plaintext font-weight-bold" disabled readonly />
-                </div>
-            </div>
 
             <div class="row p-1 d-block">
                     <h5 class="text-center text-dark font-weight-bolder">Mailing Address Information</h5><hr />
                 </div>
             <div class="form-group row pt-1">
-                <label asp-for="Student.MailingVillage" class="col-form-label col-md-2 text-right"></label>
-                <div class="col-md-6">
-                    <input asp-for="Student.MailingVillage" class="form-control-plaintext font-weight-bold" disabled readonly />
-                </div>
-                <label asp-for="Student.MailingPO" class="col-form-label col-md-1 text-right"></label>
-                <div class="col-md-3">
-                    <input asp-for="Student.MailingPO" class="form-control-plaintext font-weight-bold" disabled readonly />
+                <label asp-for="Student.MailingVillage" class="col-form-label col-md-2 text-right">Vill/Area</label>
+                <div class="col-md-10">
+                    <span class="form-control-plaintext font-weight-bold">@Model.Student.MailingVillage</span>
                 </div>
             </div>
 
             <div class="form-group row">
-                <label asp-for="Student.MailingPostCode" class="col-form-label col-md-2 text-right"></label>
-                <div class="col-md-2">
-                    <input asp-for="Student.MailingPostCode" class="form-control-plaintext font-weight-bold" disabled readonly />
-                </div>
-                <label asp-for="Student.MailingPS" class="col-form-label col-md-1 text-right"></label>
-                <div class="col-md-3">
-                    <input asp-for="Student.MailingPS" class="form-control-plaintext font-weight-bold" disabled readonly />
-                </div>
-                <label asp-for="Student.MailingDistrictId" class="col-form-label text-right col-md-1"></label>
-                <div class="col-md-3">
-                    <input asp-for="Student.MailingDistrict.DistrictName" class="form-control-plaintext font-weight-bold" disabled readonly />
+                <label asp-for="Student.MailingPO" class="col-form-label col-md-2 text-right">Post Office</label>
+                <div class="col-md-10">
+                    <span class="form-control-plaintext font-weight-bold">@Model.Student.MailingPO (@Model.Student.MailingPostCode), P.S - @Model.Student.MailingPS, District - @Model.Student.MailingDistrict.DistrictName</span>
                 </div>
             </div>
             <hr />
@@ -280,6 +256,32 @@
                     }
                     <input asp-for="Student.GuardianMobile" class="form-control-plaintext font-weight-bold" value="@gMob"  disabled readonly/>
                 </div>
+            </div>
+
+            <div class="form-group row">
+                @if (Model.Student.StudentNID != null)
+                {
+                    <label asp-for="Student.StudentNID" class="col-form-label text-right col-md-2"></label>
+                    <div class="col-md-4">
+                        <span class="form-control-plaintext font-weight-bold">@Model.Student.StudentNID</span>
+                    </div>
+                }
+                @if (Model.Student.FatherNID != null)
+                {
+                    <label asp-for="Student.FatherNID" class="col-form-label text-right col-md-2"></label>
+                    <div class="col-md-4">
+                        <span class="form-control-plaintext font-weight-bold">@Model.Student.FatherNID</span>
+                    </div>
+                }
+            </div>
+            <div class="form-group row">
+                @if (Model.Student.MotherNID != null)
+                {
+                    <label asp-for="Student.MotherNID" class="col-form-label text-right col-md-2"></label>
+                    <div class="col-md-4">
+                        <span class="form-control-plaintext font-weight-bold">@Model.Student.MotherNID</span>
+                    </div>
+                }
             </div>
 
             <div class="row p-1 d-block ">

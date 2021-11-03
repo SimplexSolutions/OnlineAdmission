@@ -138,8 +138,14 @@ namespace OnlineAdmission.Entity
         //StudentCategory = 2 = professional Student
         //StudentCategory = 3 = Masters
         public int? StudentCategory { get; set; }
+
+        [Display(Name ="Student NID")]
         public string StudentNID { get; set; }
+
+        [Display(Name = "Father's NID")]
         public string FatherNID { get; set; }
+
+        [Display(Name = "Mother's NID")]
         public string MotherNID { get; set; }
 
         //Navigation Properties
