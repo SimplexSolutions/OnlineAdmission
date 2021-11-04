@@ -194,7 +194,7 @@ namespace OnlineAdmission.APP.Controllers
                 {
                     return RedirectToAction("MastersSearch", "Students", new { mastersRoll = newPayment.ReferenceNo, notification = successNotification });
                 }
-                if (MerchantInfo.StudentType == 3)
+                if (MerchantInfo.StudentType == 4)
                 {
                     return RedirectToAction("MastersSearchGeneral", "Students", new { mastersRoll = newPayment.ReferenceNo, notification = successNotification });
                 }
