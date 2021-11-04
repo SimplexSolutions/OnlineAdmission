@@ -98,6 +98,11 @@ namespace OnlineAdmission.APP.Controllers
                     {
                         return RedirectToAction("MastersSearch", "Students");
                     }
+                    else if (newPayment.StudentCategory == 4)
+                    {
+                        return RedirectToAction("MastersSearchGeneral", "Students");
+                    }
+                    
                 }
 
                 await paymentTransactionManager.AddAsync(newPayment);
@@ -143,12 +148,24 @@ namespace OnlineAdmission.APP.Controllers
                         await meritStudentManager.UpdateAsync(meritStudent);
                     }
                 }
-                
-                
+
+                else if (newPayment.StudentCategory == 4) //For Master's General Regular
+                {
+                    //var AdmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(professionalRoll);
+                    if (meritStudent != null)
+                    {
+                        meritStudent.PaymentStatus = true;
+                        meritStudent.PaymentTransactionId = newPayment.Id;
+                        meritStudent.StudentCategory = newPayment.StudentCategory;
+                        await meritStudentManager.UpdateAsync(meritStudent);
+                    }
+                }
+
+
 
                 //////////////////Code for SMS Sending and Saving
                 ///
-                
+
                 bool SentSMS = false;
                 SentSMS = await ESMS.SendSMS(phoneNumber, msgText);
                 SMSModel newSMS = new SMSModel()
@@ -177,7 +194,10 @@ namespace OnlineAdmission.APP.Controllers
                 {
                     return RedirectToAction("MastersSearch", "Students", new { mastersRoll = newPayment.ReferenceNo, notification = successNotification });
                 }
-                
+                if (MerchantInfo.StudentType == 3)
+                {
+                    return RedirectToAction("MastersSearchGeneral", "Students", new { mastersRoll = newPayment.ReferenceNo, notification = successNotification });
+                }
             }
 
             return  Ok();
