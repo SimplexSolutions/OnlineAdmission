@@ -136,16 +136,20 @@ namespace OnlineAdmission.Entity
         
         //StudentCategory = 1 = hon's Student
         //StudentCategory = 2 = professional Student
-        //StudentCategory = 3 = Masters
+        //StudentCategory = 3 = Masters Professional
+        //StudentCategory = 4 = MastersGeneral
         public int? StudentCategory { get; set; }
 
         [Display(Name ="Student NID")]
+        [StringLength(maximumLength: 21, MinimumLength = 10)]
         public string StudentNID { get; set; }
 
         [Display(Name = "Father's NID")]
+        [StringLength(maximumLength: 21, MinimumLength = 10)]
         public string FatherNID { get; set; }
 
         [Display(Name = "Mother's NID")]
+        [StringLength(maximumLength:21, MinimumLength =10)]
         public string MotherNID { get; set; }
 
         //Navigation Properties

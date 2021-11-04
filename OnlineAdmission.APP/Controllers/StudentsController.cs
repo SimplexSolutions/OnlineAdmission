@@ -744,27 +744,27 @@ namespace OnlineAdmission.APP.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult MastersSearchGeneral(int mastersRoll, string notification)
+        public IActionResult MastersSearchGeneral(int mastersGenRoll, string notification)
         {
             if (TempData["msg"] != null)
             {
                 ViewBag.miss = TempData["msg"].ToString();
             }
-            ViewBag.Roll = mastersRoll;
+            ViewBag.Roll = mastersGenRoll;
             ViewBag.notification = notification;
             return View();
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> MastersSearchGeneral(int mastersRoll)
+        public async Task<IActionResult> MastersSearchGeneral(int mastersGenRoll)
         {
             int studentCategory = 4;
             bool isPaid = false;
-            ViewBag.nuRoll = mastersRoll;
-            if (mastersRoll > 0)
+            ViewBag.nuRoll = mastersGenRoll;
+            if (mastersGenRoll > 0)
             {
-                var payment = await _paymentTransactionManager.GetApplicationTransactionByNuRollAsync(mastersRoll, studentCategory);
+                var payment = await _paymentTransactionManager.GetApplicationTransactionByNuRollAsync(mastersGenRoll, studentCategory);
                 if (payment != null)
                 {
                     isPaid = true;

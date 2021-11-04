@@ -81,6 +81,12 @@
                                         <a asp-action="ProfessionalIndex" asp-controller="Payments" asp-route-paymentType=2>Hons Professional (Admission)</a>
                                     </li>
                                     <li>
+                                        <a asp-action="MastersGeneralIndex" asp-controller="Payments" asp-route-paymentType=1>Masters General Application</a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="MastersGeneralIndex" asp-controller="Payments" asp-route-paymentType=2>Masters General Admission</a>
+                                    </li>
+                                    <li>
                                         <a asp-action="mastersIndex" asp-controller="Payments" asp-route-paymentType=1>Masters Professional(MBA) Application</a>
                                     </li>
                                     <li>
@@ -164,7 +170,8 @@
                                 <ul id="admissionId">
                                     <li><a class="nav-link" asp-action="Search" asp-controller="Students">Honour's Admission</a></li>
                                     <li><a class="nav-link" asp-action="ProfessionalSearch" asp-controller="Students">Profession's Admission</a></li>
-                                    <li><a class="nav-link" asp-action="MastersSearch" asp-controller="Students">Master's Admission</a></li>
+                                    <li><a class="nav-link" asp-action="MastersSearch" asp-controller="Students">Master's (Professional) Admission</a></li>
+                                    <li><a class="nav-link" asp-action="MastersSearchGeneral" asp-controller="Students">Master's (General) Admission</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item active">

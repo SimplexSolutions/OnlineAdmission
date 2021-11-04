@@ -2,24 +2,24 @@
 @inject UserManager<IdentityUser> userManager
 
 @{
-    ViewBag.Title = "Professional Admission (MBA)";
+    ViewBag.Title = "Masters(Gen) Admission";
     Layout = "~/Views/Shared/_LayoutStudent.cshtml";
 }
 <div class="">
-    <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">        
+    <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">
         <div class="card-body">
-            <form asp-action="MastersSearch" asp-controller="Students" method="post">
-                <label class="col-md-8 text-success font-weight-bolder  text-md-center text-center col-form-label" style="font-size:x-large">Professional Admission (MBA)</label><br /><br />
+            <form asp-action="MastersSearchGeneral" asp-controller="Students" method="post">
+                <label class="col-md-8 text-success font-weight-bolder  text-md-center text-center col-form-label" style="font-size:x-large">Master's(General) Admission</label><br /><br />
                 <div class="form-group row">
                     <label class="col-md-2 text-md-right text-left col-form-label">NU Roll</label>
                     <div class="col-md-6">
                         @if (ViewBag.nuRoll != null)
                         {
-                            <input type="number" name="mastersRoll" value="@ViewBag.nuRoll" class="form-control" min="1000000" max="9999999" required />
+                            <input type="number" name="mastersGenRoll" value="@ViewBag.nuRoll" class="form-control" min="1000000" max="9999999" required />
                         }
                         else
                         {
-                            <input type="number" name="mastersRoll" class="form-control" min="1000000" max="9999999" required />
+                            <input type="number" name="mastersGenRoll" class="form-control" min="1000000" max="9999999" required />
                         }
                     </div>
                     <button type="submit" class="btn btn-primary mb-2">Search</button>
@@ -49,13 +49,13 @@
             {
                 <div class="row">
                     <div class="col-md-10 offset-1 text-center">
-                        <span class="alert font-weight-bold text-info">Apply for Professional Admission (MBA)</span><hr />
+                        <span class="alert font-weight-bold text-info">Apply for Master's(General) Admission</span><hr />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-8 offset-md-2">
-                        <form asp-action="NagadPaymentMasters" asp-controller="Students" method="get">
-                            <input type="hidden" name="studentCategory" value="3" />
+                        <form asp-action="NagadPaymentMastersGeneral" asp-controller="Students" method="get">
+                            <input type="hidden" name="studentCategory" value="4" />
                             <input type="hidden" name="paymentType" value="1" />
                             <input type="hidden" name="nuRoll" value="@ViewBag.nuRoll" />
                             <div class="form-group row">
@@ -82,8 +82,8 @@
 </div>
 @section Scripts{
     <script>
-    $(document).ready(function () {
-        $("#missText").fadeOut(10000);
-    });
+        $(document).ready(function () {
+            $("#missText").fadeOut(10000);
+        });
     </script>
 }

@@ -287,7 +287,7 @@ namespace OnlineAdmission.APP.Controllers
 
         }
         
-        public async Task<IActionResult> mastersIndex(string usrtext, string sortRoll, int page, int pagesize, DateTime? fromdate, DateTime? todate, int paymentType)
+        public async Task<IActionResult> MastersIndex(string usrtext, string sortRoll, int page, int pagesize, DateTime? fromdate, DateTime? todate, int paymentType)
         {
             ViewBag.action = "mastersIndex";
             ViewBag.controller = "Payments";
@@ -307,6 +307,83 @@ namespace OnlineAdmission.APP.Controllers
             }
 
             IQueryable<PaymentTransaction> paymentTransactions = _paymentTransactionManager.GetIQueryableData().Where(p => p.StudentCategory == 3 && p.PaymentType==paymentType);
+
+
+            ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
+
+
+            switch (sortRoll)
+            {
+                case "desc":
+                    paymentTransactions = paymentTransactions.OrderByDescending(m => m.ReferenceNo);
+                    break;
+                default:
+                    paymentTransactions = paymentTransactions.OrderBy(m => m.ReferenceNo);
+                    break;
+            }
+            ViewBag.data = usrtext;
+
+            int pageSize = pagesize <= 0 ? 50 : pagesize;
+            if (page <= 0) page = 1;
+
+            if (fromdate != null || todate != null)
+            {
+                if (fromdate != null && todate != null)
+                {
+                    paymentTransactions = from a in paymentTransactions
+                                          where (a.TransactionDate.Date >= fromdate && a.TransactionDate.Date <= todate)
+                                        select a;
+                }
+                else if (fromdate != null && todate == null)
+                {
+                    paymentTransactions = from a in paymentTransactions
+                                          where (a.TransactionDate.Date >= fromdate)
+                                        select a;
+                }
+                else if (fromdate == null && todate != null)
+                {
+                    paymentTransactions = from a in paymentTransactions
+                                          where (a.TransactionDate.Date <= todate)
+                                        select a;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(usrtext))
+            {
+                usrtext = usrtext.Trim().ToLower();
+
+                paymentTransactions = paymentTransactions.Where(m => m.StudentName.ToLower().Contains(usrtext) || m.AccountNo.ToLower() == usrtext 
+                || m.TransactionId.ToLower() == usrtext || m.ReferenceNo.ToString().ToLower() == usrtext 
+                || m.Amount.ToString().ToLower() == usrtext || m.TransactionDate.ToString().Contains(usrtext));
+                ViewBag.count = paymentTransactions.Count();
+
+                return View(await PaginatedList<PaymentTransaction>.CreateAsync(paymentTransactions, page, pageSize));
+            }
+            ViewBag.count = paymentTransactions.Count();
+            return View(await PaginatedList<PaymentTransaction>.CreateAsync(paymentTransactions, page, pageSize));
+
+        }
+        
+        public async Task<IActionResult> MastersGeneralIndex(string usrtext, string sortRoll, int page, int pagesize, DateTime? fromdate, DateTime? todate, int paymentType)
+        {
+            ViewBag.action = "mastersGeneralIndex";
+            ViewBag.controller = "Payments";
+            ViewBag.paymentType = paymentType;
+            if (paymentType == 1)
+            {
+                ViewBag.pageTitle = "Masters (General) Application Payment";
+            }
+            else
+            {
+                ViewBag.pageTitle = "Masters (General) Admission Payment";
+            }
+
+            if (TempData["msg"] != null)
+            {
+                ViewBag.msg = TempData["msg"].ToString();
+            }
+
+            IQueryable<PaymentTransaction> paymentTransactions = _paymentTransactionManager.GetIQueryableData().Where(p => p.StudentCategory == 4 && p.PaymentType==paymentType);
 
 
             ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";

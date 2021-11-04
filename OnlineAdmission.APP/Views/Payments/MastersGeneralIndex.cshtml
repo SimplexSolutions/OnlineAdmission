@@ -1,18 +1,17 @@
 ﻿@model PaginatedList<OnlineAdmission.Entity.PaymentTransaction>
 
 @{
-    ViewData["Title"] = "Master's (Pro) Payment";
+    ViewData["Title"] = "Master's (General) Payment";
     int i = (Model.PageIndex - 1) * Model.PageSize + 1;
     ViewBag.pagesize = Model.PageSize;
 
     ViewBag.controller = "Payments";
-    ViewBag.action = "mastersIndex";
+    ViewBag.action = "MastersGeneralIndex";
     ViewBag.search = ViewBag.data;
-    string pageTitle= ViewBag.pageTitle;
+    string pageTitle = ViewBag.pageTitle;
     double total = 0;
     int paymentType = ViewBag.paymentType;
 }
-
 
 @section Styles{
 
