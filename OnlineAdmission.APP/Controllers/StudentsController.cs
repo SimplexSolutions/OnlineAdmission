@@ -564,10 +564,7 @@ namespace OnlineAdmission.APP.Controllers
             if (NuAdmissionRoll>0)
             {
                 var meritStudent =await _meritStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll);
-                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll);
                 
-
-
                 if (meritStudent==null)
                 {
                     ViewBag.msg = "You are not eligible";
@@ -575,9 +572,13 @@ namespace OnlineAdmission.APP.Controllers
                     return View();
                 }
 
+                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll);
                 if (appliedStudent == null)
                 {
-                    ViewBag.msg = "You are not applied yet";
+
+                    //ViewBag.msg = "You are not applied yet";
+                    ViewBag.msg = "Some Information are missing for complete your admission";
+                    ViewBag.infoCollection = true;
                     return View();
                 }
 

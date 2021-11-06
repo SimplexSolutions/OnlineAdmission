@@ -3,6 +3,7 @@ using ExcelDataReader;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineAdmission.APP.ViewModels.AppliedStudents;
 using OnlineAdmission.BLL.IManager;
@@ -21,12 +22,14 @@ namespace OnlineAdmission.APP.Controllers
         private readonly IAppliedStudentManager _appliedStudentManager;
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _host;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
-        public AppliedStudentsController(IAppliedStudentManager appliedStudentManager, IMapper mapper, IWebHostEnvironment host)
+        public AppliedStudentsController(IAppliedStudentManager appliedStudentManager, IMapper mapper, IWebHostEnvironment host, SignInManager<IdentityUser> signInManager)
         {
             _appliedStudentManager = appliedStudentManager;
             _mapper = mapper;
             _host = host;
+            _signInManager = signInManager;
         }
         public async Task<IActionResult> Index(string usrtext, string sortRoll, string sortHSCRoll, int page, int pagesize)
         {
@@ -74,21 +77,47 @@ namespace OnlineAdmission.APP.Controllers
 
         }
 
-        public IActionResult Create()
+        [AllowAnonymous]
+        public async Task<IActionResult> Create( int nuRoll)
         {
+            var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+            if (existAppliedStudent != null)
+            {
+                TempData["msg"] = "You are already applied";
+                return RedirectToAction("Search", "Students");
+            }
+            ViewBag.nuRoll = nuRoll;
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(AppliedStudentVM vModel)
+        [HttpPost, AllowAnonymous]
+        public async Task<IActionResult> Create(AppliedStudentVM vModel, int nuRoll)
         {
+            if (nuRoll != vModel.NUAdmissionRoll)
+            {
+                return RedirectToAction("Search", "Students");
+            }
+
             if (ModelState.IsValid)
             {
+                var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(vModel.NUAdmissionRoll);
+                if (existAppliedStudent!=null)
+                {
+                    TempData["msg"] = "You are already applied";
+                    return RedirectToAction("Search", "Students");
+                }
+
                 AppliedStudent aStudent = _mapper.Map<AppliedStudent>(vModel);
 
                 await _appliedStudentManager.AddAsync(aStudent);
+                if (!_signInManager.IsSignedIn(User))
+                {
+                    TempData["msg"] = "Information Updated, Search Again";
+                    return RedirectToAction("Search", "Students");
+                }
                 return RedirectToAction("Index");
             }
+
             return View();
         }
 

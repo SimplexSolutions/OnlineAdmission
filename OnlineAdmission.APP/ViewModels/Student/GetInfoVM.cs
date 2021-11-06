@@ -4,28 +4,23 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OnlineAdmission.APP.ViewModels.AppliedStudents
+namespace OnlineAdmission.APP.ViewModels.Student
 {
-    public class AppliedStudentVM
+    public class GetInfoVM
     {
-        [Display(Name = "NU Roll")]
-        [Required]
+        [Required, Display(Name = "NU Roll")]
         public int NUAdmissionRoll { get; set; }
 
-        [Display(Name = "Name")]
-        [Required]
+        [Required,Display(Name = "Name")]
         public string ApplicantName { get; set; }
 
-        [Display(Name = "Father's Name")]
-        [Required]
+        [Required,Display(Name = "Father's Name")]
         public string FatherName { get; set; }
 
-        [Display(Name = "Mother's Name")]
-        [Required]
+        [Required, Display(Name = "Mother's Name")]
         public string MotherName { get; set; }
 
-        [Display(Name = "Mobile")]
-        [Required]
+        [Required, Display(Name = "Mobile")]
         public string MobileNo { get; set; }
 
         [Display(Name = "Group Name")]

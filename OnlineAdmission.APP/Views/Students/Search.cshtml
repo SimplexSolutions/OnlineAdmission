@@ -32,6 +32,15 @@
                     <div class="row">
                         <span id="msgId" class="text-danger offset-2">@ViewBag.msg</span>
                     </div>
+                    @if (ViewBag.infoCollection==true)
+                    {
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+
+                                <a asp-action="Create" asp-controller="AppliedStudents" asp-route-from="11" asp-route-nuRoll="@ViewBag.nuRoll" class="btn btn-outline-info">Give Information</a>
+                            </div>
+                        </div>
+                    }
                 }
                 @if (ViewBag.notify != null)
                 {
