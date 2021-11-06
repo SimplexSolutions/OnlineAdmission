@@ -577,7 +577,7 @@ namespace OnlineAdmission.APP.Controllers
                 {
 
                     //ViewBag.msg = "You are not applied yet";
-                    ViewBag.msg = "Some Information are missing for complete your admission";
+                    ViewBag.msg = "Please submit your basic information.";
                     ViewBag.infoCollection = true;
                     return View();
                 }
