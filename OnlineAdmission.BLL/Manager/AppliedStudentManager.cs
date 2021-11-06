@@ -23,6 +23,11 @@ namespace OnlineAdmission.BLL.Manager
             return await _appliedStudentRepository.GetByAdmissionRollAsync(roll);
         }
 
+        public async Task<AppliedStudent> GetByMobileNumber(string mobileNo)
+        {
+            return await _appliedStudentRepository.GetByMobileNumber(mobileNo.Trim());
+        }
+
         public async Task<bool> UploadAppliedStudentsAsync(List<AppliedStudent> appliedStudents)
         {
             return await _appliedStudentRepository.UploadAppliedStudentsAsync(appliedStudents);

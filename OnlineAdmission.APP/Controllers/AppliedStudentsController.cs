@@ -97,10 +97,16 @@ namespace OnlineAdmission.APP.Controllers
             {
                 return RedirectToAction("Search", "Students");
             }
-
+            ViewBag.nuRoll = nuRoll;
             if (ModelState.IsValid)
             {
                 var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(vModel.NUAdmissionRoll);
+                var isMobileNumberUsed = await _appliedStudentManager.GetByMobileNumber(vModel.MobileNo);
+                if (isMobileNumberUsed!=null)
+                {
+                    ViewBag.msg = "Provided mobile number is already exist.";
+                    return View(vModel);
+                }
                 if (existAppliedStudent!=null)
                 {
                     TempData["msg"] = "You are already applied";

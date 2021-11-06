@@ -22,10 +22,16 @@ namespace OnlineAdmission.DAL.Repository
             return await _context.AppliedStudents.FirstOrDefaultAsync(a => a.NUAdmissionRoll == roll);
         }
 
+        public async Task<AppliedStudent> GetByMobileNumber(string mobileNo)
+        {
+            return await _context.AppliedStudents.FirstOrDefaultAsync(a => a.MobileNo.Trim() == mobileNo.Trim());
+        }
+
         public async Task<bool> UploadAppliedStudentsAsync(List<AppliedStudent> appliedStudents)
         {
             await _context.AppliedStudents.AddRangeAsync(appliedStudents);
             return await _context.SaveChangesAsync() > 0;
         }
+
     }
 }
