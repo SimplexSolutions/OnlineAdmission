@@ -1,7 +1,7 @@
 ﻿@model PaginatedList<OnlineAdmission.Entity.PaymentTransaction>
 
 @{
-    ViewData["Title"] = "Master's (General) Payment";
+    ViewData["Title"] = "Master's (Regular) Payment";
     int i = (Model.PageIndex - 1) * Model.PageSize + 1;
     ViewBag.pagesize = Model.PageSize;
 

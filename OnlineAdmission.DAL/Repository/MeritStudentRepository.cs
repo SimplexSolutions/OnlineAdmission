@@ -31,7 +31,7 @@ namespace OnlineAdmission.DAL.Repository
 
         public async Task<MeritStudent> GetByAdmissionRollAsync(int NURoll)
         {
-            var existStudent =  await _context.MeritStudents.FirstOrDefaultAsync(m => m.NUAdmissionRoll == NURoll && m.StudentCategory==1 && (m.Comments.Trim().ToLower() == "Quota Merit List".Trim().ToLower() || m.PaymentStatus == true));
+            var existStudent =  await _context.MeritStudents.FirstOrDefaultAsync(m => m.NUAdmissionRoll == NURoll && m.StudentCategory==1 && (m.Comments.Trim().ToLower() == "Release Slip".Trim().ToLower() || m.PaymentStatus == true));
             return existStudent;
         }
         public async Task<MeritStudent> GetProByAdmissionRollAsync(int NuRoll)
