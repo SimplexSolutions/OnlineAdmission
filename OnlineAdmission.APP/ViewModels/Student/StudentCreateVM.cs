@@ -134,6 +134,8 @@ namespace OnlineAdmission.APP.ViewModels.Student
 
         public int NuAdmissionRoll { get; set; }
 
+        public bool? Status { get; set; }
+
         [Display(Name = "Student NID")]
         public string StudentNID { get; set; }
 

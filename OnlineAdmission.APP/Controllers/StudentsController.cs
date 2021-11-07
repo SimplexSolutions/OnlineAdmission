@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OnlineAdmission.APP.Utilities.Helper;
@@ -23,9 +24,6 @@ using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Dynamic;
-using Microsoft.Extensions.Logging;
-using Serilog;
 
 namespace OnlineAdmission.APP.Controllers
 {
@@ -596,7 +594,19 @@ namespace OnlineAdmission.APP.Controllers
                     var admittedStudent =await _studentManager.GetStudentByHSCRollAsync(selectedStudent.MeritStudent.HSCRoll);
                     if (admittedStudent != null)
                     {
-                        msg = "Congratulations! You are already admitted.";
+                        if (admittedStudent.Status==true)
+                        {
+                            ViewBag.DueAmount = false;
+                            msg = "Congratulations! You are already admitted.";
+                                                 
+                        }
+                        else
+                        {
+                            
+                            ViewBag.DueAmount = true;
+                            msg = "Your Subject Change is pending due to rest of payment";
+                            ViewBag.msg = msg;
+                        }
                         ViewBag.admittedStudent = admittedStudent;
                         return View();
                     }
@@ -2062,91 +2072,65 @@ namespace OnlineAdmission.APP.Controllers
 
             if (model.SubjectId<=0 || model.StudentId<=0)
             {
-                
                 return View(sChangedVM);
             }
             
-            Student previousStudent = await _studentManager.GetByIdAsync(model.StudentId);
-            Subject newSubject = await _subjectManager.GetByIdAsync(model.SubjectId);
+            
+            
 
             if (ModelState.IsValid)
             {
+                Student previousStudent = await _studentManager.GetByIdAsync(model.StudentId);
+                Subject newSubject = await _subjectManager.GetByIdAsync(model.SubjectId);
 
-                previousStudent.UpdatedAt = DateTime.Now;
-                previousStudent.UpdatedBy = HttpContext.Session.GetString("UserId");
-
-                previousStudent.Status = false;
-                previousStudent.StudentType = 1;
-
-                
-
-
-                Student student = new Student();
-                student = previousStudent;
-                
-                int count = await _studentManager.GetCountAsync(model.SubjectId) + 1;
-                string sl = "";
-                if (count < 100)
-                {
-                    if (count == 0)
-                    {
-                        sl = "001";
-                    }
-                    else if (count < 10)
-                    {
-                        sl = "00" + count.ToString();
-                    }
-                    else if (count < 100 && count > 9)
-                    {
-                        sl = "0" + count.ToString();
-                    }
-                }
-                else
-                {
-                    sl = count.ToString();
-                }
-                
-                student.PreviousCollegeRoll = previousStudent.CollegeRoll;
-                string year = DateTime.Today.ToString("yyyy");
-                int colRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + newSubject.Code + "" + sl);
-                student.CollegeRoll = colRoll;
-                var isCollegeRollAssign = await _studentManager.GetByCollegeRollAsync(colRoll);
-                if (isCollegeRollAssign!=null)
+                StudentCreateVM studentCreateVM = _mapper.Map<StudentCreateVM>(previousStudent);
+                Student NewStudent = _mapper.Map<Student>(studentCreateVM);
+                //Creating New College Roll
+                int newCollgeRoll = await CreateCollgeRoll(model.SubjectId);
+                var isCollegeRollAssign = await _studentManager.GetByCollegeRollAsync(newCollgeRoll);
+                if (isCollegeRollAssign != null)
                 {
                     ViewBag.msg = "Subject Change cann't be possible due to duplicate roll, Please Contact your technical support";
                     return View(sChangedVM);
                 }
-                await _studentManager.UpdateAsync(previousStudent);
-                student.Id = 0;
-                student.Status = true;
-                student.StudentType = 2; //For Subject Change
-                student.SubjectId = model.SubjectId;
-                student.CreatedAt = DateTime.Now;
-                student.CreatedBy = HttpContext.Session.GetString("UserId");
-                bool isSaved = await _studentManager.AddAsync(student);
-                if (isSaved)
+
+                //Update Previous Student
+                previousStudent.UpdatedAt = DateTime.Now;
+                previousStudent.UpdatedBy = HttpContext.Session.GetString("UserId");
+                previousStudent.Status = false;
+                previousStudent.StudentType = 1;
+
+                if (previousStudent.Subject.AdmissionFee == newSubject.AdmissionFee)
                 {
-                    return RedirectToAction("Index");
+                    previousStudent.Status = false;
                 }
+                else
+                {
+                    ViewBag.msg = "Subject Change not possible due to admission fee missmatch for both subject";
+                    TempData["msg"] = ViewBag.msg;
+                    NewStudent.Status = false;
+                }
+                await _studentManager.UpdateAsync(previousStudent);
+
+                //Create New Student
+                NewStudent.CollegeRoll = newCollgeRoll;
+                NewStudent.CreatedAt = DateTime.Now;
+                NewStudent.CreatedBy = HttpContext.Session.GetString("UserId");
+                NewStudent.UpdatedAt = new DateTime();
+                NewStudent.UpdatedBy = "";
+
+                var existingStudent = await _studentManager.GetByIdAsync(model.StudentId);
+                NewStudent.PreviousCollegeRoll = existingStudent.CollegeRoll;
+                NewStudent.SubjectId = model.SubjectId;
+                NewStudent.Subject = newSubject;
+                NewStudent.StudentType = 2;
+
+                await _studentManager.AddAsync(NewStudent);
+                return RedirectToAction("Index");
             }
 
-            SubjectChangedVM subjectChangedVM = new SubjectChangedVM();
-            subjectChangedVM.StudentList = new SelectList((from stu in await _studentManager.GetAllAsync()
-                                                           where stu.Status == true
-                                                           select new
-                                                           {
-                                                               Id = stu.Id,
-                                                               Name = stu.CollegeRoll + " - " + stu.Name + " ( " + stu.NUAdmissionRoll + " )"
-                                                           }), "Id", "Name").ToList();
-
-            subjectChangedVM.SubjectList = new SelectList((from sub in await _subjectManager.GetAllAsync()
-                                                           select new
-                                                           {
-                                                               Id = sub.Id,
-                                                               Name = sub.Code + " - " + sub.SubjectName
-                                                           }), "Id", "Name").ToList();
-
-            return View(subjectChangedVM);
+            ViewBag.msg = "Some informations are missiong, Please Try again later";
+            return View(sChangedVM);
         }
 
 
@@ -2370,6 +2354,17 @@ namespace OnlineAdmission.APP.Controllers
                 i++;
             }
             return true;
+        }
+
+        public async Task<int> CreateCollgeRoll(int subId)
+        {
+            Subject newSubject = await _subjectManager.GetByIdAsync(subId);
+            int studentCount = await _studentManager.GetCountAsync(subId) + 1;
+            
+            int colRoll = Convert.ToInt32(
+                DateTime.Today.ToString("yyyy").Substring(DateTime.Today.ToString("yyyy").Length - 2) +
+                newSubject.Code.ToString("D2") + studentCount.ToString("D3"));
+            return colRoll;
         }
 
         #endregion

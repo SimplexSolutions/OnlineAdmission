@@ -32,7 +32,7 @@
                     <div class="row">
                         <span id="msgId" class="text-danger offset-2">@ViewBag.msg</span>
                     </div>
-                    @if (ViewBag.infoCollection==true)
+                    @if (ViewBag.infoCollection == true)
                     {
                         <div class="row">
                             <div class="col-md-12 text-center">
@@ -104,32 +104,69 @@
                                 <div class="card border-0">
                                     <form asp-action="NagadPayment" asp-controller="Students" method="get">
                                         <input name="nuRoll" value="@Model.MeritStudent.NUAdmissionRoll" type="hidden" />
-                                      <input name="studentCategory" value="1" type="hidden" />
-                                      <input name="paymentType" value="2" type="hidden" /> @*1 = Application, 2 = Admission*@
-            <button type="submit">
-                <img class="card-img-top" src="~/Images/Payment/Nagad.png" alt="Nagad Logo" style="width:80px;">
-            </button>
-                                                </form>
-                                            </div>
-            @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
-            {
-                <div class="card border-0">
-                    <form asp-action="CollegePayment" asp-controller="Students" method="get">
-                        <input name="nuRoll" value="@Model.MeritStudent.NUAdmissionRoll" type="hidden" />
-                        <button type="submit">
-                            <img class="card-img-top" src="~/Images/Collge/logo.png" alt="College Logo" style="width:60px;">
-                        </button>
-                    </form>
-                </div>
-            }
-                                        </div>
+                                        <input name="studentCategory" value="1" type="hidden" />
+                                        <input name="paymentType" value="2" type="hidden" /> @*1 = Application, 2 = Admission*@
+                                        <button type="submit">
+                                            <img class="card-img-top" src="~/Images/Payment/Nagad.png" alt="Nagad Logo" style="width:80px;">
+                                        </button>
+                                    </form>
+                                </div>
+                                @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                                {
+                                    <div class="card border-0">
+                                        <form asp-action="CollegePayment" asp-controller="Students" method="get">
+                                            <input name="nuRoll" value="@Model.MeritStudent.NUAdmissionRoll" type="hidden" />
+                                            <button type="submit">
+                                                <img class="card-img-top" src="~/Images/Collge/logo.png" alt="College Logo" style="width:60px;">
+                                            </button>
+                                        </form>
                                     </div>
                                 }
                             </div>
                         </div>
                     }
-            @if (ViewBag.admittedStudent != null)
+                </div>
+            </div>
+        }
+        @if (ViewBag.admittedStudent != null)
+        {
+            @if (ViewBag.DueAmount == true)
             {
+                <div class="row" id="duePayment">
+                    <div class="col-md-12">
+                        <button class="text-center btn btn-info" id="duePayment">Make Payment</button>
+                    </div>
+                </div>
+
+                <div class="col-md-4 offset-4 pt-3" id="duePaymentId" style="display:none;">
+                    <div class="card-deck">
+                        <div class="card bg-transparent border-0">
+                            <form asp-action="NagadPayment" asp-controller="Students" method="get">
+                                <input name="nuRoll" value="@ViewBag.nuRoll" type="hidden" />
+                                <input name="studentCategory" value="1" type="hidden" />
+                                <input name="paymentType" value="2" type="hidden" /> @*1 = Application, 2 = Admission*@
+                                <button type="submit">
+                                    <img class="card-img-top" src="~/Images/Payment/Nagad.png" alt="Nagad Logo" style="width:80px;">
+                                </button>
+                            </form>
+                        </div>
+                        @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                        {
+                            <div class="card border-0">
+                                <form asp-action="CollegePayment" asp-controller="Students" method="get">
+                                    <input name="nuRoll" value="@ViewBag.nuRoll" type="hidden" />
+                                    <button type="submit">
+                                        <img class="card-img-top" src="~/Images/Collge/logo.png" alt="College Logo" style="width:60px;">
+                                    </button>
+                                </form>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+
                 <div class="row">
                     <div class="card text-center col-md-12">
                         <div class="card-header">
@@ -179,8 +216,9 @@
 
 
                 </div>
-
             }
+
+        }
 
     </div>
 </div>
@@ -209,6 +247,16 @@
                 }
                 else {
                     $('#bankingId').hide();
+                }
+            });
+
+            $('#duePayment').click(function () {
+                let isHidden = $('#duePaymentId').is(':hidden');
+                if (isHidden == true) {
+                    $('#duePaymentId').show();
+                }
+                else {
+                    $('#duePaymentId').hide();
                 }
             });
         });

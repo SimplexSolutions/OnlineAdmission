@@ -27,9 +27,11 @@
                 </form>
                 @if (ViewBag.msg!=null)
                 {
-                <div class="row text-center" id="msgId">
+                <div class="row" id="msgId">
                     <br />
-                    <h4 class="alert text-danger">@ViewBag.msg</h4>
+                    <div class="col-md-12 text-center">
+                        <h4 class="alert text-danger">@ViewBag.msg</h4>
+                    </div>
                 </div>
                 }
             </div>

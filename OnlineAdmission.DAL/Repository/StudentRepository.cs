@@ -36,10 +36,19 @@ namespace OnlineAdmission.DAL.Repository
 
         public async Task<Student> GetStudentByHSCRollAsync(int hscRoll)
         {
-            var student = await _context.Students.Include(s => s.Subject).FirstOrDefaultAsync(s => s.HSCRoll == hscRoll && s.Status==true);
+            Student student;
+            var stuList = await _context.Students.Include(s => s.Subject).Where(h => h.HSCRoll == hscRoll).ToListAsync();
+            if (stuList.Count==1)
+            {
+                student = stuList.FirstOrDefault();
+            }
+            else
+            {
+                student = stuList.FirstOrDefault(s => s.StudentType == 2);
+            }
+            //var student = await _context.Students.Include(s => s.Subject).FirstOrDefaultAsync(s => s.HSCRoll == hscRoll);
             return student;
         }
-
         public async Task<Student> GetStudentBySSCRollAsync(int sscRoll, string boardName)
         {
             var student = await _context.Students.Include(s => s.Subject).FirstOrDefaultAsync(s => s.SSCRoll == sscRoll && s.SSCBoard.Trim() == boardName.Trim());
