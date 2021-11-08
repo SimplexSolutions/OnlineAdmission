@@ -26,20 +26,20 @@ namespace OnlineAdmission.APP.Controllers
        
         //private readonly IAppliedStudentManager appliedStudentManager;
         //private readonly ISubjectManager subjectManager;
-        //private readonly IStudentManager studentManager;
+        private readonly IStudentManager _studentManager;
         private readonly INagadManager nagadManager;
         
 
 
         private readonly ISMSManager _smsManager;
 
-        public PaymentTransactions(IMeritStudentManager meritStudentManager,IPaymentTransactionManager paymentTransactionManager, ISMSManager sMSManager,INagadManager nagadManager)
+        public PaymentTransactions(IMeritStudentManager meritStudentManager,IPaymentTransactionManager paymentTransactionManager, ISMSManager sMSManager,INagadManager nagadManager, IStudentManager studentManager)
         {
             this.meritStudentManager = meritStudentManager;
             this.paymentTransactionManager = paymentTransactionManager;
             //this.appliedStudentManager = appliedStudentManager;
             //this.subjectManager = subjectManager;
-            //this.studentManager = studentManager;
+            _studentManager = studentManager;
             this.nagadManager = nagadManager;
             _smsManager = sMSManager;
         }
@@ -59,7 +59,8 @@ namespace OnlineAdmission.APP.Controllers
 
             if (status.ToLower() == "success")
             {
-                string successNotification = "Congratulations! Payment Completed (BDT: " + responsevalue.amount + "/-)";
+                string successNotification = "Congratulations! Payment Completed (BDT: " + responsevalue.amount + "/-)";                
+
 
                 var additionalMerchantInfo = (responsevalue.additionalMerchantInfo).Value;
                 dynamic MerchantInfo = JObject.Parse(additionalMerchantInfo);
@@ -82,12 +83,20 @@ namespace OnlineAdmission.APP.Controllers
                 //newPayment.ApplicantName = MerchantInfo.StudentName;
                 //newPayment.MobileNo = MerchantInfo.MobileNo;
                 //newPayment.SubjectId = MerchantInfo.SubjectId;
+                if (responsevalue.subjectChange == 1)
+                {
+                    MeritStudent existingMeritStudent = await meritStudentManager.GetByAdmissionRollAsync(MerchantInfo.NuAdmissionRoll);
+                    var existingStudent = await _studentManager.GetStudentByHSCRollAsync(existingMeritStudent.HSCRoll);
+                    existingStudent.Status = true;
+                    await _studentManager.UpdateAsync(existingStudent);
+                }
 
                 PaymentTransaction exPT = await paymentTransactionManager.GetPaymentTransactionByTrId(newPayment.TransactionId);
                 if (exPT!=null)
                 {
                     if (newPayment.StudentCategory==1)
                     {
+                        
                         return RedirectToAction("Search", "Students");
                     }
                     else if (newPayment.StudentCategory==2)
@@ -115,56 +124,27 @@ namespace OnlineAdmission.APP.Controllers
 
                 phoneNumber = MerchantInfo.MobileNo;
                 msgText = "Congratulations! your payment is successfully paid";
-                if (newPayment.StudentCategory == 1) //For Hon's General Student
+
+                //For Common Code
+                if (meritStudent != null)
                 {
                     meritStudent.PaymentStatus = true;
                     meritStudent.PaymentTransactionId = newPayment.Id;
                     meritStudent.StudentCategory = newPayment.StudentCategory;
                     await meritStudentManager.UpdateAsync(meritStudent);
+                }
+                
+
+                if (newPayment.StudentCategory == 1) //For Hon's General Student
+                {
                     //AppliedStudent newStudent = await appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll);
                     AppliedStudent newStudent = await nagadManager.GetAppliedStudentByNURollNagad(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
                     phoneNumber = newStudent.MobileNo.ToString();
                     msgText = "Congratulations! " + newStudent.ApplicantName + "(NU Roll:" + newStudent.NUAdmissionRoll + ") , your admission payment is successfully paid";
                 }
-                else if (newPayment.StudentCategory == 2) //For Hon's Professional Student
-                {
-                    
-                    if (meritStudent != null)
-                    {
-                        meritStudent.PaymentStatus = true;
-                        meritStudent.PaymentTransactionId = newPayment.Id;
-                        meritStudent.StudentCategory = newPayment.StudentCategory;
-                        await meritStudentManager.UpdateAsync(meritStudent);
-                    }
-                }
-                else if (newPayment.StudentCategory == 3) //For Master's MBA
-                {
-                    //var AdmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(professionalRoll);
-                    if (meritStudent != null) 
-                    {
-                        meritStudent.PaymentStatus = true;
-                        meritStudent.PaymentTransactionId = newPayment.Id;
-                        meritStudent.StudentCategory = newPayment.StudentCategory;
-                        await meritStudentManager.UpdateAsync(meritStudent);
-                    }
-                }
+                
 
-                else if (newPayment.StudentCategory == 4) //For Master's General Regular
-                {
-                    //var AdmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(professionalRoll);
-                    if (meritStudent != null)
-                    {
-                        meritStudent.PaymentStatus = true;
-                        meritStudent.PaymentTransactionId = newPayment.Id;
-                        meritStudent.StudentCategory = newPayment.StudentCategory;
-                        await meritStudentManager.UpdateAsync(meritStudent);
-                    }
-                }
-
-
-
-                //////////////////Code for SMS Sending and Saving
-                ///
+                //////////Code for SMS Sending and Saving///
 
                 bool SentSMS = false;
                 SentSMS = await ESMS.SendSMS(phoneNumber, msgText);

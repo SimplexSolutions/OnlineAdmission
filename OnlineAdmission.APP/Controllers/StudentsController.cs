@@ -566,7 +566,6 @@ namespace OnlineAdmission.APP.Controllers
                 if (meritStudent==null)
                 {
                     ViewBag.msg = "You are not eligible";
-                    
                     return View();
                 }
 
@@ -971,14 +970,13 @@ namespace OnlineAdmission.APP.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult> NagadPayment(int nuRoll, int studentCategory, int paymentType)
+        public async Task<ActionResult> NagadPayment(int nuRoll, int studentCategory, int paymentType, int? subjectChange)
         {
             if (nuRoll<=0)
             {
                 _logger.LogWarning("NU Roll is Invalid");
                 return RedirectToAction("Search");
             }
-
 
 
             string OrderId;
@@ -997,6 +995,17 @@ namespace OnlineAdmission.APP.Controllers
             Subject subject = await _nagadManager.GetSubjectByCodeNagad(meritStudent.SubjectCode);
 
             OrderId = meritStudent.NUAdmissionRoll + "" + meritStudent.SubjectCode + "" + DateTime.Now.ToString("HHmmss");
+            double paymentForSubjectChange = 0.00;
+            if (subjectChange==1)
+            {
+                Student existingStudent = await _studentManager.GetStudentByHSCRollAsync(meritStudent.HSCRoll);
+                Subject ChangedSubject = await _subjectManager.GetByIdAsync(existingStudent.SubjectId);
+                OrderId = nuRoll + "" + ChangedSubject.Code + "" + DateTime.Now.ToString("HHmmss");
+
+                var payments = await _paymentTransactionManager.GetAllPaymentTrancsactionByNuRoll(nuRoll);
+                var paidForAdmission = payments.Where(p => p.PaymentType == 2).Sum(p => p.AdmissionFee);
+                paymentForSubjectChange = ChangedSubject.AdmissionFee - paidForAdmission;
+            }
             //}
 
 
@@ -1095,6 +1104,13 @@ namespace OnlineAdmission.APP.Controllers
             string challenge = responsevalue.challenge;
             string paymentRefId = responsevalue.paymentReferenceId;
             double amount= subject.AdmissionFee - meritStudent.DeductedAmaount;
+            if (subjectChange==1)
+            {
+                if (paymentForSubjectChange > 20)
+                {
+                    amount = paymentForSubjectChange;
+                }
+            }
             double serviceCharge =  amount * .0157;
             double totalAmount = Math.Round((amount + serviceCharge),2); 
 
@@ -1105,7 +1121,8 @@ namespace OnlineAdmission.APP.Controllers
                 orderId = OrderId,
                 currencyCode = "050",
                 amount = totalAmount,
-                challenge = challenge
+                challenge = challenge,
+                subjectChange = subjectChange
             };
 
             string paymentJsonData = JsonConvert.SerializeObject(paymentJSON);
@@ -2099,16 +2116,29 @@ namespace OnlineAdmission.APP.Controllers
                 previousStudent.UpdatedBy = HttpContext.Session.GetString("UserId");
                 previousStudent.Status = false;
                 previousStudent.StudentType = 1;
-
+                string msgText="";
+                double restAmount = newSubject.AdmissionFee - previousStudent.Subject.AdmissionFee;
                 if (previousStudent.Subject.AdmissionFee == newSubject.AdmissionFee)
                 {
                     previousStudent.Status = false;
+                    msgText = NewStudent.Name + ", Your subject changed ("+previousStudent.Subject.SubjectName+" to "+newSubject.SubjectName+") is completed";
                 }
                 else
                 {
-                    ViewBag.msg = "Subject Change not possible due to admission fee missmatch for both subject";
-                    TempData["msg"] = ViewBag.msg;
-                    NewStudent.Status = false;
+                    if (restAmount>0)
+                    {
+                        ViewBag.msg = "Subject Change will pending due to admission fee missmatch for both subject";
+                        msgText = NewStudent.Name + ", Your subject changed is incompleted due to rest payment. Please pay full payment to complete your admission";
+                        NewStudent.Status = false;
+                    }
+                    else
+                    {
+                        
+                        msgText = NewStudent.Name + ", Your subject changed is completed. You can collect "+restAmount+"Tk. from admission office.";
+                        NewStudent.Status = true;
+                    }
+
+                    
                 }
                 await _studentManager.UpdateAsync(previousStudent);
 
@@ -2126,6 +2156,23 @@ namespace OnlineAdmission.APP.Controllers
                 NewStudent.StudentType = 2;
 
                 await _studentManager.AddAsync(NewStudent);
+                bool SentSMS = false;
+                string phoneNum = NewStudent.StudentMobile.ToString();
+
+                SentSMS = await ESMS.SendSMS("0" + phoneNum, msgText);
+                SMSModel newSMS = new SMSModel()
+                {
+                    MobileList = phoneNum,
+                    Text = msgText,
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = "System",
+                    Description = "Subject Changed"
+                };
+
+                if (SentSMS == true)
+                {
+                    await _smsManager.AddAsync(newSMS);
+                }
                 return RedirectToAction("Index");
             }
 
@@ -2366,6 +2413,8 @@ namespace OnlineAdmission.APP.Controllers
                 newSubject.Code.ToString("D2") + studentCount.ToString("D3"));
             return colRoll;
         }
+
+        
 
         #endregion
 
