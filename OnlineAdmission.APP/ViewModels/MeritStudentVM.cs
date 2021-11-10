@@ -10,7 +10,7 @@ namespace OnlineAdmission.APP.ViewModels
         public int Id { get; set; }
         public int NUAdmissionRoll { get; set; }
         public string ApplicantName { get; set; }
-        public string HSCRoll { get; set; }
+        public long HSCRoll { get; set; }
         public int SubjectCode { get; set; }
         public string SubjectName { get; set; }
         public string HSCGroup { get; set; }

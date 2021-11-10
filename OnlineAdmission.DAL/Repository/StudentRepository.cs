@@ -34,7 +34,7 @@ namespace OnlineAdmission.DAL.Repository
             return students;
         }
 
-        public async Task<Student> GetStudentByHSCRollAsync(int hscRoll)
+        public async Task<Student> GetStudentByHSCRollAsync(long hscRoll)
         {
             Student student;
             var stuList = await _context.Students.Include(s => s.Subject).Where(h => h.HSCRoll == hscRoll).ToListAsync();

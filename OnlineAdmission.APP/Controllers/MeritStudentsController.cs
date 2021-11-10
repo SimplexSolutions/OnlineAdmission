@@ -213,14 +213,11 @@ namespace OnlineAdmission.APP.Controllers
                         students.Add(new MeritStudent()
                         {
                             NUAdmissionRoll = Convert.ToInt32(reader.GetValue(0).ToString()),
-                            HSCRoll = Convert.ToInt32(reader.GetValue(1).ToString()),
+                            HSCRoll = Convert.ToInt64(reader.GetValue(1).ToString()),
                             MeritPosition = Convert.ToInt32(reader.GetValue(2).ToString()),
                             SubjectCode = Convert.ToInt32(reader.GetValue(3).ToString()),
                             Comments = reader.GetValue(4).ToString(),
                             StudentCategory = Convert.ToInt32(reader.GetValue(5).ToString())
-                            //PaymentStatus = false,
-                            //DeductedAmaount = 0.00,
-                            
                         });
 
                     }

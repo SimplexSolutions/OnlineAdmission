@@ -32,16 +32,17 @@ namespace OnlineAdmission.BLL.Manager
             return await _studentRepository.GetCountAsync(subId);
         }
 
-        public async Task<Student> GetStudentByHSCRoll(int hscRoll)
+        public async Task<Student> GetStudentByHSCRoll(long hscRoll)
         {
             var student = await _studentRepository.GetStudentByHSCRollAsync(hscRoll);
             return student;
         }
 
-        public async Task<Student> GetStudentByHSCRollAsync(int hscRoll)
+        public async Task<Student> GetStudentByHSCRollAsync(long hscRoll)
         {
             return await _studentRepository.GetStudentByHSCRollAsync(hscRoll);
         }
+
 
         public async Task<Student> GetStudentBySSCRollAsync(int sscRoll, string boardName)
         {

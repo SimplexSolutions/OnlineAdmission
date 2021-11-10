@@ -16,7 +16,7 @@ namespace OnlineAdmission.Entity
 
 
         [Display(Name = "HSC Roll")]
-        public int HSCRoll { get; set; }
+        public long HSCRoll { get; set; }
 
         [Display(Name = "Subject Code")]
         public int SubjectCode { get; set; } //subject Code=0 will consider as applied student otherwise selected student
