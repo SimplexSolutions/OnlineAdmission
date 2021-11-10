@@ -724,7 +724,16 @@ namespace OnlineAdmission.APP.Controllers
             if (TempData["msg"] != null)
             {
                 ViewBag.miss = TempData["msg"].ToString();
+                ViewBag.msg = TempData["msg"].ToString();
             }
+            if (TempData["infoCollection"] != null)
+            {
+                ViewBag.infoCollection = TempData["infoCollection"].ToString();
+            }
+            if (TempData["mastersRoll"] != null)
+            {
+                ViewBag.Roll = TempData["mastersRoll"].ToString();
+            } 
             ViewBag.Roll = mastersRoll;
             ViewBag.notification = notification;
             return View();
@@ -735,19 +744,70 @@ namespace OnlineAdmission.APP.Controllers
         public async Task<IActionResult> MastersSearch(int mastersRoll)
         {
             int studentCategory = 3;
-            bool isPaid = false;
+            bool applicationIsPaid;
+            bool addmissionIsPaid;
+            bool admitted;
+            bool selected;
             ViewBag.nuRoll = mastersRoll;
+            ViewBag.DueAmount = false;
+
             if (mastersRoll > 0)
             {
-                var payment = await _paymentTransactionManager.GetApplicationTransactionByNuRollAsync(mastersRoll,studentCategory);
-                if (payment != null)
+                var student = await _studentManager.GetByAdmissionRollAsync(mastersRoll);
+                if (student != null)
                 {
-                    isPaid = true;
-                    ViewBag.isPaid = isPaid;
+                    admitted = true;
+                    ViewBag.admitted = admitted;
+                    ViewBag.student = student;
                     return View();
                 }
-                ViewBag.isPaid = isPaid;
+
+                var AdmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(mastersRoll, studentCategory);
+
+                if (AdmissionPayment == null)
+                {
+                    var applicationPayment = await _paymentTransactionManager.GetApplicationTransactionByNuRollAsync(mastersRoll, studentCategory);
+                    if (applicationPayment != null)
+                    {
+                        applicationIsPaid = true;
+                        ViewBag.applicationIsPaid = applicationIsPaid;
+
+                        var selectedStudent = await _meritStudentManager.GetProMBAByAdmissionRollAsync(mastersRoll);
+                        var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(mastersRoll);
+                        var subject = await _subjectManager.GetByCodeAsync(selectedStudent.SubjectCode);
+                        SelectedStudentVM selectedStudentVM = new SelectedStudentVM();
+                        selectedStudentVM.AppliedStudent = appliedStudent;
+                        selectedStudentVM.MeritStudent = selectedStudent;
+                        selectedStudentVM.Subject = subject;
+
+                        ViewBag.allStudentVM = selectedStudentVM;
+
+
+                        if (selectedStudent != null)
+                        {
+                            selected = true;
+                            ViewBag.selected = selected;
+                            return View();
+                        }
+                        ViewBag.msg = "You are not selected";
+                        return View();
+                    }
+                    ViewBag.msg = "You didn't apply";
+                    return View();
+                }
+                else
+                {
+                    selected = true;
+                    addmissionIsPaid = true;
+                    ViewBag.addmissionIsPaid = addmissionIsPaid;
+                    applicationIsPaid = true;
+                }
+
+                ViewBag.selected = selected;
+                ViewBag.addmissionIsPaid = addmissionIsPaid;
+                ViewBag.applicationIsPaid = applicationIsPaid;
             }
+            ViewBag.nuRoll = mastersRoll;
             return View();
         }
 
@@ -1477,16 +1537,27 @@ namespace OnlineAdmission.APP.Controllers
 
             if (studentCategory == 3)
             {
-                if (mobileNum == null || studentName == null)
+                if (paymentType==1)
                 {
-                    TempData["miss"] = "Mobile Number and Name is mendatory";
-                    return RedirectToAction("MastersSearch", "Students");
+                    if (mobileNum == null || studentName == null)
+                    {
+                        TempData["miss"] = "Mobile Number and Name is mendatory";
+                        return RedirectToAction("MastersSearch", "Students");
+                    }
                 }
+                
                 OrderId = nuRoll.ToString() + "" + "promba" + "" + DateTime.Now.ToString("HHmmss");
                 if (paymentType==2)
                 {
                     OrderId = nuRoll.ToString() + "" + "MBAAdm" + "" + DateTime.Now.ToString("HHmmss");
                     AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+                    if (appliedStudent==null)
+                    {
+                        TempData["msg"] = "Please submit your basic information.";
+                        TempData["infoCollection"] = true;
+                        TempData["mastersRoll"] = nuRoll;
+                        return RedirectToAction("MastersSearch", "Students");
+                    }
                     studentName = appliedStudent.ApplicantName;
                     mobileNum = appliedStudent.MobileNo;
                 }

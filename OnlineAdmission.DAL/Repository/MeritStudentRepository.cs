@@ -42,7 +42,7 @@ namespace OnlineAdmission.DAL.Repository
 
         public async Task<MeritStudent> GetProMBAByAdmissionRollAsync(int NuRoll)
         {
-            var existStudent = await _context.MeritStudents.FirstOrDefaultAsync(m => m.NUAdmissionRoll == NuRoll &&  m.PaymentStatus == true && m.StudentCategory == 3);
+            var existStudent = await _context.MeritStudents.FirstOrDefaultAsync(m => m.NUAdmissionRoll == NuRoll  && m.StudentCategory == 3);
             return existStudent;
         }
 

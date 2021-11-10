@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_LayoutStudent.cshtml";
 }
 <div class="">
-    <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">        
+    <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">
         <div class="card-body">
             <form asp-action="MastersSearch" asp-controller="Students" method="post">
                 <label class="col-md-8 text-success font-weight-bolder  text-md-center text-center col-form-label" style="font-size:x-large">Professional Admission (MBA)</label><br /><br />
@@ -33,13 +33,30 @@
                 </div>
             }
         </div>
+        @if (ViewBag.msg != null)
+        {
+            <div class="row">
+                <span id="msgId" class="text-danger offset-2">@ViewBag.msg</span>
+            </div>
+            @if (ViewBag.infoCollection == true)
+            {
+                <div class="row">
+                    <div class="col-md-12 text-center">
+
+                        <a asp-action="Create" asp-controller="AppliedStudents" asp-route-from="Mastersprofessional" asp-route-nuRoll="@ViewBag.nuRoll" class="btn btn-outline-info">Give Information</a>
+                    </div>
+                </div>
+            }
+        }
         @if (ViewBag.notification != null)
         {
             <div class="text-md-center">
                 <span class="h2 alert text-success">@ViewBag.notification</span>
             </div>
         }
-        @if (ViewBag.isPaid != null)
+
+        //============This Code only for Application purpose==============
+        @*@if (ViewBag.isPaid != null)
         {
             if (ViewBag.isPaid == true)
             {
@@ -74,6 +91,41 @@
                     </div>
                 </div>
             }
+        }*@
+
+        @if (ViewBag.DueAmount == false)
+        {
+            <div class="row" id="duePayment">
+                <div class="col-md-12">
+                    <button class="text-center btn btn-info" id="paymentId">Make Payment</button>
+                </div>
+            </div>
+
+            <div class="col-md-4 offset-4 pt-3" id="paymentArea" style="display:none;">
+                <div class="card-deck">
+                    <div class="card bg-transparent border-0">
+                        <form asp-action="NagadPaymentMasters" asp-controller="Students" method="get">
+                            <input name="nuRoll" value="@ViewBag.nuRoll" type="hidden" />
+                            <input name="studentCategory" value="3" type="hidden" />
+                            <input name="paymentType" value="2" type="hidden" /> @*1 = Application, 2 = Admission*@
+                            <button type="submit">
+                                <img class="card-img-top" src="~/Images/Payment/Nagad.png" alt="Nagad Logo" style="width:80px;">
+                            </button>
+                        </form>
+                    </div>
+                    @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                    {
+                        <div class="card border-0">
+                            <form asp-action="CollegePayment" asp-controller="Students" method="get">
+                                <input name="nuRoll" value="@ViewBag.nuRoll" type="hidden" />
+                                <button type="submit">
+                                    <img class="card-img-top" src="~/Images/Collge/logo.png" alt="College Logo" style="width:60px;">
+                                </button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
         }
 
     </div>
@@ -84,6 +136,16 @@
     <script>
     $(document).ready(function () {
         $("#missText").fadeOut(10000);
+
+        $('#paymentId').click(function () {
+            let isHidden = $('#paymentArea').is(':hidden');
+            if (isHidden == true) {
+                $('#paymentArea').show();
+            }
+            else {
+                $('#paymentArea').hide();
+            }
+        });
     });
     </script>
 }

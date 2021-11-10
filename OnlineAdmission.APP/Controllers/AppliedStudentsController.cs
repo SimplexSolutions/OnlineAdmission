@@ -78,13 +78,19 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Create( int nuRoll)
+        public async Task<IActionResult> Create( int nuRoll, string from)
         {
+            string targetActionName = "Search";
+            if (from== "Mastersprofessional")
+            {
+                targetActionName = "MastersSearch";
+            }
+
             var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
             if (existAppliedStudent != null)
             {
                 TempData["msg"] = "You are already applied";
-                return RedirectToAction("Search", "Students");
+                return RedirectToAction(targetActionName, "Students");
             }
             ViewBag.nuRoll = nuRoll;
             return View();
