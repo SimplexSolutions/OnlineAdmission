@@ -128,7 +128,11 @@ namespace OnlineAdmission.APP.Controllers
                 //For Common Code
                 if (meritStudent != null)
                 {
-                    meritStudent.PaymentStatus = true;
+                    if (newPayment.PaymentType==2)
+                    {
+                        meritStudent.PaymentStatus = true;
+                    }
+                    
                     meritStudent.PaymentTransactionId = newPayment.Id;
                     meritStudent.StudentCategory = newPayment.StudentCategory;
                     await meritStudentManager.UpdateAsync(meritStudent);
