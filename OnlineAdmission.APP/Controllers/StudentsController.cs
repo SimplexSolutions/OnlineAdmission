@@ -154,6 +154,7 @@ namespace OnlineAdmission.APP.Controllers
         {
             if (nuAdmissionRoll>0)
             {
+                ViewBag.studentCategory = studentCategory;
                 MeritStudent existingMeritStudent = new MeritStudent();
                 if (studentCategory==2) //For Hon's General Student
                 {
@@ -748,7 +749,7 @@ namespace OnlineAdmission.APP.Controllers
             bool addmissionIsPaid = false;
             bool admitted = false;
             bool selected =false ;
-
+            ViewBag.admitted = admitted;
             ViewBag.nuRoll = mastersRoll;
             ViewBag.DueAmount = false;
 
@@ -763,59 +764,70 @@ namespace OnlineAdmission.APP.Controllers
                     return View();
                 }
                 var meritStudent = await _meritStudentManager.GetProMBAByAdmissionRollAsync(mastersRoll);
+                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(mastersRoll);
+                
                 if (meritStudent==null)
                 {
                     ViewBag.msg = "You are not selected";
+                    selected = false;
+                    ViewBag.selected = selected;
+                    return View();
+                }                
+                
+                selected = true;
+
+                var applicationPayment = await _paymentTransactionManager.GetApplicationTransactionByNuRollAsync(mastersRoll, studentCategory);
+                if (applicationPayment==null)
+                {
+                    applicationIsPaid = false;
+                    ViewBag.msg = "You are not applied";
+                    ViewBag.applicaitonIsPaid = applicationIsPaid;
                     return View();
                 }
-                else
+                applicationIsPaid = true;
+                ViewBag.applicationIsPaid = applicationIsPaid;
+
+                if (appliedStudent == null)
                 {
-                    var AdmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(mastersRoll, studentCategory);
-                    if (AdmissionPayment == null)
-                    {
-                        addmissionIsPaid = false;
-                        ViewBag.addmissionIsPaid = addmissionIsPaid;
-                        ViewBag.msg = "Congratulations! You are selected.";
-                        var applicationPayment = await _paymentTransactionManager.GetApplicationTransactionByNuRollAsync(mastersRoll, studentCategory);
-                        if (applicationPayment != null)
-                        {
-                            applicationIsPaid = true;
-                            ViewBag.applicationIsPaid = applicationIsPaid;
-
-                            
-                            var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(mastersRoll);
-                            if (appliedStudent == null)
-                            {
-                                ViewBag.msg = "Congratulations! You are selected. Now, please submit your basic information.";
-                                ViewBag.infoCollection = true;
-                                ViewBag.nuRoll = mastersRoll;
-                                return View();
-                            }
-                            var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
-                            SelectedStudentVM selectedStudentVM = new SelectedStudentVM();
-                            selectedStudentVM.AppliedStudent = appliedStudent;
-                            selectedStudentVM.MeritStudent = meritStudent;
-                            selectedStudentVM.Subject = subject;
-
-                            ViewBag.allStudentVM = selectedStudentVM;                            
-                            return View();
-                        }
-                        
-                        applicationIsPaid = false;
-                        ViewBag.msg = "You didn't apply";
-                        return View();
-                    }
-                    
+                    ViewBag.msg = "Congratulations! You are selected. Now, please submit your basic information.";
+                    ViewBag.infoCollection = true;
+                    ViewBag.nuRoll = mastersRoll;
+                    return View();
                 }
-
-
+                var AdmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(mastersRoll, studentCategory);
+                if (AdmissionPayment == null)
+                {
+                    addmissionIsPaid = false;
+                    ViewBag.addmissionIsPaid = addmissionIsPaid;
+                    ViewBag.msg = "Congratulations! You are selected. Now, please complete your admission fee.";
+                    return View();
+                }
+                
                 addmissionIsPaid = true;
+                ViewBag.msg = "Your payment is completed";
+                var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
+                SelectedStudentVM selectedStudentVM = new SelectedStudentVM();
+                selectedStudentVM.AppliedStudent = appliedStudent;
+                selectedStudentVM.MeritStudent = meritStudent;
+                selectedStudentVM.Subject = subject;
 
+                ViewBag.meritStudent = meritStudent;
+                ViewBag.allStudentVM = selectedStudentVM;                                                    
+                ViewBag.addmissionIsPaid = addmissionIsPaid;                    
+                ViewBag.AppliedStudent = appliedStudent;
                 ViewBag.selected = selected;
                 ViewBag.addmissionIsPaid = addmissionIsPaid;
                 ViewBag.applicationIsPaid = applicationIsPaid;
+                ViewBag.AppliedStudent = appliedStudent;
             }
-            
+            else
+            {
+                ViewBag.selected = selected;
+                ViewBag.addmissionIsPaid = addmissionIsPaid;
+                ViewBag.applicationIsPaid = applicationIsPaid;
+                ViewBag.admitted = admitted;
+            }
+
             return View();
         }
 

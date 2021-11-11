@@ -5,6 +5,23 @@
     Layout = User.IsInRole("Admin") ? "~/Views/Shared/_Layout.cshtml" : "~/Views/Shared/_LayoutStudent.cshtml";
 
     string studentMobileNumber = "+880" + Model.StudentMobile;
+    string studentClass = "1st Year Bachelor of Honours 2020-2021";
+    if (ViewBag.studentCategory == 3)
+    {
+        studentClass = "MBA (Professional) 2020-2021";
+    }
+    else if (ViewBag.studentCategory == 2)
+    {
+        studentClass = "1st Year Bachelor(Professional) of Honours 2020-2021";
+    }
+    else if (ViewBag.studentCategory == 4)
+    {
+        studentClass = "Masters Admission 2020-2021";
+    }
+    else
+    {
+        studentClass = "1st Year Bachelor of Honours 2020-2021";
+    }
 }
 
 <div class="">
@@ -13,7 +30,7 @@
             <div class="text-center">
                 <h3>Tejgaon College, Dhaka</h3>
                 <h5>College Code: 6422</h5>
-                <h5>1st Year Bachelor of Honours 2020-2021</h5><br />
+                <h5>@studentClass</h5><br />
                 <h3>Student Personal Information Form</h3>
             </div>
         </div>
