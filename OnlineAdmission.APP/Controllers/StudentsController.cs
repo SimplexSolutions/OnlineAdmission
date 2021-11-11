@@ -177,12 +177,12 @@ namespace OnlineAdmission.APP.Controllers
                     existingMeritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuAdmissionRoll);
                 }
 
-                var addmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(nuAdmissionRoll, studentCategory);
-                if (addmissionPayment==null)
-                {
-                    TempData["msg"] = "Your payment is not completed yet.";
-                    return RedirectToAction(action, "Students");
-                }
+                //var addmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(nuAdmissionRoll, studentCategory);
+                //if (addmissionPayment==null)
+                //{
+                //    TempData["msg"] = "Your payment is not completed yet.";
+                //    return RedirectToAction(action, "Students");
+                //}
 
                 var existingAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuAdmissionRoll);
                 var existingSubject = await _subjectManager.GetByCodeAsync(existingMeritStudent.SubjectCode);
