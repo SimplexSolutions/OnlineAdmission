@@ -155,19 +155,34 @@ namespace OnlineAdmission.APP.Controllers
             if (nuAdmissionRoll>0)
             {
                 ViewBag.studentCategory = studentCategory;
+                string action = "Search";
                 MeritStudent existingMeritStudent = new MeritStudent();
-                if (studentCategory==2) //For Hon's General Student
+                if (studentCategory==2) //For Hon's Prfessional Student
                 {
                     existingMeritStudent = await _meritStudentManager.GetProByAdmissionRollAsync(nuAdmissionRoll);
+                    action = "ProfessionalSearch";
                 }
                 else if (studentCategory==3) //For Master's Professional MBA Student
                 {
                     existingMeritStudent = await _meritStudentManager.GetProMBAByAdmissionRollAsync(nuAdmissionRoll);
+                    action = "MastersSearch";
+                }
+                else if (studentCategory==4) //For Master's Professional MBA Student
+                {
+                    existingMeritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuAdmissionRoll);
+                    action = "MastersSearchGeneral";
                 }
                 else // for Hon's General Student
                 {
                     existingMeritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuAdmissionRoll);
-                }                
+                }
+
+                var addmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(nuAdmissionRoll, studentCategory);
+                if (addmissionPayment==null)
+                {
+                    TempData["msg"] = "Your payment is not completed yet.";
+                    return RedirectToAction(action, "Students");
+                }
 
                 var existingAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuAdmissionRoll);
                 var existingSubject = await _subjectManager.GetByCodeAsync(existingMeritStudent.SubjectCode);
@@ -175,26 +190,27 @@ namespace OnlineAdmission.APP.Controllers
                 string year = DateTime.Today.ToString("yyyy");
                 int subjectCode = existingSubject.Code;
                 int count = await _studentManager.GetCountAsync(existingSubject.Id)+1;
-                string sl = "";
-                if (count < 100)
-                {
-                    if (count == 0)
-                    {
-                        sl = "001";
-                    }
-                    else if (count < 10)
-                    {
-                        sl = "00" + count.ToString();
-                    }
-                    else if (count < 100 && count > 9)
-                    {
-                        sl = "0" + count.ToString();
-                    }
-                }
-                else
-                {
-                    sl = count.ToString();
-                }
+                string sl = count.ToString("D3");
+                //if (count < 100)
+                //{
+                //    if (count == 0)
+                //    {
+                //        sl = "001";
+                //    }
+                //    else if (count < 10)
+                //    {
+                //        sl = "00" + count.ToString();
+                //    }
+                //    else if (count < 100 && count > 9)
+                //    {
+                //        sl = "0" + count.ToString();
+                //    }
+                //}
+                //else
+                //{
+                //    sl = count.ToString();
+                //}
+                //sl = count.ToString("D3");
                 
                 StudentCreateVM student = new StudentCreateVM();
                 student.Name = existingAppliedStudent.ApplicantName;
@@ -299,26 +315,26 @@ namespace OnlineAdmission.APP.Controllers
                     string year = DateTime.Today.ToString("yyyy");
                     int subjectCode = existingSubject.Code;
                     int count = await _studentManager.GetCountAsync(existingSubject.Id)+1;
-                    string sl = "";
-                    if (count < 100)
-                    {
-                        if (count == 0)
-                        {
-                            sl = "001";
-                        }
-                        else if (count < 10)
-                        {
-                            sl = "00" + count.ToString();
-                        }
-                        else if (count < 100 && count > 9)
-                        {
-                            sl = "0" + count.ToString();
-                        }
-                    }
-                    else
-                    {
-                        sl = count.ToString();
-                    }
+                    string sl = count.ToString("D3");
+                    //if (count < 100)
+                    //{
+                    //    if (count == 0)
+                    //    {
+                    //        sl = "001";
+                    //    }
+                    //    else if (count < 10)
+                    //    {
+                    //        sl = "00" + count.ToString();
+                    //    }
+                    //    else if (count < 100 && count > 9)
+                    //    {
+                    //        sl = "0" + count.ToString();
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    sl = count.ToString();
+                    //}
                     
                     if (subjectCode<10)
                     {
@@ -749,6 +765,7 @@ namespace OnlineAdmission.APP.Controllers
             bool addmissionIsPaid = false;
             bool admitted = false;
             bool selected =false ;
+            ViewBag.msg = "Your admission successfully completed.";
             ViewBag.admitted = admitted;
             ViewBag.nuRoll = mastersRoll;
             ViewBag.DueAmount = false;

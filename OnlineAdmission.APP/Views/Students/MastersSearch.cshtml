@@ -35,7 +35,12 @@
                 </div>
             }
         </div>
-
+        @if (ViewBag.admitted == true)
+        {
+        <div class="col-md-6 offset-3">
+            <a asp-action="Details" asp-controller="Students" asp-route-id="@ViewBag.student.Id" class="btn btn-info">View admission form</a>
+        </div>
+        }
 
         @if (ViewBag.infoCollection == true)
         {
@@ -49,12 +54,7 @@
         {
             @if (ViewBag.addmissionIsPaid == true)
             {
-                if (ViewBag.admitted == true)
-                {
-                    <div class="col-md-6 offset-3">
-                        <a asp-action="Details" asp-controller="Students" asp-route-id="@ViewBag.student.Id" class="btn btn-info">View admission form</a>
-                    </div>
-                }
+
                 if (ViewBag.admitted == false)
                 {
                     <div class="row">

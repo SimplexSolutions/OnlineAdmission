@@ -110,10 +110,10 @@ namespace OnlineAdmission.Entity
         [Display(Name = "College Roll")]
         public int CollegeRoll { get; set; }
 
-        [Display(Name = "Passing Year"), Range(2016, 2019), Required(ErrorMessage = "Passing Year Required")]
+        [Display(Name = "Passing Year"), Required(ErrorMessage = "Passing Year Required")]
         public int SSCPassingYear { get; set; }
 
-        [Display(Name = "Passing Year"), Range(2018, 2021), Required(ErrorMessage = "Passing Year Required")]
+        [Display(Name = "Passing Year"), Required(ErrorMessage = "Passing Year Required")]
         public int HSCPassingYear { get; set; }
 
         [Display(Name = "SSC Board"), StringLength(20)]
