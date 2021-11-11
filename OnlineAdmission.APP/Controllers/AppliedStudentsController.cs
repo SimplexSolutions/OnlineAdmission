@@ -78,30 +78,87 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Create( int nuRoll, string from)
+        public async Task<IActionResult> Create( int nuRoll, int? studentCat)
         {
-            string targetActionName = "Search";
-            if (from== "Mastersprofessional")
+            string Action = "Search";
+            ViewBag.returnAction = Action;
+            if (studentCat == 3)
             {
-                targetActionName = "MastersSearch";
+                ViewBag.studentCategory = 3;
+                Action = "MastersSearch";
+                ViewBag.studentCategoryName = "Masters(MBA)";
+                ViewBag.returnAction = Action;
+            }
+            else if (studentCat == 2)
+            {
+                ViewBag.studentCategory = 2;
+                Action = "ProfessionalSearch";
+                ViewBag.studentCategoryName = "Honors(Prfessional)";
+                ViewBag.returnAction = Action;
+            }
+            else if (studentCat == 4)
+            {
+                ViewBag.studentCategory = 4;
+                Action = "MastersSearchGeneral";
+                ViewBag.studentCategoryName = "Masters(General)";
+                ViewBag.returnAction = Action;
+            }
+            else
+            {
+                ViewBag.studentCategory = 1;
+                Action = "Search";
+                ViewBag.studentCategoryName = "General";
+                ViewBag.returnAction = Action;
             }
 
             var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
             if (existAppliedStudent != null)
             {
                 TempData["msg"] = "You are already applied";
-                return RedirectToAction(targetActionName, "Students");
+                return RedirectToAction(Action, "Students");
             }
             ViewBag.nuRoll = nuRoll;
             return View();
         }
 
         [HttpPost, AllowAnonymous]
-        public async Task<IActionResult> Create(AppliedStudentVM vModel, int nuRoll)
+        public async Task<IActionResult> Create(AppliedStudentVM vModel, int nuRoll, int? studentCat)
         {
+            string Action = "Search";
+            ViewBag.returnAction = Action;
+            if (studentCat == 3)
+            {
+                ViewBag.studentCategory = 3;
+                Action = "MastersSearch";
+                ViewBag.studentCategoryName = "Masters(MBA)";
+                ViewBag.returnAction = Action;
+            }
+            else if (studentCat == 2)
+            {
+                ViewBag.studentCategory = 2;
+                Action = "ProfessionalSearch";
+                ViewBag.studentCategoryName = "Honors(Prfessional)";
+                ViewBag.returnAction = Action;
+            }
+            else if (studentCat == 4)
+            {
+                ViewBag.studentCategory = 4;
+                Action = "MastersSearchGeneral";
+                ViewBag.studentCategoryName = "Masters(General)";
+                ViewBag.returnAction = Action;
+            }
+            else
+            {
+                ViewBag.studentCategory = 1;
+                Action = "Search";
+                ViewBag.studentCategoryName = "General";
+                ViewBag.returnAction = Action;
+            }
+
+            
             if (nuRoll != vModel.NUAdmissionRoll)
             {
-                return RedirectToAction("Search", "Students");
+                return RedirectToAction(Action, "Students");
             }
             ViewBag.nuRoll = nuRoll;
             if (ModelState.IsValid)
@@ -116,7 +173,7 @@ namespace OnlineAdmission.APP.Controllers
                 if (existAppliedStudent!=null)
                 {
                     TempData["msg"] = "You are already applied";
-                    return RedirectToAction("Search", "Students");
+                    return RedirectToAction(Action, "Students");
                 }
 
                 AppliedStudent aStudent = _mapper.Map<AppliedStudent>(vModel);
@@ -124,8 +181,9 @@ namespace OnlineAdmission.APP.Controllers
                 await _appliedStudentManager.AddAsync(aStudent);
                 if (!_signInManager.IsSignedIn(User))
                 {
+                    
                     TempData["msg"] = "Information Updated, Search Again";
-                    return RedirectToAction("Search", "Students");
+                    return RedirectToAction(Action, "Students");
                 }
                 return RedirectToAction("Index");
             }

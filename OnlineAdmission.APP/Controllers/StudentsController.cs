@@ -744,10 +744,11 @@ namespace OnlineAdmission.APP.Controllers
         public async Task<IActionResult> MastersSearch(int mastersRoll)
         {
             int studentCategory = 3;
-            bool applicationIsPaid;
-            bool addmissionIsPaid;
-            bool admitted;
-            bool selected;
+            bool applicationIsPaid = false;
+            bool addmissionIsPaid = false;
+            bool admitted = false;
+            bool selected =false ;
+
             ViewBag.nuRoll = mastersRoll;
             ViewBag.DueAmount = false;
 
@@ -761,53 +762,60 @@ namespace OnlineAdmission.APP.Controllers
                     ViewBag.student = student;
                     return View();
                 }
-
-                var AdmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(mastersRoll, studentCategory);
-
-                if (AdmissionPayment == null)
+                var meritStudent = await _meritStudentManager.GetProMBAByAdmissionRollAsync(mastersRoll);
+                if (meritStudent==null)
                 {
-                    var applicationPayment = await _paymentTransactionManager.GetApplicationTransactionByNuRollAsync(mastersRoll, studentCategory);
-                    if (applicationPayment != null)
-                    {
-                        applicationIsPaid = true;
-                        ViewBag.applicationIsPaid = applicationIsPaid;
-
-                        var selectedStudent = await _meritStudentManager.GetProMBAByAdmissionRollAsync(mastersRoll);
-                        var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(mastersRoll);
-                        var subject = await _subjectManager.GetByCodeAsync(selectedStudent.SubjectCode);
-                        SelectedStudentVM selectedStudentVM = new SelectedStudentVM();
-                        selectedStudentVM.AppliedStudent = appliedStudent;
-                        selectedStudentVM.MeritStudent = selectedStudent;
-                        selectedStudentVM.Subject = subject;
-
-                        ViewBag.allStudentVM = selectedStudentVM;
-
-
-                        if (selectedStudent != null)
-                        {
-                            selected = true;
-                            ViewBag.selected = selected;
-                            return View();
-                        }
-                        ViewBag.msg = "You are not selected";
-                        return View();
-                    }
-                    ViewBag.msg = "You didn't apply";
+                    ViewBag.msg = "You are not selected";
                     return View();
                 }
                 else
                 {
-                    selected = true;
-                    addmissionIsPaid = true;
-                    ViewBag.addmissionIsPaid = addmissionIsPaid;
-                    applicationIsPaid = true;
+                    var AdmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(mastersRoll, studentCategory);
+                    if (AdmissionPayment == null)
+                    {
+                        addmissionIsPaid = false;
+                        ViewBag.addmissionIsPaid = addmissionIsPaid;
+                        ViewBag.msg = "Congratulations! You are selected.";
+                        var applicationPayment = await _paymentTransactionManager.GetApplicationTransactionByNuRollAsync(mastersRoll, studentCategory);
+                        if (applicationPayment != null)
+                        {
+                            applicationIsPaid = true;
+                            ViewBag.applicationIsPaid = applicationIsPaid;
+
+                            
+                            var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(mastersRoll);
+                            if (appliedStudent == null)
+                            {
+                                ViewBag.msg = "Congratulations! You are selected. Now, please submit your basic information.";
+                                ViewBag.infoCollection = true;
+                                ViewBag.nuRoll = mastersRoll;
+                                return View();
+                            }
+                            var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
+                            SelectedStudentVM selectedStudentVM = new SelectedStudentVM();
+                            selectedStudentVM.AppliedStudent = appliedStudent;
+                            selectedStudentVM.MeritStudent = meritStudent;
+                            selectedStudentVM.Subject = subject;
+
+                            ViewBag.allStudentVM = selectedStudentVM;                            
+                            return View();
+                        }
+                        
+                        applicationIsPaid = false;
+                        ViewBag.msg = "You didn't apply";
+                        return View();
+                    }
+                    
                 }
+
+
+                addmissionIsPaid = true;
 
                 ViewBag.selected = selected;
                 ViewBag.addmissionIsPaid = addmissionIsPaid;
                 ViewBag.applicationIsPaid = applicationIsPaid;
             }
-            ViewBag.nuRoll = mastersRoll;
+            
             return View();
         }
 
@@ -1534,7 +1542,8 @@ namespace OnlineAdmission.APP.Controllers
             }
 
             string OrderId = "";
-
+            MeritStudent meritStudent = await _meritStudentManager.GetProMBAByAdmissionRollAsync(nuRoll);
+            Subject subject = await _nagadManager.GetSubjectByCodeNagad(meritStudent.SubjectCode);
             if (studentCategory == 3)
             {
                 if (paymentType==1)
@@ -1560,6 +1569,7 @@ namespace OnlineAdmission.APP.Controllers
                     }
                     studentName = appliedStudent.ApplicantName;
                     mobileNum = appliedStudent.MobileNo;
+                    
                 }
             }
             else
@@ -1662,9 +1672,9 @@ namespace OnlineAdmission.APP.Controllers
             dynamic responsevalue = JObject.Parse(decryptedSensitiveData);
             string challenge = responsevalue.challenge;
             string paymentRefId = responsevalue.paymentReferenceId;
-            double amount = 300;
-
-            double serviceCharge = 5.00;// (amount * .015);
+            //double amount = 300;
+            double amount = subject.AdmissionFee - meritStudent.DeductedAmaount;
+            double serviceCharge = (amount * .015);
             double totalAmount = amount + serviceCharge;
 
             // Create JSON Object

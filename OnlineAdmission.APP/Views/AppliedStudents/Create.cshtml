@@ -8,53 +8,82 @@
     {
         Layout = "~/Views/Shared/_LayoutStudent.cshtml";
     }
+    string studentCategoryName = "";
+    if (ViewBag.studentCategoryName!=null)
+    {
+        studentCategoryName = ViewBag.studentCategoryName;
+    }
+    
+    int studentCategory = 1;
+    if (ViewBag.studentCategory!=null)
+    {
+        studentCategory = ViewBag.studentCategory;
+    }
+
+
  }
 
-<h4>Student Apply Form (<span class="text-danger">Fill the form carefully as per your certificates since there is no scope for editing.</span>)</h4>
+<h4>@studentCategoryName Student Apply Form <br />(<span class="text-danger">Fill the form carefully as per your certificates since there is no scope for editing.</span>)</h4>
 <hr />
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <form asp-action="Create" asp-controller="AppliedStudents" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" name="nuRoll" value="@ViewBag.nuRoll" />
-            <div class="form-group">
-                <label asp-for="NUAdmissionRoll" class="control-label"></label>
-                <input readonly asp-for="NUAdmissionRoll" class="form-control" value="@ViewBag.nuRoll" />
-                <span asp-validation-for="NUAdmissionRoll" class="text-danger"></span>
+            <input type="hidden" name="studentCat" value="@studentCategory" />
+            <div class="form-group row">
+                <label asp-for="NUAdmissionRoll" class="control-label col-md-2 text-right"></label>
+                <div class="col-md-10">
+                    <input readonly asp-for="NUAdmissionRoll" class="form-control" value="@ViewBag.nuRoll" />
+                    <span asp-validation-for="NUAdmissionRoll" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ApplicantName" class="control-label"></label>
-                <input asp-for="ApplicantName" class="form-control" />
-                <span asp-validation-for="ApplicantName" class="text-danger"></span>
+            <div class="form-group row">
+                <label asp-for="ApplicantName" class="control-label col-md-2 text-right"></label>
+                <div class="col-md-10">
+                    <input asp-for="ApplicantName" class="form-control" />
+                    <span asp-validation-for="ApplicantName" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="FatherName" class="control-label"></label>
-                <input asp-for="FatherName" class="form-control" />
-                <span asp-validation-for="FatherName" class="text-danger"></span>
+            <div class="form-group row">
+                <label asp-for="FatherName" class="control-label text-right col-md-2"></label>
+                <div class="col-md-10">
+                    <input asp-for="FatherName" class="form-control" />
+                    <span asp-validation-for="FatherName" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="MotherName" class="control-label"></label>
-                <input asp-for="MotherName" class="form-control" />
-                <span asp-validation-for="MotherName" class="text-danger"></span>
+            <div class="form-group row">
+                <label asp-for="MotherName" class="control-label text-right col-md-2"></label>
+                <div class="col-md-10">
+                    <input asp-for="MotherName" class="form-control" />
+                    <span asp-validation-for="MotherName" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="MobileNo" class="control-label"></label>
-                <input asp-for="MobileNo" class="form-control" />
-                <span asp-validation-for="MobileNo" class="text-danger"></span>
+            <div class="form-group row">
+                <label asp-for="MobileNo" class="control-label text-right col-md-2"></label>
+                <div class="col-md-10">
+                    <input asp-for="MobileNo" class="form-control" />
+                    <span asp-validation-for="MobileNo" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="HSCGroup" class="control-label"></label>
-                <select asp-for="HSCGroup" class="form-control">
-                    <option selected disabled>Select Group</option>
-                    <option value="SCIENCE">Science</option>
-                    <option value="HUMANITIES">Humanities</option>
-                    <option value="BUSINESS ADMINISTRATION">Business Administration</option>
-                </select>
-                <span asp-validation-for="HSCGroup" class="text-danger"></span>
+            <div class="form-group row">
+                <label asp-for="HSCGroup" class="control-label text-right col-md-2"></label>
+                <div class="col-md-10">
+                    <select asp-for="HSCGroup" class="form-control">
+                        <option selected disabled>Select Group</option>
+                        <option value="SCIENCE">Science</option>
+                        <option value="HUMANITIES">Humanities</option>
+                        <option value="BUSINESS ADMINISTRATION">Business Administration</option>
+                    </select>
+                    <span asp-validation-for="HSCGroup" class="text-danger"></span>
+                </div>
             </div>
             
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group row">
+                <div class="col-md-2 offset-2">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+                
                 @if (ViewBag.msg!=null)
                 {
                     <span id="msgId" class="alert alert-danger">@ViewBag.msg</span>
