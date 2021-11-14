@@ -92,6 +92,9 @@
                                     <li>
                                         <a asp-action="mastersIndex" asp-controller="Payments" asp-route-paymentType=2>Masters Professional(MBA) Admission</a>
                                     </li>
+                                    <li>
+                                        <a asp-action="DegreeIndex" asp-controller="Payments" asp-route-paymentType=1>Degree Pass Application</a>
+                                    </li>
                                 }
                                 @if (User.IsInRole("SuperAdmin"))
                                 {
@@ -172,6 +175,7 @@
                                     <li><a class="nav-link" asp-action="ProfessionalSearch" asp-controller="Students">Profession's Admission</a></li>
                                     <li><a class="nav-link" asp-action="MastersSearch" asp-controller="Students">Master's (Professional) Admission</a></li>
                                     <li><a class="nav-link" asp-action="MastersSearchGeneral" asp-controller="Students">Master's Application (Regular)</a></li>
+                                    <li><a class="nav-link" asp-action="DegreeSearch" asp-controller="Students">Degree Pass Application</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item active">

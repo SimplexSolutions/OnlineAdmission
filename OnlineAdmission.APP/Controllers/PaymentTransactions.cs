@@ -111,6 +111,10 @@ namespace OnlineAdmission.APP.Controllers
                     {
                         return RedirectToAction("MastersSearchGeneral", "Students");
                     }
+                    else if (newPayment.StudentCategory == 5)
+                    {
+                        return RedirectToAction("DegreeSearch", "Students");
+                    }
                     
                 }
 
@@ -181,6 +185,10 @@ namespace OnlineAdmission.APP.Controllers
                 if (MerchantInfo.StudentType == 4)
                 {
                     return RedirectToAction("MastersSearchGeneral", "Students", new { mastersRoll = newPayment.ReferenceNo, notification = successNotification });
+                }
+                if (MerchantInfo.StudentType == 5)
+                {
+                    return RedirectToAction("DegreeSearch", "Students", new { degreePassRoll = newPayment.ReferenceNo, notification = successNotification });
                 }
             }
 
