@@ -13,11 +13,11 @@
             <form asp-action="Search" asp-controller="Students" method="post">
                 <label class="col-md-8 text-success font-weight-bolder  text-md-center text-center col-form-label" style="font-size:x-large">Honours Admission (Release Slip) </label><br /><br />
                 <div class="form-group row">
-                    <label class="col-md-2 text-md-right text-left col-form-label">Roll</label>
+                    <label class="col-md-2 text-md-right text-left col-form-label">NU Roll</label>
                     <div class="col-md-6">
                         @if (ViewBag.nuRoll != null)
                         {
-                            <input type="number" name="NuAdmissionRoll" value="@ViewBag.nuRoll" min="1000000" max="9999999" class="form-control" />
+                            <input type="number" name="NuAdmissionRoll" value="@ViewBag.nuRoll" min="1000000" max="9999999" class="form-control" placeholder="NU Admission Roll" />
                         }
                         else
                         {
