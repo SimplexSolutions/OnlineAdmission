@@ -26,6 +26,15 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label asp-for="StudentCategoryId" class="control-label col-form-label col-md-3 text-md-right"></label>
+                <div class="col-md-9">
+                    <select asp-for="StudentCategoryId" class="form-control" asp-items="@ViewBag.studentCategoryId">
+                        <option selected disabled>Select Class</option>
+                    </select>
+                    <span asp-validation-for="StudentCategoryId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
                 <label asp-for="AdmissionFee" class="control-label col-form-label col-md-3 text-md-right"></label>
                 <div class="col-md-9">
                     <input asp-for="AdmissionFee" class="form-control" />

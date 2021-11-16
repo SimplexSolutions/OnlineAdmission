@@ -11,5 +11,7 @@ namespace OnlineAdmission.Entity
     {
         [Display(Name="Category")]
         public string CategoryName { get; set; }
+
+        public ICollection<Subject> Subjects { get; set; }
     }
 }

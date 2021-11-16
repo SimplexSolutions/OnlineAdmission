@@ -18,5 +18,8 @@ namespace OnlineAdmission.Entity
 
         [Display(Name = "Admission Fee")]
         public double AdmissionFee { get; set; }
+
+        public int? StudentCategoryId { get; set; }
+        public StudentCategory StudentCategory { get; set; }
     }
 }

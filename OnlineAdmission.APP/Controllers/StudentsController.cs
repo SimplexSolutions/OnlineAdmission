@@ -68,16 +68,33 @@ namespace OnlineAdmission.APP.Controllers
 
         // GET: StudentsController
         [Authorize(Roles = "Admin,SuperAdmin,Teacher")]
-        public async Task<IActionResult> Index(int studentCategory, string usrtext, string sortRoll, int page, int pagesize)
+        public async Task<IActionResult> Index(int studentCategory, string usrtext, string sortRoll, int page, int pagesize, int categorySubject, string meritType)
         {
             IQueryable<Student> students = _studentManager.GetStudents();
             var studentCategoryFromSession = HttpContext.Session.GetString("studentCategory");
-
+            
             if (  studentCategory>0)
             {
-                ViewBag.category = studentCategory;
-                HttpContext.Session.SetString("studentCategory", studentCategory.ToString());
                 students = students.Where(s => s.StudentCategory == studentCategory);
+                if (categorySubject>0)
+                {
+                    students = students.Where(s => s.SubjectId == categorySubject);
+                    if (meritType!=null)
+                    {
+                        List<MeritStudent> meritList = await _meritStudentManager.GetAllAsync();
+                        students = _studentManager.GetStudents();
+
+                        students = from s in students.Where(s => s.StudentCategory==studentCategory && s.SubjectId==categorySubject)
+                                   join m in meritList on s.NUAdmissionRoll equals m.NUAdmissionRoll
+                                   where m.Comments.Trim().ToLower() == meritType.Trim().ToLower() 
+                                   select s;
+                    }
+                    
+                }
+                ViewBag.category = studentCategory;
+                ViewBag.subject = categorySubject;
+                HttpContext.Session.SetString("studentCategory", studentCategory.ToString());
+                HttpContext.Session.SetString("categorySubject", categorySubject.ToString());
             }
             else if (studentCategory == 0)
             {
@@ -100,10 +117,18 @@ namespace OnlineAdmission.APP.Controllers
                 usrtext = usrtext.Trim();
                 students = students.Where(s => s.Name.Contains(usrtext) || s.CollegeRoll.ToString().Contains(usrtext) || s.NUAdmissionRoll.ToString().Contains(usrtext) || s.Subject.SubjectName.Contains(usrtext) || s.StudentMobile.ToString().Contains(usrtext));
             }
+
             ViewBag.data = usrtext;
             ViewBag.action = "Index";
             ViewBag.controller = "Students";
             ViewBag.StudentCategoryList = new SelectList(await _studentCategoryManager.GetAllAsync(), "Id", "CategoryName",studentCategory);
+            var subList = await _subjectManager.GetAllAsync();
+            if (studentCategory>0)
+            {
+                subList =subList.Where(s => s.StudentCategoryId == studentCategory).ToList();
+            }
+            ViewBag.SubjectList = new SelectList(subList, "Id", "SubjectName", categorySubject);
+            ViewBag.Count = students.Count();
             //return View(AdmittedStudents.Where(s => s.Status==true));
             return View(await PaginatedList<Student>.CreateAsync(students, page, pageSize));
         }
