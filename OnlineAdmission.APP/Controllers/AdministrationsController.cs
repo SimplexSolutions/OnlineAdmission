@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OnlineAdmission.APP.Controllers
 {
-    //[Authorize(Roles = "Admin,SuperAdmin")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
     public class AdministrationsController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -216,13 +216,13 @@ namespace OnlineAdmission.APP.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddRemoveUserFromRole(List<UserRoleVM> model, string roleId)
+        public async Task<IActionResult> AddRemoveUserFromRole(List<UserRoleVM> model, string roleIdString)
         {
-            var role = await _roleManager.FindByIdAsync(roleId);
+            var role = await _roleManager.FindByIdAsync(roleIdString);
 
             if (role == null)
             {
-                ViewBag.ErrorMessage = $"Role with Id = {roleId} cannot be found";
+                ViewBag.ErrorMessage = $"Role with Id = {roleIdString} cannot be found";
                 return View("NotFound");
             }
 
@@ -250,11 +250,11 @@ namespace OnlineAdmission.APP.Controllers
                     if (i < (model.Count - 1))
                         continue;
                     else
-                        return RedirectToAction("EditRole", new { Id = roleId });
+                        return RedirectToAction("EditRole", new { Id = roleIdString });
                 }
             }
 
-            return RedirectToAction("EditRole", new { Id = roleId });
+            return RedirectToAction("EditRole", new { Id = roleIdString });
         }
 
     }
