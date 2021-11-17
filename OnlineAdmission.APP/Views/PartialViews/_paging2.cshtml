@@ -34,7 +34,11 @@
     {
         paymentType = ViewBag.paymentType;
     }
-
+    string meritType = "";
+    if (ViewBag.meritType!=null)
+    {
+        meritType = ViewBag.meritType;
+    }
 
     int[] pgsize = { 50, 100, 500, 1000, 5000 };
 
@@ -76,6 +80,7 @@
                                asp-route-paymentType="@paymentType"
                                asp-route-studentCategory="@studentCategoryId"
                                asp-route-categorySubject="@subjectid"
+                               asp-route-meritType="@meritType"
                                class="page-link">@p</a>
                         </li>
                     }
@@ -89,6 +94,7 @@
                                asp-route-paymentType="@paymentType"
                                asp-route-studentCategory="@studentCategoryId"
                                asp-route-categorySubject="@subjectid"
+                               asp-route-meritType="@meritType"
                                class="page-link">@p</a>
                         </li>
                     }
@@ -101,8 +107,9 @@
                    asp-route-page="@(cp+1)"
                    asp-route-pagesize="@pagesize"
                    asp-route-paymentType="@paymentType"
-                               asp-route-studentCategory="@studentCategoryId"
-                               asp-route-categorySubject="@subjectid"
+                   asp-route-studentCategory="@studentCategoryId"
+                   asp-route-categorySubject="@subjectid"
+                   asp-route-meritType="@meritType"
                    class="page-link @dnext">Next</a>
             </li>
             <li class="page-item">
@@ -111,15 +118,16 @@
                    asp-route-page="@tp"
                    asp-route-pagesize="@pagesize"
                    asp-route-paymentType="@paymentType"
-                               asp-route-studentCategory="@studentCategoryId"
-                               asp-route-categorySubject="@subjectid"
+                   asp-route-studentCategory="@studentCategoryId"
+                   asp-route-categorySubject="@subjectid"
+                   asp-route-meritType="@meritType"
                    class="page-link">Last</a>
             </li>
             <li class="float-right">
                 <form id="frm" class="form-inline" asp-action="@pageaction" method="post">
 
 
-
+                    <input type="hidden" name="meritType" value="@meritType" />
                     <input type="hidden" name="studentCategory" value="@studentCategoryId" />
                     <input type="hidden" name="categorySubject" value="@subjectid" />
                     <input type="hidden" name="usrtext" value="@ViewBag.data" />

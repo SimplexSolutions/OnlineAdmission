@@ -31,12 +31,9 @@
                 </div>
                 <label class="px-3 col-form-label text-md-right">Merit Type</label>
                 <div class="pr-3">
-                    <select class="form-control-sm" asp-items="@ViewBag.MeritTypeList" name="meritType" id="meritId" data-meritType="@ViewBag.meritType">
+                    <select class="form-control-sm" asp-items="@ViewBag.MeritList" name="meritType" id="meritId" data-meritType="@ViewBag.meritType">
                         <option selected disabled>Select Merit</option>
-                        <option value="1st Merit List">1st Merit List</option>
-                        <option value="2nd Merit List">2nd Merit List</option>
-                        <option value="Quota Merit List">Quota Merit List</option>
-                        <option value="Release Slip">Release Slip</option>
+                        
                     </select>
                 </div>
                 <button class="form-control-sm btn btn-sm btn-info">Show</button>

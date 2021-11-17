@@ -81,18 +81,18 @@ namespace OnlineAdmission.APP.Controllers
                     students = students.Where(s => s.SubjectId == categorySubject);
                     if (meritType!=null)
                     {
-                        List<MeritStudent> meritList = await _meritStudentManager.GetAllAsync();
-                        students = _studentManager.GetStudents();
+                        var meritList = _meritStudentManager.GetMeritStudents();
+                        meritList = meritList.Where(m => m.StudentCategory == studentCategory && m.Comments.Trim().ToLower() == meritType.Trim().ToLower());
 
-                        students = from s in students.Where(s => s.StudentCategory==studentCategory && s.SubjectId==categorySubject)
+                        students = from s in students
                                    join m in meritList on s.NUAdmissionRoll equals m.NUAdmissionRoll
-                                   where m.Comments.Trim().ToLower() == meritType.Trim().ToLower() 
                                    select s;
                     }
                     
                 }
                 ViewBag.category = studentCategory;
                 ViewBag.subject = categorySubject;
+                ViewBag.meritType = meritType;
                 HttpContext.Session.SetString("studentCategory", studentCategory.ToString());
                 HttpContext.Session.SetString("categorySubject", categorySubject.ToString());
             }
@@ -117,6 +117,28 @@ namespace OnlineAdmission.APP.Controllers
                 usrtext = usrtext.Trim();
                 students = students.Where(s => s.Name.Contains(usrtext) || s.CollegeRoll.ToString().Contains(usrtext) || s.NUAdmissionRoll.ToString().Contains(usrtext) || s.Subject.SubjectName.Contains(usrtext) || s.StudentMobile.ToString().Contains(usrtext));
             }
+            List<MeritTypeVM> mTypeList = new List<MeritTypeVM>();
+           
+            MeritTypeVM meritTypeVM1 = new MeritTypeVM() { 
+                MeritTypeName = "1st Merit List"
+            };
+            MeritTypeVM meritTypeVM2 = new MeritTypeVM()
+            {
+                MeritTypeName = "2nd Merit List"
+            };
+            MeritTypeVM meritTypeVM3 = new MeritTypeVM()
+            {
+                MeritTypeName = "Quota Merit List"
+            };
+            MeritTypeVM meritTypeVM4 = new MeritTypeVM()
+            {
+                MeritTypeName = "Release Slip"
+            };
+            mTypeList.Add(meritTypeVM1);
+            mTypeList.Add(meritTypeVM2);
+            mTypeList.Add(meritTypeVM3);
+            mTypeList.Add(meritTypeVM4);
+
 
             ViewBag.data = usrtext;
             ViewBag.action = "Index";
@@ -128,6 +150,7 @@ namespace OnlineAdmission.APP.Controllers
                 subList =subList.Where(s => s.StudentCategoryId == studentCategory).ToList();
             }
             ViewBag.SubjectList = new SelectList(subList, "Id", "SubjectName", categorySubject);
+            ViewBag.MeritList = new SelectList(mTypeList, "MeritTypeName", "MeritTypeName", meritType);
             ViewBag.Count = students.Count();
             //return View(AdmittedStudents.Where(s => s.Status==true));
             return View(await PaginatedList<Student>.CreateAsync(students, page, pageSize));
@@ -2390,8 +2413,6 @@ namespace OnlineAdmission.APP.Controllers
 
             return View();
         }
-
-        
 
         [AllowAnonymous]
         public ActionResult StudentApply(int? id)
