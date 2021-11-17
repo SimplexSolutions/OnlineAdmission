@@ -2208,7 +2208,7 @@ namespace OnlineAdmission.APP.Controllers
             dynamic responsevalue = JObject.Parse(decryptedSensitiveData);
             string challenge = responsevalue.challenge;
             string paymentRefId = responsevalue.paymentReferenceId;
-            double amount = 300;
+            double amount = 250;
 
             double serviceCharge = 5.00;// (amount * .015);
             double totalAmount = amount + serviceCharge;
