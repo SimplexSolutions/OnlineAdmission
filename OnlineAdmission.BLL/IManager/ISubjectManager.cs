@@ -11,5 +11,6 @@ namespace OnlineAdmission.BLL.IManager
     {
         Task<Subject> GetByCodeAsync(int code);
         Task<Subject> GetByStudentIdAsyc(int stuId);
+        Task<List<Subject>> GetAllByCategoryIdAsync(int CategoryId);
     }
 }

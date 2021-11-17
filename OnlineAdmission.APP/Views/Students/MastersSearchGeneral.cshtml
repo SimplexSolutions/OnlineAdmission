@@ -15,11 +15,11 @@
                     <div class="col-md-6">
                         @if (ViewBag.nuRoll != null)
                         {
-                            <input type="number" name="mastersGenRoll" value="@ViewBag.nuRoll" class="form-control" min="1000000" max="9999999" required />
+                            <input type="number" name="mastersGenRoll" value="@ViewBag.nuRoll" class="form-control" min="1000000" max="9999999" required placeholder="NU Admission Roll"/>
                         }
                         else
                         {
-                            <input type="number" name="mastersGenRoll" class="form-control" min="1000000" max="9999999" required />
+                            <input type="number" name="mastersGenRoll" class="form-control" min="1000000" max="9999999" required placeholder="NU Admission Roll"/>
                         }
                     </div>
                     <button type="submit" class="btn btn-primary mb-2">Search</button>

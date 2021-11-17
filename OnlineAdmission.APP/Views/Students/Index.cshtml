@@ -1,23 +1,49 @@
 ﻿@model PaginatedList<OnlineAdmission.Entity.Student>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Student List";
     string bgColor = "";
     int i = (Model.PageIndex - 1) * Model.PageSize + 1;
     ViewBag.pagesize = Model.PageSize;
+    int totalFound = 0;
+    @if (ViewBag.Count!=null)
+    {
+        totalFound = ViewBag.Count;
+    }
 }
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <form asp-action="Index" asp-controller="Students">
             <div class="form-group row">
-                <label class="col-md-3 col-form-label text-md-right">Class of Student</label>
-                <div class="col-md-8">
-                    <select class="form-control" asp-items="@ViewBag.StudentCategoryList" name="studentCategory" id="studentCategory" data-categoryId="@ViewBag.category">
+                <label for="studentCategoryId" class="col-form-label text-md-right px-3">Class of Student</label>
+                <div class="pr-3">
+                    <select class="form-control-sm" asp-items="@ViewBag.StudentCategoryList" name="studentCategory" id="studentCategoryId" data-categoryId="@ViewBag.category">
+                        <option selected disabled>Select Student</option>
                         <option value="0">All Student</option>
                     </select>
                 </div>
-                <button class="col-md-1 btn-block btn-info">Show</button>
+                <label class="px-3 col-form-label text-md-right" for="studentSubjectId">Subject</label>
+                <div class="pr-3">
+                    <select class="form-control-sm" asp-items="@ViewBag.SubjectList" name="categorySubject" id="studentSubjectId" data-subjectId="@ViewBag.category">
+                        <option selected disabled> Select Subject </option>
+                    </select>
+                </div>
+                <label class="px-3 col-form-label text-md-right">Merit Type</label>
+                <div class="pr-3">
+                    <select class="form-control-sm" asp-items="@ViewBag.MeritTypeList" name="meritType" id="meritId" data-meritType="@ViewBag.meritType">
+                        <option selected disabled>Select Merit</option>
+                        <option value="1st Merit List">1st Merit List</option>
+                        <option value="2nd Merit List">2nd Merit List</option>
+                        <option value="Quota Merit List">Quota Merit List</option>
+                        <option value="Release Slip">Release Slip</option>
+                    </select>
+                </div>
+                <button class="form-control-sm btn btn-sm btn-info">Show</button>
+                @if (ViewBag.Count!=null)
+                {
+                    <span class="pl-md-2">Total <span class="text-danger">@totalFound</span> found</span>
+                }
             </div>
         </form>
     </div>
@@ -100,7 +126,7 @@
             }
         </tbody>
     </table>
-    <partial name="~/Views/PartialViews/_paging.cshtml" model="@Model" />
+    <partial name="~/Views/PartialViews/_paging2.cshtml" model="@Model" />
     <br />
     <br />
 
@@ -131,6 +157,30 @@
 
         <script>
             $(document).ready(function () {
+                $('#studentCategoryId').change(function () {
+                    let catId = $('option:selected', this).val();                    
+                    $.ajax({
+                        "url": "/Subjects/GetSubjectByStudentCategory",
+                        "data": { catId : catId },
+                        "dataType": 'JSON',
+                        "method": 'POST',
+                        "cache": false,
+                        "success": function (data) {
+                            console.log(data);
+                            $('#studentSubjectId').empty();
+                            let o = '<option selected desabled>Select Subject</option>'
+                            $('#studentSubjectId').append(o);
+                            $.each(data, function (i, obj) {
+                                let op = '<option value=' + obj.id + '>' + obj.subjectName + '</option>';
+                                $('#studentSubjectId').append(op);
+                            });
+                        },
+                        "error": function (err) {
+                            console.log(err);
+                        }
+                    });
+                });
+
 
                 $('#render-data').DataTable({
 

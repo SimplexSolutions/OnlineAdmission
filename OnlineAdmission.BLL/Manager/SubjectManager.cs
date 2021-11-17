@@ -17,6 +17,11 @@ namespace OnlineAdmission.BLL.Manager
             subjectRepository = context;
         }
 
+        public async Task<List<Subject>> GetAllByCategoryIdAsync(int CategoryId)
+        {
+            return await subjectRepository.GetAllByCategoryIdAsync(CategoryId);
+        }
+
         public async Task<Subject> GetByCodeAsync(int code)
         {
             return await subjectRepository.GetByCodeAsync(code);

@@ -16,10 +16,12 @@ namespace OnlineAdmission.APP.Controllers
     public class SubjectsController : Controller
     {
         private readonly ISubjectManager _subjectManager;
+        private readonly IStudentCategoryManager _studentCategoryManager;
 
-        public SubjectsController(ISubjectManager subjectManager)
+        public SubjectsController(ISubjectManager subjectManager, IStudentCategoryManager studentCategoryManager)
         {
             _subjectManager = subjectManager;
+            _studentCategoryManager = studentCategoryManager;
         }
 
         // GET: Subjects
@@ -47,8 +49,10 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         // GET: Subjects/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var stuCategory = await _studentCategoryManager.GetAllAsync();
+            ViewBag.studentCategoryId = new SelectList(stuCategory, "Id", "CategoryName");
             return View();
         }
 
@@ -57,7 +61,7 @@ namespace OnlineAdmission.APP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SubjectName,Code,AdmissionFee")] Subject subject)
+        public async Task<IActionResult> Create([Bind("Id,SubjectName,Code,AdmissionFee,StudentCategoryId")] Subject subject)
         {
             if (ModelState.IsValid)
             {
@@ -80,15 +84,15 @@ namespace OnlineAdmission.APP.Controllers
             {
                 return NotFound();
             }
+            var stuCategory = await _studentCategoryManager.GetAllAsync();
+            ViewBag.studentCategoryId = new SelectList(stuCategory, "Id", "CategoryName", subject);
             return View(subject);
         }
 
-        // POST: Subjects/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,SubjectName,Code,AdmissionFee")] Subject subject)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,SubjectName,Code,AdmissionFee,StudentCategoryId")] Subject subject)
         {
             if (id != subject.Id)
             {
@@ -155,6 +159,13 @@ namespace OnlineAdmission.APP.Controllers
             {
                 return false;
             }
+        }
+
+
+        public async Task<JsonResult> GetSubjectByStudentCategory(int catId)
+        {
+            var subjects = await _subjectManager.GetAllByCategoryIdAsync(catId);
+            return Json(subjects);
         }
     }
 }

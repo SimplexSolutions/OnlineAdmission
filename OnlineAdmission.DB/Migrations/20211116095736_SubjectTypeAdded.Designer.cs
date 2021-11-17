@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineAdmission.DB;
 
 namespace OnlineAdmission.DB.Migrations
 {
     [DbContext(typeof(OnlineAdmissionDbContext))]
-    partial class OnlineAdmissionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211116095736_SubjectTypeAdded")]
+    partial class SubjectTypeAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -693,10 +695,39 @@ namespace OnlineAdmission.DB.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StudentCategoryId")
+                    b.Property<string>("SubjectName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SubjectTypeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("SubjectName")
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubjectTypeId");
+
+                    b.ToTable("Subjects");
+                });
+
+            modelBuilder.Entity("OnlineAdmission.Entity.SubjectType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubjectTypeName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -707,9 +738,7 @@ namespace OnlineAdmission.DB.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StudentCategoryId");
-
-                    b.ToTable("Subjects");
+                    b.ToTable("SubjectTypes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -809,14 +838,14 @@ namespace OnlineAdmission.DB.Migrations
 
             modelBuilder.Entity("OnlineAdmission.Entity.Subject", b =>
                 {
-                    b.HasOne("OnlineAdmission.Entity.StudentCategory", "StudentCategory")
+                    b.HasOne("OnlineAdmission.Entity.SubjectType", "SubjectType")
                         .WithMany("Subjects")
-                        .HasForeignKey("StudentCategoryId");
+                        .HasForeignKey("SubjectTypeId");
 
-                    b.Navigation("StudentCategory");
+                    b.Navigation("SubjectType");
                 });
 
-            modelBuilder.Entity("OnlineAdmission.Entity.StudentCategory", b =>
+            modelBuilder.Entity("OnlineAdmission.Entity.SubjectType", b =>
                 {
                     b.Navigation("Subjects");
                 });

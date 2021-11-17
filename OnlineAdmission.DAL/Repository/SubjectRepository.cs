@@ -22,6 +22,11 @@ namespace OnlineAdmission.DAL.Repository
            return await _context.Subjects.OrderBy(s => s.SubjectName).ToListAsync();
         }
 
+        public async Task<List<Subject>> GetAllByCategoryIdAsync(int typeId)
+        {
+            return await _context.Subjects.Where(s => s.StudentCategoryId == typeId).OrderBy(s => s.SubjectName).ToListAsync();
+        }
+
         public async Task<Subject> GetByCodeAsync(int code)
         {
             return await _context.Subjects.FirstOrDefaultAsync(s => s.Code == code);
