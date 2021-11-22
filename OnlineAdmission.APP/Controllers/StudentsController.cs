@@ -749,6 +749,11 @@ namespace OnlineAdmission.APP.Controllers
                         ViewBag.applicationIsPaid = applicationIsPaid;
 
                         var selectedStudent = await _meritStudentManager.GetProByAdmissionRollAsync(professionalRoll);
+                        if (selectedStudent == null)
+                        {
+                            ViewBag.msg = "You are not eligible";
+                            return View();
+                        }
                         var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(professionalRoll);
                         var subject = await _subjectManager.GetByCodeAsync(selectedStudent.SubjectCode);
                         SelectedStudentVM selectedStudentVM = new SelectedStudentVM();
