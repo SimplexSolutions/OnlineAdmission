@@ -925,18 +925,45 @@ namespace OnlineAdmission.APP.Controllers
         public async Task<IActionResult> MastersSearchGeneral(int mastersGenRoll)
         {
             int studentCategory = 4;
-            bool isPaid = false;
+            bool isPaid;
+            bool admitted;
+
             ViewBag.nuRoll = mastersGenRoll;
             if (mastersGenRoll > 0)
             {
-                var payment = await _paymentTransactionManager.GetApplicationTransactionByNuRollAsync(mastersGenRoll, studentCategory);
-                if (payment != null)
+                var existAdmittedStudent = await _studentManager.GetByAdmissionRollAsync(mastersGenRoll);
+                if (existAdmittedStudent!=null)
                 {
-                    isPaid = true;
-                    ViewBag.isPaid = isPaid;
+                    admitted = true;
+                    ViewBag.admitted = admitted;
+                    ViewBag.student = existAdmittedStudent;
                     return View();
                 }
-                ViewBag.isPaid = isPaid;
+                else
+                {
+                    var existMeritStudent = await _meritStudentManager.GetGenMastersByAdmissionRollAsync(mastersGenRoll);
+                    if (existMeritStudent == null)
+                    {
+                        ViewBag.msg = "Sorry! You are not selected";
+                        return View();
+                    }
+                    else
+                    {
+                        ViewBag.msg = "Congratulations! You are selected";
+                        var exisitingAdmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(mastersGenRoll, studentCategory);
+                        if (exisitingAdmissionPayment!=null)
+                        {
+                            isPaid = true;
+                            ViewBag.isPaid = isPaid;
+                            ViewBag.msg = "Your admission payment is completed";
+                        }
+                        else
+                        {
+                            isPaid = false;
+                            ViewBag.isPaid = isPaid;
+                        }
+                    }
+                }
             }
             return View();
         }
@@ -1910,21 +1937,20 @@ namespace OnlineAdmission.APP.Controllers
             }
 
             string OrderId = "";
-
+            MeritStudent meritStudent = await _meritStudentManager.GetGenMastersByAdmissionRollAsync(nuRoll);
+            Subject subject = await _nagadManager.GetSubjectByCodeNagad(meritStudent.SubjectCode);
             if (studentCategory == 4)
             {
-                if (mobileNum == null || studentName == null)
-                {
-                    TempData["miss"] = "Mobile Number and Name is mendatory";
-                    return RedirectToAction("MastersSearchGeneral", "Students");
-                }
                 OrderId = nuRoll.ToString() + "" + "GenMas" + "" + DateTime.Now.ToString("HHmmss");
                 if (paymentType == 2)
                 {
-                    OrderId = nuRoll.ToString() + "" + "MasGnAdm" + "" + DateTime.Now.ToString("HHmmss");
+                    OrderId = nuRoll.ToString() + "" + "MGnAd" + "" + DateTime.Now.ToString("HHmmss");
                     AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
-                    studentName = appliedStudent.ApplicantName;
-                    mobileNum = appliedStudent.MobileNo;
+                    if (appliedStudent != null)
+                    {
+                        studentName = appliedStudent.ApplicantName;
+                        mobileNum = appliedStudent.MobileNo;
+                    }
                 }
             }
             else
@@ -1986,7 +2012,6 @@ namespace OnlineAdmission.APP.Controllers
                     if (httpResponse.Content != null)
                     {
                         responseContent = await httpResponse.Content.ReadAsStringAsync();
-
                     }
                 }
 
@@ -1996,9 +2021,6 @@ namespace OnlineAdmission.APP.Controllers
                 Console.WriteLine(ex);
 
             }
-
-
-
 
             Console.WriteLine("Initialize API Response:" + responseContent + "\n");
             #endregion
@@ -2018,7 +2040,6 @@ namespace OnlineAdmission.APP.Controllers
             var v = Verify(decryptedSensitiveData, returnedSignature, SecurityKey.nagadPublicKey, Encoding.UTF8, HashAlgorithmName.SHA256);
             if (!v)
             {
-
                 ViewBag.msg = "Signature Verification Failed";
                 return View();
             }
@@ -2027,10 +2048,14 @@ namespace OnlineAdmission.APP.Controllers
             dynamic responsevalue = JObject.Parse(decryptedSensitiveData);
             string challenge = responsevalue.challenge;
             string paymentRefId = responsevalue.paymentReferenceId;
-            double amount = 300;
 
-            double serviceCharge = 5.00;// (amount * .015);
-            double totalAmount = amount + serviceCharge;
+            double amount = subject.AdmissionFee - meritStudent.DeductedAmaount;
+            double serviceCharge = amount * .0157;
+            double totalAmount = Math.Round((amount + serviceCharge), 2);
+
+            //double amount = 300;
+            //double serviceCharge = 5.00;// (amount * .015);
+            //double totalAmount = amount + serviceCharge;
 
             // Create JSON Object
             var paymentJSON = new

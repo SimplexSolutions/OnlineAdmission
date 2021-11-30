@@ -41,6 +41,7 @@ namespace OnlineAdmission.APP.Controllers
 
             IQueryable<MeritStudent> meritStudentList = _meritStudentManager.GetMeritStudents();
             var studentCategoryFromSession = HttpContext.Session.GetString("studentCategoryMerit");
+
             if (studentCategory!=null && studentCategory > 0)
             {
                 ViewBag.studentCategory = studentCategory;
@@ -59,6 +60,12 @@ namespace OnlineAdmission.APP.Controllers
                 HttpContext.Session.SetString("studentCategoryMerit", "");
             }
 
+            if (studentCategory == 0)
+            {
+                meritStudentList = _meritStudentManager.GetMeritStudents();
+                ViewBag.studentCategory = "";
+                HttpContext.Session.SetString("studentCategoryMerit", "");
+            }
             ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
 
             
@@ -214,10 +221,11 @@ namespace OnlineAdmission.APP.Controllers
                         {
                             NUAdmissionRoll = Convert.ToInt32(reader.GetValue(0).ToString()),
                             HSCRoll = Convert.ToInt64(reader.GetValue(1).ToString()),
-                            MeritPosition = Convert.ToInt32(reader.GetValue(2).ToString()),
+                            MeritPosition = Convert.ToDouble(reader.GetValue(2).ToString()),
                             SubjectCode = Convert.ToInt32(reader.GetValue(3).ToString()),
                             Comments = reader.GetValue(4).ToString(),
-                            StudentCategory = Convert.ToInt32(reader.GetValue(5).ToString())
+                            StudentCategory = Convert.ToInt32(reader.GetValue(5).ToString()),
+                            HonorsRoll = Convert.ToInt64(reader.GetValue(6).ToString())
                         });
 
                     }

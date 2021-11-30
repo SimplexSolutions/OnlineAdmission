@@ -101,11 +101,18 @@ namespace OnlineAdmission.Entity
         [Display(Name = "S.S.C Roll"), Required(ErrorMessage = "SSC Roll Required")]
         public int SSCRoll { get; set; }
 
+        [Display(Name = "S.S.C Roll")]
+        public int? HonorsRoll { get; set; }
+
         [Required(ErrorMessage = "HSC CGPA Required"), Display(Name = "HSC GPA")]
         public double HSCGPA { get; set; }
 
         [Required(ErrorMessage = "SSC CGPA Required"), Display(Name = "SSC GPA")]
         public double SSCGPA { get; set; }
+
+        [Display(Name = "HONS GPA")]
+        public double HonsGPA { get; set; }
+
 
         [Display(Name = "College Roll")]
         public int CollegeRoll { get; set; }
@@ -116,13 +123,21 @@ namespace OnlineAdmission.Entity
         [Display(Name = "Passing Year"), Required(ErrorMessage = "Passing Year Required.")]
         public int HSCPassingYear { get; set; }
 
+        [Display(Name = "Passing Year")]
+        public int? HONSPassingYear { get; set; }
+
         [Display(Name = "SSC Board"), StringLength(20)]
         public string SSCBoard { get; set; }
 
         [Display(Name = "HSC Board"), StringLength(20)]
         public string HSCBoard { get; set; }
+
+        [Display(Name = "University"), StringLength(30)]
+        public string University { get; set; }
+
         public string SSCRemark { get; set; }
         public string HSCRemark { get; set; }
+        public string HONSRemark { get; set; }
 
         
         // 1=Regular Student, 2=SubjectChanged, 3 = CollegeChanged
@@ -137,7 +152,7 @@ namespace OnlineAdmission.Entity
         //StudentCategory = 1 = hon's Student
         //StudentCategory = 2 = professional Student
         //StudentCategory = 3 = Masters Professional
-        //StudentCategory = 4 = MastersGeneral
+        //StudentCategory = 4 = Masters General
         public int? StudentCategory { get; set; }
 
         [Display(Name ="Student NID")]

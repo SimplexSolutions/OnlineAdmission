@@ -9,17 +9,17 @@
     <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">
         <div class="card-body">
             <form asp-action="MastersSearchGeneral" asp-controller="Students" method="post">
-                <label class="col-md-8 text-success font-weight-bolder  text-md-center text-center col-form-label" style="font-size:x-large">Master's Application (Regular)</label><br /><br />
+                <label class="col-md-8 text-success font-weight-bolder  text-md-center text-center col-form-label" style="font-size:x-large">Master's Admission (Regular)</label><br /><br />
                 <div class="form-group row">
                     <label class="col-md-2 text-md-right text-left col-form-label">NU Roll</label>
                     <div class="col-md-6">
                         @if (ViewBag.nuRoll != null)
                         {
-                            <input type="number" name="mastersGenRoll" value="@ViewBag.nuRoll" class="form-control" min="1000000" max="9999999" required placeholder="NU Admission Roll"/>
+                            <input type="number" name="mastersGenRoll" value="@ViewBag.nuRoll" class="form-control" min="1000000" max="9999999" required placeholder="NU Admission Roll" />
                         }
                         else
                         {
-                            <input type="number" name="mastersGenRoll" class="form-control" min="1000000" max="9999999" required placeholder="NU Admission Roll"/>
+                            <input type="number" name="mastersGenRoll" class="form-control" min="1000000" max="9999999" required placeholder="NU Admission Roll" />
                         }
                     </div>
                     <button type="submit" class="btn btn-primary mb-2">Search</button>
@@ -29,7 +29,9 @@
             @if (ViewBag.msg != null)
             {
                 <div class="form-group row" id="missText">
-                    <span class="alert alert-danger">@ViewBag.msg</span>
+                    <div class="col-md-12">
+                        <span class="alert alert-danger">@ViewBag.msg</span>
+                    </div>
                 </div>
             }
         </div>
@@ -39,26 +41,36 @@
                 <span class="h2 alert text-success">@ViewBag.notification</span>
             </div>
         }
+        @if (ViewBag.admitted == true)
+        {
+            <span class="h2 alert text-success">Your admission is completed</span>
+            <a asp-action="Details" asp-controller="Students" asp-route-id="@ViewBag.student.Id" class="btn btn-info">View admission form</a>
+        }
+
         @if (ViewBag.isPaid != null)
         {
             if (ViewBag.isPaid == true)
             {
-                <span>Your payment is already completed.</span>
+                <span class="h2 alert text-success">Your payment is completed</span>
+                <div class="col-md-6">
+                    <a class="btn btn-outline-info" asp-action="Create" asp-controller="Students" asp-route-studentCategory="3" asp-route-nuAdmissionRoll="@ViewBag.AppliedStudent.NUAdmissionRoll">Admission Form</a>
+                </div>
+
             }
             else
             {
-                <div class="row">
+                @*<div class="row">
                     <div class="col-md-10 offset-1 text-center">
-                        <span class="alert font-weight-bold text-info">Apply for Master's Application (Regular)</span><hr />
+                        <span class="alert font-weight-bold text-info">Admission for Master's Application (Regular)</span><hr />
                     </div>
-                </div>
+                </div>*@
                 <div class="row">
                     <div class="col-md-8 offset-md-2">
                         <form asp-action="NagadPaymentMastersGeneral" asp-controller="Students" method="get">
                             <input type="hidden" name="studentCategory" value="4" />
-                            <input type="hidden" name="paymentType" value="1" />
+                            <input type="hidden" name="paymentType" value="2" />
                             <input type="hidden" name="nuRoll" value="@ViewBag.nuRoll" />
-                            <div class="form-group row">
+                            @*<div class="form-group row">
                                 <label class="col-md-2 text-md-right text-left col-form-label">Name : </label>
                                 <div class="col-md-4">
                                     <input required type="text" name="studentName" class="form-control" />
@@ -68,7 +80,7 @@
                                 <div class="col-md-4">
                                     <input required type="number" name="mobileNum" class="form-control" min="01300000000" max="01999999999" />
                                 </div>
-                            </div>
+                            </div>*@
                             <button type="submit" class="btn btn-primary mb-2">Make Payment</button>
                         </form>
                     </div>

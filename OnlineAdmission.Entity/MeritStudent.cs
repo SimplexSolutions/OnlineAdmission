@@ -18,12 +18,15 @@ namespace OnlineAdmission.Entity
         [Display(Name = "HSC Roll")]
         public long HSCRoll { get; set; }
 
+        [Display(Name = "Hon's Roll")]
+        public long? HonorsRoll { get; set; }
+
         [Display(Name = "Subject Code")]
         public int SubjectCode { get; set; } //subject Code=0 will consider as applied student otherwise selected student
 
 
         [Display(Name = "Merit Position")]
-        public int MeritPosition { get; set; }
+        public double MeritPosition { get; set; }
 
         public string Comments { get; set; }
 
@@ -43,7 +46,8 @@ namespace OnlineAdmission.Entity
 
         //StudentCategory = 1 = hon's Student
         //StudentCategory = 2 = professional Student
-        //StudentCategory = 3 = Masters
+        //StudentCategory = 3 = Masters Professional
+        //StudentCategory = 4 = Masters Regular
         public int? StudentCategory { get; set; }
     }
 }

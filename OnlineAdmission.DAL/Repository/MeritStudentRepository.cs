@@ -66,5 +66,11 @@ namespace OnlineAdmission.DAL.Repository
             await _context.MeritStudents.AddRangeAsync(meritStudents);
             return await _context.SaveChangesAsync()>0;
         }
+
+        public async Task<MeritStudent> GetGenMastersByAdmissionRollAsync(int NuRoll)
+        {
+            var student = await _context.MeritStudents.FirstOrDefaultAsync(m => m.NUAdmissionRoll == NuRoll && m.StudentCategory == 4 && m.Comments.Trim().ToLower() == "1st merit list");
+            return student;
+        }
     }
 }

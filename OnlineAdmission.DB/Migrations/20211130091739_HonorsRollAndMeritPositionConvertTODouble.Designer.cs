@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineAdmission.DB;
 
 namespace OnlineAdmission.DB.Migrations
 {
     [DbContext(typeof(OnlineAdmissionDbContext))]
-    partial class OnlineAdmissionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211130091739_HonorsRollAndMeritPositionConvertTODouble")]
+    partial class HonorsRollAndMeritPositionConvertTODouble
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -505,12 +507,6 @@ namespace OnlineAdmission.DB.Migrations
                     b.Property<string>("GuardianOccupation")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("HONSPassingYear")
-                        .HasColumnType("int");
-
-                    b.Property<string>("HONSRemark")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("HSCBoard")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
@@ -529,9 +525,6 @@ namespace OnlineAdmission.DB.Migrations
 
                     b.Property<int?>("HonorsRoll")
                         .HasColumnType("int");
-
-                    b.Property<double>("HonsGPA")
-                        .HasColumnType("float");
 
                     b.Property<int>("MailingDistrictId")
                         .HasColumnType("int");
@@ -642,10 +635,6 @@ namespace OnlineAdmission.DB.Migrations
 
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
-
-                    b.Property<string>("University")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
