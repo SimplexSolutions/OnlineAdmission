@@ -51,10 +51,17 @@
         {
             if (ViewBag.isPaid == true)
             {
-                <span class="h2 alert text-success">Your payment is completed</span>
-                <div class="col-md-6">
-                    <a class="btn btn-outline-info" asp-action="Create" asp-controller="Students" asp-route-studentCategory="3" asp-route-nuAdmissionRoll="@ViewBag.AppliedStudent.NUAdmissionRoll">Admission Form</a>
-                </div>
+                if (ViewBag.appliedStudent == null)
+                {
+                    <span class="h2 alert text-success">
+                        <a asp-action="Create" asp-controller="AppliedStudents" asp-route-studentCat="4" asp-route-nuRoll="@ViewBag.NuAdmissionRoll" class="btn btn-outline-info">Give Information</a>
+                    </span>
+                }
+                else
+                {
+                    <span class="h2 alert text-success">Your payment is completed <a class="btn btn-outline-info" asp-action="Create" asp-controller="Students" asp-route-studentCategory="4" asp-route-nuAdmissionRoll="@ViewBag.NuAdmissionRoll">Admission Form</a></span>
+                    
+                }
 
             }
             else

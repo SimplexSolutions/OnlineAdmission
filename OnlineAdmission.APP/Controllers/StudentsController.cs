@@ -217,7 +217,7 @@ namespace OnlineAdmission.APP.Controllers
                 }
                 else if (studentCategory==4) //For Master's Professional MBA Student
                 {
-                    existingMeritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuAdmissionRoll);
+                    existingMeritStudent = await _meritStudentManager.GetGenMastersByAdmissionRollAsync(nuAdmissionRoll);
                     action = "MastersSearchGeneral";
                 }
                 else if (studentCategory == 5) //For Master's Professional MBA Student
@@ -244,26 +244,7 @@ namespace OnlineAdmission.APP.Controllers
                 int subjectCode = existingSubject.Code;
                 int count = await _studentManager.GetCountAsync(existingSubject.Id)+1;
                 string sl = count.ToString("D3");
-                //if (count < 100)
-                //{
-                //    if (count == 0)
-                //    {
-                //        sl = "001";
-                //    }
-                //    else if (count < 10)
-                //    {
-                //        sl = "00" + count.ToString();
-                //    }
-                //    else if (count < 100 && count > 9)
-                //    {
-                //        sl = "0" + count.ToString();
-                //    }
-                //}
-                //else
-                //{
-                //    sl = count.ToString();
-                //}
-                //sl = count.ToString("D3");
+                
                 
                 StudentCreateVM student = new StudentCreateVM();
                 student.Name = existingAppliedStudent.ApplicantName;
@@ -949,13 +930,19 @@ namespace OnlineAdmission.APP.Controllers
                     }
                     else
                     {
-                        ViewBag.msg = "Congratulations! You are selected";
+                        ViewBag.msg = "Congratulations! You are selected"; 
+                        ViewBag.NuAdmissionRoll = mastersGenRoll;
                         var exisitingAdmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(mastersGenRoll, studentCategory);
                         if (exisitingAdmissionPayment!=null)
                         {
                             isPaid = true;
-                            ViewBag.isPaid = isPaid;
-                            ViewBag.msg = "Your admission payment is completed";
+                            ViewBag.isPaid = isPaid;                         
+                            ViewBag.appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(mastersGenRoll);
+                            if (ViewBag.appliedStudent==null)
+                            {
+                                ViewBag.msg = "You have need to provide some information to get admission form";  
+                            }
+                            return View();
                         }
                         else
                         {
