@@ -2638,9 +2638,6 @@ namespace OnlineAdmission.APP.Controllers
             return Json(subs);
         }
 
-
-
-
         //Nagad Addition Code here=======================================
 
         #region Helper Functions
