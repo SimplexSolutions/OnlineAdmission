@@ -115,14 +115,32 @@ namespace OnlineAdmission.APP.Controllers
                     {
                         return RedirectToAction("DegreeSearch", "Students");
                     }
-                    
+                }
+                await paymentTransactionManager.AddAsync(newPayment);
+
+                MeritStudent meritStudent = new MeritStudent();
+                if (newPayment.StudentCategory == 1)
+                {
+                    meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
+                }
+                else if (newPayment.StudentCategory == 2)
+                {
+                    meritStudent = await meritStudentManager.GetProByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
+                }
+                else if (newPayment.StudentCategory == 3)
+                {
+                    meritStudent = await meritStudentManager.GetProMBAByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
+                }
+                else if (newPayment.StudentCategory == 4)
+                {
+                    meritStudent = await meritStudentManager.GetGenMastersByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
+                }
+                else if (newPayment.StudentCategory == 5)
+                {
+                    meritStudent = await meritStudentManager.GetDegreeByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
                 }
 
-                await paymentTransactionManager.AddAsync(newPayment);
-                
-                //MeritStudent meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
-                MeritStudent meritStudent = await nagadManager.GetMeritStudentByNURollNagad(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
-
+                //MeritStudent meritStudent = await nagadManager.GetMeritStudentByNURollNagad(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
                 string phoneNumber ;
                 string msgText;
 

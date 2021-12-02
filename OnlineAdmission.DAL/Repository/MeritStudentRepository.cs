@@ -45,6 +45,16 @@ namespace OnlineAdmission.DAL.Repository
             var existStudent = await _context.MeritStudents.FirstOrDefaultAsync(m => m.NUAdmissionRoll == NuRoll  && m.StudentCategory == 3);
             return existStudent;
         }
+        public async Task<MeritStudent> GetGenMastersByAdmissionRollAsync(int NuRoll)
+        {
+            var existStudent = await _context.MeritStudents.FirstOrDefaultAsync(m => m.NUAdmissionRoll == NuRoll  && m.StudentCategory == 4 && m.Comments== "1st Merit List");
+            return existStudent;
+        }
+        public async Task<MeritStudent> GetDegreeByAdmissionRollAsync(int NuRoll)
+        {
+            var existStudent = await _context.MeritStudents.FirstOrDefaultAsync(m => m.NUAdmissionRoll == NuRoll  && m.StudentCategory == 5);
+            return existStudent;
+        }
 
         public IQueryable<MeritStudent> GetMeritStudents()
         {
@@ -67,10 +77,6 @@ namespace OnlineAdmission.DAL.Repository
             return await _context.SaveChangesAsync()>0;
         }
 
-        public async Task<MeritStudent> GetGenMastersByAdmissionRollAsync(int NuRoll)
-        {
-            var student = await _context.MeritStudents.FirstOrDefaultAsync(m => m.NUAdmissionRoll == NuRoll && m.StudentCategory == 4 && m.Comments.Trim().ToLower() == "1st merit list");
-            return student;
-        }
+       
     }
 }

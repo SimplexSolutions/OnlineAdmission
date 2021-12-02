@@ -938,7 +938,6 @@ namespace OnlineAdmission.APP.Controllers
                     else
                     {
                         
-
                         AppliedStudent existingAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(mastersGenRoll);
                         if (existingAppliedStudent == null)
                         {

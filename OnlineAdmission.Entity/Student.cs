@@ -153,6 +153,8 @@ namespace OnlineAdmission.Entity
         //StudentCategory = 2 = professional Student
         //StudentCategory = 3 = Masters Professional
         //StudentCategory = 4 = Masters General
+        //StudentCategory = 5 = Degree
+        
         public int? StudentCategory { get; set; }
 
         [Display(Name ="Student NID")]

@@ -9,10 +9,11 @@ namespace OnlineAdmission.DAL.IRepository
 {
     public interface IMeritStudentRepository : IRepository<MeritStudent>
     {
-        Task<MeritStudent> GetByAdmissionRollAsync(int NURoll);
-        Task<MeritStudent> GetProMBAByAdmissionRollAsync(int NuRoll);
-        Task<MeritStudent> GetProByAdmissionRollAsync(int NuRoll);
-        Task<MeritStudent> GetGenMastersByAdmissionRollAsync(int NuRoll);
+        Task<MeritStudent> GetByAdmissionRollAsync(int NURoll); //student categroy =1
+        Task<MeritStudent> GetProMBAByAdmissionRollAsync(int NuRoll); //student categroy =3
+        Task<MeritStudent> GetProByAdmissionRollAsync(int NuRoll); //student categroy = 2
+        Task<MeritStudent> GetGenMastersByAdmissionRollAsync(int NuRoll); //student categroy = 4
+        Task<MeritStudent> GetDegreeByAdmissionRollAsync(int NuRoll); //student categroy = 5
 
         Task<bool> UploadMeritStudentsAsync(List<MeritStudent> meritStudents);
         Task<List<MeritStudent>> GetAppliedStudentAsync(); //Student will filterd with subject Code=0

@@ -35,6 +35,11 @@ namespace OnlineAdmission.BLL.Manager
             return existStudent;
         }
 
+        public async Task<MeritStudent> GetDegreeByAdmissionRollAsync(int NuRoll)
+        {
+            return await _meritStudentRepository.GetDegreeByAdmissionRollAsync(NuRoll);
+        }
+
         public async Task<MeritStudent> GetGenMastersByAdmissionRollAsync(int NuRoll)
         {
             return await _meritStudentRepository.GetGenMastersByAdmissionRollAsync(NuRoll);
