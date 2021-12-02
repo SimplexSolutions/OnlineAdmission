@@ -46,53 +46,48 @@
             <span class="h2 alert text-success">Your admission is completed</span>
             <a asp-action="Details" asp-controller="Students" asp-route-id="@ViewBag.student.Id" class="btn btn-info">View admission form</a>
         }
-
-        @if (ViewBag.isPaid != null)
+        @if (ViewBag.existingAppliedStudent == false)
         {
-            if (ViewBag.isPaid == true)
-            {
-                if (ViewBag.appliedStudent == null)
-                {
-                    <span class="h2 alert text-success">
-                        <a asp-action="Create" asp-controller="AppliedStudents" asp-route-studentCat="4" asp-route-nuRoll="@ViewBag.NuAdmissionRoll" class="btn btn-outline-info">Give Information</a>
-                    </span>
-                }
-                else
-                {
-                    <span class="h2 alert text-success">Your payment is completed <a class="btn btn-outline-info" asp-action="Create" asp-controller="Students" asp-route-studentCategory="4" asp-route-nuAdmissionRoll="@ViewBag.NuAdmissionRoll">Admission Form</a></span>
-                    
-                }
-
-            }
-            else
-            {
-                @*<div class="row">
-                    <div class="col-md-10 offset-1 text-center">
-                        <span class="alert font-weight-bold text-info">Admission for Master's Application (Regular)</span><hr />
-                    </div>
-                </div>*@
-                <div class="row">
-                    <div class="col-md-8 offset-md-2">
-                        <form asp-action="NagadPaymentMastersGeneral" asp-controller="Students" method="get">
-                            <input type="hidden" name="studentCategory" value="4" />
-                            <input type="hidden" name="paymentType" value="2" />
-                            <input type="hidden" name="nuRoll" value="@ViewBag.nuRoll" />
-                            <div class="form-group row">
-                                <label class="col-md-2 text-md-right text-left col-form-label">Name : </label>
-                                <div class="col-md-4">
-                                    <input required type="text" name="studentName" class="form-control" />
-                                </div>
-
-                                <label class="col-md-2 text-md-right text-left col-form-label">Mobile : </label>
-                                <div class="col-md-4">
-                                    <input required type="number" name="mobileNum" class="form-control" min="01300000000" max="01999999999" />
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary mb-2">Make Payment</button>
-                        </form>
-                    </div>
+            <span class="h2 alert text-success">
+                <a asp-action="Create" asp-controller="AppliedStudents" asp-route-studentCat="4" asp-route-nuRoll="@ViewBag.nuRoll" class="btn btn-outline-info">Give Information</a>
+            </span>
+        }
+        @if (ViewBag.isPaid == true)
+        {
+            <span class="h2 alert text-success">Your payment is completed, <a class="btn btn-outline-info" asp-action="Create" asp-controller="Students" asp-route-studentCategory="4" asp-route-nuAdmissionRoll="@ViewBag.NuAdmissionRoll">Admission Form</a></span>
+        }
+        @if (ViewBag.isPaid == false)
+        {
+            <div class="row card">
+                <table class="table table-bordered border-warning">
+                    <thead class="thead-light bg-primary text-white">
+                        <tr>
+                            <td>NU Roll</td>
+                            <td>Name</td>
+                            <td>Subject</td>
+                            <td>Merit List</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.MeritStudent.NUAdmissionRoll</td>
+                            <td>@Model.AppliedStudent.ApplicantName</td>
+                            <td>@Model.Subject.SubjectName <br />(@Model.MeritStudent.SubjectCode)</td>
+                            <td>@Model.MeritStudent.Comments</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <form asp-action="NagadPaymentMastersGeneral" asp-controller="Students" method="get">
+                        <input type="hidden" name="studentCategory" value="4" />
+                        <input type="hidden" name="paymentType" value="2" />
+                        <input type="hidden" name="nuRoll" value="@ViewBag.nuRoll" />
+                        <button type="submit" class="btn btn-primary mb-2">Make Payment</button>
+                    </form>
                 </div>
-            }
+            </div>
         }
 
     </div>

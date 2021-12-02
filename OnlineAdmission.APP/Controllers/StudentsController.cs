@@ -908,8 +908,8 @@ namespace OnlineAdmission.APP.Controllers
             int studentCategory = 4;
             bool isPaid;
             bool admitted;
-
             ViewBag.nuRoll = mastersGenRoll;
+
             if (mastersGenRoll > 0)
             {
                 var existAdmittedStudent = await _studentManager.GetByAdmissionRollAsync(mastersGenRoll);
@@ -918,10 +918,17 @@ namespace OnlineAdmission.APP.Controllers
                     admitted = true;
                     ViewBag.admitted = admitted;
                     ViewBag.student = existAdmittedStudent;
+
                     return View();
                 }
                 else
                 {
+                    //var appliePayment = await _paymentTransactionManager.GetApplicationTransactionByNuRollAsync(mastersGenRoll,studentCategory);
+                    //if (appliePayment==null)
+                    //{
+                    //    ViewBag.msg = "Sorry! You are not applied";
+                    //    return View();
+                    //}
                     var existMeritStudent = await _meritStudentManager.GetGenMastersByAdmissionRollAsync(mastersGenRoll);
                     if (existMeritStudent == null)
                     {
@@ -930,24 +937,40 @@ namespace OnlineAdmission.APP.Controllers
                     }
                     else
                     {
+                        
+
+                        AppliedStudent existingAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(mastersGenRoll);
+                        if (existingAppliedStudent == null)
+                        {
+                            ViewBag.existingAppliedStudent = false;
+                            ViewBag.msg = "You are selected, please give some information for admission";
+                            return View();
+                        }
+
                         ViewBag.msg = "Congratulations! You are selected"; 
                         ViewBag.NuAdmissionRoll = mastersGenRoll;
+                        Subject selectedSubject = await _subjectManager.GetByCodeAsync(existMeritStudent.SubjectCode);
+
+
+                        SelectedStudentVM selectedStudentVM = new SelectedStudentVM();
+                        selectedStudentVM.Subject = selectedSubject;
+                        selectedStudentVM.AppliedStudent = existingAppliedStudent;
+                        selectedStudentVM.MeritStudent = existMeritStudent;
+
                         var exisitingAdmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(mastersGenRoll, studentCategory);
                         if (exisitingAdmissionPayment!=null)
                         {
                             isPaid = true;
-                            ViewBag.isPaid = isPaid;                         
-                            ViewBag.appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(mastersGenRoll);
-                            if (ViewBag.appliedStudent==null)
-                            {
-                                ViewBag.msg = "You have need to provide some information to get admission form";  
-                            }
-                            return View();
+                            ViewBag.isPaid = isPaid;
+                            ViewBag.msg = "Your Payment is completed";
+                            return View(selectedStudentVM);
                         }
                         else
                         {
                             isPaid = false;
                             ViewBag.isPaid = isPaid;
+                            ViewBag.msg = "Your Payment is completed";
+                            return View(selectedStudentVM);
                         }
                     }
                 }
