@@ -545,8 +545,17 @@ namespace OnlineAdmission.APP.Controllers
                 existMeritStudent = await _meritStudentManager.GetProMBAByAdmissionRollAsync(paymentTransaction.ReferenceNo);
                 ViewBag.action = "mastersIndex";
             }
-            
+            if (studentCategory == 4)
+            {
+                existMeritStudent = await _meritStudentManager.GetGenMastersByAdmissionRollAsync(paymentTransaction.ReferenceNo);
+                ViewBag.action = "MastersGeneralIndex";
+            }
 
+            if (studentCategory == 5)
+            {
+                existMeritStudent = await _meritStudentManager.GetDegreeByAdmissionRollAsync(paymentTransaction.ReferenceNo);
+                ViewBag.action = "DegreeIndex";
+            }
             var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(paymentTransaction.ReferenceNo);
             Subject existSubject = new Subject();
             Student student = new Student();
