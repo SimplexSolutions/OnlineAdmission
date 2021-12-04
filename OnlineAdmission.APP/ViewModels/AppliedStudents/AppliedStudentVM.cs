@@ -28,7 +28,7 @@ namespace OnlineAdmission.APP.ViewModels.AppliedStudents
         [Required]
         public string MobileNo { get; set; }
 
-        [Required, Display(Name = "Group Name")]
+        [Display(Name = "Group Name")]
         public string HSCGroup { get; set; }
 
     }
