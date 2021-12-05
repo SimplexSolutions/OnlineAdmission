@@ -550,7 +550,7 @@ namespace OnlineAdmission.APP.Controllers
             MeritStudent existMeritStudent = new MeritStudent();
             if (studentCategory==1)
             {
-                existMeritStudent = await _meritStudentManager.GetByAdmissionRollAsync(paymentTransaction.ReferenceNo);
+                existMeritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(paymentTransaction.ReferenceNo);
                 ViewBag.action = "Index";
             }
             if (studentCategory==2)
@@ -580,7 +580,7 @@ namespace OnlineAdmission.APP.Controllers
             if (existMeritStudent!=null)
             {
                 existSubject = await _subjectManager.GetByCodeAsync(existMeritStudent.SubjectCode);
-                student = await _studentManager.GetByAdmissionRollAsync(existMeritStudent.NUAdmissionRoll);
+                student = await _studentManager.GetHonsByAdmissionRollAsync(existMeritStudent.NUAdmissionRoll);
             }
 
             PaymentReceiptVM paymentReceiptVM = new PaymentReceiptVM();
@@ -617,7 +617,7 @@ namespace OnlineAdmission.APP.Controllers
             if (ModelState.IsValid)
             {
                 await _paymentTransactionManager.AddAsync(paymentTransaction);
-                var meritStudent =await _meritStudentManager.GetByAdmissionRollAsync(paymentTransaction.ReferenceNo);
+                var meritStudent =await _meritStudentManager.GetHonsByAdmissionRollAsync(paymentTransaction.ReferenceNo);
                 meritStudent.PaymentStatus = true;
                 meritStudent.PaymentTransactionId = paymentTransaction.Id;
                 bool isSaved = await _meritStudentManager.UpdateAsync(meritStudent);

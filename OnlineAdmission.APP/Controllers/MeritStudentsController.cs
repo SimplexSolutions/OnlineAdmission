@@ -38,7 +38,14 @@ namespace OnlineAdmission.APP.Controllers
 
             ViewBag.action = "Index";
             ViewBag.controller = "MeritStudents";
-
+            if (TempData["duplicateCount"]!=null)
+            {
+                ViewBag.duplicateCount = TempData["duplicateCount"].ToString();
+            }
+            if (TempData["savedCount"] != null)
+            {
+                ViewBag.savedCount = TempData["savedCount"].ToString();
+            }
             IQueryable<MeritStudent> meritStudentList = _meritStudentManager.GetMeritStudents();
             var studentCategoryFromSession = HttpContext.Session.GetString("studentCategoryMerit");
 
@@ -208,15 +215,26 @@ namespace OnlineAdmission.APP.Controllers
 
         private async Task<List<MeritStudent>> GetStudentsList(string fName)
         {
-            List<MeritStudent> students = new List<MeritStudent>();
+            List<MeritStudent> students = new List<MeritStudent>(); 
+            int duplicateCount = 0;
+            int savedItem = 0;
             var fileName = fName; // $"{Directory.GetCurrentDirectory()}{@"\wwwroot\FileData\"}" + fName;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             using (var stream = System.IO.File.Open(fileName, FileMode.Open, FileAccess.Read))
             {
+               
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
                 {
+                    
                     while (reader.Read())
                     {
+                        var existingMeritList = await _meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(reader.GetValue(0).ToString()));
+                        if (existingMeritList != null)
+                        {
+                            duplicateCount++;
+                            continue;
+                        }
+                        savedItem++;
                         students.Add(new MeritStudent()
                         {
                             NUAdmissionRoll = Convert.ToInt32(reader.GetValue(0).ToString()),
@@ -232,6 +250,8 @@ namespace OnlineAdmission.APP.Controllers
                 }
             }
             await _meritStudentManager.UploadMeritStudentsAsync(students);
+            TempData["duplicateCount"] = duplicateCount;
+            TempData["savedCount"] = savedItem;
             return students;
         }
 

@@ -14,6 +14,14 @@
 <h1>Merit Student's List</h1>
 <p>
     <a class="btn btn-info" asp-action="GetMeritStudentList">Add Merit Student's Excel File</a>
+    @if (ViewBag.duplicateCount != null)
+    {
+        <span class="text-danger h5" id="duplicateCountId">@ViewBag.duplicateCount duplicate item found (Not saved)</span>
+    }
+    @if (ViewBag.savedCount != null)
+    {
+        <span class="text-success font-weight-bold h5" id="savedCountId">@ViewBag.savedCount item saved</span>
+    }
 </p>
 <div class="row">
     <div class="col-md-6">
@@ -158,6 +166,10 @@
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
         <script>
             $(document).ready(function () {
+                $('#duplicateCountId').fadeOut(6000);
+                $('#savedCountId').fadeOut(12000);
+
+
                 let catVal = $('#studentCategoryValue').val();
                 $('#studentCategory  option[value="' + catVal + '"]').prop("selected", true);
 

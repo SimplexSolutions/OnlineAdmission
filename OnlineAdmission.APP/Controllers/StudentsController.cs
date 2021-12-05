@@ -222,12 +222,12 @@ namespace OnlineAdmission.APP.Controllers
                 }
                 else if (studentCategory == 5) //For Master's Professional MBA Student
                 {
-                    existingMeritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuAdmissionRoll);
+                    existingMeritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(nuAdmissionRoll);
                     action = "DegreeSearch";
                 }
                 else // for Hon's General Student
                 {
-                    existingMeritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuAdmissionRoll);
+                    existingMeritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(nuAdmissionRoll);
                 }
 
                 //var addmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(nuAdmissionRoll, studentCategory);
@@ -517,7 +517,7 @@ namespace OnlineAdmission.APP.Controllers
             List<MeritStudent> meritStudents = new List<MeritStudent>();
             foreach (var item in student)
             {
-                var mStudent = await _meritStudentManager.GetByAdmissionRollAsync(item.NUAdmissionRoll);
+                var mStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(item.NUAdmissionRoll);
                 meritStudents.Add(mStudent);
             }
             if (studentMeritType!=null )
@@ -612,7 +612,7 @@ namespace OnlineAdmission.APP.Controllers
             string nuRoll = NuAdmissionRoll.ToString();
             if (NuAdmissionRoll>0)
             {
-                var meritStudent =await _meritStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll);
+                var meritStudent =await _meritStudentManager.GetHonsByAdmissionRollAsync(NuAdmissionRoll);
                 
                 if (meritStudent==null)
                 {
@@ -710,7 +710,7 @@ namespace OnlineAdmission.APP.Controllers
             ViewBag.nuRoll = professionalRoll;
             if (professionalRoll>0)
             {
-                var student = await _studentManager.GetByAdmissionRollAsync(professionalRoll);
+                var student = await _studentManager.GetHonsByAdmissionRollAsync(professionalRoll);
                 if (student!=null)
                 {
                     admitted = true;
@@ -811,7 +811,7 @@ namespace OnlineAdmission.APP.Controllers
 
             if (mastersRoll > 0)
             {
-                var student = await _studentManager.GetByAdmissionRollAsync(mastersRoll);
+                var student = await _studentManager.GetHonsByAdmissionRollAsync(mastersRoll);
                 if (student != null)
                 {
                     admitted = true;
@@ -912,7 +912,7 @@ namespace OnlineAdmission.APP.Controllers
 
             if (mastersGenRoll > 0)
             {
-                var existAdmittedStudent = await _studentManager.GetByAdmissionRollAsync(mastersGenRoll);
+                var existAdmittedStudent = await _studentManager.GetHonsByAdmissionRollAsync(mastersGenRoll);
                 if (existAdmittedStudent!=null)
                 {
                     admitted = true;
@@ -1018,7 +1018,7 @@ namespace OnlineAdmission.APP.Controllers
             string msg = "";
             if (NuAdmissionRoll > 0)
             {
-                var meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll);
+                var meritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(NuAdmissionRoll);
                 var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll);
 
                 var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
@@ -1069,7 +1069,7 @@ namespace OnlineAdmission.APP.Controllers
         [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<ActionResult> CollegePayment(int nuRoll)
         {
-            MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll);
+            MeritStudent meritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(nuRoll);
             Subject subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
             AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
             TransactionInfo transactionInfo = new TransactionInfo();
@@ -1121,7 +1121,7 @@ namespace OnlineAdmission.APP.Controllers
                 //newPayment.ApplicantName = model.Name;
                 await _paymentTransactionManager.AddAsync(newPayment);
 
-                MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(model.PaymentTransaction.ReferenceNo);
+                MeritStudent meritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(model.PaymentTransaction.ReferenceNo);
                 if (meritStudent != null)
                 {
                     meritStudent.PaymentStatus = true;
@@ -2409,7 +2409,7 @@ namespace OnlineAdmission.APP.Controllers
             if (ModelState.IsValid)
             {
                 
-                MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(model.PaymentTransaction.ReferenceNo);
+                MeritStudent meritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(model.PaymentTransaction.ReferenceNo);
 
                 HttpClient client = _nagadAPI.Initial();
 
@@ -2491,7 +2491,7 @@ namespace OnlineAdmission.APP.Controllers
             student.PresentDistrict = await _districtManager.GetByIdAsync(student.PresentDistrictId);
             student.PermanentDistrict = await _districtManager.GetByIdAsync(student.PermanentDistrictId);
             student.MailingDistrict = await _districtManager.GetByIdAsync(student.MailingDistrictId);
-            MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(student.NUAdmissionRoll);
+            MeritStudent meritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(student.NUAdmissionRoll);
 
             
 

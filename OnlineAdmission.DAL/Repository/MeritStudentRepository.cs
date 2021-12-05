@@ -18,6 +18,10 @@ namespace OnlineAdmission.DAL.Repository
             
         }
 
+        public async Task<MeritStudent> GetByAdmissionRollAsync(int NURoll)
+        {
+            return await _context.MeritStudents.FirstOrDefaultAsync(m => m.NUAdmissionRoll == NURoll);
+        }
         public async Task<List<MeritStudent>> GetAllWithoutPaidAsync()
         {
             return await _context.MeritStudents.Where(m => m.PaymentStatus == false).ToListAsync();
@@ -29,7 +33,7 @@ namespace OnlineAdmission.DAL.Repository
             return appliedStudent;
         }
 
-        public async Task<MeritStudent> GetByAdmissionRollAsync(int NURoll)
+        public async Task<MeritStudent> GetHonsByAdmissionRollAsync(int NURoll)
         {
             var existStudent =  await _context.MeritStudents.FirstOrDefaultAsync(m => m.NUAdmissionRoll == NURoll && m.StudentCategory==1 && (m.Comments.Trim().ToLower() == "Release Slip".Trim().ToLower() || m.PaymentStatus == true));
             return existStudent;
@@ -77,6 +81,5 @@ namespace OnlineAdmission.DAL.Repository
             return await _context.SaveChangesAsync()>0;
         }
 
-       
     }
 }

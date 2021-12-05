@@ -108,7 +108,7 @@ namespace OnlineAdmission.APP.Controllers
         // GET: SpecialOfferController/Edit/5
         public async Task<ActionResult> Edit(int nuRoll)
         {
-            var meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll);
+            var meritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(nuRoll);
             var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
             var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
 
@@ -158,7 +158,7 @@ namespace OnlineAdmission.APP.Controllers
         {
             if (ModelState.IsValid)
             {
-                MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll);
+                MeritStudent meritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(nuRoll);
                 meritStudent.DeductedAmaount = 0;
                 await _meritStudentManager.UpdateAsync(meritStudent);
                 return RedirectToAction("Index");

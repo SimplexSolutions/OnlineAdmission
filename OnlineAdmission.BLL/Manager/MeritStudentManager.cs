@@ -18,6 +18,11 @@ namespace OnlineAdmission.BLL.Manager
             _meritStudentRepository = meritStudentRepository;
         }
 
+
+        public async Task<MeritStudent> GetByAdmissionRollAsync(int NURoll)
+        {
+            return await _meritStudentRepository.GetByAdmissionRollAsync(NURoll);
+        }
         public async Task<List<MeritStudent>> GetAllWithoutPaidAsync()
         {
             return await _meritStudentRepository.GetAllWithoutPaidAsync();
@@ -28,9 +33,9 @@ namespace OnlineAdmission.BLL.Manager
             return await _meritStudentRepository.GetAppliedStudentAsync();
         }
 
-        public async Task<MeritStudent> GetByAdmissionRollAsync(int NURoll)
+        public async Task<MeritStudent> GetHonsByAdmissionRollAsync(int NURoll)
         {
-            var existStudent = await _meritStudentRepository.GetByAdmissionRollAsync(NURoll);
+            var existStudent = await _meritStudentRepository.GetHonsByAdmissionRollAsync(NURoll);
             
             return existStudent;
         }
@@ -74,5 +79,7 @@ namespace OnlineAdmission.BLL.Manager
         {
             return await _meritStudentRepository.UploadMeritStudentsAsync(meritStudents);
         }
+
+        
     }
 }

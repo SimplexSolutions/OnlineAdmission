@@ -85,7 +85,7 @@ namespace OnlineAdmission.APP.Controllers
                 //newPayment.SubjectId = MerchantInfo.SubjectId;
                 if (responsevalue.subjectChange == 1)
                 {
-                    MeritStudent existingMeritStudent = await meritStudentManager.GetByAdmissionRollAsync(MerchantInfo.NuAdmissionRoll);
+                    MeritStudent existingMeritStudent = await meritStudentManager.GetHonsByAdmissionRollAsync(MerchantInfo.NuAdmissionRoll);
                     var existingStudent = await _studentManager.GetStudentByHSCRollAsync(existingMeritStudent.HSCRoll);
                     existingStudent.Status = true;
                     await _studentManager.UpdateAsync(existingStudent);
@@ -121,7 +121,7 @@ namespace OnlineAdmission.APP.Controllers
                 MeritStudent meritStudent = new MeritStudent();
                 if (newPayment.StudentCategory == 1)
                 {
-                    meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
+                    meritStudent = await meritStudentManager.GetHonsByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
                 }
                 else if (newPayment.StudentCategory == 2)
                 {
