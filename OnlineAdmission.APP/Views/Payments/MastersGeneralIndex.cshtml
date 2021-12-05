@@ -1,4 +1,4 @@
-﻿@model PaginatedList<OnlineAdmission.Entity.PaymentTransaction>
+﻿@model PaginatedList<OnlineAdmission.APP.ViewModels.PaymentReceiptVM>
 
 @{
     ViewData["Title"] = "Master's (Regular) Payment";
@@ -72,6 +72,9 @@
                         NU Roll
                     </th>
                     <th>
+                        College Roll
+                    </th>
+                    <th>
                         Session
                     </th>
                     <th>
@@ -100,38 +103,40 @@
                             @(i).
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.StudentName)
+                            @Html.DisplayFor(modelItem => item.Student.Name)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.ReferenceNo)
-                        </td>
-
-                        <td>
-                            2021-2022
+                            @Html.DisplayFor(modelItem => item.PaymentTransaction.ReferenceNo)
                         </td>
                         <td>
-                            @(item.MobileNumber)
+                            @Html.DisplayFor(modelItem => item.Student.CollegeRoll)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.TransactionId)
+                            2020-2021
                         </td>
                         <td>
-                            @item.AccountNo
+                            @(item.AppliedStudent.MobileNo)
                         </td>
                         <td>
-                            @item.TransactionDate.ToString("yyyy-MM-dd")
+                            @Html.DisplayFor(modelItem => item.PaymentTransaction.TransactionId)
+                        </td>
+                        <td>
+                            @item.PaymentTransaction.AccountNo
+                        </td>
+                        <td>
+                            @item.PaymentTransaction.TransactionDate.ToString("yyyy-MM-dd")
                         </td>
                         <td class="text-right">
-                            @Math.Round(item.Amount, 2)
+                            @Math.Round(item.PaymentTransaction.Amount, 2)
                         </td>
                         <td class="noPrint">
                             @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
-                            <a asp-action="Details" asp-route-id="@item.Id" asp-route-studentCategory="3">Details</a>
+                            <a asp-action="Details" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategory="4">Details</a>
                             @*<a asp-action="Delete" asp-route-id="@item.PaymentTransaction.Id">Delete</a>*@
                         </td>
                     </tr>
                     i++;
-                    total = total + item.Amount;
+                    total = total + item.PaymentTransaction.Amount;
                 }
                 <tr class="" style="background-color:#f7f0f0">
                     <td colspan="8" class="text-md-right">TOTAL</td>
