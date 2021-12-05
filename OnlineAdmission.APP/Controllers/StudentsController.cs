@@ -968,7 +968,7 @@ namespace OnlineAdmission.APP.Controllers
                         {
                             isPaid = false;
                             ViewBag.isPaid = isPaid;
-                            ViewBag.msg = "Your Payment is completed";
+                            ViewBag.msg = "Your Payment is not completed";
                             return View(selectedStudentVM);
                         }
                     }
