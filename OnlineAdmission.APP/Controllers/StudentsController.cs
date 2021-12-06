@@ -2093,7 +2093,7 @@ namespace OnlineAdmission.APP.Controllers
                 StudentName = studentName,
                 MobileNo = mobileNum,
                 NuAdmissionRoll = nuRoll,
-                AdmissionFee = 0,
+                AdmissionFee = subject.AdmissionFee,
                 StudentCategory = studentCategory,
                 PaymentType = paymentType
             };
