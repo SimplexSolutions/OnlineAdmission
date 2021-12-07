@@ -115,7 +115,7 @@ namespace OnlineAdmission.APP.Controllers
                 ViewBag.returnAction = Action;
             }
 
-            var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+            var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll, (int)studentCat);
             if (existAppliedStudent != null)
             {
                 TempData["msg"] = "You are already applied";
@@ -167,7 +167,7 @@ namespace OnlineAdmission.APP.Controllers
             ViewBag.nuRoll = nuRoll;
             if (ModelState.IsValid)
             {
-                var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(vModel.NUAdmissionRoll);
+                var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(vModel.NUAdmissionRoll, (int)studentCat);
                 var isMobileNumberUsed = await _appliedStudentManager.GetByMobileNumber(vModel.MobileNo);
                 if (isMobileNumberUsed!=null)
                 {

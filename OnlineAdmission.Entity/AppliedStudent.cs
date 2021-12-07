@@ -34,5 +34,11 @@ namespace OnlineAdmission.Entity
 
         [Display(Name = "Group Name")]
         public string HSCGroup { get; set; }
+
+        public int? AcademicSessionId { get; set; }
+        public AcademicSession AcademicSession { get; set; }
+
+        public int? StudentCategoryId { get; set; }
+        public StudentCategory StudentCategory { get; set; }
     }
 }

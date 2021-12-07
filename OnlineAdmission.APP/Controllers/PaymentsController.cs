@@ -574,7 +574,7 @@ namespace OnlineAdmission.APP.Controllers
                 existMeritStudent = await _meritStudentManager.GetDegreeByAdmissionRollAsync(paymentTransaction.ReferenceNo);
                 ViewBag.action = "DegreeIndex";
             }
-            var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(paymentTransaction.ReferenceNo);
+            var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(paymentTransaction.ReferenceNo, studentCategory);
             Subject existSubject = new Subject();
             Student student = new Student();
             if (existMeritStudent!=null)
@@ -679,6 +679,10 @@ namespace OnlineAdmission.APP.Controllers
             return View(paymentTransaction);
         }
 
+        public async Task<IActionResult> ReportByDate(DateTime? fromDate, DateTime? toDate)
+        {
+            return View();
+        }
         // GET: Payments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

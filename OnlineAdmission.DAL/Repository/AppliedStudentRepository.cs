@@ -17,15 +17,18 @@ namespace OnlineAdmission.DAL.Repository
 
         }
 
-        public async Task<AppliedStudent> GetByAdmissionRollAsync(int roll)
+
+        public async Task<AppliedStudent> GetByAdmissionRollAsync(int roll, int stuCat)
         {
-            return await _context.AppliedStudents.FirstOrDefaultAsync(a => a.NUAdmissionRoll == roll);
+            return await _context.AppliedStudents.FirstOrDefaultAsync(a => a.NUAdmissionRoll == roll && a.StudentCategoryId==stuCat);
         }
 
         public async Task<AppliedStudent> GetByMobileNumber(string mobileNo)
         {
             return await _context.AppliedStudents.FirstOrDefaultAsync(a => a.MobileNo.Trim() == mobileNo.Trim());
         }
+
+        
 
         public async Task<bool> UploadAppliedStudentsAsync(List<AppliedStudent> appliedStudents)
         {

@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OnlineAdmission.Entity
 {
-    public class StudentCategory: BaseProps
+    public class AcademicSession : BaseProps
     {
-        [Display(Name="Category")]
-        public string CategoryName { get; set; }
-
-        public ICollection<Subject> Subjects { get; set; }
+        public string SessionName { get; set; }
         public ICollection<AppliedStudent> AppliedStudents { get; set; }
     }
 }

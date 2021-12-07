@@ -10,7 +10,7 @@ namespace OnlineAdmission.BLL.IManager
     public interface IAppliedStudentManager : IManager<AppliedStudent>
     {
         Task<bool> UploadAppliedStudentsAsync(List<AppliedStudent> appliedStudents);
-        Task<AppliedStudent> GetByAdmissionRollAsync(int roll);
+        Task<AppliedStudent> GetByAdmissionRollAsync(int roll, int stuCat);
         Task<AppliedStudent> GetByMobileNumber(string mobileNo);
     }
 }

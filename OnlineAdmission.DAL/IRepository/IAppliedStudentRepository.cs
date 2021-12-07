@@ -10,7 +10,8 @@ namespace OnlineAdmission.DAL.IRepository
     public interface IAppliedStudentRepository : IRepository<AppliedStudent>
     {
         Task<bool> UploadAppliedStudentsAsync(List<AppliedStudent> appliedStudents);
-        Task<AppliedStudent> GetByAdmissionRollAsync(int roll);
+        Task<AppliedStudent> GetByAdmissionRollAsync(int roll, int stuCat);
+
         Task<AppliedStudent> GetByMobileNumber(string mobileNo);
     }
 }
