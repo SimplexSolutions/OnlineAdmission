@@ -580,7 +580,7 @@ namespace OnlineAdmission.APP.Controllers
             if (existMeritStudent!=null)
             {
                 existSubject = await _subjectManager.GetByCodeAsync(existMeritStudent.SubjectCode);
-                student = await _studentManager.GetHonsByAdmissionRollAsync(existMeritStudent.NUAdmissionRoll);
+                student = await _studentManager.GetByAdmissionRollAsync(existMeritStudent.NUAdmissionRoll);
             }
 
             PaymentReceiptVM paymentReceiptVM = new PaymentReceiptVM();

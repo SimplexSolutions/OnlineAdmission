@@ -17,7 +17,7 @@ namespace OnlineAdmission.BLL.Manager
             _studentRepository = studentRepository;
         }
 
-        public async Task<Student> GetHonsByAdmissionRollAsync(int NURoll)
+        public async Task<Student> GetByAdmissionRollAsync(int NURoll)
         {
             return await _studentRepository.GetByAdmissionRollAsync(NURoll);
         }

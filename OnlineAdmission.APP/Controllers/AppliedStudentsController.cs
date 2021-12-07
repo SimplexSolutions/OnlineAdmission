@@ -23,16 +23,19 @@ namespace OnlineAdmission.APP.Controllers
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _host;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly IStudentManager _studentManager;
 
-        public AppliedStudentsController(IAppliedStudentManager appliedStudentManager, IMapper mapper, IWebHostEnvironment host, SignInManager<IdentityUser> signInManager)
+        public AppliedStudentsController(IAppliedStudentManager appliedStudentManager, IMapper mapper, IWebHostEnvironment host, SignInManager<IdentityUser> signInManager, IStudentManager studentManager)
         {
             _appliedStudentManager = appliedStudentManager;
             _mapper = mapper;
             _host = host;
             _signInManager = signInManager;
+            _studentManager = studentManager;
         }
         public async Task<IActionResult> Index(string usrtext, string sortRoll, string sortHSCRoll, int page, int pagesize)
         {
+            
             IQueryable<AppliedStudent> appliedStudentList = _appliedStudentManager.GetIQueryableData();
             ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
             ViewBag.action = "Index";
@@ -76,6 +79,7 @@ namespace OnlineAdmission.APP.Controllers
 
 
         }
+
 
         [AllowAnonymous]
         public async Task<IActionResult> Create( int nuRoll, int? studentCat)
@@ -191,6 +195,41 @@ namespace OnlineAdmission.APP.Controllers
             return View();
         }
 
+
+        [Authorize(Roles ="SuperAdmin")]
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var existingStudent = await _appliedStudentManager.GetByIdAsync(id);
+            if (existingStudent ==null)
+            {
+                ViewBag.msg = "Student Not found";
+                return View();
+            }
+            
+            return View(existingStudent);
+        }
+
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpPost]
+        [ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirm(int id)
+        {
+            var existingStudent = await _appliedStudentManager.GetByIdAsync(id);
+            var admittedStudent = await _studentManager.GetByAdmissionRollAsync(existingStudent.NUAdmissionRoll);
+            if (admittedStudent == null)
+            {
+                var isDeleted = await _appliedStudentManager.RemoveAsync(existingStudent);
+                if (isDeleted == true)
+                {
+                    return RedirectToAction("Index");
+                }
+                ViewBag.msg = "not Deleted.";
+                return View(existingStudent);
+            }
+            ViewBag.msg = "This student is already admitted";
+            return View(existingStudent);
+        }
 
         [HttpGet]
         public IActionResult GetAppliedStudentList()

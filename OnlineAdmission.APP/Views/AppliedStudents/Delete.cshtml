@@ -1,0 +1,73 @@
+﻿@model OnlineAdmission.Entity.AppliedStudent
+
+@{
+}
+
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Applied Student</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ApplicantName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ApplicantName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NUAdmissionRoll)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NUAdmissionRoll)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HSCGroup)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HSCGroup)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MobileNo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MobileNo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FatherName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FatherName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MotherName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MotherName)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+    @if (ViewBag.msg != null)
+    {
+        <div class="row " id="msg">
+            <span class="alert text-danger">@ViewBag.msg</span>
+        </div>
+
+    }
+</div>
+
+@section Scripts
+{
+<script>
+    $(document).ready(function () {
+        $('#msg').fadeOut(6000);
+    });
+</script>
+}
