@@ -35,7 +35,14 @@ namespace OnlineAdmission.APP.Controllers
         }
         public async Task<IActionResult> Index(string usrtext, string sortRoll, string sortHSCRoll, int page, int pagesize)
         {
-            
+            if (TempData["notSaved"] != null)
+            {
+                ViewBag.notSaved = TempData["notSaved"].ToString();
+            }
+            if (TempData["saved"] != null)
+            {
+                ViewBag.saved = TempData["saved"].ToString();
+            }
             IQueryable<AppliedStudent> appliedStudentList = _appliedStudentManager.GetIQueryableData();
             ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
             ViewBag.action = "Index";
@@ -259,28 +266,46 @@ namespace OnlineAdmission.APP.Controllers
 
         private async Task<List<AppliedStudent>> GetStudentsList(string fName)
         {
+            int notSaved = 0;
+            int saved = 0;
             List<AppliedStudent> students = new List<AppliedStudent>();
             var fileName = fName; // $"{Directory.GetCurrentDirectory()}{@"\wwwroot\FileData\"}" + fName;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             using (var stream = System.IO.File.Open(fileName, FileMode.Open, FileAccess.Read))
             {
+                
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
                 {
                     while (reader.Read())
                     {
-                        students.Add(new AppliedStudent()
+                        var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(reader.GetValue(0).ToString()), Convert.ToInt32(reader.GetValue(6).ToString()));
+                        if (existAppliedStudent != null)
                         {
-                            NUAdmissionRoll = Convert.ToInt32(reader.GetValue(0).ToString()),
-                            ApplicantName = reader.GetValue(1).ToString(),
-                            FatherName = reader.GetValue(2).ToString(),
-                            MotherName = reader.GetValue(3).ToString(),
-                            MobileNo = reader.GetValue(4).ToString(),
-                            HSCGroup = reader.GetValue(5).ToString()
-                        });
+                            notSaved++;
+                            continue;
+                        }
+                        else
+                        {
+                            students.Add(new AppliedStudent()
+                            {
+                                NUAdmissionRoll = Convert.ToInt32(reader.GetValue(0).ToString()),
+                                ApplicantName = reader.GetValue(1).ToString(),
+                                FatherName = reader.GetValue(2).ToString(),
+                                MotherName = reader.GetValue(3).ToString(),
+                                MobileNo = reader.GetValue(4).ToString(),
+                                HSCGroup = reader.GetValue(5).ToString(),
+                                StudentCategoryId = Convert.ToInt32(reader.GetValue(6).ToString()),
+                                AcademicSessionId = Convert.ToInt32(reader.GetValue(7).ToString())
+                                //NUAdmissionRoll,ApplicantName,FatherName,MotherName,MobileNo,HSCGroup,StudentCategoryId,AcademicSessionId
+                            });
+                            saved++;
+                        }
                     }
                 }
             }
             await _appliedStudentManager.UploadAppliedStudentsAsync(students);
+            TempData["notSaved"] = notSaved;
+            TempData["saved"] = saved;
             return students;
         }
 
