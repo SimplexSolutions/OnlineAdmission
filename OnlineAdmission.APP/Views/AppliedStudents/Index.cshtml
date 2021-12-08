@@ -14,11 +14,11 @@
         <a class="btn btn-primary" asp-action="GetAppliedStudentList">Add Applied Student's Excel File</a> 
         @if (ViewBag.notSaved != null)
         {
-            <span class="text-danger font-weight-bold">@ViewBag.notSaved item duplicate found(not saved).</span>
+            <span class="text-danger font-weight-bold msg">@ViewBag.notSaved item duplicate found(not saved).</span>
         }
         @if (ViewBag.saved != null)
         {
-            <span class="text-success font-weight-bold">[ @ViewBag.saved item successfully saved]</span>
+            <span class="text-success font-weight-bold msg">[ @ViewBag.saved item successfully saved]</span>
         }
     </p>
 </div>
@@ -115,4 +115,9 @@
         </script>
 
         <script src="~/js/tableToCSV.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.msg').fadeOut(10000);
+        });
+    </script>
     }
