@@ -679,9 +679,84 @@ namespace OnlineAdmission.APP.Controllers
             return View(paymentTransaction);
         }
 
-        public async Task<IActionResult> ReportByDate(DateTime? fromDate, DateTime? toDate)
+        [HttpGet]
+        public async Task<IActionResult> SummeryReport()
         {
-            return View();
+            List<PaymentTransaction> payments = await _paymentTransactionManager.GetAllAsync();
+            List<Student> students = await _studentManager.GetAllAsync();
+
+            ViewBag.applicationPaymentCount = payments.Where(s => s.PaymentType == 1).Count();
+            ViewBag.admissionPaymentCount = payments.Where(s => s.PaymentType == 2).Count();
+            ViewBag.totalApplicationPayment = payments.Where(s => s.PaymentType == 1).Sum(s => s.Amount);
+            ViewBag.totalAdmissionPayment = payments.Where(s => s.PaymentType == 2).Sum(s => s.Amount);
+            ViewBag.totalPayment = payments.Sum(s => s.Amount);
+
+            ViewBag.honorsApplicationPaymentCount = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 1).Count();
+            ViewBag.honorsApplicationPaymentSum = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 1).Sum(m => m.Amount);
+
+            ViewBag.honorsProApplicationPaymentCount = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 1).Count();
+            ViewBag.honorsProApplicationPaymentSum = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 1).Sum(m => m.Amount);
+
+            ViewBag.mastersApplicationPaymentCount = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 1).Count();
+            ViewBag.mastersApplicationPaymentSum = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 1).Sum(p => p.Amount);
+
+            ViewBag.mastersProApplicationPaymentCount = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 1).Count();
+            ViewBag.mastersProApplicationPaymentSum = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 1).Sum(p=> p.Amount);
+
+            ViewBag.degreeApplicationPaymentCount = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 1).Count();
+            ViewBag.degreeApplicationPaymentSum = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 1).Sum(p => p.Amount);
+
+            ViewBag.honorsAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 2).Count();
+            ViewBag.honorsAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 2).Sum(p => p.Amount);
+
+            ViewBag.honorsProAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 2).Count();
+            ViewBag.honorsProAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 2).Sum(p => p.Amount);
+
+            ViewBag.mastersAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 2).Count();
+            ViewBag.mastersAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 2).Sum(p => p.Amount);
+
+            ViewBag.mastersProAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 2).Count();
+            ViewBag.mastersProAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 2).Sum(p => p.Amount);
+
+            ViewBag.degreeAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 2).Count();
+            ViewBag.degreeAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 2).Sum(p => p.Amount);
+
+            return View(payments);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SummeryReport(DateTime? fromDate, DateTime? toDate)
+        {
+            
+            List<PaymentTransaction> payments = await _paymentTransactionManager.GetAllAsync();
+            List<Student> students = await _studentManager.GetAllAsync();
+            var paymentSummery = from pay in payments
+                                 group pay by pay.StudentCategory
+                                 into payCatGroup
+                                 orderby payCatGroup.Key
+                                 select payCatGroup;
+
+            ViewBag.result = paymentSummery;
+
+     //                            items.GroupBy(item => item.Order.Customer)
+     //.Select(group => new { Customer = group.Key, Items = group.ToList() })
+     //.ToList()
+
+
+
+            if (fromDate != null && toDate != null)
+            {
+                payments = payments.Where(p => p.TransactionDate.Date >= (DateTime)fromDate && p.TransactionDate.Date <= (DateTime)toDate).ToList();
+            }
+            else if (fromDate == null && toDate != null)
+            {
+                payments = payments.Where(p => p.TransactionDate.Date <= (DateTime)toDate).ToList();
+            }
+            else if (fromDate != null && toDate == null)
+            {
+                payments = payments.Where(p => p.TransactionDate.Date >= (DateTime)fromDate).ToList();
+            }
+            return View(payments);
         }
         // GET: Payments/Delete/5
         public async Task<IActionResult> Delete(int? id)
