@@ -6,165 +6,270 @@
     int applicaitonSl = 0;
     int admissionSl = 0;
 }
-
-
-@if (ViewBag.applicationPaymentCount != null)
+<div class="row">
+    <div class="col-md-10 offset-md-1">
+        <form asp-action="SummeryReport" asp-controller="Payments" method="post">
+            <div class="form-group row">
+                <Label class="col-md-2 text-md-right col-form-label">From</Label>
+                <div class="col-md-3">
+                    <input type="date" name="FromDate" value="@ViewBag.FromDate" class="form-control" required />
+                </div>
+                <Label class="col-md-2 text-md-right col-form-label"> To</Label>
+                <div class="col-md-3">
+                    <input type="date" name="ToDate" value="@DateTime.Today.Date" class="form-control" required />
+                </div>
+                <div class="col-md-2">
+                    <input type="submit" class="btn-block btn-info form-control" value="Search" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@if (ViewBag.totalPayment != null || ViewBag.totalPayment <= 0)
 {
-    <span>Application Payments = @ViewBag.applicationPaymentCount</span>
+    <div class="" id="printableArea">
+        <div class="row">
+            <div class="col-md-10 offset-md-1 text-center">
+                <h2>Tejgaon College</h2>
+                <h3>Student Admission (Summery Report)</h3>
+            </div>
+        </div>
+        @if (ViewBag.FromDate != null || ViewBag.Todate != null)
+        {
+            <div class="row">
+                <div class="col-md-10 offset-md-1">
+                    <span class="alert h5">From : <span class="font-weight-bold">@ViewBag.FromDate</span> To :<span class="font-weight-bold">@ViewBag.ToDate</span></span>
+                </div>
+            </div>
+        }
+        @if (ViewBag.totalApplicationPayment != null || ViewBag.totalApplicationPayment > 0)
+        {
+            <div class="col-md-10 offset-md-1">
+                <table class="table table-secondary table-bordered">
+                    <thead class="font-weight-bold">
+                        <tr class="bg-info">
+                            <td colspan="6" class="text-center font-weight-bold h6">Application Payment Summary</td>
+                        </tr>
+                        <tr>
+                            <td>#</td>
+                            <td>Applicaiton Payment for</td>
+                            <td>Students</td>
+                            <td class="text-right">Received Amount</td>
+                            <td class="text-right">Service Charge</td>
+                            <td class="text-right">Net Amount</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.honorsApplicationPaymentCount > 0)
+                        {
+                            <tr>
+                                <td>@(++applicaitonSl)</td>
+                                <td>Honors (General) Student</td>
+                                <td>@ViewBag.honorsApplicationPaymentCount</td>
+                                <td class="text-right">@ViewBag.honorsApplicationPaymentSum.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.honorsApplicationPaymentService.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.honorsApplicationPaymentSumNet.ToString("N2")</td>
+                            </tr>
+                        }
+                        @if (ViewBag.honorsProApplicationPaymentCount > 0)
+                        {
+                            <tr>
+                                <td>@(++applicaitonSl)</td>
+                                <td>Honors (General) Student</td>
+                                <td>@ViewBag.honorsProApplicationPaymentCount</td>
+                                <td class="text-right">@ViewBag.honorsProApplicationPaymentSum.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.honorsProApplicationPaymentService.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.honorsProApplicationPaymentSumNet.ToString("N2")</td>
+                            </tr>
+                        }
+                        @if (ViewBag.mastersApplicationPaymentCount > 0)
+                        {
+                            <tr>
+                                <td>@(++applicaitonSl)</td>
+                                <td>Honors (Professional) Student</td>
+                                <td>@ViewBag.mastersApplicationPaymentCount</td>
+                                <td class="text-right">@ViewBag.mastersApplicationPaymentSum.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.mastersApplicationPaymentService.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.mastersApplicationPaymentSumNet.ToString("N2")</td>
+                            </tr>
+                        }
+                        @if (ViewBag.mastersProApplicationPaymentCount > 0)
+                        {
+                            <tr>
+                                <td>@(++applicaitonSl)</td>
+                                <td>Masters (Professional) Student</td>
+                                <td>@ViewBag.mastersProApplicationPaymentCount</td>
+                                <td class="text-right">@ViewBag.mastersProApplicationPaymentSum.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.mastersProApplicationPaymentService.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.mastersProApplicationPaymentSumNet.ToString("N2")</td>
+                            </tr>
+                        }
+                        @if (ViewBag.degreeApplicationPaymentCount > 0)
+                        {
+                            <tr>
+                                <td>@(++applicaitonSl)</td>
+                                <td>Degree (Pass Course) Student</td>
+                                <td>@ViewBag.degreeApplicationPaymentCount</td>
+                                <td class="text-right">@ViewBag.degreeApplicationPaymentSum.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.degreeApplicationPaymentService.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.degreeApplicationPaymentSumNet.ToString("N2")</td>
+                            </tr>
+                        }
+                        <tr class="font-weight-bold">
+                            <td colspan="2" class="text-md-right">Sub Total(Application)</td>
+                            <td>@ViewBag.applicationPaymentCount</td>
+                            <td class="text-right">@Convert.ToDouble(ViewBag.totalApplicationPayment).ToString("N2")</td>
+                            <td class="text-right">@Convert.ToDouble(ViewBag.totalApplicationPaymentService).ToString("N2")</td>
+                            <td class="text-right">@Convert.ToDouble(ViewBag.totalApplicationPaymentNet).ToString("N2")</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        }
+        @if (ViewBag.totalAdmissionPayment != null || ViewBag.totalAdmissionPayment > 0)
+        {
+            <hr />
+            <div class="col-md-10 offset-md-1">
+                <table class="table table-secondary table-bordered">
+                    <thead class="font-weight-bold">
+                        <tr class="bg-info">
+                            <td colspan="6" class="text-center h6 font-weight-bold">Admission Payment Summary</td>
+                        </tr>
+                        <tr>
+                            <td>#</td>
+                            <td>Admission Payment for</td>
+                            <td>Students</td>
+                            <td class="text-right">Received Amount</td>
+                            <td class="text-right">Service Charge</td>
+                            <td class="text-right">Net Amount</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.honorsAdmissionPaymentCount > 0)
+                        {
+                            <tr>
+                                <td>@(++admissionSl)</td>
+                                <td>Honors (General) Student</td>
+                                <td>@ViewBag.honorsAdmissionPaymentCount</td>
+                                <td class="text-right">@ViewBag.honorsAdmissionPaymentSum.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.honorsAdmissionPaymentService.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.honorsAdmissionPaymentSumNet.ToString("N2")</td>
+                            </tr>
+                        }
+                        @if (ViewBag.honorsProAdmissionPaymentCount > 0)
+                        {
+                            <tr>
+                                <td>@(++admissionSl)</td>
+                                <td>Honors (Professional) Student</td>
+                                <td>@ViewBag.honorsProAdmissionPaymentCount</td>
+                                <td class="text-right">@ViewBag.honorsProAdmissionPaymentSum.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.honorsProAdmissionPaymentService.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.honorsProAdmissionPaymentSumNet.ToString("N2")</td>
+                            </tr>
+                        }
+                        @if (ViewBag.mastersAdmissionPaymentCount > 0)
+                        {
+                            <tr>
+                                <td>@(++admissionSl)</td>
+                                <td>Honors (Professional) Student</td>
+                                <td>@ViewBag.mastersAdmissionPaymentCount</td>
+                                <td class="text-right">@ViewBag.mastersAdmissionPaymentSum.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.mastersAdmissionPaymentService.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.mastersAdmissionPaymentSumNet.ToString("N2")</td>
+                            </tr>
+                        }
+                        @if (ViewBag.mastersProAdmissionPaymentCount > 0)
+                        {
+                            <tr>
+                                <td>@(++admissionSl)</td>
+                                <td>Masters (Professional) Student</td>
+                                <td>@ViewBag.mastersProAdmissionPaymentCount</td>
+                                <td class="text-right">@ViewBag.mastersProAdmissionPaymentSum.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.mastersProAdmissionPaymentService.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.mastersProAdmissionPaymentSumNet.ToString("N2")</td>
+                            </tr>
+                        }
+                        @if (ViewBag.degreeAdmissionPaymentCount > 0)
+                        {
+                            <tr>
+                                <td>@(++admissionSl)</td>
+                                <td>Degree (Pass Course) Student</td>
+                                <td>@ViewBag.degreeAdmissionPaymentCount</td>
+                                <td class="text-right">@ViewBag.degreeApplicationPaymentSum.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.degreeApplicationPaymentService.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.degreeApplicationPaymentSumNet.ToString("N2")</td>
+                            </tr>
+                        }
+                        @if (ViewBag.totalAdmissionPayment != null)
+                        {
+                            <tr class="font-weight-bold">
+                                <td colspan="2" class="text-md-right">Sub Total(Admission)</td>
+                                <td>@ViewBag.AdmissionPaymentCount</td>
+                                <td class="text-right">@ViewBag.totalAdmissionPayment.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.totalAdmissionPaymentService.ToString("N2")</td>
+                                <td class="text-right">@ViewBag.totalAdmissionPaymentNet.ToString("N2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        }
+        @if (ViewBag.totalPayment != null || ViewBag.totalPayment <= 0)
+        {
+            <div class="col-md-10 offset-md-1">
+                <table class="table table-warning table-bordered">
+                    <thead>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td class="text-right">Total Students</td>
+                            <td class="text-right">Total Received Amount</td>
+                            <td class="text-right">Service Charge</td>
+                            <td class="text-right">Net Amount</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="font-weight-bolder">
+                            <td colspan="3" class="text-md-right">Total(Application+Admission)</td>
+                            <td class="text-right">@ViewBag.totalPaymentCount</td>
+                            <td class="text-right">@ViewBag.totalPayment.ToString("N2")</td>
+                            <td class="text-right">@ViewBag.totalPaymentService.ToString("N2")</td>
+                            <td class="text-right">@ViewBag.totalPaymentNet.ToString("N2")</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
+
+
+    </div>
+    <div class="row">
+        <div class="col-md-10 offset-md-1 text-md-right">
+            <button class="btn btn-default btn-info" onclick="printDiv('printableArea')"><i class="fa fa-print" aria-hidden="true" style="    font-size: 17px;"> Print</i></button>
+        </div>
+    </div>
+
 }
-@if (ViewBag.admissionPaymentCount != null)
+@if (Model.Count <= 0 || Model == null)
 {
-    <span>Admission Payments = @ViewBag.admissionPaymentCount</span>
+    <div class="row">
+        <div class="col-md-10 offset-md-1 text-center">
+            <span class="h4 alert">No data found</span>
+        </div>
+    </div>
 }
 
-            @*ViewBag.honorsApplicationPaymentCount = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 1).Count();
-            ViewBag.honorsProApplicationPaymentCount = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 1).Count();
-            ViewBag.mastersApplicationPaymentCount = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 1).Count();
-            ViewBag.mastersProApplicationPaymentCount = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 1).Count();
-            ViewBag.degreeApplicationPaymentCount = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 1).Count();*@
+@section Scripts{ 
+    <script>
+        function printDiv(divName) {
+             var printContents = document.getElementById(divName).innerHTML;
+             var originalContents = document.body.innerHTML;
+             document.body.innerHTML = printContents;
+             window.print();
+             document.body.innerHTML = originalContents;
+        }
+    </script>
 
-
-<div class="col-md-10 offset-md-1">
-    <table class="table table-info">
-        <thead>
-            <tr class="bg-info">
-                <td colspan="4" class="text-center">Application Payment Summary</td>
-            </tr>
-            <tr>
-                <td>#</td>
-                <td>Applicaiton Payment for</td>
-                <td>Students</td>
-                <td class="text-right">Amount</td>
-            </tr>
-        </thead>
-        <tbody>
-            @if (ViewBag.honorsApplicationPaymentCount > 0)
-            {
-                <tr>
-                    <td>@(++applicaitonSl)</td>
-                    <td>Honors (General) Student</td>
-                    <td>@ViewBag.honorsApplicationPaymentCount</td>
-                    <td class="text-right">@ViewBag.honorsApplicationPaymentSum.ToString("N2")</td>
-                </tr>
-            }
-            @if (ViewBag.honorsProApplicationPaymentCount > 0)
-            {
-                <tr>
-                    <td>@(++applicaitonSl)</td>
-                    <td>Honors (General) Student</td>
-                    <td>@ViewBag.honorsProApplicationPaymentCount</td>
-                    <td class="text-right">@ViewBag.honorsProApplicationPaymentSum.ToString("N2")</td>
-                </tr>
-            }
-            @if (ViewBag.mastersApplicationPaymentCount > 0)
-            {
-                <tr>
-                    <td>@(++applicaitonSl)</td>
-                    <td>Honors (Professional) Student</td>
-                    <td>@ViewBag.mastersApplicationPaymentCount</td>
-                    <td class="text-right">@ViewBag.mastersApplicationPaymentSum.ToString("N2")</td>
-                </tr>
-            }
-            @if (ViewBag.mastersProApplicationPaymentCount > 0)
-            {
-                <tr>
-                    <td>@(++applicaitonSl)</td>
-                    <td>Masters (Professional) Student</td>
-                    <td>@ViewBag.mastersProApplicationPaymentCount</td>
-                    <td class="text-right">@ViewBag.mastersProApplicationPaymentSum.ToString("N2")</td>
-                </tr>
-            }
-            @if (ViewBag.degreeApplicationPaymentCount > 0)
-            {
-                <tr>
-                    <td>@(++applicaitonSl)</td>
-                    <td>Degree (Pass Course) Student</td>
-                    <td>@ViewBag.degreeApplicationPaymentCount</td>
-                    <td class="text-right">@ViewBag.degreeApplicationPaymentSum.ToString("N2")</td>
-                </tr>
-            }
-            <tr>
-                <td colspan="2" class="text-md-right">Total</td>
-                <td>@ViewBag.applicationPaymentCount</td>
-                <td class="text-right">@Convert.ToDouble(ViewBag.totalApplicationPayment).ToString("N2")</td>
-            </tr>
-        </tbody>
-    </table>
-
-</div>
-<hr />
-<div class="col-md-10 offset-md-1">
-    <table class="table table-success">
-        <thead>
-            <tr class="bg-info">
-                <td colspan="4" class="text-center">Admission Payment Summary</td>
-            </tr>
-            <tr>
-                <td>#</td>
-                <td>Admission Payment for</td>
-                <td>Students</td>
-                <td class="text-right">Amount</td>
-            </tr>
-        </thead>
-        <tbody>
-            @if (ViewBag.honorsApplicationPaymentCount > 0)
-            {
-                <tr>
-                    <td>@(++admissionSl)</td>
-                    <td>Honors (General) Student</td>
-                    <td>@ViewBag.honorsAdmissionPaymentCount</td>
-                    <td class="text-right">@ViewBag.honorsAdmissionPaymentSum.ToString("N2")</td>
-                </tr>
-            }
-            @if (ViewBag.honorsProAdmissionPaymentCount > 0)
-            {
-                <tr>
-                    <td>@(++admissionSl)</td>
-                    <td>Honors (General) Student</td>
-                    <td>@ViewBag.honorsProAdmissionPaymentCount</td>
-                    <td class="text-right">@ViewBag.honorsProAdmissionPaymentSum.ToString("N2")</td>
-                </tr>
-            }
-            @if (ViewBag.mastersAdmissionPaymentCount > 0)
-            {
-                <tr>
-                    <td>@(++admissionSl)</td>
-                    <td>Honors (Professional) Student</td>
-                    <td>@ViewBag.mastersAdmissionPaymentCount</td>
-                    <td class="text-right">@ViewBag.mastersAdmissionPaymentSum.ToString("N2")</td>
-                </tr>
-            }
-            @if (ViewBag.mastersProAdmissionPaymentCount > 0)
-            {
-                <tr>
-                    <td>@(++admissionSl)</td>
-                    <td>Masters (Professional) Student</td>
-                    <td>@ViewBag.mastersProAdmissionPaymentCount</td>
-                    <td class="text-right">@ViewBag.mastersProAdmissionPaymentSum.ToString("N2")</td>
-                </tr>
-            }
-            @if (ViewBag.degreeAdmissionPaymentCount > 0)
-            {
-                <tr>
-                    <td>@(++admissionSl)</td>
-                    <td>Degree (Pass Course) Student</td>
-                    <td>@ViewBag.degreeAdmissionPaymentCount</td>
-                    <td class="text-right">@ViewBag.degreeApplicationPaymentSum.ToString("N2")</td>
-                </tr>
-            }
-            <tr>
-                <td colspan="2" class="text-md-right">Total</td>
-                <td>@ViewBag.AdmissionPaymentCount</td>
-                <td class="text-right">@ViewBag.totalAdmissionPayment.ToString("N2")</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<div class="col-md-10 offset-md-1">
-    <table class="table">
-        <tr class="font-weight-bold">
-            <td colspan="3" class="text-md-right">Total</td>
-            <td class="text-right">@ViewBag.totalPayment.ToString("N2")</td>
-        </tr>
-    </table>
-</div>
+}

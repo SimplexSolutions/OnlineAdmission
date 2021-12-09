@@ -683,43 +683,43 @@ namespace OnlineAdmission.APP.Controllers
         public async Task<IActionResult> SummeryReport()
         {
             List<PaymentTransaction> payments = await _paymentTransactionManager.GetAllAsync();
-            List<Student> students = await _studentManager.GetAllAsync();
+            //List<Student> students = await _studentManager.GetAllAsync();
 
-            ViewBag.applicationPaymentCount = payments.Where(s => s.PaymentType == 1).Count();
-            ViewBag.admissionPaymentCount = payments.Where(s => s.PaymentType == 2).Count();
-            ViewBag.totalApplicationPayment = payments.Where(s => s.PaymentType == 1).Sum(s => s.Amount);
-            ViewBag.totalAdmissionPayment = payments.Where(s => s.PaymentType == 2).Sum(s => s.Amount);
-            ViewBag.totalPayment = payments.Sum(s => s.Amount);
+            //ViewBag.applicationPaymentCount = payments.Where(s => s.PaymentType == 1).Count();
+            //ViewBag.admissionPaymentCount = payments.Where(s => s.PaymentType == 2).Count();
+            //ViewBag.totalApplicationPayment = payments.Where(s => s.PaymentType == 1).Sum(s => s.Amount);
+            //ViewBag.totalAdmissionPayment = payments.Where(s => s.PaymentType == 2).Sum(s => s.Amount);
+            //ViewBag.totalPayment = payments.Sum(s => s.Amount);
 
-            ViewBag.honorsApplicationPaymentCount = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 1).Count();
-            ViewBag.honorsApplicationPaymentSum = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 1).Sum(m => m.Amount);
+            //ViewBag.honorsApplicationPaymentCount = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 1).Count();
+            //ViewBag.honorsApplicationPaymentSum = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 1).Sum(m => m.Amount);
 
-            ViewBag.honorsProApplicationPaymentCount = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 1).Count();
-            ViewBag.honorsProApplicationPaymentSum = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 1).Sum(m => m.Amount);
+            //ViewBag.honorsProApplicationPaymentCount = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 1).Count();
+            //ViewBag.honorsProApplicationPaymentSum = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 1).Sum(m => m.Amount);
 
-            ViewBag.mastersApplicationPaymentCount = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 1).Count();
-            ViewBag.mastersApplicationPaymentSum = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 1).Sum(p => p.Amount);
+            //ViewBag.mastersApplicationPaymentCount = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 1).Count();
+            //ViewBag.mastersApplicationPaymentSum = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 1).Sum(p => p.Amount);
 
-            ViewBag.mastersProApplicationPaymentCount = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 1).Count();
-            ViewBag.mastersProApplicationPaymentSum = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 1).Sum(p=> p.Amount);
+            //ViewBag.mastersProApplicationPaymentCount = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 1).Count();
+            //ViewBag.mastersProApplicationPaymentSum = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 1).Sum(p=> p.Amount);
 
-            ViewBag.degreeApplicationPaymentCount = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 1).Count();
-            ViewBag.degreeApplicationPaymentSum = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 1).Sum(p => p.Amount);
+            //ViewBag.degreeApplicationPaymentCount = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 1).Count();
+            //ViewBag.degreeApplicationPaymentSum = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 1).Sum(p => p.Amount);
 
-            ViewBag.honorsAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 2).Count();
-            ViewBag.honorsAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 2).Sum(p => p.Amount);
+            //ViewBag.honorsAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 2).Count();
+            //ViewBag.honorsAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 2).Sum(p => p.Amount);
 
-            ViewBag.honorsProAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 2).Count();
-            ViewBag.honorsProAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 2).Sum(p => p.Amount);
+            //ViewBag.honorsProAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 2).Count();
+            //ViewBag.honorsProAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 2).Sum(p => p.Amount);
 
-            ViewBag.mastersAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 2).Count();
-            ViewBag.mastersAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 2).Sum(p => p.Amount);
+            //ViewBag.mastersAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 2).Count();
+            //ViewBag.mastersAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 2).Sum(p => p.Amount);
 
-            ViewBag.mastersProAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 2).Count();
-            ViewBag.mastersProAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 2).Sum(p => p.Amount);
+            //ViewBag.mastersProAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 2).Count();
+            //ViewBag.mastersProAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 2).Sum(p => p.Amount);
 
-            ViewBag.degreeAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 2).Count();
-            ViewBag.degreeAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 2).Sum(p => p.Amount);
+            //ViewBag.degreeAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 2).Count();
+            //ViewBag.degreeAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 2).Sum(p => p.Amount);
 
             return View(payments);
         }
@@ -727,20 +727,9 @@ namespace OnlineAdmission.APP.Controllers
         [HttpPost]
         public async Task<IActionResult> SummeryReport(DateTime? fromDate, DateTime? toDate)
         {
-            
+            ViewBag.FromDate =Convert.ToDateTime(fromDate).Date.ToShortDateString();
+            ViewBag.ToDate =Convert.ToDateTime(toDate).Date.ToShortDateString();
             List<PaymentTransaction> payments = await _paymentTransactionManager.GetAllAsync();
-            List<Student> students = await _studentManager.GetAllAsync();
-            var paymentSummery = from pay in payments
-                                 group pay by pay.StudentCategory
-                                 into payCatGroup
-                                 orderby payCatGroup.Key
-                                 select payCatGroup;
-
-            ViewBag.result = paymentSummery;
-
-     //                            items.GroupBy(item => item.Order.Customer)
-     //.Select(group => new { Customer = group.Key, Items = group.ToList() })
-     //.ToList()
 
 
 
@@ -756,6 +745,79 @@ namespace OnlineAdmission.APP.Controllers
             {
                 payments = payments.Where(p => p.TransactionDate.Date >= (DateTime)fromDate).ToList();
             }
+            else
+            {
+                payments = new List<PaymentTransaction>();
+            }
+
+            ViewBag.totalPaymentCount = payments.Count();
+            ViewBag.applicationPaymentCount = payments.Where(s => s.PaymentType == 1).Count();
+            ViewBag.admissionPaymentCount = payments.Where(s => s.PaymentType == 2).Count();
+
+            ViewBag.totalApplicationPayment = payments.Where(s => s.PaymentType == 1).Sum(s => s.Amount);
+            ViewBag.totalApplicationPaymentService = payments.Where(s => s.PaymentType == 1).Sum(s => s.ServiceCharge);
+            ViewBag.totalApplicationPaymentNet = payments.Where(s => s.PaymentType == 1).Sum(s => s.Amount)- payments.Where(s => s.PaymentType == 1).Sum(s => s.ServiceCharge);
+
+            ViewBag.totalAdmissionPayment = payments.Where(s => s.PaymentType == 2).Sum(s => s.Amount);
+            ViewBag.totalAdmissionPaymentService = payments.Where(s => s.PaymentType == 2).Sum(s => s.ServiceCharge);
+            ViewBag.totalAdmissionPaymentNet = payments.Where(s => s.PaymentType == 2).Sum(s => s.Amount) - payments.Where(s => s.PaymentType == 2).Sum(s => s.ServiceCharge);
+
+            ViewBag.totalPayment = payments.Sum(s => s.Amount);
+            ViewBag.totalPaymentService = payments.Sum(s => s.ServiceCharge);
+            ViewBag.totalPaymentNet = payments.Sum(s => s.Amount) - payments.Sum(s => s.ServiceCharge);
+
+            ViewBag.honorsApplicationPaymentCount = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 1).Count();
+            ViewBag.honorsApplicationPaymentSum = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 1).Sum(m => m.Amount);
+            ViewBag.honorsApplicationPaymentService = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 1).Sum(m => m.ServiceCharge);
+            ViewBag.honorsApplicationPaymentSumNet = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 1).Sum(m => m.Amount) - payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 1).Sum(m => m.ServiceCharge);
+
+            ViewBag.honorsProApplicationPaymentCount = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 1).Count();
+            ViewBag.honorsProApplicationPaymentSum = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 1).Sum(m => m.Amount);
+            ViewBag.honorsProApplicationPaymentService = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 1).Sum(m => m.ServiceCharge);
+            ViewBag.honorsProApplicationPaymentSumNet = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 1).Sum(m => m.Amount) - payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 1).Sum(m => m.ServiceCharge);
+
+            ViewBag.mastersApplicationPaymentCount = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 1).Count();
+            ViewBag.mastersApplicationPaymentSum = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 1).Sum(p => p.Amount);
+            ViewBag.mastersApplicationPaymentService = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 1).Sum(p => p.ServiceCharge);
+            ViewBag.mastersApplicationPaymentSumNet = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 1).Sum(p => p.Amount) - payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 1).Sum(p => p.ServiceCharge);
+
+            ViewBag.mastersProApplicationPaymentCount = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 1).Count();
+            ViewBag.mastersProApplicationPaymentSum = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 1).Sum(p => p.Amount);
+            ViewBag.mastersProApplicationPaymentService = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 1).Sum(p => p.ServiceCharge);
+            ViewBag.mastersProApplicationPaymentSumNet = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 1).Sum(p => p.Amount)- payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 1).Sum(p => p.ServiceCharge);
+
+            ViewBag.degreeApplicationPaymentCount = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 1).Count();
+            ViewBag.degreeApplicationPaymentSum = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 1).Sum(p => p.Amount);
+            ViewBag.degreeApplicationPaymentService = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 1).Sum(p => p.ServiceCharge);
+            ViewBag.degreeApplicationPaymentSumNet = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 1).Sum(p => p.Amount) - payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 1).Sum(p => p.ServiceCharge);
+
+            ViewBag.honorsAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 2).Count();
+            ViewBag.honorsAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 2).Sum(p => p.Amount);
+            ViewBag.honorsAdmissionPaymentService = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 2).Sum(p => p.ServiceCharge);
+            ViewBag.honorsAdmissionPaymentSumNet = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 2).Sum(p => p.Amount) - payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 2).Sum(p => p.ServiceCharge);
+
+            ViewBag.honorsProAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 2).Count();
+            ViewBag.honorsProAdmissionPaymentService = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 2).Sum(p => p.Amount);
+            ViewBag.honorsProAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 2).Sum(p => p.Amount);
+            ViewBag.honorsProAdmissionPaymentService = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 2).Sum(p => p.ServiceCharge);
+            ViewBag.honorsProAdmissionPaymentSumNet = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 2).Sum(p => p.Amount) - payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 2).Sum(p => p.ServiceCharge);
+
+            ViewBag.mastersAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 2).Count();
+            ViewBag.mastersAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 2).Sum(p => p.Amount);
+            ViewBag.mastersAdmissionPaymentService = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 2).Sum(p => p.ServiceCharge);
+            ViewBag.mastersAdmissionPaymentSumNet = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 2).Sum(p => p.Amount) - payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 2).Sum(p => p.ServiceCharge);
+
+            ViewBag.mastersProAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 2).Count();
+            ViewBag.mastersProAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 2).Sum(p => p.Amount);
+            ViewBag.mastersProAdmissionPaymentService = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 2).Sum(p => p.ServiceCharge);
+            ViewBag.mastersProAdmissionPaymentSumNet = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 2).Sum(p => p.Amount)- payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 2).Sum(p => p.ServiceCharge);
+
+            ViewBag.degreeAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 2).Count();
+            ViewBag.degreeAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 2).Sum(p => p.Amount);
+            ViewBag.degreeAdmissionPaymentService = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 2).Sum(p => p.Amount);
+            ViewBag.degreeAdmissionPaymentSumNet = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 2).Sum(p => p.Amount) - payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 2).Sum(p => p.Amount);
+
+
             return View(payments);
         }
         // GET: Payments/Delete/5
