@@ -60,7 +60,7 @@
             <div class="form-group row">
                 <label asp-for="MobileNo" class="control-label text-right col-md-2"></label>
                 <div class="col-md-10">
-                    <input asp-for="MobileNo" class="form-control" />
+                    <input asp-for="MobileNo" class="form-control" min="01300000000" max="01999999999" required />
                     <span asp-validation-for="MobileNo" class="text-danger"></span>
                 </div>
             </div>

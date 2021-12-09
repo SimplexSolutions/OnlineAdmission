@@ -195,11 +195,10 @@ namespace OnlineAdmission.APP.Controllers
                 }
 
                 AppliedStudent aStudent = _mapper.Map<AppliedStudent>(vModel);
-
+                aStudent.StudentCategoryId = studentCat;
                 await _appliedStudentManager.AddAsync(aStudent);
                 if (!_signInManager.IsSignedIn(User))
                 {
-                    
                     TempData["msg"] = "Information Updated, Search Again";
                     return RedirectToAction(Action, "Students");
                 }
