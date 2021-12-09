@@ -228,7 +228,7 @@ namespace OnlineAdmission.APP.Controllers
                     
                     while (reader.Read())
                     {
-                        var existingMeritList = await _meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(reader.GetValue(0).ToString()));
+                        var existingMeritList = await _meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(reader.GetValue(0).ToString()), Convert.ToInt32(reader.GetValue(5).ToString()), reader.GetValue(4).ToString());
                         if (existingMeritList != null)
                         {
                             duplicateCount++;

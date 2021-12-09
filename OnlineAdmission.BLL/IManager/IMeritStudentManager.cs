@@ -9,7 +9,7 @@ namespace OnlineAdmission.BLL.IManager
 {
     public interface IMeritStudentManager : IManager<MeritStudent>
     {
-        Task<MeritStudent> GetByAdmissionRollAsync(int NURoll); //ALL student categroy
+        Task<MeritStudent> GetByAdmissionRollAsync(int NURoll, int categoryId, string comments); //ALL student categroy
         Task<MeritStudent> GetHonsByAdmissionRollAsync(int NURoll);
         Task<MeritStudent> GetProMBAByAdmissionRollAsync(int NuRoll);
         Task<MeritStudent> GetProByAdmissionRollAsync(int NuRoll);

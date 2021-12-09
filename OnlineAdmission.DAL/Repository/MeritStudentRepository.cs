@@ -18,9 +18,9 @@ namespace OnlineAdmission.DAL.Repository
             
         }
 
-        public async Task<MeritStudent> GetByAdmissionRollAsync(int NURoll)
+        public async Task<MeritStudent> GetByAdmissionRollAsync(int NURoll, int categoryId, string comments)
         {
-            return await _context.MeritStudents.FirstOrDefaultAsync(m => m.NUAdmissionRoll == NURoll);
+            return await _context.MeritStudents.FirstOrDefaultAsync(m => m.NUAdmissionRoll == NURoll && m.StudentCategory == categoryId && m.Comments.Trim().ToLower() == comments.Trim().ToLower());
         }
         public async Task<List<MeritStudent>> GetAllWithoutPaidAsync()
         {

@@ -19,9 +19,9 @@ namespace OnlineAdmission.BLL.Manager
         }
 
 
-        public async Task<MeritStudent> GetByAdmissionRollAsync(int NURoll)
+        public async Task<MeritStudent> GetByAdmissionRollAsync(int NURoll, int categoryId, string comments)
         {
-            return await _meritStudentRepository.GetByAdmissionRollAsync(NURoll);
+            return await _meritStudentRepository.GetByAdmissionRollAsync(NURoll, categoryId, comments);
         }
         public async Task<List<MeritStudent>> GetAllWithoutPaidAsync()
         {
@@ -79,7 +79,5 @@ namespace OnlineAdmission.BLL.Manager
         {
             return await _meritStudentRepository.UploadMeritStudentsAsync(meritStudents);
         }
-
-        
     }
 }
