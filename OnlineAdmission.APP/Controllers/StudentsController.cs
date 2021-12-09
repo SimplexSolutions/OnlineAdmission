@@ -710,7 +710,7 @@ namespace OnlineAdmission.APP.Controllers
             ViewBag.nuRoll = professionalRoll;
             if (professionalRoll>0)
             {
-                var student = await _studentManager.GetHonsByAdmissionRollAsync(professionalRoll);
+                var student = await _studentManager.GetByAdmissionRollAsync(professionalRoll, studentCategory);
                 if (student!=null)
                 {
                     admitted = true;
@@ -811,7 +811,7 @@ namespace OnlineAdmission.APP.Controllers
 
             if (mastersRoll > 0)
             {
-                var student = await _studentManager.GetHonsByAdmissionRollAsync(mastersRoll);
+                var student = await _studentManager.GetByAdmissionRollAsync(mastersRoll, studentCategory);
                 if (student != null)
                 {
                     admitted = true;
@@ -912,7 +912,7 @@ namespace OnlineAdmission.APP.Controllers
 
             if (mastersGenRoll > 0)
             {
-                var existAdmittedStudent = await _studentManager.GetHonsByAdmissionRollAsync(mastersGenRoll);
+                var existAdmittedStudent = await _studentManager.GetByAdmissionRollAsync(mastersGenRoll, studentCategory);
                 if (existAdmittedStudent!=null)
                 {
                     admitted = true;

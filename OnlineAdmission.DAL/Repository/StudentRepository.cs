@@ -61,9 +61,9 @@ namespace OnlineAdmission.DAL.Repository
             return count;
         }
 
-        public async Task<Student> GetByAdmissionRollAsync(int NURoll)
+        public async Task<Student> GetByAdmissionRollAsync(int NURoll, int stuCategory)
         {
-            var student = await _context.Students.FirstOrDefaultAsync(s => s.NUAdmissionRoll == NURoll);
+            var student = await _context.Students.FirstOrDefaultAsync(s => s.NUAdmissionRoll == NURoll && s.StudentCategory == stuCategory);
             return student;
         }
 
