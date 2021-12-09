@@ -69,6 +69,9 @@
                                 @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("Accounts"))
                                 {
                                     <li>
+                                        <a asp-action="SummeryReport" asp-controller="Payments">Summery Report</a>
+                                    </li>
+                                    <li>
                                         <a asp-action="Index" asp-controller="Payments" asp-route-paymentType=1>Hons General (Application)</a>
                                     </li>
                                     <li>

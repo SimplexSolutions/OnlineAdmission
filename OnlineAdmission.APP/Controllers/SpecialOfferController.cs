@@ -34,7 +34,7 @@ namespace OnlineAdmission.APP.Controllers
             foreach (var item in specialStudent)
             {
                 SpecialOfferVM specialOfferVM = new SpecialOfferVM();
-                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(item.NUAdmissionRoll);
+                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(item.NUAdmissionRoll, (int)item.StudentCategory);
                 var subject = await _subjectManager.GetByCodeAsync(item.SubjectCode);
                 specialOfferVM.AppliedStudent = appliedStudent;
                 specialOfferVM.MeritStudent = item;
@@ -63,7 +63,7 @@ namespace OnlineAdmission.APP.Controllers
             foreach (var item in meritStudents)
             {
                 SpecialOfferVM specialOfferVM = new SpecialOfferVM();
-                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(item.NUAdmissionRoll);
+                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(item.NUAdmissionRoll, (int)item.StudentCategory);
                 if (appliedStudent!=null)
                 {
                     specialOfferVM.AppliedStudent = appliedStudent;
@@ -109,7 +109,7 @@ namespace OnlineAdmission.APP.Controllers
         public async Task<ActionResult> Edit(int nuRoll)
         {
             var meritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(nuRoll);
-            var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+            var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll, (int)meritStudent.StudentCategory);
             var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
 
             SpecialOfferVM specialOfferVM = new SpecialOfferVM() {
@@ -139,7 +139,7 @@ namespace OnlineAdmission.APP.Controllers
                 return RedirectToAction("Index");
             }
             var mStudent = await _meritStudentManager.GetByIdAsync(model.MeritStudent.Id);
-            var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(mStudent.NUAdmissionRoll);
+            var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(mStudent.NUAdmissionRoll, (int)mStudent.StudentCategory);
             var subject = await _subjectManager.GetByCodeAsync(mStudent.SubjectCode);
 
             SpecialOfferVM specialOfferVM = new SpecialOfferVM()

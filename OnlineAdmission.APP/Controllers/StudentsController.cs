@@ -237,7 +237,7 @@ namespace OnlineAdmission.APP.Controllers
                 //    return RedirectToAction(action, "Students");
                 //}
 
-                var existingAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuAdmissionRoll);
+                var existingAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuAdmissionRoll, studentCategory);
                 var existingSubject = await _subjectManager.GetByCodeAsync(existingMeritStudent.SubjectCode);
 
                 string year = DateTime.Today.ToString("yyyy");
@@ -620,7 +620,7 @@ namespace OnlineAdmission.APP.Controllers
                     return View();
                 }
 
-                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll);
+                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll, (int)meritStudent.StudentCategory);
                 if (appliedStudent == null)
                 {
 
@@ -735,7 +735,7 @@ namespace OnlineAdmission.APP.Controllers
                             ViewBag.msg = "You are not eligible";
                             return View();
                         }
-                        var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(professionalRoll);
+                        var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(professionalRoll,studentCategory);
                         var subject = await _subjectManager.GetByCodeAsync(selectedStudent.SubjectCode);
                         SelectedStudentVM selectedStudentVM = new SelectedStudentVM();
                         selectedStudentVM.AppliedStudent = appliedStudent;
@@ -820,7 +820,7 @@ namespace OnlineAdmission.APP.Controllers
                     return View();
                 }
                 var meritStudent = await _meritStudentManager.GetProMBAByAdmissionRollAsync(mastersRoll);
-                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(mastersRoll);
+                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(mastersRoll, studentCategory);
                 
                 if (meritStudent==null)
                 {
@@ -938,7 +938,7 @@ namespace OnlineAdmission.APP.Controllers
                     else
                     {
                         
-                        AppliedStudent existingAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(mastersGenRoll);
+                        AppliedStudent existingAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(mastersGenRoll, studentCategory);
                         if (existingAppliedStudent == null)
                         {
                             ViewBag.existingAppliedStudent = false;
@@ -1019,7 +1019,7 @@ namespace OnlineAdmission.APP.Controllers
             if (NuAdmissionRoll > 0)
             {
                 var meritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(NuAdmissionRoll);
-                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll);
+                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll, (int)meritStudent.StudentCategory);
 
                 var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
 
@@ -1071,7 +1071,7 @@ namespace OnlineAdmission.APP.Controllers
         {
             MeritStudent meritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(nuRoll);
             Subject subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
-            AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+            AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll, (int)meritStudent.StudentCategory);
             TransactionInfo transactionInfo = new TransactionInfo();
 
             double admissinoFee = 0;
@@ -1135,7 +1135,7 @@ namespace OnlineAdmission.APP.Controllers
 
                         //////////////////Code for SMS Sending and Saving
                         ///
-                        AppliedStudent newStudent = await _appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll);
+                        AppliedStudent newStudent = await _appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll, (int)meritStudent.StudentCategory);
                         bool SentSMS = false;
                         string phoneNum = newStudent.MobileNo.ToString();
                         string msgText = "Congratulations! " + newStudent.ApplicantName + ", your admission payment is successfully paid";
@@ -1479,7 +1479,7 @@ namespace OnlineAdmission.APP.Controllers
             else if (paymentType == 2)
             {
                 OrderId = nuRoll.ToString() + "ProAdm" + DateTime.Now.ToString("HHmmss");
-                AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+                AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll, studentCategory);
                 studentName = appliedStudent.ApplicantName;
                 mobileNum = appliedStudent.MobileNo;
             }
@@ -1716,7 +1716,7 @@ namespace OnlineAdmission.APP.Controllers
                 if (paymentType==2)
                 {
                     OrderId = nuRoll.ToString() + "" + "MBAAdm" + "" + DateTime.Now.ToString("HHmmss");
-                    AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+                    AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll, studentCategory);
                     if (appliedStudent==null)
                     {
                         TempData["msg"] = "Please submit your basic information.";
@@ -1954,7 +1954,7 @@ namespace OnlineAdmission.APP.Controllers
                 if (paymentType == 2)
                 {
                     OrderId = nuRoll.ToString() + "" + "MGnAd" + "" + DateTime.Now.ToString("HHmmss");
-                    AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+                    AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll,studentCategory);
                     if (appliedStudent != null)
                     {
                         studentName = appliedStudent.ApplicantName;
@@ -2190,7 +2190,7 @@ namespace OnlineAdmission.APP.Controllers
                 if (paymentType == 2)
                 {
                     OrderId = nuRoll.ToString() + "" + "DegPAdm" + "" + DateTime.Now.ToString("HHmmss");
-                    AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+                    AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll, studentCategory);
                     studentName = appliedStudent.ApplicantName;
                     mobileNum = appliedStudent.MobileNo;
                 }

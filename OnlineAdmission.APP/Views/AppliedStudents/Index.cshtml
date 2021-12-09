@@ -9,10 +9,19 @@
 }
 
 <h1>Applied Student's List</h1>
-
-<p>
-    <a class="btn btn-primary" asp-action="GetAppliedStudentList">Add Applied Student's Excel File</a>
-</p>
+<div class="row">
+    <p>
+        <a class="btn btn-primary" asp-action="GetAppliedStudentList">Add Applied Student's Excel File</a> 
+        @if (ViewBag.notSaved != null)
+        {
+            <span class="text-danger font-weight-bold msg">@ViewBag.notSaved item duplicate found(not saved).</span>
+        }
+        @if (ViewBag.saved != null)
+        {
+            <span class="text-success font-weight-bold msg">[ @ViewBag.saved item successfully saved]</span>
+        }
+    </p>
+</div>
 
 <partial name="~/Views/PartialViews/_SearchCreateBtn.cshtml">
     @if (ViewBag.count != null)
@@ -106,4 +115,9 @@
         </script>
 
         <script src="~/js/tableToCSV.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.msg').fadeOut(10000);
+        });
+    </script>
     }

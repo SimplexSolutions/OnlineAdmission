@@ -23,16 +23,26 @@ namespace OnlineAdmission.APP.Controllers
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _host;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly IStudentManager _studentManager;
 
-        public AppliedStudentsController(IAppliedStudentManager appliedStudentManager, IMapper mapper, IWebHostEnvironment host, SignInManager<IdentityUser> signInManager)
+        public AppliedStudentsController(IAppliedStudentManager appliedStudentManager, IMapper mapper, IWebHostEnvironment host, SignInManager<IdentityUser> signInManager, IStudentManager studentManager)
         {
             _appliedStudentManager = appliedStudentManager;
             _mapper = mapper;
             _host = host;
             _signInManager = signInManager;
+            _studentManager = studentManager;
         }
         public async Task<IActionResult> Index(string usrtext, string sortRoll, string sortHSCRoll, int page, int pagesize)
         {
+            if (TempData["notSaved"] != null)
+            {
+                ViewBag.notSaved = TempData["notSaved"].ToString();
+            }
+            if (TempData["saved"] != null)
+            {
+                ViewBag.saved = TempData["saved"].ToString();
+            }
             IQueryable<AppliedStudent> appliedStudentList = _appliedStudentManager.GetIQueryableData();
             ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : " ";
             ViewBag.action = "Index";
@@ -77,6 +87,7 @@ namespace OnlineAdmission.APP.Controllers
 
         }
 
+
         [AllowAnonymous]
         public async Task<IActionResult> Create( int nuRoll, int? studentCat)
         {
@@ -111,7 +122,7 @@ namespace OnlineAdmission.APP.Controllers
                 ViewBag.returnAction = Action;
             }
 
-            var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll);
+            var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll, (int)studentCat);
             if (existAppliedStudent != null)
             {
                 TempData["msg"] = "You are already applied";
@@ -163,7 +174,7 @@ namespace OnlineAdmission.APP.Controllers
             ViewBag.nuRoll = nuRoll;
             if (ModelState.IsValid)
             {
-                var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(vModel.NUAdmissionRoll);
+                var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(vModel.NUAdmissionRoll, (int)studentCat);
                 var isMobileNumberUsed = await _appliedStudentManager.GetByMobileNumber(vModel.MobileNo);
                 if (isMobileNumberUsed!=null)
                 {
@@ -191,6 +202,41 @@ namespace OnlineAdmission.APP.Controllers
             return View();
         }
 
+
+        [Authorize(Roles ="SuperAdmin")]
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var existingStudent = await _appliedStudentManager.GetByIdAsync(id);
+            if (existingStudent ==null)
+            {
+                ViewBag.msg = "Student Not found";
+                return View();
+            }
+            
+            return View(existingStudent);
+        }
+
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpPost]
+        [ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirm(int id)
+        {
+            var existingStudent = await _appliedStudentManager.GetByIdAsync(id);
+            var admittedStudent = await _studentManager.GetByAdmissionRollAsync(existingStudent.NUAdmissionRoll);
+            if (admittedStudent == null)
+            {
+                var isDeleted = await _appliedStudentManager.RemoveAsync(existingStudent);
+                if (isDeleted == true)
+                {
+                    return RedirectToAction("Index");
+                }
+                ViewBag.msg = "not Deleted.";
+                return View(existingStudent);
+            }
+            ViewBag.msg = "This student is already admitted";
+            return View(existingStudent);
+        }
 
         [HttpGet]
         public IActionResult GetAppliedStudentList()
@@ -220,28 +266,46 @@ namespace OnlineAdmission.APP.Controllers
 
         private async Task<List<AppliedStudent>> GetStudentsList(string fName)
         {
+            int notSaved = 0;
+            int saved = 0;
             List<AppliedStudent> students = new List<AppliedStudent>();
             var fileName = fName; // $"{Directory.GetCurrentDirectory()}{@"\wwwroot\FileData\"}" + fName;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             using (var stream = System.IO.File.Open(fileName, FileMode.Open, FileAccess.Read))
             {
+                
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
                 {
                     while (reader.Read())
                     {
-                        students.Add(new AppliedStudent()
+                        var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(reader.GetValue(0).ToString()), Convert.ToInt32(reader.GetValue(6).ToString()));
+                        if (existAppliedStudent != null)
                         {
-                            NUAdmissionRoll = Convert.ToInt32(reader.GetValue(0).ToString()),
-                            ApplicantName = reader.GetValue(1).ToString(),
-                            FatherName = reader.GetValue(2).ToString(),
-                            MotherName = reader.GetValue(3).ToString(),
-                            MobileNo = reader.GetValue(4).ToString(),
-                            HSCGroup = reader.GetValue(5).ToString()
-                        });
+                            notSaved++;
+                            continue;
+                        }
+                        else
+                        {
+                            students.Add(new AppliedStudent()
+                            {
+                                NUAdmissionRoll = Convert.ToInt32(reader.GetValue(0).ToString()),
+                                ApplicantName = reader.GetValue(1).ToString(),
+                                FatherName = reader.GetValue(2).ToString(),
+                                MotherName = reader.GetValue(3).ToString(),
+                                MobileNo = reader.GetValue(4).ToString(),
+                                HSCGroup = reader.GetValue(5).ToString(),
+                                StudentCategoryId = Convert.ToInt32(reader.GetValue(6).ToString()),
+                                AcademicSessionId = Convert.ToInt32(reader.GetValue(7).ToString())
+                                //NUAdmissionRoll,ApplicantName,FatherName,MotherName,MobileNo,HSCGroup,StudentCategoryId,AcademicSessionId
+                            });
+                            saved++;
+                        }
                     }
                 }
             }
             await _appliedStudentManager.UploadAppliedStudentsAsync(students);
+            TempData["notSaved"] = notSaved;
+            TempData["saved"] = saved;
             return students;
         }
 
