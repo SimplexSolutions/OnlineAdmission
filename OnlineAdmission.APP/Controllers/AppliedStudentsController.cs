@@ -223,7 +223,7 @@ namespace OnlineAdmission.APP.Controllers
         public async Task<IActionResult> DeleteConfirm(int id)
         {
             var existingStudent = await _appliedStudentManager.GetByIdAsync(id);
-            var admittedStudent = await _studentManager.GetByAdmissionRollAsync(existingStudent.NUAdmissionRoll);
+            var admittedStudent = await _studentManager.GetByAdmissionRollAsync(existingStudent.NUAdmissionRoll,(int)existingStudent.StudentCategoryId);
             if (admittedStudent == null)
             {
                 var isDeleted = await _appliedStudentManager.RemoveAsync(existingStudent);
