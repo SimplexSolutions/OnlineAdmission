@@ -114,6 +114,13 @@ namespace OnlineAdmission.APP.Controllers
                 ViewBag.studentCategoryName = "Masters(General)";
                 ViewBag.returnAction = Action;
             }
+            else if (studentCat == 5)
+            {
+                ViewBag.studentCategory = 5;
+                Action = "DegreeSearch";
+                ViewBag.studentCategoryName = "Degree (Pass Course)";
+                ViewBag.returnAction = Action;
+            }
             else
             {
                 ViewBag.studentCategory = 1;
