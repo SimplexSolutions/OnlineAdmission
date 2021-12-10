@@ -6,12 +6,14 @@
 @{
     //Layout = User.IsInRole("Admin") ? "~/Views/Shared/_Layout.cshtml" : "~/Views/Shared/_LayoutStudent.cshtml";
     Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+    string meritType = "2nd Release Slip";
 }
 <div class="">
     <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">
         <div class="card-body">
             <form asp-action="Search" asp-controller="Students" method="post">
-                <label class="col-md-8 text-success font-weight-bolder  text-md-center text-center col-form-label" style="font-size:x-large">Honours Admission (2nd Release Slip) </label><br /><br />
+                <input type="hidden" name="meritType" value="@meritType" />
+                <label class="col-md-8 text-success font-weight-bolder  text-md-center text-center col-form-label" style="font-size:x-large">Honours Admission (@meritType) </label><br /><br />
                 <div class="form-group row">
                     <label class="col-md-2 text-md-right text-left col-form-label">NU Roll</label>
                     <div class="col-md-6">
@@ -143,6 +145,7 @@
                     <div class="card-deck">
                         <div class="card bg-transparent border-0">
                             <form asp-action="NagadPayment" asp-controller="Students" method="get">
+                                <input type="hidden"  name="meritType" value="@meritType" />
                                 <input name="nuRoll" value="@ViewBag.nuRoll" type="hidden" />
                                 <input name="studentCategory" value="1" type="hidden" />
                                 <input name="paymentType" value="2" type="hidden" /> @*1 = Application, 2 = Admission*@

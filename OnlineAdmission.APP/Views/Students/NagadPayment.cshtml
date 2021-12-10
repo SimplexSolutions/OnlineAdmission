@@ -30,9 +30,7 @@
                 </div>
                 <div class="row pt-4" style="background: #ED161F">
                     <div class="col-md-12">
-                        
                         <form asp-action="NagadPayment" asp-controller="Students" method="post">
-                        @*<form action="https://localhost:44301/api/PaymentTransactions/" method="post">*@
                             <div class="form-group">
                                 <label for="bkashPaymentNumber" class="text-center text-white">Your Nagad Account number</label>
                                 <input class="form-control text-center" asp-for="PaymentTransaction.AccountNo" placeholder="e.g 01xxxxxxxxx">

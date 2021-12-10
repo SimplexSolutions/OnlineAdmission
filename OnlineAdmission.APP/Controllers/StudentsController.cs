@@ -40,12 +40,11 @@ namespace OnlineAdmission.APP.Controllers
         private readonly ISubjectManager _subjectManager;
         private readonly ISecurityKey _securityKey;
         private readonly ISMSManager _smsManager;
-        private readonly INagadManager _nagadManager;
         private readonly IStudentCategoryManager _studentCategoryManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<StudentsController> _logger;
 
-        public StudentsController(IStudentManager studentManager, IWebHostEnvironment host, IMeritStudentManager meritStudentManager, IMapper mapper, IDistrictManager districtManager, ISubjectManager subjectManager, IAppliedStudentManager appliedStudentManager, IPaymentTransactionManager paymentTransactionManager, ISecurityKey securityKey, ISMSManager smsManager, UserManager<IdentityUser> userManager, INagadManager nagadManager, IStudentCategoryManager studentCategoryManager, ILogger<StudentsController> logger)
+        public StudentsController(IStudentManager studentManager, IWebHostEnvironment host, IMeritStudentManager meritStudentManager, IMapper mapper, IDistrictManager districtManager, ISubjectManager subjectManager, IAppliedStudentManager appliedStudentManager, IPaymentTransactionManager paymentTransactionManager, ISecurityKey securityKey, ISMSManager smsManager, UserManager<IdentityUser> userManager, IStudentCategoryManager studentCategoryManager, ILogger<StudentsController> logger)
         {
             _studentManager = studentManager;
             _host = host;
@@ -58,7 +57,6 @@ namespace OnlineAdmission.APP.Controllers
             _securityKey = securityKey;
             _smsManager = smsManager;
             _userManager = userManager;
-            _nagadManager = nagadManager;
             _studentCategoryManager = studentCategoryManager;
             _logger = logger;
         }
@@ -604,15 +602,15 @@ namespace OnlineAdmission.APP.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Search(int NuAdmissionRoll)
+        public async Task<IActionResult> Search(int NuAdmissionRoll, string meritType)
         {
-            
+            int studentCategory = 1;
             ViewBag.nuRoll = NuAdmissionRoll;
             string msg = "";
             string nuRoll = NuAdmissionRoll.ToString();
             if (NuAdmissionRoll>0)
             {
-                var meritStudent =await _meritStudentManager.GetHonsByAdmissionRollAsync(NuAdmissionRoll);
+                var meritStudent =await _meritStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll,studentCategory, meritType);
                 
                 if (meritStudent==null)
                 {
@@ -1163,39 +1161,9 @@ namespace OnlineAdmission.APP.Controllers
             return View();
         }
 
-        //[AllowAnonymous]
-        //[HttpGet]
-        //public async Task<ActionResult> BkashPayment(int NuRoll)
-        //{
-
-
-        //    return View();
-        //}
-
-        //[AllowAnonymous]
-        //[HttpPost]
-        //public async Task<ActionResult> BkashPayment(SelectedStudentVM model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        MeritStudent mStudent = await _meritStudentManager.GetByAdmissionRollAsync(model.MeritStudent.NUAdmissionRoll);
-        //        //mStudent.PaidAmaount = model.MeritStudent.PaidAmaount;
-        //        mStudent.PaymentStatus = true;
-
-        //    }
-
-        //    return View(model);
-        //}
-
-        //[AllowAnonymous]
-        //public ActionResult RocketPayment(int roll)
-        //{
-        //    return View();
-        //}
-
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult> NagadPayment(int nuRoll, int studentCategory, int paymentType, int? subjectChange)
+        public async Task<ActionResult> NagadPayment(int nuRoll, int studentCategory, int paymentType, int? subjectChange, string meritType)
         {
             if (nuRoll<=0)
             {
@@ -1205,19 +1173,19 @@ namespace OnlineAdmission.APP.Controllers
 
 
             string OrderId;
-                     AppliedStudent appliedStudent = await _nagadManager.GetAppliedStudentByNURollNagad(nuRoll);
+            AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll, studentCategory);
             if (appliedStudent==null)
             {
                 _logger.LogWarning("Applied Student Not Found");
                 return RedirectToAction("Search");
             }
-            MeritStudent meritStudent = await _nagadManager.GetMeritStudentByNURollNagad(nuRoll);
+            MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll, studentCategory, meritType);
             if (meritStudent == null)
             {
                 _logger.LogWarning("Merit Student Not Found");
                 return RedirectToAction("Search");
             }
-            Subject subject = await _nagadManager.GetSubjectByCodeNagad(meritStudent.SubjectCode);
+            Subject subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
 
             OrderId = meritStudent.NUAdmissionRoll + "" + meritStudent.SubjectCode + "" + DateTime.Now.ToString("HHmmss");
             double paymentForSubjectChange = 0.00;
@@ -1347,7 +1315,8 @@ namespace OnlineAdmission.APP.Controllers
                 currencyCode = "050",
                 amount = totalAmount,
                 challenge = challenge,
-                subjectChange = subjectChange
+                subjectChange = subjectChange,
+                meritType = meritType
             };
 
             string paymentJsonData = JsonConvert.SerializeObject(paymentJSON);
@@ -1450,7 +1419,7 @@ namespace OnlineAdmission.APP.Controllers
         
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult> NagadPaymentPro(int nuRoll, int studentCategory, string mobileNum, string studentName, int paymentType)
+        public async Task<ActionResult> NagadPaymentPro(int nuRoll, int studentCategory, string mobileNum, string studentName, int paymentType, string meritType)
         {
             if (nuRoll <= 0)
             {
@@ -1460,13 +1429,13 @@ namespace OnlineAdmission.APP.Controllers
 
             string OrderId="";
 
-            MeritStudent meritStudent = await _nagadManager.GetMeritStudentByNURollNagad(nuRoll);
+            MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll, studentCategory, meritType);
             if (meritStudent == null)
             {
                 _logger.LogWarning("Merit Student Not Found");
                 return RedirectToAction("ProfessionalSearch");
             }
-            Subject subject = await _nagadManager.GetSubjectByCodeNagad(meritStudent.SubjectCode);
+            Subject subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
             if (subject==null)
             {
                 _logger.LogWarning("Subject Not Found");
@@ -1690,7 +1659,7 @@ namespace OnlineAdmission.APP.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult> NagadPaymentMasters(int nuRoll, int studentCategory, string mobileNum, string studentName, int paymentType)
+        public async Task<ActionResult> NagadPaymentMasters(int nuRoll, int studentCategory, string mobileNum, string studentName, int paymentType, string meritType)
         {
             if (nuRoll <= 0)
             {
@@ -1699,8 +1668,8 @@ namespace OnlineAdmission.APP.Controllers
             }
 
             string OrderId = "";
-            MeritStudent meritStudent = await _meritStudentManager.GetProMBAByAdmissionRollAsync(nuRoll);
-            Subject subject = await _nagadManager.GetSubjectByCodeNagad(meritStudent.SubjectCode);
+            MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll,studentCategory,meritType);
+            Subject subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
             if (studentCategory == 3)
             {
                 if (paymentType==1)
@@ -1937,7 +1906,7 @@ namespace OnlineAdmission.APP.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult> NagadPaymentMastersGeneral(int nuRoll, int studentCategory, string mobileNum, string studentName, int paymentType)
+        public async Task<ActionResult> NagadPaymentMastersGeneral(int nuRoll, int studentCategory, string mobileNum, string studentName, int paymentType, string meritType)
         {
             if (nuRoll <= 0)
             {
@@ -1946,8 +1915,9 @@ namespace OnlineAdmission.APP.Controllers
             }
 
             string OrderId = "";
-            MeritStudent meritStudent = await _meritStudentManager.GetGenMastersByAdmissionRollAsync(nuRoll);
-            Subject subject = await _nagadManager.GetSubjectByCodeNagad(meritStudent.SubjectCode);
+            MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll, studentCategory, meritType);
+            Subject subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
+
             if (studentCategory == 4)
             {
                 OrderId = nuRoll.ToString() + "" + "GenMas" + "" + DateTime.Now.ToString("HHmmss");

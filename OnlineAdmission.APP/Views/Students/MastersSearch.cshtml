@@ -4,6 +4,7 @@
 @{
     ViewBag.Title = "Professional Admission (MBA)";
     Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+    string meritType = "1st Merit List";
 }
 <div class="">
     <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">
@@ -80,6 +81,7 @@
                     <div class="card-deck">
                         <div class="card bg-transparent border-0">
                             <form asp-action="NagadPaymentMasters" asp-controller="Students" method="get">
+                                <input type="hidden" name="meritType" value="@meritType" />
                                 <input name="nuRoll" value="@ViewBag.nuRoll" type="hidden" />
                                 <input name="studentCategory" value="3" type="hidden" />
                                 <input name="paymentType" value="2" type="hidden" /> @*1 = Application, 2 = Admission*@

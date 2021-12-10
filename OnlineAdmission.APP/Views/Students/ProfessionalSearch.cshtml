@@ -5,7 +5,7 @@
     //Layout = User.IsInRole("Admin") ? "~/Views/Shared/_Layout.cshtml" : "~/Views/Shared/_LayoutStudent.cshtml";
     Layout = "~/Views/Shared/_LayoutStudent.cshtml";
     int studentCategory = 2;
-
+    string meritType = "Quota Merit List";
 }
 <div class="">
     <div class="row card text-center border-0 p-5" style="background-color: #DEE2EB">
@@ -62,6 +62,7 @@
                     else if ((ViewBag.addmissionIsPaid == false || ViewBag.addmissionIsPaid == null) && ViewBag.applicationIsPaid == true)
                     {
         <form asp-action="NagadPaymentPro" asp-controller="Students" method="get">
+            <input type="hidden" name="meritType" value="@meritType" />
             <input type="hidden" name="studentCategory" value="2" />
             <input type="hidden" name="nuRoll" value="@ViewBag.nuRoll" />
             <input type="hidden" name="paymentType" value="2" />

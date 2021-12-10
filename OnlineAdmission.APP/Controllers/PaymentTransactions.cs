@@ -23,24 +23,23 @@ namespace OnlineAdmission.APP.Controllers
         private readonly IMeritStudentManager meritStudentManager;
         private readonly IPaymentTransactionManager paymentTransactionManager;
         private HttpClient httpClient;
-       
-        //private readonly IAppliedStudentManager appliedStudentManager;
+
+        private readonly IAppliedStudentManager _appliedStudentManager;
         //private readonly ISubjectManager subjectManager;
         private readonly IStudentManager _studentManager;
-        private readonly INagadManager nagadManager;
+        //private readonly INagadManager nagadManager;
         
 
 
         private readonly ISMSManager _smsManager;
 
-        public PaymentTransactions(IMeritStudentManager meritStudentManager,IPaymentTransactionManager paymentTransactionManager, ISMSManager sMSManager,INagadManager nagadManager, IStudentManager studentManager)
+        public PaymentTransactions(IMeritStudentManager meritStudentManager,IPaymentTransactionManager paymentTransactionManager, ISMSManager sMSManager, IStudentManager studentManager, IAppliedStudentManager appliedStudentManager)
         {
             this.meritStudentManager = meritStudentManager;
             this.paymentTransactionManager = paymentTransactionManager;
-            //this.appliedStudentManager = appliedStudentManager;
+            _appliedStudentManager = appliedStudentManager;
             //this.subjectManager = subjectManager;
             _studentManager = studentManager;
-            this.nagadManager = nagadManager;
             _smsManager = sMSManager;
         }
         [HttpGet]
@@ -119,26 +118,28 @@ namespace OnlineAdmission.APP.Controllers
                 await paymentTransactionManager.AddAsync(newPayment);
 
                 MeritStudent meritStudent = new MeritStudent();
-                if (newPayment.StudentCategory == 1)
-                {
-                    meritStudent = await meritStudentManager.GetHonsByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
-                }
-                else if (newPayment.StudentCategory == 2)
-                {
-                    meritStudent = await meritStudentManager.GetProByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
-                }
-                else if (newPayment.StudentCategory == 3)
-                {
-                    meritStudent = await meritStudentManager.GetProMBAByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
-                }
-                else if (newPayment.StudentCategory == 4)
-                {
-                    meritStudent = await meritStudentManager.GetGenMastersByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
-                }
-                else if (newPayment.StudentCategory == 5)
-                {
-                    meritStudent = await meritStudentManager.GetDegreeByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
-                }
+                meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll), (int)newPayment.StudentCategory, MerchantInfo.meritType);
+
+                //if (newPayment.StudentCategory == 1)
+                //{
+                //    meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll), (int)newPayment.StudentCategory, MerchantInfo.meritType);
+                //}
+                //else if (newPayment.StudentCategory == 2)
+                //{
+                //    meritStudent = await meritStudentManager.GetProByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
+                //}
+                //else if (newPayment.StudentCategory == 3)
+                //{
+                //    meritStudent = await meritStudentManager.GetProMBAByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
+                //}
+                //else if (newPayment.StudentCategory == 4)
+                //{
+                //    meritStudent = await meritStudentManager.GetGenMastersByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
+                //}
+                //else if (newPayment.StudentCategory == 5)
+                //{
+                //    meritStudent = await meritStudentManager.GetDegreeByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
+                //}
 
                 //MeritStudent meritStudent = await nagadManager.GetMeritStudentByNURollNagad(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
                 string phoneNumber ;
@@ -164,7 +165,7 @@ namespace OnlineAdmission.APP.Controllers
                 if (newPayment.StudentCategory == 1) //For Hon's General Student
                 {
                     //AppliedStudent newStudent = await appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll);
-                    AppliedStudent newStudent = await nagadManager.GetAppliedStudentByNURollNagad(Convert.ToInt32(MerchantInfo.NuAdmissionRoll));
+                    AppliedStudent newStudent = await _appliedStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll), (int)newPayment.StudentCategory);
                     phoneNumber = newStudent.MobileNo.ToString();
                     msgText = "Congratulations! " + newStudent.ApplicantName + "(NU Roll:" + newStudent.NUAdmissionRoll + ") , your admission payment is successfully paid";
                 }
