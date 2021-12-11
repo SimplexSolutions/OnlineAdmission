@@ -14,5 +14,6 @@ namespace OnlineAdmission.Entity
 
         public ICollection<Subject> Subjects { get; set; }
         public ICollection<AppliedStudent> AppliedStudents { get; set; }
+        public ICollection<StudentPaymentType> StudentPaymentTypes { get; set; }
     }
 }

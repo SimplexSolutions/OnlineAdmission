@@ -9,5 +9,6 @@ namespace OnlineAdmission.Entity
     public class PaymentType : BaseProps
     {
         public string PaymentTypeName { get; set; }
+        public ICollection<StudentPaymentType> StudentPaymentTypes { get; set; }
     }
 }

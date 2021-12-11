@@ -11,6 +11,8 @@ namespace OnlineAdmission.Entity
         public int StudentCategoryId { get; set; }
         public StudentCategory StudentCategory { get; set; }
 
+        public int? MeritTypeId { get; set; }
+        public MeritType MeritType { get; set; }
         public int PaymentTypeId { get; set; }
         public PaymentType PaymentType { get; set; }
 

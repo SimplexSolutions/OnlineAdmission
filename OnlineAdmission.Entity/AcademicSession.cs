@@ -10,5 +10,6 @@ namespace OnlineAdmission.Entity
     {
         public string SessionName { get; set; }
         public ICollection<AppliedStudent> AppliedStudents { get; set; }
+        public ICollection<StudentPaymentType> StudentPaymentTypes { get; set; }
     }
 }

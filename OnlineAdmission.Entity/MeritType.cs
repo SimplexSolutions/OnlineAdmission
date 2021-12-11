@@ -9,5 +9,6 @@ namespace OnlineAdmission.Entity
     public class MeritType : BaseProps
     {
         public string MeritTypeName { get; set; }
+        public ICollection<StudentPaymentType> StudentPaymentTypes { get; set; }
     }
 }
