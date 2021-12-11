@@ -115,6 +115,9 @@ namespace OnlineAdmission.APP
             services.AddScoped<IPaymentTypeRepository, PaymentTypeRepository>();
             services.AddScoped<IPaymentTypeManager, PaymentTypeManager>();
 
+            services.AddScoped<IMeritTypeRepository, MeritTypeRepository>();
+            services.AddScoped<IMeritTypeManager, MeritTypeManager>();
+
             services.AddScoped<ISecurityKey, SecurityKey>();
         }
 
