@@ -26,7 +26,9 @@ namespace OnlineAdmission.DB
         public DbSet<SMSModel> SMSModels { get; set; }
         public DbSet<StudentCategory> StudentCategories { get; set; }
         public DbSet<AcademicSession> AcademicSessions { get; set; }
-
+        public DbSet<MeritType> MeritTypes { get; set; }
+        public DbSet<PaymentType> PaymentTypes { get; set; }
+        public DbSet<StudentPaymentType> StudentPaymentTypes { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
