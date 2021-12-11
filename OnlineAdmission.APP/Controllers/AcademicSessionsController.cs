@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineAdmission.BLL.IManager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using OnlineAdmission.Entity;
+using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
+using System.Linq;
+using System;
 
 namespace OnlineAdmission.APP.Controllers
 {
+    [Authorize(Roles = "Admin, SuperAdmin")]
     public class AcademicSessionsController : Controller
     {
         private readonly IAcademicSessionManager _academicSessionManager;
@@ -17,9 +19,10 @@ namespace OnlineAdmission.APP.Controllers
             _academicSessionManager = academicSessionManager;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var sessions = await _academicSessionManager.GetAllAsync();
+            return View(sessions);
         }
 
         // GET: AcademicSessionsController/Details/5
@@ -37,37 +40,81 @@ namespace OnlineAdmission.APP.Controllers
         // POST: AcademicSessionsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(AcademicSession model)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                var sessions = await _academicSessionManager.GetAllAsync();
+                bool isExist = sessions.FirstOrDefault(s => s.SessionName.Trim() == model.SessionName.Trim()) != null;
+                if (isExist==true)
+                {
+                    ViewBag.msg = "This session is already exist.";
+                    return View(model);
+                }
+                try
+                {
+                    model.CreatedAt = DateTime.Now;
+                    model.CreatedBy = HttpContext.Session.GetString("UserId");
+                    await _academicSessionManager.AddAsync(model);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    return View();
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return View();
         }
 
         // GET: AcademicSessionsController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var aSession = await _academicSessionManager.GetByIdAsync(id);
+            if (aSession == null)
+            {
+                TempData["msg"] = "Session is available";
+                return RedirectToAction("Index");
+            }
+
+            return View(aSession);
         }
 
         // POST: AcademicSessionsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, AcademicSession academicSession)
         {
-            try
+            if (id != academicSession.Id)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
+            if (ModelState.IsValid)
             {
-                return View();
+                var sessionList = await _academicSessionManager.GetAllAsync();
+                var sessionExist = sessionList.FirstOrDefault(s => s.SessionName == academicSession.SessionName && s.Id != id);
+                if (sessionExist == null)
+                {
+                    try
+                    {
+                        academicSession.UpdatedAt = DateTime.Now;
+                        academicSession.UpdatedBy = HttpContext.Session.GetString("UserId");
+                        bool isSaved = await _academicSessionManager.AddAsync(academicSession);
+                        if (isSaved)
+                        {
+                            return RedirectToAction(nameof(Index));
+                        }
+                        ViewBag.msg = "Not updated";
+                        return View(academicSession);
+                    }
+                    catch
+                    {
+                        return View();
+                    }
+                }
+                ViewBag.msg = "This session is already exist.";
             }
+            return View(academicSession);
+            
         }
 
         // GET: AcademicSessionsController/Delete/5
