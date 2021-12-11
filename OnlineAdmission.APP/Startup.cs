@@ -118,6 +118,9 @@ namespace OnlineAdmission.APP
             services.AddScoped<IMeritTypeRepository, MeritTypeRepository>();
             services.AddScoped<IMeritTypeManager, MeritTypeManager>();
 
+            services.AddScoped<IAcademicSessionRepository, AcademicSessionRepository>();
+            services.AddScoped<IAcademicSessionManager, AcademicSessionManager>();
+
             services.AddScoped<ISecurityKey, SecurityKey>();
         }
 
