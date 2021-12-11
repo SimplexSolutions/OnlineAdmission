@@ -121,6 +121,9 @@ namespace OnlineAdmission.APP
             services.AddScoped<IAcademicSessionRepository, AcademicSessionRepository>();
             services.AddScoped<IAcademicSessionManager, AcademicSessionManager>();
 
+            services.AddScoped<IStudentPaymentTypeRepository, StudentPaymentTypeRepository>();
+            services.AddScoped<IStudentPaymentTypeManager, StudentPaymentTypeManager>();
+
             services.AddScoped<ISecurityKey, SecurityKey>();
         }
 
