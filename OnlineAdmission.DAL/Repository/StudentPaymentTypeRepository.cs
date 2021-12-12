@@ -1,4 +1,5 @@
-﻿using OnlineAdmission.DAL.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineAdmission.DAL.IRepository;
 using OnlineAdmission.DB;
 using OnlineAdmission.Entity;
 using System;
@@ -14,6 +15,25 @@ namespace OnlineAdmission.DAL.Repository
         public StudentPaymentTypeRepository(OnlineAdmissionDbContext context) : base(context)
         {
 
+        }
+
+        public override async Task<List<StudentPaymentType>> GetAllAsync()
+        {
+            return await _context.StudentPaymentTypes
+                .Include(s => s.AcademicSession)
+                .Include(s => s.MeritType)
+                .Include(s => s.PaymentType)
+                .Include(s => s.StudentCategory)
+                .ToListAsync();
+        }
+        public override async Task<StudentPaymentType> GetByIdAsync(int id)
+        {
+            return await _context.StudentPaymentTypes
+                .Include(s => s.AcademicSession)
+                .Include(s => s.MeritType)
+                .Include(s => s.PaymentType)
+                .Include(s => s.StudentCategory)
+                .FirstOrDefaultAsync(s => s.Id == id);
         }
     }
 }

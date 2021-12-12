@@ -1,6 +1,13 @@
-﻿
+﻿@using OnlineAdmission.BLL.IManager;
+
 @inject SignInManager<IdentityUser> signInManager
 @inject UserManager<IdentityUser> userManager
+@inject IStudentPaymentTypeManager _studentPaymentTypeManager
+
+@{ 
+    var studentPaymentTypeList = await _studentPaymentTypeManager.GetAllAsync();
+}
+
 
 <!doctype html>
 <html lang="en">
@@ -174,11 +181,11 @@
                             <li class="nav-item" id="admissionNav">
                                 <span class="nav-link" id="admissionLink">Admission</span>
                                 <ul id="admissionId">
-                                    <li><a class="nav-link" asp-action="Search" asp-controller="Students">Honour's Admission</a></li>
-                                    <li><a class="nav-link" asp-action="ProfessionalSearch" asp-controller="Students">Profession's Admission</a></li>
-                                    <li><a class="nav-link" asp-action="MastersSearch" asp-controller="Students">Master's (Professional) Admission</a></li>
-                                    <li><a class="nav-link" asp-action="MastersSearchGeneral" asp-controller="Students">Master's Admission (Regular)</a></li>
-                                    <li><a class="nav-link" asp-action="DegreeSearch" asp-controller="Students">Degree Pass Application</a></li>
+                                    @foreach (var item in studentPaymentTypeList.Where(s => s.Status == true))
+                                    {
+                                        <li><a class="nav-link" asp-action="Search" asp-controller="Students" asp-route-studentPaymentTypeId="@item.Id">@item.StudentCategory.CategoryName @item.PaymentType.PaymentTypeName (@item.AcademicSession.SessionName)</a></li>
+                                        
+                                    }
                                 </ul>
                             </li>
                             <li class="nav-item active">

@@ -15,6 +15,7 @@ namespace OnlineAdmission.BLL.IManager
         Task<MeritStudent> GetProByAdmissionRollAsync(int NuRoll);
         Task<MeritStudent> GetGenMastersByAdmissionRollAsync(int NuRoll);
         Task<MeritStudent> GetDegreeByAdmissionRollAsync(int NuRoll);
+        Task<MeritStudent> GetMeritStudentAsync(int nuRoll, int studentCategoryId, int meritTypeId, int sessionId);
 
         Task<bool> UploadMeritStudentsAsync(List<MeritStudent> meritStudents);
         Task<List<MeritStudent>> GetAppliedStudentAsync(); //Student will filterd with subject Code = 0

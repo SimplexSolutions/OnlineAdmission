@@ -1,5 +1,5 @@
-﻿@model OnlineAdmission.APP.ViewModels.Student.SelectedStudentVM
-
+﻿@*@model OnlineAdmission.APP.ViewModels.Student.SelectedStudentVM*@
+@model OnlineAdmission.APP.ViewModels.Student.StudentDynamicInfoVM
 @inject SignInManager<IdentityUser> signInManager
 @inject UserManager<IdentityUser> userManager
 
@@ -13,37 +13,23 @@
         <div class="card-body">
             <form asp-action="Search" asp-controller="Students" method="post">
                 <input type="hidden" name="meritType" value="@meritType" />
-                <label class="col-md-8 text-success font-weight-bolder  text-md-center text-center col-form-label" style="font-size:x-large">Honours Admission (@meritType) </label><br /><br />
+                <label class="col-md-8 text-success font-weight-bolder  text-md-center text-center col-form-label" style="font-size:x-large">@ViewBag.FormTitle </label><br /><br />
                 <div class="form-group row">
                     <label class="col-md-2 text-md-right text-left col-form-label">NU Roll</label>
                     <div class="col-md-6">
                         @if (ViewBag.nuRoll != null)
                         {
-                            <input type="number" name="NuAdmissionRoll" value="@ViewBag.nuRoll" min="1000000" max="9999999" class="form-control" placeholder="NU Admission Roll" />
+                            <input asp-for="NuRoll" value="@ViewBag.nuRoll" min="1000000" max="9999999" class="form-control" placeholder="NU Admission Roll" />
                         }
                         else
                         {
-                            <input type="number" name="NuAdmissionRoll" class="form-control" placeholder="NU Admission Roll" min="1000000" max="9999999" />
+                            <input asp-for="NuRoll" class="form-control" placeholder="NU Admission Roll" min="1000000" max="9999999" />
                         }
 
                     </div>
                     <button type="submit" class="btn btn-primary mb-2">Search</button>
                 </div>
-                @if (ViewBag.msg != null)
-                {
-                    <div class="row">
-                        <span id="msgId" class="text-danger offset-2">@ViewBag.msg</span>
-                    </div>
-                    @if (ViewBag.infoCollection == true)
-                    {
-                        <div class="row">
-                            <div class="col-md-12 text-center">
 
-                                <a asp-action="Create" asp-controller="AppliedStudents" asp-route-studentCat="1" asp-route-nuRoll="@ViewBag.nuRoll" class="btn btn-outline-info">Give Information</a>
-                            </div>
-                        </div>
-                    }
-                }
                 @if (ViewBag.notify != null)
                 {
                     <div class="row">
@@ -52,10 +38,29 @@
                 }
 
             </form>
+            @if (ViewBag.msg != null)
+            {
+                <div class="row">
+                    <span id="msgId" class="text-danger offset-2">@ViewBag.msg</span>
+                </div>
+                @if (ViewBag.infoCollection == true)
+                {
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <form asp-action="Create" asp-controller="AppliedStudents" method="post">
+                                <input type="hidden" asp-for="CategoryId" />
+                                <input type="hidden" asp-for="NuRoll" />
+                                <input type="hidden" asp-for="SessionId" />
+                                <input class="btn btn-outline-info" type="submit" value="Submit Information" />
+                            </form>
+                        </div>
+                    </div>
+                }
+            }
         </div>
 
 
-        @if (Model != null)
+        @if (Model != null && Model.AppliedStudent!=null)
         {
             <div class="card text-center border-0">
                 <div class="card-body">
@@ -70,10 +75,10 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>@Model.MeritStudent.NUAdmissionRoll</td>
+                                <td>@Model.NuRoll</td>
                                 <td>@Model.AppliedStudent.ApplicantName</td>
-                                <td>@Model.Subject.SubjectName <br />(@Model.MeritStudent.SubjectCode)</td>
-                                <td>@Model.MeritStudent.Comments</td>
+                                <td>@Model.Subject.SubjectName <br />(@Model.Subject.Code)</td>
+                                <td>@Model.MeritType.MeritTypeName</td>
                             </tr>
                         </tbody>
                     </table>
@@ -84,7 +89,12 @@
                                 <h5>Payment Completed</h5>
                             </div>
                             <div class="col-md-6">
-                                <a class="btn btn-outline-info" asp-action="Create" asp-controller="Students" asp-route-nuAdmissionRoll="@Model.AppliedStudent.NUAdmissionRoll">Admission Form</a>
+                                <form asp-action="Create" asp-controller="Students"  method="post">
+                                    <input type="hidden" asp-for="NuRoll" />
+                                    <input type="hidden" asp-for="CategoryId" />
+                                    <input type="hidden" asp-for="SessionId" />
+                                    <input type="submit"  value="Admission Form" class="btn btn-outline-info" />
+                                </form>
                             </div>
                         </div>
                     }
@@ -105,9 +115,11 @@
                             <div class="card-deck">
                                 <div class="card border-0">
                                     <form asp-action="NagadPayment" asp-controller="Students" method="get">
-                                        <input name="nuRoll" value="@Model.MeritStudent.NUAdmissionRoll" type="hidden" />
-                                        <input name="studentCategory" value="1" type="hidden" />
-                                        <input name="paymentType" value="2" type="hidden" /> @*1 = Application, 2 = Admission*@
+                                        <input asp-for="NuRoll"  type="hidden" />
+                                        <input asp-for="CategoryId" type="hidden" />
+                                        <input asp-for="SessionId" type="hidden" />
+                                        <input asp-for="MeritType.Id" type="hidden" />
+                                        <input asp-for="PaymentTypeId" type="hidden" />
                                         
                                         <button type="submit">
                                             <img class="card-img-top" src="~/Images/Payment/Nagad.png" alt="Nagad Logo" style="width:80px;">
@@ -118,7 +130,11 @@
                                 {
                                     <div class="card border-0">
                                         <form asp-action="CollegePayment" asp-controller="Students" method="get">
-                                            <input name="nuRoll" value="@Model.MeritStudent.NUAdmissionRoll" type="hidden" />
+                                            <input asp-for="NuRoll" type="hidden" />
+                                            <input asp-for="CategoryId" type="hidden" />
+                                            <input asp-for="SessionId" type="hidden" />
+                                            <input asp-for="MeritType.Id" type="hidden" />
+                                            <input asp-for="PaymentTypeId" type="hidden" />
                                             <button type="submit">
                                                 <img class="card-img-top" src="~/Images/Collge/logo.png" alt="College Logo" style="width:60px;">
                                             </button>
@@ -145,11 +161,10 @@
                     <div class="card-deck">
                         <div class="card bg-transparent border-0">
                             <form asp-action="NagadPayment" asp-controller="Students" method="get">
-                                <input type="hidden"  name="meritType" value="@meritType" />
-                                <input name="nuRoll" value="@ViewBag.nuRoll" type="hidden" />
-                                <input name="studentCategory" value="1" type="hidden" />
-                                <input name="paymentType" value="2" type="hidden" /> @*1 = Application, 2 = Admission*@
-                                <input type="hidden" name="subjectChange" value="1" />
+                                <input asp-for="MeritType.Id" type="hidden"  />
+                                <input asp-for="NuRoll" type="hidden" />
+                                <input asp-for="CategoryId" type="hidden" />
+                                <input asp-for="PaymentTypeId" type="hidden" />
                                 <button type="submit">
                                     <img class="card-img-top" src="~/Images/Payment/Nagad.png" alt="Nagad Logo" style="width:80px;">
                                 </button>
@@ -159,7 +174,10 @@
                         {
                             <div class="card border-0">
                                 <form asp-action="CollegePayment" asp-controller="Students" method="get">
-                                    <input name="nuRoll" value="@ViewBag.nuRoll" type="hidden" />
+                                    <input asp-for="MeritType.Id" type="hidden" />
+                                    <input asp-for="NuRoll" type="hidden" />
+                                    <input asp-for="CategoryId" type="hidden" />
+                                    <input asp-for="PaymentTypeId" type="hidden" />
                                     <button type="submit">
                                         <img class="card-img-top" src="~/Images/Collge/logo.png" alt="College Logo" style="width:60px;">
                                     </button>

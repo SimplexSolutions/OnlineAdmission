@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineAdmission.BLL.IManager;
 using OnlineAdmission.Entity;
 using System;
@@ -14,10 +15,12 @@ namespace OnlineAdmission.APP.Controllers
     public class StudentCategoriesController : Controller
     {
         private readonly IStudentCategoryManager _studentCategoryManager;
+        private readonly IAcademicSessionManager _academicSessionManager;
 
-        public StudentCategoriesController(IStudentCategoryManager studentCategoryManager)
+        public StudentCategoriesController(IStudentCategoryManager studentCategoryManager, IAcademicSessionManager academicSessionManager)
         {
             _studentCategoryManager = studentCategoryManager;
+            _academicSessionManager = academicSessionManager;
         }
         public async Task<IActionResult> Index()
         {
@@ -31,8 +34,9 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            
             return View();
         }
 
@@ -46,6 +50,7 @@ namespace OnlineAdmission.APP.Controllers
                 await _studentCategoryManager.AddAsync(model);
                 return RedirectToAction("Index");
             }
+
             return View();
         }
 
@@ -60,6 +65,7 @@ namespace OnlineAdmission.APP.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(int id, StudentCategory model)
         {
+
             if (model.Id!=id)
             {
                 return View();
@@ -72,13 +78,14 @@ namespace OnlineAdmission.APP.Controllers
                 await _studentCategoryManager.UpdateAsync(model);
                 return RedirectToAction("Index");
             }
+
             return View();
         }
 
         public async Task<IActionResult> Delete(int id)
         {
             var cat = await _studentCategoryManager.GetByIdAsync(id);
-            return View();
+            return View(cat);
         }
         [ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirm(int id)

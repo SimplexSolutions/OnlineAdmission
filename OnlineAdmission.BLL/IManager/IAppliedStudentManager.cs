@@ -11,6 +11,7 @@ namespace OnlineAdmission.BLL.IManager
     {
         Task<bool> UploadAppliedStudentsAsync(List<AppliedStudent> appliedStudents);
         Task<AppliedStudent> GetByAdmissionRollAsync(int roll, int stuCat);
+        Task<AppliedStudent> GetAppliedStudentAsync(int nuRoll, int studentCategroyId, int sessionId);
         Task<AppliedStudent> GetByMobileNumber(string mobileNo);
     }
 }

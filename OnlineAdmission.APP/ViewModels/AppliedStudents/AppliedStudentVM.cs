@@ -30,6 +30,7 @@ namespace OnlineAdmission.APP.ViewModels.AppliedStudents
 
         [Display(Name = "Group Name")]
         public string HSCGroup { get; set; }
+        public int AcademicSessionId { get; set; }
 
     }
 }

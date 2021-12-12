@@ -157,7 +157,7 @@ namespace OnlineAdmission.APP.Controllers
                     }
                     
                     meritStudent.PaymentTransactionId = newPayment.Id;
-                    meritStudent.StudentCategory = newPayment.StudentCategory;
+                    meritStudent.StudentCategoryId = newPayment.StudentCategory;
                     await meritStudentManager.UpdateAsync(meritStudent);
                 }
                 

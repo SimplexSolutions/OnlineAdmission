@@ -11,9 +11,10 @@ namespace OnlineAdmission.Entity
     {
         [Display(Name="Category")]
         public string CategoryName { get; set; }
-
-        public ICollection<Subject> Subjects { get; set; }
-        public ICollection<AppliedStudent> AppliedStudents { get; set; }
         public ICollection<StudentPaymentType> StudentPaymentTypes { get; set; }
+        public ICollection<AppliedStudent> AppliedStudents { get; set; }
+        public ICollection<MeritStudent> MeritStudents { get; set; }
+        public ICollection<Student> Students { get; set; }
+        public ICollection<PaymentTransaction> PaymentTransactions { get; set; }
     }
 }

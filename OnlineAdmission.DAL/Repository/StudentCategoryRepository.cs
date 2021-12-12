@@ -1,4 +1,5 @@
-﻿using OnlineAdmission.DAL.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineAdmission.DAL.IRepository;
 using OnlineAdmission.DB;
 using OnlineAdmission.Entity;
 using System;
@@ -15,5 +16,6 @@ namespace OnlineAdmission.DAL.Repository
         {
 
         }
+       
     }
 }

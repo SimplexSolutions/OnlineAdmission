@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineAdmission.BLL.IManager;
+using OnlineAdmission.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,10 @@ namespace OnlineAdmission.APP.Controllers
             _paymentTypeManager = paymentTypeManager;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var paymentTypes = await _paymentTypeManager.GetAllAsync();
+            return View(paymentTypes);
         }
 
         // GET: PaymentTypesController/Details/5
@@ -37,16 +39,29 @@ namespace OnlineAdmission.APP.Controllers
         // POST: PaymentTypesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(PaymentType  model)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    model.CreatedAt = DateTime.Now;
+                    model.CreatedBy = HttpContext.Session.GetString("UserId");
+                    bool isSaved = await _paymentTypeManager.AddAsync(model);
+                    if (isSaved)
+                    {
+                        return RedirectToAction(nameof(Index));
+
+                    }
+                    ViewBag.msg = "Not Created";
+                }
+                catch
+                {
+                    return View();
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return View();
+
         }
 
         // GET: PaymentTypesController/Edit/5

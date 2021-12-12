@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineAdmission.BLL.IManager;
+using OnlineAdmission.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,10 @@ namespace OnlineAdmission.APP.Controllers
             _meritTypeManager = meritTypeManager;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var meritTypes = await _meritTypeManager.GetAllAsync();
+            return View(meritTypes);
         }
 
         // GET: MeritTypesController/Details/5
@@ -37,16 +39,27 @@ namespace OnlineAdmission.APP.Controllers
         // POST: MeritTypesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(MeritType model)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    model.CreatedAt = DateTime.Now;
+                    model.CreatedBy = HttpContext.Session.GetString("UserId");
+                    bool isSaved = await _meritTypeManager.AddAsync(model);
+                    if (isSaved)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                    ViewBag.msg = "not created";
+                }
+                catch
+                {
+                    return View();
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return View();
         }
 
         // GET: MeritTypesController/Edit/5

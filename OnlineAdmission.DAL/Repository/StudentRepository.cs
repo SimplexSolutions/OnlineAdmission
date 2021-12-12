@@ -63,7 +63,7 @@ namespace OnlineAdmission.DAL.Repository
 
         public async Task<Student> GetByAdmissionRollAsync(int NURoll, int stuCategory)
         {
-            var student = await _context.Students.FirstOrDefaultAsync(s => s.NUAdmissionRoll == NURoll && s.StudentCategory == stuCategory);
+            var student = await _context.Students.FirstOrDefaultAsync(s => s.NUAdmissionRoll == NURoll && s.StudentCategoryId == stuCategory);
             return student;
         }
 
@@ -74,7 +74,7 @@ namespace OnlineAdmission.DAL.Repository
         }
         public async Task<List<Student>> GetStudentsByCategoryAsync(int stuCategory)
         {
-            var result = await _context.Students.Where(s => s.StudentCategory == stuCategory).ToListAsync();
+            var result = await _context.Students.Where(s => s.StudentCategoryId == stuCategory).ToListAsync();
             return result;
         }
     }

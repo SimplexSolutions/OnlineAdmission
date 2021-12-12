@@ -72,31 +72,31 @@
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title">Hon's General Student</h6><hr />
-                        <h5>Total: @Model.Students.Where(s => s.StudentCategory == 1 && s.Status == true).Count()</h5>
+                        <h5>Total: @Model.Students.Where(s => s.StudentCategoryId == 1 && s.Status == true).Count()</h5>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title">Hon's Professional Student</h6><hr />
-                        <h5>Total: @Model.Students.Where(s => s.StudentCategory == 2 && s.Status == true).Count()</h5>
+                        <h5>Total: @Model.Students.Where(s => s.StudentCategoryId == 2 && s.Status == true).Count()</h5>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title">Master's(MBA) Student</h6><hr />
-                        <h5>Total: @Model.Students.Where(s => s.StudentCategory == 3 && s.Status == true).Count()</h5>
+                        <h5>Total: @Model.Students.Where(s => s.StudentCategoryId == 3 && s.Status == true).Count()</h5>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title">Master's(General) Student</h6><hr />
-                        <h5>Total: @Model.Students.Where(s => s.StudentCategory == 4 && s.Status == true).Count()</h5>
+                        <h5>Total: @Model.Students.Where(s => s.StudentCategoryId == 4 && s.Status == true).Count()</h5>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title">Degree Student</h6><hr />
-                        <h5>Total: @Model.Students.Where(s => s.StudentCategory == 5 && s.Status == true).Count()</h5>
+                        <h5>Total: @Model.Students.Where(s => s.StudentCategoryId == 5 && s.Status == true).Count()</h5>
                     </div>
                 </div>
             </div>
@@ -113,31 +113,31 @@
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title">Hon's General Subject Changed</h6><hr />
-                        <h5>Total: @Model.Students.Where(s => s.StudentCategory == 1 && s.Status == true && s.StudentType == 2).Count()</h5>
+                        <h5>Total: @Model.Students.Where(s => s.StudentCategoryId == 1 && s.Status == true && s.StudentType == 2).Count()</h5>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title">Hon's Professional Subject Changed</h6><hr />
-                        <h5>Total: @Model.Students.Where(s => s.StudentCategory == 2 && s.Status == true && s.StudentType == 2).Count()</h5>
+                        <h5>Total: @Model.Students.Where(s => s.StudentCategoryId == 2 && s.Status == true && s.StudentType == 2).Count()</h5>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title">Master's(MBA) Subject Changed</h6><hr />
-                        <h5>Total: @Model.Students.Where(s => s.StudentCategory == 3 && s.Status == true && s.StudentType == 2).Count()</h5>
+                        <h5>Total: @Model.Students.Where(s => s.StudentCategoryId == 3 && s.Status == true && s.StudentType == 2).Count()</h5>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title">Master's(General) Subject Changed</h6><hr />
-                        <h5>Total: @Model.Students.Where(s => s.StudentCategory == 4 && s.Status == true && s.StudentType == 2).Count()</h5>
+                        <h5>Total: @Model.Students.Where(s => s.StudentCategoryId == 4 && s.Status == true && s.StudentType == 2).Count()</h5>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title">Degree Subject Changed</h6><hr />
-                        <h5>Total: @Model.Students.Where(s => s.StudentCategory == 5 && s.Status == true && s.StudentType == 2).Count()</h5>
+                        <h5>Total: @Model.Students.Where(s => s.StudentCategoryId == 5 && s.Status == true && s.StudentType == 2).Count()</h5>
                     </div>
                 </div>
             </div>

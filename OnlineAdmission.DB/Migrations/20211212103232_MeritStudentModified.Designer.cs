@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineAdmission.DB;
 
 namespace OnlineAdmission.DB.Migrations
 {
     [DbContext(typeof(OnlineAdmissionDbContext))]
-    partial class OnlineAdmissionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211212103232_MeritStudentModified")]
+    partial class MeritStudentModified
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -366,9 +368,6 @@ namespace OnlineAdmission.DB.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AcademicSessionId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Comments")
                         .HasColumnType("nvarchar(max)");
 
@@ -403,8 +402,6 @@ namespace OnlineAdmission.DB.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AcademicSessionId");
 
                     b.HasIndex("MeritTypeId");
 
@@ -479,9 +476,6 @@ namespace OnlineAdmission.DB.Migrations
                     b.Property<int?>("StudentCategory")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StudentCategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("StudentName")
                         .HasColumnType("nvarchar(max)");
 
@@ -492,8 +486,6 @@ namespace OnlineAdmission.DB.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("StudentCategoryId");
 
                     b.ToTable("PaymentTransactions");
                 });
@@ -564,9 +556,6 @@ namespace OnlineAdmission.DB.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("AcademicSessionId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("Birthday")
                         .HasColumnType("datetime2");
@@ -738,7 +727,7 @@ namespace OnlineAdmission.DB.Migrations
                     b.Property<bool?>("Status")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("StudentCategoryId")
+                    b.Property<int?>("StudentCategory")
                         .HasColumnType("int");
 
                     b.Property<int>("StudentMobile")
@@ -766,15 +755,11 @@ namespace OnlineAdmission.DB.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AcademicSessionId");
-
                     b.HasIndex("MailingDistrictId");
 
                     b.HasIndex("PermanentDistrictId");
 
                     b.HasIndex("PresentDistrictId");
-
-                    b.HasIndex("StudentCategoryId");
 
                     b.HasIndex("SubjectId");
 
@@ -961,10 +946,6 @@ namespace OnlineAdmission.DB.Migrations
 
             modelBuilder.Entity("OnlineAdmission.Entity.MeritStudent", b =>
                 {
-                    b.HasOne("OnlineAdmission.Entity.AcademicSession", "AcademicSession")
-                        .WithMany("MeritStudents")
-                        .HasForeignKey("AcademicSessionId");
-
                     b.HasOne("OnlineAdmission.Entity.MeritType", "MeritType")
                         .WithMany()
                         .HasForeignKey("MeritTypeId");
@@ -977,8 +958,6 @@ namespace OnlineAdmission.DB.Migrations
                         .WithMany("MeritStudents")
                         .HasForeignKey("StudentCategoryId");
 
-                    b.Navigation("AcademicSession");
-
                     b.Navigation("MeritType");
 
                     b.Navigation("PaymentTransaction");
@@ -986,19 +965,8 @@ namespace OnlineAdmission.DB.Migrations
                     b.Navigation("StudentCategory");
                 });
 
-            modelBuilder.Entity("OnlineAdmission.Entity.PaymentTransaction", b =>
-                {
-                    b.HasOne("OnlineAdmission.Entity.StudentCategory", null)
-                        .WithMany("PaymentTransactions")
-                        .HasForeignKey("StudentCategoryId");
-                });
-
             modelBuilder.Entity("OnlineAdmission.Entity.Student", b =>
                 {
-                    b.HasOne("OnlineAdmission.Entity.AcademicSession", "AcademicSession")
-                        .WithMany("Students")
-                        .HasForeignKey("AcademicSessionId");
-
                     b.HasOne("OnlineAdmission.Entity.District", "MailingDistrict")
                         .WithMany()
                         .HasForeignKey("MailingDistrictId")
@@ -1017,25 +985,17 @@ namespace OnlineAdmission.DB.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OnlineAdmission.Entity.StudentCategory", "StudentCategory")
-                        .WithMany("Students")
-                        .HasForeignKey("StudentCategoryId");
-
                     b.HasOne("OnlineAdmission.Entity.Subject", "Subject")
                         .WithMany()
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AcademicSession");
-
                     b.Navigation("MailingDistrict");
 
                     b.Navigation("PermanentDistrict");
 
                     b.Navigation("PresentDistrict");
-
-                    b.Navigation("StudentCategory");
 
                     b.Navigation("Subject");
                 });
@@ -1076,7 +1036,7 @@ namespace OnlineAdmission.DB.Migrations
             modelBuilder.Entity("OnlineAdmission.Entity.Subject", b =>
                 {
                     b.HasOne("OnlineAdmission.Entity.StudentCategory", "StudentCategory")
-                        .WithMany()
+                        .WithMany("Subjects")
                         .HasForeignKey("StudentCategoryId");
 
                     b.Navigation("StudentCategory");
@@ -1086,11 +1046,7 @@ namespace OnlineAdmission.DB.Migrations
                 {
                     b.Navigation("AppliedStudents");
 
-                    b.Navigation("MeritStudents");
-
                     b.Navigation("StudentPaymentTypes");
-
-                    b.Navigation("Students");
                 });
 
             modelBuilder.Entity("OnlineAdmission.Entity.MeritType", b =>
@@ -1109,11 +1065,9 @@ namespace OnlineAdmission.DB.Migrations
 
                     b.Navigation("MeritStudents");
 
-                    b.Navigation("PaymentTransactions");
-
                     b.Navigation("StudentPaymentTypes");
 
-                    b.Navigation("Students");
+                    b.Navigation("Subjects");
                 });
 #pragma warning restore 612, 618
         }

@@ -89,7 +89,7 @@ namespace OnlineAdmission.APP.Controllers
 
 
         [AllowAnonymous]
-        public async Task<IActionResult> Create( int nuRoll, int? studentCat)
+        public async Task<IActionResult> Create( int nuRoll, int? studentCat, int? AcademicSessionId)
         {
             string Action = "Search";
             ViewBag.returnAction = Action;
@@ -301,7 +301,7 @@ namespace OnlineAdmission.APP.Controllers
                                 MobileNo = reader.GetValue(4).ToString(),
                                 HSCGroup = reader.GetValue(5).ToString(),
                                 StudentCategoryId = Convert.ToInt32(reader.GetValue(6).ToString()),
-                                AcademicSessionId = Convert.ToInt32(reader.GetValue(7).ToString())
+                                //AcademicSessionId = Convert.ToInt32(reader.GetValue(7).ToString())
                                 //NUAdmissionRoll,ApplicantName,FatherName,MotherName,MobileNo,HSCGroup,StudentCategoryId,AcademicSessionId
                             });
                             saved++;

@@ -10,15 +10,15 @@
         meritPosition = "(Merit Position: " + Model.MeritStudent.MeritPosition + ")";
     }
     string studentClass = "";
-    if (Model.Student.StudentCategory==2)
+    if (Model.Student.StudentCategoryId == 2)
     {
         studentClass = "1st Year Bachelor of Honours(Professional) 2020-2021";
     }
-    else if (Model.Student.StudentCategory == 3)
+    else if (Model.Student.StudentCategoryId == 3)
     {
         studentClass = "MBA (Professional) 2020-2021";
     }
-    else if (Model.Student.StudentCategory == 4)
+    else if (Model.Student.StudentCategoryId == 4)
     {
         studentClass = "Masters Admission 2020-2021";
     }
@@ -318,7 +318,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if (Model.Student.StudentCategory == 4)
+                        @if (Model.Student.StudentCategoryId == 4)
                         {
                             <tr class="font-weight-bold">
                                 <td>Honors</td>

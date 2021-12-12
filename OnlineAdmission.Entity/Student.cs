@@ -155,7 +155,8 @@ namespace OnlineAdmission.Entity
         //StudentCategory = 4 = Masters General
         //StudentCategory = 5 = Degree
         
-        public int? StudentCategory { get; set; }
+        public int? StudentCategoryId { get; set; }
+        public StudentCategory StudentCategory { get; set; }
 
         [Display(Name ="Student NID")]
         [StringLength(maximumLength: 21, MinimumLength = 10)]
@@ -176,5 +177,8 @@ namespace OnlineAdmission.Entity
         public District PresentDistrict { get; set; }
         public District PermanentDistrict { get; set; }
         public District MailingDistrict { get; set; }
+
+        public int? AcademicSessionId { get; set; }
+        public AcademicSession AcademicSession { get; set; }
     }
 }

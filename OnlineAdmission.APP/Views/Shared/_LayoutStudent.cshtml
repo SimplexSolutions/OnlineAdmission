@@ -1,5 +1,13 @@
-﻿@inject SignInManager<IdentityUser> signInManager
+﻿@using OnlineAdmission.BLL.IManager;
+
+@inject SignInManager<IdentityUser> signInManager
 @inject UserManager<IdentityUser> userManager
+@inject IStudentPaymentTypeManager _studentPaymentTypeManager
+
+@{
+    var studentPaymentTypeList = await _studentPaymentTypeManager.GetAllAsync();
+}
+
 
 <!doctype html>
 <html lang="en">
@@ -31,17 +39,17 @@
                         <ul class="navbar-nav flex-grow-1">
                             @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                             {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
 
-                                            <li class="nav-item">
-                                                <a class="nav-link text-dark" asp-area="" asp-controller="AppliedStudents" asp-action="Index">Applied Students</a>
-                                            </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link text-dark" asp-area="" asp-controller="MeritStudents" asp-action="Index">Merit Students</a>
-                                                                </li>
-                                }
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="AppliedStudents" asp-action="Index">Applied Students</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="MeritStudents" asp-action="Index">Merit Students</a>
+                                </li>
+                            }
 
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="Search">Check</a>
@@ -71,11 +79,10 @@
                             <li class="nav-item" id="admissionNav">
                                 <span class="nav-link" id="admissionLink" style="color:#0cc315">Student Type <i class="fas fa-angle-down"></i></span>
                                 <ul id="admissionId">
-                                    <li><a class="nav-link" asp-action="Search" asp-controller="Students">Honours Admission</a></li>
-                                    <li><a class="nav-link" asp-action="ProfessionalSearch" asp-controller="Students">Professional Admission (Under Graduate)</a></li>
-                                    <li><a class="nav-link" asp-action="MastersSearch" asp-controller="Students">Professional Admission (MBA)</a></li>
-                                    <li><a class="nav-link" asp-action="MastersSearchGeneral" asp-controller="Students">Master's Admission (Regular)</a></li>
-                                    <li><a class="nav-link" asp-action="DegreeSearch" asp-controller="Students">Degree Pass Application</a></li>
+                                    @foreach (var item in studentPaymentTypeList.Where(s => s.Status == true))
+                                    {
+                                        <li><a class="nav-link" href="/Students/Search?studentPaymentTypeId=@item.Id"> @item.StudentCategory.CategoryName @item.PaymentType.PaymentTypeName (@item.AcademicSession.SessionName)</a></li>
+                                    }
                                 </ul>
                             </li>
                         </ul>

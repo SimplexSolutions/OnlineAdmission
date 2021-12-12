@@ -15,7 +15,7 @@ namespace OnlineAdmission.DAL.IRepository
         Task<MeritStudent> GetProByAdmissionRollAsync(int NuRoll); //student categroy = 2
         Task<MeritStudent> GetGenMastersByAdmissionRollAsync(int NuRoll); //student categroy = 4
         Task<MeritStudent> GetDegreeByAdmissionRollAsync(int NuRoll); //student categroy = 5
-
+        Task<MeritStudent> GetMeritStudentAsync(int nuRoll, int studentCategoryId, int meritTypeId, int sessionId);
 
         Task<bool> UploadMeritStudentsAsync(List<MeritStudent> meritStudents);
         Task<List<MeritStudent>> GetAppliedStudentAsync(); //Student will filterd with subject Code=0

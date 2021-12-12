@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineAdmission.BLL.IManager;
+using OnlineAdmission.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,15 +12,24 @@ namespace OnlineAdmission.APP.Controllers
 {
     public class StudentPaymentTypesController : Controller
     {
-        private readonly IStudentPaymentTypeManager _paymentTypeManager;
-
-        public StudentPaymentTypesController(IStudentPaymentTypeManager paymentTypeManager)
+        private readonly IStudentPaymentTypeManager _studentPaymentTypeManager;
+        private readonly IStudentCategoryManager _studentCategoryManager;
+        private readonly IMeritTypeManager _meritTypeManager;
+        private readonly IPaymentTypeManager _paymentTypeManager;
+        private readonly IAcademicSessionManager _academicSessionManager;
+        public StudentPaymentTypesController(IStudentPaymentTypeManager studentPaymentTypeManager, IAcademicSessionManager academicSessionManager, IPaymentTypeManager paymentTypeManager, IMeritTypeManager meritTypeManager, IStudentCategoryManager studentCategoryManager)
         {
+            _studentPaymentTypeManager = studentPaymentTypeManager;
+            _meritTypeManager = meritTypeManager;
+            _studentCategoryManager = studentCategoryManager;
             _paymentTypeManager = paymentTypeManager;
+            _academicSessionManager = academicSessionManager;
+
         }
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var paymentTypes = await _studentPaymentTypeManager.GetAllAsync();
+            return View(paymentTypes);
         }
 
         // GET: StudentPaymentTypesController/Details/5
@@ -28,24 +39,46 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         // GET: StudentPaymentTypesController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
+            ViewBag.StudentCategoryId = new SelectList(await _studentCategoryManager.GetAllAsync(), "Id", "CategoryName");
+            ViewBag.MeritTypeId = new SelectList(await _meritTypeManager.GetAllAsync(), "Id", "MeritTypeName");
+            ViewBag.PaymentTypeId = new SelectList(await _paymentTypeManager.GetAllAsync(), "Id", "PaymentTypeName");
+            ViewBag.AcademicSessionId = new SelectList(await _academicSessionManager.GetAllAsync(), "Id", "SessionName");
             return View();
         }
 
         // POST: StudentPaymentTypesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(StudentPaymentType model)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    model.CreatedAt = DateTime.Now;
+                    model.CreatedBy = HttpContext.Session.GetString("UserId");
+                    bool isSaved = await _studentPaymentTypeManager.AddAsync(model);
+                    if (isSaved)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                    ViewBag.msg = "Not created";
+                }
+                catch
+                {
+
+                }
             }
-            catch
-            {
-                return View();
-            }
+            
+
+            ViewBag.StudentCategoryId = new SelectList(await _studentCategoryManager.GetAllAsync(), "Id", "CategoryName", model.StudentCategoryId);
+            ViewBag.MeritTypeId = new SelectList(await _meritTypeManager.GetAllAsync(), "Id", "MeritTypeName", model.MeritTypeId);
+            ViewBag.PaymentTypeId = new SelectList(await _paymentTypeManager.GetAllAsync(), "Id", "PaymentTypeName", model.PaymentTypeId);
+            ViewBag.AcademicSessionId = new SelectList(await _academicSessionManager.GetAllAsync(), "Id", "SessionName", model.AcademicSessionId);
+
+            return View(model);
         }
 
         // GET: StudentPaymentTypesController/Edit/5

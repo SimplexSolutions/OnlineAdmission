@@ -79,5 +79,10 @@ namespace OnlineAdmission.BLL.Manager
         {
             return await _meritStudentRepository.UploadMeritStudentsAsync(meritStudents);
         }
+
+        public async Task<MeritStudent> GetMeritStudentAsync(int nuRoll, int studentCategoryId, int meritTypeId, int sessionId)
+        {
+            return await _meritStudentRepository.GetMeritStudentAsync(nuRoll, studentCategoryId, meritTypeId, sessionId);
+        }
     }
 }
