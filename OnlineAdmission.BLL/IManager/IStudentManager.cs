@@ -9,7 +9,7 @@ namespace OnlineAdmission.BLL.IManager
 {
     public interface IStudentManager : IManager<Student>
     {
-
+        Task<Student> GetStudentAsync(int nuRoll, int studentCategoryId, int academicSessionId);
         Task<Student> GetStudentByHSCRollAsync(long hscRoll);
         Task<Student> GetStudentBySSCRollAsync(int hscRoll, string boardName);
         Task<int> GetCountAsync(int subjectCode);

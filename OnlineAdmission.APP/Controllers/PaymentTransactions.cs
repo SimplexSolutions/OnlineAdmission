@@ -76,8 +76,8 @@ namespace OnlineAdmission.APP.Controllers
                     ServiceCharge = MerchantInfo.ServiceCharge,
                     StudentName = MerchantInfo.StudentName,
                     MobileNumber = MerchantInfo.MobileNo,
-                    StudentCategory = MerchantInfo.StudentCategory,
-                    PaymentType = MerchantInfo.PaymentType
+                    StudentCategoryId = MerchantInfo.StudentCategory,
+                    PaymentTypeId = MerchantInfo.PaymentType
                     };
                 //newPayment.ApplicantName = MerchantInfo.StudentName;
                 //newPayment.MobileNo = MerchantInfo.MobileNo;
@@ -93,24 +93,24 @@ namespace OnlineAdmission.APP.Controllers
                 PaymentTransaction exPT = await paymentTransactionManager.GetPaymentTransactionByTrId(newPayment.TransactionId);
                 if (exPT!=null)
                 {
-                    if (newPayment.StudentCategory==1)
+                    if (newPayment.StudentCategoryId==1)
                     {
                         
                         return RedirectToAction("Search", "Students");
                     }
-                    else if (newPayment.StudentCategory==2)
+                    else if (newPayment.StudentCategoryId==2)
                     {
                         return RedirectToAction("ProfessionalSearch", "Students");
                     }
-                    else if (newPayment.StudentCategory == 3)
+                    else if (newPayment.StudentCategoryId == 3)
                     {
                         return RedirectToAction("MastersSearch", "Students");
                     }
-                    else if (newPayment.StudentCategory == 4)
+                    else if (newPayment.StudentCategoryId == 4)
                     {
                         return RedirectToAction("MastersSearchGeneral", "Students");
                     }
-                    else if (newPayment.StudentCategory == 5)
+                    else if (newPayment.StudentCategoryId == 5)
                     {
                         return RedirectToAction("DegreeSearch", "Students");
                     }
@@ -118,7 +118,7 @@ namespace OnlineAdmission.APP.Controllers
                 await paymentTransactionManager.AddAsync(newPayment);
 
                 MeritStudent meritStudent = new MeritStudent();
-                meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll), (int)newPayment.StudentCategory, MerchantInfo.meritType);
+                meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll), (int)newPayment.StudentCategoryId, MerchantInfo.meritType);
 
                 //if (newPayment.StudentCategory == 1)
                 //{
@@ -151,21 +151,21 @@ namespace OnlineAdmission.APP.Controllers
                 //For Common Code
                 if (meritStudent != null)
                 {
-                    if (newPayment.PaymentType==2)
+                    if (newPayment.PaymentTypeId==2)
                     {
                         meritStudent.PaymentStatus = true;
                     }
                     
                     meritStudent.PaymentTransactionId = newPayment.Id;
-                    meritStudent.StudentCategoryId = newPayment.StudentCategory;
+                    meritStudent.StudentCategoryId = newPayment.StudentCategoryId;
                     await meritStudentManager.UpdateAsync(meritStudent);
                 }
                 
 
-                if (newPayment.StudentCategory == 1) //For Hon's General Student
+                if (newPayment.StudentCategoryId == 1) //For Hon's General Student
                 {
                     //AppliedStudent newStudent = await appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll);
-                    AppliedStudent newStudent = await _appliedStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll), (int)newPayment.StudentCategory);
+                    AppliedStudent newStudent = await _appliedStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll), (int)newPayment.StudentCategoryId);
                     phoneNumber = newStudent.MobileNo.ToString();
                     msgText = "Congratulations! " + newStudent.ApplicantName + "(NU Roll:" + newStudent.NUAdmissionRoll + ") , your admission payment is successfully paid";
                 }

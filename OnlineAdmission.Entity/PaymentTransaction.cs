@@ -42,10 +42,15 @@ namespace OnlineAdmission.Entity
         //StudentCategory = 1 = hon's Student
         //StudentCategory = 2 = professional Student
         //StudentCategory = 3 = Masters
-        public int? StudentCategory { get; set; }
+        public int? StudentCategoryId { get; set; }
+        public StudentCategory StudentCategory { get; set; }
 
         //Application Fee = 1
         //Addmission Fee = 2
-        public int? PaymentType { get; set; }
+        public int? PaymentTypeId { get; set; }
+        public PaymentType PaymentType { get; set; }
+
+        public int? AcademicSessionId { get; set; }
+        public AcademicSession AcademicSession { get; set; }
     }
 }

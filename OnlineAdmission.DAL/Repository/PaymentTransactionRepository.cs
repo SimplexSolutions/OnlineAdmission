@@ -32,12 +32,12 @@ namespace OnlineAdmission.DAL.Repository
 
         public async Task<PaymentTransaction> GetApplicationTransactionByNuRollAsync(int nuRoll, int studentCategory)
         {
-            return await _context.PaymentTransactions.FirstOrDefaultAsync(p => p.ReferenceNo == nuRoll && p.StudentCategory == studentCategory && p.PaymentType == 1);
+            return await _context.PaymentTransactions.FirstOrDefaultAsync(p => p.ReferenceNo == nuRoll && p.StudentCategoryId == studentCategory && p.PaymentTypeId == 1);
         }
 
         public async Task<PaymentTransaction> GetAdmissionTrByNuRoll(int nuRoll, int studentCategory)
         {
-            return await _context.PaymentTransactions.FirstOrDefaultAsync(p => p.ReferenceNo == nuRoll && p.StudentCategory == studentCategory && p.PaymentType == 2);
+            return await _context.PaymentTransactions.FirstOrDefaultAsync(p => p.ReferenceNo == nuRoll && p.StudentCategoryId == studentCategory && p.PaymentTypeId == 2);
         }
 
         public async Task<PaymentTransaction> GetPaymentTransactionByTrId(string transactionId)
@@ -49,6 +49,11 @@ namespace OnlineAdmission.DAL.Repository
         public async Task<List<PaymentTransaction>> GetAllPaymentTrancsactionByNuRoll(int nuRoll)
         {
             return await _context.PaymentTransactions.Where(p => p.ReferenceNo == nuRoll).ToListAsync();
+        }
+
+        public async Task<List<PaymentTransaction>> GetPaymentTransactionsAsync(int nuRoll, int studentCategoryId, int academicSessionId, int paymentTypeId)
+        {
+            return await _context.PaymentTransactions.Where(p => p.ReferenceNo == nuRoll && p.StudentCategoryId == studentCategoryId && p.AcademicSessionId == academicSessionId && p.PaymentTypeId == paymentTypeId).ToListAsync();
         }
     }
 }

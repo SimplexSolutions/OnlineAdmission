@@ -622,21 +622,18 @@ namespace OnlineAdmission.APP.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Search(StudentDynamicInfoVM model /*int NuAdmissionRoll, string meritType, int stuPaymentTypeId*/)
+        public async Task<IActionResult> Search(StudentDynamicInfoVM model)
         {
-            //var studentPaymentType = await _studentPaymentTypeManager.GetByIdAsync(stuPaymentTypeId);
-            //StudentDynamicInfoVM studentDynamicInfoVM = new StudentDynamicInfoVM();
-            //if (studentPaymentType != null)
-            //{
-            //studentDynamicInfoVM.NuRoll = NuAdmissionRoll;
-            //studentDynamicInfoVM.CategoryId = studentPaymentType.StudentCategoryId;
-            //studentDynamicInfoVM.SessionId = studentPaymentType.AcademicSessionId;
-            //studentDynamicInfoVM.MeritTypeId = (int)studentPaymentType.MeritTypeId;
-            //studentDynamicInfoVM.PaymentTypeId = studentPaymentType.PaymentTypeId;
-            //}
 
             if (model.NuRoll>0)
             {
+                var admittedStu = await _studentManager.GetStudentAsync(model.NuRoll, model.CategoryId, model.SessionId);
+                if (admittedStu != null)
+                {
+                    ViewBag.alreadyAdmittedStudent = admittedStu;
+
+                    return View(model);
+                }
                 var meritStudent = await _meritStudentManager.GetMeritStudentAsync(model.NuRoll,model.CategoryId,model.MeritType.Id,model.SessionId);
                 
                 if (meritStudent==null)
@@ -645,7 +642,7 @@ namespace OnlineAdmission.APP.Controllers
                     return View();
                 }
 
-                var appliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(model.NuRoll, (int)meritStudent.StudentCategoryId, model.SessionId);
+                var appliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(model.NuRoll, model.CategoryId, model.SessionId);
                 if (appliedStudent == null)
                 {
 
@@ -666,6 +663,8 @@ namespace OnlineAdmission.APP.Controllers
                
                 if (selectedStudent != null)
                 {
+                    
+
                     var admittedStudent =await _studentManager.GetStudentByHSCRollAsync(selectedStudent.MeritStudent.HSCRoll);
                     if (admittedStudent != null)
                     {
@@ -1220,7 +1219,7 @@ namespace OnlineAdmission.APP.Controllers
                 OrderId = nuRoll + "" + ChangedSubject.Code + "" + DateTime.Now.ToString("HHmmss");
 
                 var payments = await _paymentTransactionManager.GetAllPaymentTrancsactionByNuRoll(nuRoll);
-                var paidForAdmission = payments.Where(p => p.PaymentType == 2).Sum(p => p.AdmissionFee);
+                var paidForAdmission = payments.Where(p => p.PaymentTypeId == 2).Sum(p => p.AdmissionFee);
                 paymentForSubjectChange = ChangedSubject.AdmissionFee - paidForAdmission;
             }
             //}

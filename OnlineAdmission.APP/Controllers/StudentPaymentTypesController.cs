@@ -82,24 +82,39 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         // GET: StudentPaymentTypesController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var model = await _studentPaymentTypeManager.GetByIdAsync(id);
+
+            ViewBag.StudentCategoryId = new SelectList(await _studentCategoryManager.GetAllAsync(), "Id", "CategoryName", model.StudentCategoryId);
+            ViewBag.MeritTypeId = new SelectList(await _meritTypeManager.GetAllAsync(), "Id", "MeritTypeName", model.MeritTypeId);
+            ViewBag.PaymentTypeId = new SelectList(await _paymentTypeManager.GetAllAsync(), "Id", "PaymentTypeName", model.PaymentTypeId);
+            ViewBag.AcademicSessionId = new SelectList(await _academicSessionManager.GetAllAsync(), "Id", "SessionName", model.AcademicSessionId);
+            return View(model);
         }
 
         // POST: StudentPaymentTypesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, StudentPaymentType model)
         {
-            try
+            if (id != model.Id)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
+            if (ModelState.IsValid)
             {
-                return View();
+                model.UpdatedAt = DateTime.Now;
+                model.UpdatedBy = HttpContext.Session.GetString("UserId");
+
+                bool isUpdated = await _studentPaymentTypeManager.UpdateAsync(model);
+                if (isUpdated)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
             }
+            
+            return View();
         }
 
         // GET: StudentPaymentTypesController/Delete/5
