@@ -11,6 +11,7 @@ namespace OnlineAdmission.APP.ViewModels.Student
         public int NuRoll { get; set; }
         public int CategoryId { get; set; }
         public int SessionId { get; set; }
+        public int MeritTypeId { get; set; }
         public MeritType MeritType { get; set; }
         public int PaymentTypeId { get; set; }
         public int StudentPaymentTypeId { get; set; }

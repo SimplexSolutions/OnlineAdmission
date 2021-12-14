@@ -48,7 +48,7 @@ namespace OnlineAdmission.Entity
         //Application Fee = 1
         //Addmission Fee = 2
         public int? PaymentTypeId { get; set; }
-        public PaymentType PaymentType { get; set; }
+        //public PaymentType PaymentType { get; set; }
 
         public int? AcademicSessionId { get; set; }
         public AcademicSession AcademicSession { get; set; }

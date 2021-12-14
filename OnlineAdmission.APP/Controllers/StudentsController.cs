@@ -157,89 +157,16 @@ namespace OnlineAdmission.APP.Controllers
             //return View(AdmittedStudents.Where(s => s.Status==true));
             return View(await PaginatedList<Student>.CreateAsync(students, page, pageSize));
         }
-        //[HttpGet]
-        //[Authorize(Roles = "SuperAdmin")]
-        //public async Task<IActionResult> SendSMS(int studentCategory)
-        //{
-        //    var user = await _userManager.GetUserAsync(HttpContext.User);
-        //    HttpContext.Session.SetString("UserId", user.Id);
 
-        //    //var AdmittedStudents = await _studentManager.GetAllAsync();
-        //    //var studentCategoryFromSession = HttpContext.Session.GetString("studentCategory");
-
-        //   // var AdmittedStudents= new 
-        //    //if (studentCategory > 0)
-        //    //{
-        //    //    ViewBag.category = studentCategory;
-        //    //    HttpContext.Session.SetString("studentCategory", studentCategory.ToString());
-        //      var  AdmittedStudents = await _studentManager.GetStudentsByCategoryAsync(studentCategory);
-        //    //}
-        //    //else if (studentCategory == 0)
-        //    //{
-        //    //    HttpContext.Session.SetString("studentCategory", studentCategory.ToString());
-        //    //}
-        //    //else if (!string.IsNullOrEmpty(studentCategoryFromSession))
-        //    //{
-        //    //    ViewBag.category = Convert.ToInt32(studentCategoryFromSession);
-        //    //    AdmittedStudents = await _studentManager.GetStudentsByCategoryAsync(Convert.ToInt32(studentCategoryFromSession));
-        //    //}
-        //    //else
-        //    //{
-        //    //    HttpContext.Session.SetString("studentCategory", "");
-        //    //}
-        //    //int count = await _studentManager.GetCountAsync(AdmittedStudents..Id);
-
-        //    StudentIndexVM studentIndexVM = new StudentIndexVM();
-        //    studentIndexVM.Students = AdmittedStudents.Where(s => s.Status == true).ToList();
-
-
-        //    //ViewBag.StudentCategoryList = new SelectList(await _studentCategoryManager.GetAllAsync(), "Id", "CategoryName", studentIndexVM.StudentCategory);
-        //    //return View(AdmittedStudents.Where(s => s.Status==true));
-        //    return View(studentIndexVM);
-        //}
 
         // GET: StudentsController/Create
-        [AllowAnonymous]
-        public async Task<ActionResult> Create(int nuAdmissionRoll, int studentCategory)
+        [AllowAnonymous, HttpGet]
+        public async Task<ActionResult> Create(StudentDynamicInfoVM model)
         {
-            if (nuAdmissionRoll>0)
+            if (model.NuRoll>0)
             {
-                ViewBag.studentCategory = studentCategory;
-                string action = "Search";
-                MeritStudent existingMeritStudent = new MeritStudent();
-                if (studentCategory==2) //For Hon's Prfessional Student
-                {
-                    existingMeritStudent = await _meritStudentManager.GetProByAdmissionRollAsync(nuAdmissionRoll);
-                    action = "ProfessionalSearch";
-                }
-                else if (studentCategory==3) //For Master's Professional MBA Student
-                {
-                    existingMeritStudent = await _meritStudentManager.GetProMBAByAdmissionRollAsync(nuAdmissionRoll);
-                    action = "MastersSearch";
-                }
-                else if (studentCategory==4) //For Master's Professional MBA Student
-                {
-                    existingMeritStudent = await _meritStudentManager.GetGenMastersByAdmissionRollAsync(nuAdmissionRoll);
-                    action = "MastersSearchGeneral";
-                }
-                else if (studentCategory == 5) //For Master's Professional MBA Student
-                {
-                    existingMeritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(nuAdmissionRoll);
-                    action = "DegreeSearch";
-                }
-                else // for Hon's General Student
-                {
-                    existingMeritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(nuAdmissionRoll);
-                }
-
-                //var addmissionPayment = await _paymentTransactionManager.GetAdmissionTrByNuRoll(nuAdmissionRoll, studentCategory);
-                //if (addmissionPayment==null)
-                //{
-                //    TempData["msg"] = "Your payment is not completed yet.";
-                //    return RedirectToAction(action, "Students");
-                //}
-
-                var existingAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuAdmissionRoll, studentCategory);
+                MeritStudent existingMeritStudent = await _meritStudentManager.GetMeritStudentAsync(model.NuRoll, model.CategoryId,model.MeritTypeId, model.SessionId);
+                var existingAppliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(model.NuRoll, model.CategoryId, model.SessionId);
                 var existingSubject = await _subjectManager.GetByCodeAsync(existingMeritStudent.SubjectCode);
 
                 string year = DateTime.Today.ToString("yyyy");
@@ -256,7 +183,7 @@ namespace OnlineAdmission.APP.Controllers
                 student.HSCRoll = existingMeritStudent.HSCRoll;
                 student.SubjectId = existingSubject.Id;
                 student.Subject = existingSubject;
-                student.NuAdmissionRoll = nuAdmissionRoll;
+                student.NuAdmissionRoll = model.NuRoll;
                 student.StudentCategory = (int)existingMeritStudent.StudentCategoryId;
                 if (subjectCode < 10)
                 {
@@ -590,9 +517,13 @@ namespace OnlineAdmission.APP.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Search(string notification, int studentPaymentTypeId)
         {
+            
             if (studentPaymentTypeId<=0)
             {
-                studentPaymentTypeId = 1;
+                var stuPayType = await _studentPaymentTypeManager.GetAllAsync();
+                studentPaymentTypeId = (from spt in stuPayType
+                                        where spt.Status == true
+                                        select spt.Id).FirstOrDefault();
             }
             var stuPaymentType = await _studentPaymentTypeManager.GetByIdAsync(studentPaymentTypeId);
             var meritType = await _meritTypeManager.GetByIdAsync((int)stuPaymentType.MeritTypeId);
@@ -600,6 +531,7 @@ namespace OnlineAdmission.APP.Controllers
             {
                 CategoryId = stuPaymentType.StudentCategoryId,
                 SessionId = stuPaymentType.AcademicSessionId,
+                MeritTypeId = (int)stuPaymentType.MeritTypeId,
                 MeritType = meritType,
                 PaymentTypeId = stuPaymentType.PaymentTypeId
             };
@@ -627,29 +559,49 @@ namespace OnlineAdmission.APP.Controllers
 
             if (model.NuRoll>0)
             {
+                if (model.NuRoll>9999999 || model.NuRoll<100000)
+                {
+                    ViewBag.invalidRoll = "You entered an invalid roll.";
+                    return View(model);
+                }
                 var admittedStu = await _studentManager.GetStudentAsync(model.NuRoll, model.CategoryId, model.SessionId);
                 if (admittedStu != null)
                 {
                     ViewBag.alreadyAdmittedStudent = admittedStu;
-
                     return View(model);
                 }
-                var meritStudent = await _meritStudentManager.GetMeritStudentAsync(model.NuRoll,model.CategoryId,model.MeritType.Id,model.SessionId);
+                var meritStudent = await _meritStudentManager.GetMeritStudentAsync(model.NuRoll,model.CategoryId,model.MeritTypeId,model.SessionId);
                 
                 if (meritStudent==null)
                 {
-                    ViewBag.msg = "You are not eligible";
+                    ViewBag.NotSelected = "Sorry! You are not eligible for admission.";
                     return View();
                 }
 
                 var appliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(model.NuRoll, model.CategoryId, model.SessionId);
                 if (appliedStudent == null)
                 {
-
-                    //ViewBag.msg = "You are not applied yet";
-                    ViewBag.msg = "Please submit your basic information.";
+                    ViewBag.provideAppliedInformation = "Please submit your basic information.";
                     ViewBag.infoCollection = true;
                     return View();
+                }
+
+                model.MeritStudent = meritStudent;
+                model.AppliedStudent = appliedStudent;
+                if (meritStudent.PaymentStatus == true)
+                {
+                    var existPayment = await _paymentTransactionManager.GetPaymentTransactionAsync(model.NuRoll, model.CategoryId, model.SessionId, model.PaymentTypeId);
+                    if (existPayment != null)
+                    {
+                        ViewBag.paidNotAdmitted = "Congratulations! Your payment is completed";
+                        return View(model);
+                    }
+                    ViewBag.paymentNotCompleted = "Your payment is not completed yet";
+                }
+                else
+                {
+                    ViewBag.paymentNotCompleted = "Your payment is not complete yet";
+                    return View(model);
                 }
 
                 var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
@@ -659,39 +611,6 @@ namespace OnlineAdmission.APP.Controllers
                     AppliedStudent = appliedStudent,
                     Subject = subject
                 };
-
-               
-                if (selectedStudent != null)
-                {
-                    
-
-                    var admittedStudent =await _studentManager.GetStudentByHSCRollAsync(selectedStudent.MeritStudent.HSCRoll);
-                    if (admittedStudent != null)
-                    {
-                        if (admittedStudent.Status==true)
-                        {
-                            ViewBag.DueAmount = false;
-                            ViewBag.msg = "Congratulations! You are already admitted.";
-                                                 
-                        }
-                        else
-                        {
-                            
-                            ViewBag.DueAmount = true;
-                            ViewBag.msg = "Your Subject Change is pending due to rest of payment";                            
-                        }
-                        ViewBag.admittedStudent = admittedStudent;
-                        return View();
-                    }
-                    else
-                    {
-                        return View(selectedStudent);
-                    }
-                }
-                else
-                {
-                    ViewBag.msg = "Sorry! Roll Number not found.";
-                }
             }
             else
             {
@@ -1186,9 +1105,9 @@ namespace OnlineAdmission.APP.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult> NagadPayment(int nuRoll, int studentCategory, int paymentType, int? subjectChange, string meritType)
+        public async Task<ActionResult> NagadPayment(StudentDynamicInfoVM model, int? subjectChange)
         {
-            if (nuRoll<=0)
+            if (model.NuRoll<= 0)
             {
                 _logger.LogWarning("NU Roll is Invalid");
                 return RedirectToAction("Search");
@@ -1196,13 +1115,13 @@ namespace OnlineAdmission.APP.Controllers
 
 
             string OrderId;
-            AppliedStudent appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll, studentCategory);
+            AppliedStudent appliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(model.NuRoll, model.CategoryId, model.SessionId);
             if (appliedStudent==null)
             {
                 _logger.LogWarning("Applied Student Not Found");
                 return RedirectToAction("Search");
             }
-            MeritStudent meritStudent = await _meritStudentManager.GetByAdmissionRollAsync(nuRoll, studentCategory, meritType);
+            MeritStudent meritStudent = await _meritStudentManager.GetMeritStudentAsync(model.NuRoll, model.CategoryId, model.MeritTypeId, model.SessionId);
             if (meritStudent == null)
             {
                 _logger.LogWarning("Merit Student Not Found");
@@ -1216,9 +1135,9 @@ namespace OnlineAdmission.APP.Controllers
             {
                 Student existingStudent = await _studentManager.GetStudentByHSCRollAsync(meritStudent.HSCRoll);
                 Subject ChangedSubject = await _subjectManager.GetByIdAsync(existingStudent.SubjectId);
-                OrderId = nuRoll + "" + ChangedSubject.Code + "" + DateTime.Now.ToString("HHmmss");
+                OrderId = model.NuRoll + "" + ChangedSubject.Code + "" + DateTime.Now.ToString("HHmmss");
 
-                var payments = await _paymentTransactionManager.GetAllPaymentTrancsactionByNuRoll(nuRoll);
+                var payments = await _paymentTransactionManager.GetAllPaymentTrancsactionByNuRoll(model.NuRoll);
                 var paidForAdmission = payments.Where(p => p.PaymentTypeId == 2).Sum(p => p.AdmissionFee);
                 paymentForSubjectChange = ChangedSubject.AdmissionFee - paidForAdmission;
             }
@@ -1339,7 +1258,9 @@ namespace OnlineAdmission.APP.Controllers
                 amount = totalAmount,
                 challenge = challenge,
                 subjectChange = subjectChange,
-                meritType = meritType
+                meritType = model.MeritTypeId,
+                sessionId = model.SessionId,
+                categoryId = model.CategoryId
             };
 
             string paymentJsonData = JsonConvert.SerializeObject(paymentJSON);
@@ -1366,9 +1287,9 @@ namespace OnlineAdmission.APP.Controllers
                 StudentName = appliedStudent.ApplicantName,
                 MobileNo = appliedStudent.MobileNo,
                 SubjectId = subject.Id,
-                NuAdmissionRoll = nuRoll,
-                StudentCategory= studentCategory,
-                PaymentType = paymentType
+                NuAdmissionRoll = model.NuRoll,
+                StudentCategory= model.CategoryId,
+                PaymentType = model.PaymentTypeId
             };
 
             var paymentFinalJSON = new

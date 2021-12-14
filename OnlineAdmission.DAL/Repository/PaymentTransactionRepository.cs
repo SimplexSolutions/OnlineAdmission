@@ -55,5 +55,10 @@ namespace OnlineAdmission.DAL.Repository
         {
             return await _context.PaymentTransactions.Where(p => p.ReferenceNo == nuRoll && p.StudentCategoryId == studentCategoryId && p.AcademicSessionId == academicSessionId && p.PaymentTypeId == paymentTypeId).ToListAsync();
         }
+
+        public async Task<PaymentTransaction> GetPaymentTransactionAsync(int nuRoll, int studentCategoryId, int academicSessionId, int paymentTypeId)
+        {
+            return await _context.PaymentTransactions.FirstOrDefaultAsync(p => p.ReferenceNo == nuRoll && p.StudentCategoryId == studentCategoryId && p.AcademicSessionId == academicSessionId && p.PaymentTypeId == paymentTypeId);
+        }
     }
 }

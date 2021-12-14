@@ -29,6 +29,7 @@
                                 <input asp-for="PaymentTypeId" type="hidden" />
                                 <input asp-for="SessionId" type="hidden" />
                                 <input asp-for="MeritType.Id" type="hidden" />
+                                <input asp-for="MeritTypeId" type="hidden" />
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="NuRoll">NU Roll</span>
@@ -41,6 +42,29 @@
                     </div>
                 </div>
             </div>
+            @if (ViewBag.invalidRoll != null)
+            {
+                <div class="card-footer">
+                    <div class="col-md-6 offset-3">
+                        <span class="alert alertify-notifier text-danger font-weight-bold">@ViewBag.invalidRoll</span>
+                    </div>
+                </div>
+            }
+            @if (ViewBag.provideAppliedInformation != null)
+            {
+                <div class="card-footer">
+                    <div class="col-md-6 offset-3">
+                        <span class="alert alertify-notifier">@ViewBag.provideAppliedInformation</span>
+                        <form asp-action="create" asp-controller="AppliedStudents" method="get">
+                            <input type="hidden" asp-for="NuRoll" />
+                            <input type="hidden" asp-for="CategoryId" />
+                            <input type="hidden" asp-for="SessionId" />
+                            <input type="hidden" asp-for="MeritTypeId" />
+                            <input class="btn btn-outline-info" type="submit" value="Give Information" />
+                        </form>
+                    </div>
+                </div>
+            }
             @if (ViewBag.alreadyAdmittedStudent != null)
             {
                 <div class="card-footer">
@@ -70,6 +94,44 @@
                 <div class="card-footer">
                     <div class="col-md-6 offset-3">
                         <a asp-action="Details" asp-controller="Students" asp-route-id="@ViewBag.alreadyAdmittedStudent.Id" class="btn btn-info">View admission form</a>
+                    </div>
+                </div>
+            }
+            @if (ViewBag.paidNotAdmitted != null)
+            {
+                <div class="card-footer">
+                    <div class="col-md-6 offset-3">
+                        <span class="alert alertify-notifier">@ViewBag.paidNotAdmitted</span>
+                        <form asp-action="create" asp-controller="Students" method="get">
+                            <input type="hidden" asp-for="NuRoll" />
+                            <input type="hidden" asp-for="CategoryId" />
+                            <input type="hidden" asp-for="SessionId" />
+                            <input type="hidden" asp-for="MeritTypeId" />
+                            <input class="btn btn-info" type="submit" value="Form Fillup" />
+                        </form>
+                    </div>
+                </div>
+            }
+            @if (ViewBag.NotSelected != null)
+            {
+                <div class="card-footer">
+                    <div class="col-md-6 offset-3">
+                        <span class="alert alertify-notifier text-danger font-weight-bold">@ViewBag.NotSelected</span>
+                    </div>
+                </div>
+            }
+            @if (ViewBag.paymentNotCompleted != null)
+            {
+                <div class="card-footer">
+                    <div class="col-md-6 offset-3">
+                        <span class="alert alertify-notifier text-warning font-weight-bold">@ViewBag.paymentNotCompleted</span>
+                        <form asp-action="NagadPayment" asp-controller="Students" method="get">
+                            <input type="hidden" asp-for="NuRoll" />
+                            <input type="hidden" asp-for="CategoryId" />
+                            <input type="hidden" asp-for="SessionId" />
+                            <input type="hidden" asp-for="MeritTypeId" />
+                            <input class="btn btn-info" type="submit" value="Go for Payment" />
+                        </form>
                     </div>
                 </div>
             }

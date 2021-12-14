@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineAdmission.APP.ViewModels.AppliedStudents;
+using OnlineAdmission.APP.ViewModels.Student;
 using OnlineAdmission.BLL.IManager;
 using OnlineAdmission.Entity;
 using System;
@@ -89,7 +90,7 @@ namespace OnlineAdmission.APP.Controllers
 
 
         [AllowAnonymous]
-        public async Task<IActionResult> Create( int nuRoll, int? studentCat, int? AcademicSessionId)
+        public async Task<IActionResult> Create(StudentDynamicInfoVM model, int nuRoll, int? studentCat, int? AcademicSessionId)
         {
             string Action = "Search";
             ViewBag.returnAction = Action;
