@@ -94,46 +94,47 @@ namespace OnlineAdmission.APP.Controllers
         {
             string Action = "Search";
             ViewBag.returnAction = Action;
-            if (studentCat == 3)
-            {
-                ViewBag.studentCategory = 3;
-                Action = "MastersSearch";
-                ViewBag.studentCategoryName = "Masters(MBA)";
-                ViewBag.returnAction = Action;
-            }
-            else if (studentCat == 2)
-            {
-                ViewBag.studentCategory = 2;
-                Action = "ProfessionalSearch";
-                ViewBag.studentCategoryName = "Honors(Prfessional)";
-                ViewBag.returnAction = Action;
-            }
-            else if (studentCat == 4)
-            {
-                ViewBag.studentCategory = 4;
-                Action = "MastersSearchGeneral";
-                ViewBag.studentCategoryName = "Masters(General)";
-                ViewBag.returnAction = Action;
-            }
-            else if (studentCat == 5)
-            {
-                ViewBag.studentCategory = 5;
-                Action = "DegreeSearch";
-                ViewBag.studentCategoryName = "Degree (Pass Course)";
-                ViewBag.returnAction = Action;
-            }
-            else
-            {
-                ViewBag.studentCategory = 1;
-                Action = "Search";
-                ViewBag.studentCategoryName = "General";
-                ViewBag.returnAction = Action;
-            }
+            //if (studentCat == 3)
+            //{
+            //    ViewBag.studentCategory = 3;
+            //    Action = "MastersSearch";
+            //    ViewBag.studentCategoryName = "Masters(MBA)";
+            //    ViewBag.returnAction = Action;
+            //}
+            //else if (studentCat == 2)
+            //{
+            //    ViewBag.studentCategory = 2;
+            //    Action = "ProfessionalSearch";
+            //    ViewBag.studentCategoryName = "Honors(Prfessional)";
+            //    ViewBag.returnAction = Action;
+            //}
+            //else if (studentCat == 4)
+            //{
+            //    ViewBag.studentCategory = 4;
+            //    Action = "MastersSearchGeneral";
+            //    ViewBag.studentCategoryName = "Masters(General)";
+            //    ViewBag.returnAction = Action;
+            //}
+            //else if (studentCat == 5)
+            //{
+            //    ViewBag.studentCategory = 5;
+            //    Action = "DegreeSearch";
+            //    ViewBag.studentCategoryName = "Degree (Pass Course)";
+            //    ViewBag.returnAction = Action;
+            //}
+            //else
+            //{
+            //    ViewBag.studentCategory = 1;
+            //    Action = "Search";
+            //    ViewBag.studentCategoryName = "General";
+            //    ViewBag.returnAction = Action;
+            //}
 
-            var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll, (int)studentCat);
+           // var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll, (int)studentCat);
+            var existAppliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(model.NuRoll, model.CategoryId, model.SessionId);
             if (existAppliedStudent != null)
             {
-                TempData["msg"] = "You are already applied";
+                TempData["msg"] = "You have already applied";
                 return RedirectToAction(Action, "Students");
             }
             ViewBag.nuRoll = nuRoll;

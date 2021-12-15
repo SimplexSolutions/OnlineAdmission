@@ -10,9 +10,9 @@ namespace OnlineAdmission.DB.Migrations
                 name: "FK_AppliedStudents_AcademicSessions_AcademicSessionId",
                 table: "AppliedStudents");
 
-            migrationBuilder.DropIndex(
-                name: "IX_AppliedStudents_AcademicSessionId",
-                table: "AppliedStudents");
+            //migrationBuilder.DropIndex(
+            //    name: "IX_AppliedStudents_AcademicSessionId",
+            //    table: "AppliedStudents");
 
             migrationBuilder.DropColumn(
                 name: "AcademicSessionId",

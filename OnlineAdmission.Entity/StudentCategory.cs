@@ -11,6 +11,7 @@ namespace OnlineAdmission.Entity
     {
         [Display(Name="Category")]
         public string CategoryName { get; set; }
+        public string CategoryShortCode { get; set; }
         public ICollection<StudentPaymentType> StudentPaymentTypes { get; set; }
         public ICollection<AppliedStudent> AppliedStudents { get; set; }
         public ICollection<MeritStudent> MeritStudents { get; set; }

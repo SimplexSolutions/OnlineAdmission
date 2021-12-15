@@ -73,16 +73,46 @@ namespace OnlineAdmission.APP.Controllers
         // POST: PaymentTypesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, PaymentType paymentType)
         {
-            try
+            //try
+            //{
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //catch
+            //{
+            //    return View();
+            //}
+            if (id != paymentType.Id)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
+            if (ModelState.IsValid)
             {
-                return View();
+                var paymentTypeList = await _paymentTypeManager.GetAllAsync();
+                var paymentTypeExist = paymentTypeList.FirstOrDefault(p => p.PaymentTypeName==paymentType.PaymentTypeName && p.Id != id);
+                if (paymentTypeExist == null)
+                {
+                    try
+                    {
+                        paymentType.UpdatedAt = DateTime.Now;
+                        paymentType.UpdatedBy = HttpContext.Session.GetString("UserId");
+                        bool isSaved = await _paymentTypeManager.AddAsync(paymentType);
+                        if (isSaved)
+                        {
+                            return RedirectToAction(nameof(Index));
+                        }
+                        ViewBag.msg = "Not updated";
+                        return View(paymentType);
+                    }
+                    catch
+                    {
+                        return View();
+                    }
+                }
+                ViewBag.msg = "This session is already exist.";
             }
+            return View(paymentType);
         }
 
         // GET: PaymentTypesController/Delete/5
