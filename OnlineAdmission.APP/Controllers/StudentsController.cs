@@ -507,9 +507,15 @@ namespace OnlineAdmission.APP.Controllers
                 studentPaymentTypeId = (from spt in stuPayType
                                         where spt.Status == true
                                         select spt.Id).FirstOrDefault();
+                if (studentPaymentTypeId <= 0)
+                {
+                    studentPaymentTypeId = 1;
+                }
             }
             var stuPaymentType = await _studentPaymentTypeManager.GetByIdAsync(studentPaymentTypeId);
             var meritType = await _meritTypeManager.GetByIdAsync((int)stuPaymentType.MeritTypeId);
+            //var meritType = await _meritTypeManager.GetByIdAsync(1);
+            //StudentDynamicInfoVM studentDynamicInfoVM = new StudentDynamicInfoVM();
             StudentDynamicInfoVM studentDynamicInfoVM = new StudentDynamicInfoVM()
             {
                 CategoryId = stuPaymentType.StudentCategoryId,
@@ -520,7 +526,7 @@ namespace OnlineAdmission.APP.Controllers
             };
             //StudentCategory studentCategory = await _studentCategoryManager.GetByIdAsync(stuPaymentType.StudentCategoryId);
             ViewBag.FormTitle = stuPaymentType.StudentCategory.CategoryName + " " + stuPaymentType.PaymentType.PaymentTypeName + " " + (stuPaymentType.AcademicSession.SessionName);
-            
+
             if (TempData["msg"]!=null)
             {
                 ViewBag.msg = TempData["msg"].ToString();
@@ -544,7 +550,7 @@ namespace OnlineAdmission.APP.Controllers
             {
                 if (model.NuRoll>9999999 || model.NuRoll<100000)
                 {
-                    ViewBag.invalidRoll = "You entered an invalid roll.";
+                    ViewBag.invalidRoll = "Invalid roll. Please enter a valid roll";
                     return View(model);
                 }
                 var admittedStu = await _studentManager.GetStudentAsync(model.NuRoll, model.CategoryId, model.SessionId);
@@ -557,7 +563,7 @@ namespace OnlineAdmission.APP.Controllers
                 
                 if (meritStudent==null)
                 {
-                    ViewBag.NotSelected = "Sorry! You are not eligible for admission.";
+                    ViewBag.NotSelected = "Sorry! You are not selected for admission.";
                     return View();
                 }
 
@@ -573,15 +579,17 @@ namespace OnlineAdmission.APP.Controllers
                 model.AppliedStudent = appliedStudent;
                 if (meritStudent.PaymentStatus == true)
                 {
-                    var existPayment = await _paymentTransactionManager.GetPaymentTransactionAsync(model.NuRoll, model.CategoryId, model.SessionId, model.PaymentTypeId);
-                    if (existPayment != null)
-                    {
-                        ViewBag.paidNotAdmitted = "Congratulations! Your payment is completed";
-                        return View(model);
-                    }
-                    ViewBag.paymentNotCompleted = "Your payment is not completed yet";
+                    //var existPayment = await _paymentTransactionManager.GetPaymentTransactionAsync(model.NuRoll, model.CategoryId, model.SessionId, model.PaymentTypeId);
+                    //if (existPayment != null)
+                    //{
+                    //    ViewBag.paidNotAdmitted = "Congratulations! Your payment is completed";
+                    //    return View(model);
+                    //}
+                    //ViewBag.paymentNotCompleted = "Your payment is not completed yet";
+                    ViewBag.paidNotAdmitted = "Congratulations! Your payment is completed";
+                    return View(model);
                 }
-                else
+                else if (meritStudent.PaymentStatus == false)
                 {
                     ViewBag.paymentNotCompleted = "Your payment is not complete yet";
                     return View(model);
@@ -597,7 +605,7 @@ namespace OnlineAdmission.APP.Controllers
             }
             else
             {
-                ViewBag.msg = "Please insert a valid roll first.";
+                ViewBag.msg = "Please enter a valid roll.";
 
             }
             return View();
@@ -1112,7 +1120,9 @@ namespace OnlineAdmission.APP.Controllers
             }
             Subject subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
 
-            OrderId = meritStudent.NUAdmissionRoll + "" + meritStudent.SubjectCode + "" + DateTime.Now.ToString("HHmmss");
+           // OrderId = nuRoll.ToString() + "ProAdm" + DateTime.Now.ToString("HHmmss");
+            string paymentshortcode = model.CategoryShortCode + model.PaymentTypeShortCode;
+            OrderId = meritStudent.NUAdmissionRoll + "" + paymentshortcode + "" + DateTime.Now.ToString("HHmmss");
             double paymentForSubjectChange = 0.00;
             if (subjectChange==1)
             {

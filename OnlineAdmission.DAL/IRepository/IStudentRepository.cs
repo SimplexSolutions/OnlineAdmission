@@ -16,5 +16,7 @@ namespace OnlineAdmission.DAL.IRepository
         Task<Student> GetByCollegeRollAsync(int CollegeRoll);
         Task<List<Student>> GetStudentsByCategoryAsync(int stuCategory);
         IQueryable<Student> GetStudents();
+        Task<Student> GetStudentAsync(int nuRoll, int studentCategoryId, int academicSessionId);
+
     }
 }
