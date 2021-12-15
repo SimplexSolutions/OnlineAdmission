@@ -45,8 +45,9 @@ namespace OnlineAdmission.APP.Controllers
         private readonly ILogger<StudentsController> _logger;
         private readonly IStudentPaymentTypeManager _studentPaymentTypeManager;
         private readonly IMeritTypeManager _meritTypeManager;
+        private readonly IAcademicSessionManager _academicSessionManager;
 
-        public StudentsController(IStudentManager studentManager, IWebHostEnvironment host, IMeritStudentManager meritStudentManager, IMapper mapper, IDistrictManager districtManager, ISubjectManager subjectManager, IAppliedStudentManager appliedStudentManager, IPaymentTransactionManager paymentTransactionManager, ISecurityKey securityKey, ISMSManager smsManager, UserManager<IdentityUser> userManager, IStudentCategoryManager studentCategoryManager, ILogger<StudentsController> logger, IStudentPaymentTypeManager studentPaymentTypeManager, IMeritTypeManager meritTypeManager)
+        public StudentsController(IStudentManager studentManager, IWebHostEnvironment host, IMeritStudentManager meritStudentManager, IMapper mapper, IDistrictManager districtManager, ISubjectManager subjectManager, IAppliedStudentManager appliedStudentManager, IPaymentTransactionManager paymentTransactionManager, ISecurityKey securityKey, ISMSManager smsManager, UserManager<IdentityUser> userManager, IStudentCategoryManager studentCategoryManager, ILogger<StudentsController> logger, IStudentPaymentTypeManager studentPaymentTypeManager, IMeritTypeManager meritTypeManager, IAcademicSessionManager academicSessionManager)
         {
             _studentManager = studentManager;
             _host = host;
@@ -63,6 +64,7 @@ namespace OnlineAdmission.APP.Controllers
             _logger = logger;
             _studentPaymentTypeManager = studentPaymentTypeManager;
             _meritTypeManager = meritTypeManager;
+            _academicSessionManager = academicSessionManager;
         }
 
         ApplicationAPI _api = new ApplicationAPI();
@@ -70,7 +72,7 @@ namespace OnlineAdmission.APP.Controllers
 
         // GET: StudentsController
         [Authorize(Roles = "Admin,SuperAdmin,Teacher")]
-        public async Task<IActionResult> Index(int studentCategory, string usrtext, string sortRoll, int page, int pagesize, int categorySubject, string meritType)
+        public async Task<IActionResult> Index(int studentCategory, string usrtext, int page, int pagesize, int categorySubject, int meritType)
         {
             IQueryable<Student> students = _studentManager.GetStudents();
             var studentCategoryFromSession = HttpContext.Session.GetString("studentCategory");
@@ -81,13 +83,13 @@ namespace OnlineAdmission.APP.Controllers
                 if (categorySubject>0)
                 {
                     students = students.Where(s => s.SubjectId == categorySubject);
-                    if (meritType!=null)
+                    if (meritType>0)
                     {
-                        var meritList = _meritStudentManager.GetMeritStudents();
-                        meritList = meritList.Where(m => m.StudentCategoryId == studentCategory && m.Comments.Trim().ToLower() == meritType.Trim().ToLower());
+                        var meritStudents = await _meritStudentManager.GetAllAsync();
+                        var selectedMeritList = meritStudents.Where(m => m.MeritTypeId == meritType).ToList();
 
                         students = from s in students
-                                   join m in meritList on s.NUAdmissionRoll equals m.NUAdmissionRoll
+                                   join m in selectedMeritList on s.NUAdmissionRoll equals m.NUAdmissionRoll
                                    select s;
                     }
                     
@@ -119,28 +121,10 @@ namespace OnlineAdmission.APP.Controllers
                 usrtext = usrtext.Trim();
                 students = students.Where(s => s.Name.Contains(usrtext) || s.CollegeRoll.ToString().Contains(usrtext) || s.NUAdmissionRoll.ToString().Contains(usrtext) || s.Subject.SubjectName.Contains(usrtext) || s.StudentMobile.ToString().Contains(usrtext));
             }
-            List<MeritTypeVM> mTypeList = new List<MeritTypeVM>();
-           
-            MeritTypeVM meritTypeVM1 = new MeritTypeVM() { 
-                MeritTypeName = "1st Merit List"
-            };
-            MeritTypeVM meritTypeVM2 = new MeritTypeVM()
-            {
-                MeritTypeName = "2nd Merit List"
-            };
-            MeritTypeVM meritTypeVM3 = new MeritTypeVM()
-            {
-                MeritTypeName = "Quota Merit List"
-            };
-            MeritTypeVM meritTypeVM4 = new MeritTypeVM()
-            {
-                MeritTypeName = "Release Slip"
-            };
-            mTypeList.Add(meritTypeVM1);
-            mTypeList.Add(meritTypeVM2);
-            mTypeList.Add(meritTypeVM3);
-            mTypeList.Add(meritTypeVM4);
-
+            
+            
+            ViewBag.MeritTypeList = new SelectList(await _meritTypeManager.GetAllAsync(), "Id", "MeritTypeName");
+            ViewBag.AcademicSessionList = new SelectList(await _academicSessionManager.GetAllAsync(), "Id", "SessionName");
 
             ViewBag.data = usrtext;
             ViewBag.action = "Index";
@@ -152,7 +136,6 @@ namespace OnlineAdmission.APP.Controllers
                 subList =subList.Where(s => s.StudentCategoryId == studentCategory).ToList();
             }
             ViewBag.SubjectList = new SelectList(subList, "Id", "SubjectName", categorySubject);
-            ViewBag.MeritList = new SelectList(mTypeList, "MeritTypeName", "MeritTypeName", meritType);
             ViewBag.Count = students.Count();
             //return View(AdmittedStudents.Where(s => s.Status==true));
             return View(await PaginatedList<Student>.CreateAsync(students, page, pageSize));
@@ -2574,6 +2557,12 @@ namespace OnlineAdmission.APP.Controllers
             return Json(subs);
         }
 
+        [AllowAnonymous]
+        public async Task<JsonResult> MeritTypeByStudentCategory(int sessionId, int categoryId)
+        {
+            var meritTypeList = await _meritTypeManager.GetAllAsync();
+            return Json("");
+        }
         //Nagad Addition Code here=======================================
 
         #region Helper Functions

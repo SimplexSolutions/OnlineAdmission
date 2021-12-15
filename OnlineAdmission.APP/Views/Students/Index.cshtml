@@ -16,6 +16,13 @@
     <div class="col-md-12">
         <form asp-action="Index" asp-controller="Students">
             <div class="form-group row">
+                <label for="studentCategoryId" class="col-form-label text-md-right px-3">Session</label>
+                <div class="pr-3">
+                    <select class="form-control-sm" asp-items="@ViewBag.AcademicSessionList" name="sessionId" id="academicSessionId">
+                        <option selected disabled>Select Session</option>
+                        <option value="0">All Session</option>
+                    </select>
+                </div>
                 <label for="studentCategoryId" class="col-form-label text-md-right px-3">Class of Student</label>
                 <div class="pr-3">
                     <select class="form-control-sm" asp-items="@ViewBag.StudentCategoryList" name="studentCategory" id="studentCategoryId" data-categoryId="@ViewBag.category">
@@ -31,15 +38,14 @@
                 </div>
                 <label class="px-3 col-form-label text-md-right">Merit Type</label>
                 <div class="pr-3">
-                    <select class="form-control-sm" asp-items="@ViewBag.MeritList" name="meritType" id="meritId" data-meritType="@ViewBag.meritType">
+                    <select class="form-control-sm" asp-items="@ViewBag.MeritTypeList" name="meritType" id="meritId">
                         <option selected disabled>Select Merit</option>
-                        
                     </select>
                 </div>
                 <button class="form-control-sm btn btn-sm btn-info">Show</button>
                 @if (ViewBag.Count!=null)
                 {
-                    <span class="pl-md-2">Total <span class="text-danger">@totalFound</span> found</span>
+                    <span class="pl-md-2">Total <span class="text-danger">@totalFound</span> Search</span>
                 }
             </div>
         </form>
