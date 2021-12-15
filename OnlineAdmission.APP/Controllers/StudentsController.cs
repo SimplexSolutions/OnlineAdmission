@@ -72,27 +72,31 @@ namespace OnlineAdmission.APP.Controllers
 
         // GET: StudentsController
         [Authorize(Roles = "Admin,SuperAdmin,Teacher")]
-        public async Task<IActionResult> Index(int studentCategory, string usrtext, int page, int pagesize, int categorySubject, int meritType)
+        public async Task<IActionResult> Index(int sessionId, int studentCategory, string usrtext, int page, int pagesize, int categorySubject, int meritType)
         {
             IQueryable<Student> students = _studentManager.GetStudents();
             var studentCategoryFromSession = HttpContext.Session.GetString("studentCategory");
             
             if (  studentCategory>0)
             {
+                if (sessionId>0)
+                {
+                    students = students.Where(s => s.AcademicSessionId == sessionId);
+                }
+
                 students = students.Where(s => s.StudentCategoryId == studentCategory);
                 if (categorySubject>0)
                 {
                     students = students.Where(s => s.SubjectId == categorySubject);
-                    if (meritType>0)
-                    {
-                        var meritStudents = await _meritStudentManager.GetAllAsync();
-                        var selectedMeritList = meritStudents.Where(m => m.MeritTypeId == meritType).ToList();
+                }
+                if (meritType > 0)
+                {
+                    var meritStudents = await _meritStudentManager.GetAllAsync();
+                    var selectedMeritList = meritStudents.Where(m => m.MeritTypeId == meritType).ToList();
 
-                        students = from s in students
-                                   join m in selectedMeritList on s.NUAdmissionRoll equals m.NUAdmissionRoll
-                                   select s;
-                    }
-                    
+                    students = from s in students
+                               join m in selectedMeritList on s.NUAdmissionRoll equals m.NUAdmissionRoll
+                               select s;
                 }
                 ViewBag.category = studentCategory;
                 ViewBag.subject = categorySubject;

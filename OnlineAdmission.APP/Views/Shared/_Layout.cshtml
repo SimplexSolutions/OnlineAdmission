@@ -3,9 +3,12 @@
 @inject SignInManager<IdentityUser> signInManager
 @inject UserManager<IdentityUser> userManager
 @inject IStudentPaymentTypeManager _studentPaymentTypeManager
+@inject IStudentCategoryManager _stuentCategoryManager
 
 @{ 
     var studentPaymentTypeList = await _studentPaymentTypeManager.GetAllAsync();
+    var studentCategoryList = await _stuentCategoryManager.GetAllAsync();
+    int subMenu = 0;
 }
 
 
@@ -71,14 +74,30 @@
                         }
 
                         <li>
-                            <a href="#paymentSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Payments</a>
-                            <ul class="collapse list-unstyled" id="paymentSubMenu">
+                            <a href="#paymentSubMenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Payments</a>
+                            <ul  id="paymentSubMenu1" class="list-unstyled">
+
                                 @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("Accounts"))
                                 {
                                     <li>
                                         <a asp-action="SummeryReport" asp-controller="Payments">Summery Report</a>
                                     </li>
                                     <li>
+                                        <a href="subMenuTopper" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">payments</a>
+                                        <ul class="collapse list-unstyled components" id="subMenuTopper">
+                                            @foreach (var item in studentCategoryList)
+                                            {
+                                                <li>
+                                                    <a href="subSubMenu_@(++subMenu)" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">@item.CategoryName</a>
+                                                    <ul class="list-unstyled components mb-5" id="subSubMenu_@(subMenu)">
+                                                        <li><a href="#">Application</a></li>
+                                                        <li><a href="#">Admission</a></li>
+                                                    </ul>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+                                    @*<li>
                                         <a asp-action="Index" asp-controller="Payments" asp-route-paymentType=1>Hons General (Application)</a>
                                     </li>
                                     <li>
@@ -104,7 +123,7 @@
                                     </li>
                                     <li>
                                         <a asp-action="DegreeIndex" asp-controller="Payments" asp-route-paymentType=1>Degree Pass Application</a>
-                                    </li>
+                                    </li>*@
                                 }
                                 @if (User.IsInRole("SuperAdmin"))
                                 {
