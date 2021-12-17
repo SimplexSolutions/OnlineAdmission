@@ -77,15 +77,19 @@ namespace OnlineAdmission.APP.Controllers
                     StudentName = MerchantInfo.StudentName,
                     MobileNumber = MerchantInfo.MobileNo,
                     StudentCategoryId = MerchantInfo.StudentCategory,
-                    PaymentTypeId = MerchantInfo.PaymentType
-                    };
+                    PaymentTypeId = MerchantInfo.PaymentType,
+                    AcademicSessionId=MerchantInfo.sessionId
+                };
                 //newPayment.ApplicantName = MerchantInfo.StudentName;
                 //newPayment.MobileNo = MerchantInfo.MobileNo;
                 //newPayment.SubjectId = MerchantInfo.SubjectId;
                 if (responsevalue.subjectChange == 1)
                 {
-                    MeritStudent existingMeritStudent = await meritStudentManager.GetHonsByAdmissionRollAsync(MerchantInfo.NuAdmissionRoll);
-                    var existingStudent = await _studentManager.GetStudentByHSCRollAsync(existingMeritStudent.HSCRoll);
+                   // MeritStudent existingMeritStudent = await meritStudentManager.GetHonsByAdmissionRollAsync(MerchantInfo.NuAdmissionRoll);
+                    MeritStudent existingMeritStudent= await meritStudentManager.GetMeritStudentAsync(MerchantInfo.MerchantInfo.NuAdmissionRoll, MerchantInfo.StudentCategory,
+                        MerchantInfo.meritType, MerchantInfo.sessionId);
+                    //var existingStudent = await _studentManager.GetStudentByHSCRollAsync(existingMeritStudent.HSCRoll);
+                    var existingStudent = await _studentManager.GetStudentAsync(MerchantInfo.NuAdmissionRoll, MerchantInfo.StudentCategory, MerchantInfo.sessionId);
                     existingStudent.Status = true;
                     await _studentManager.UpdateAsync(existingStudent);
                 }
@@ -93,32 +97,36 @@ namespace OnlineAdmission.APP.Controllers
                 PaymentTransaction exPT = await paymentTransactionManager.GetPaymentTransactionByTrId(newPayment.TransactionId);
                 if (exPT!=null)
                 {
-                    if (newPayment.StudentCategoryId==1)
-                    {
-                        
-                        return RedirectToAction("Search", "Students");
-                    }
-                    else if (newPayment.StudentCategoryId==2)
-                    {
-                        return RedirectToAction("ProfessionalSearch", "Students");
-                    }
-                    else if (newPayment.StudentCategoryId == 3)
-                    {
-                        return RedirectToAction("MastersSearch", "Students");
-                    }
-                    else if (newPayment.StudentCategoryId == 4)
-                    {
-                        return RedirectToAction("MastersSearchGeneral", "Students");
-                    }
-                    else if (newPayment.StudentCategoryId == 5)
-                    {
-                        return RedirectToAction("DegreeSearch", "Students");
-                    }
+                    return RedirectToAction("Search", "Students");
+                    //if (newPayment.StudentCategoryId==1)
+                    //{
+
+                    //    return RedirectToAction("Search", "Students");
+                    //}
+                    //else if (newPayment.StudentCategoryId==2)
+                    //{
+                    //    return RedirectToAction("ProfessionalSearch", "Students");
+                    //}
+                    //else if (newPayment.StudentCategoryId == 3)
+                    //{
+                    //    return RedirectToAction("MastersSearch", "Students");
+                    //}
+                    //else if (newPayment.StudentCategoryId == 4)
+                    //{
+                    //    return RedirectToAction("MastersSearchGeneral", "Students");
+                    //}
+                    //else if (newPayment.StudentCategoryId == 5)
+                    //{
+                    //    return RedirectToAction("DegreeSearch", "Students");
+                    //}
                 }
                 await paymentTransactionManager.AddAsync(newPayment);
 
-                MeritStudent meritStudent = new MeritStudent();
-                meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll), (int)newPayment.StudentCategoryId, MerchantInfo.meritType);
+                MeritStudent meritStudent = await meritStudentManager.GetMeritStudentAsync((int)MerchantInfo.NuAdmissionRoll, (int)MerchantInfo.StudentCategory,
+                        MerchantInfo.meritType, MerchantInfo.sessionId);
+                //MeritStudent meritStudent = new MeritStudent();
+                //meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll), (int)newPayment.StudentCategoryId, MerchantInfo.meritType);
+               // var meritStudent = await meritStudentManager.GetMeritStudentAsync(model.NuRoll, model.CategoryId, model.MeritTypeId, model.SessionId);
 
                 //if (newPayment.StudentCategory == 1)
                 //{
@@ -146,7 +154,7 @@ namespace OnlineAdmission.APP.Controllers
                 string msgText;
 
                 phoneNumber = MerchantInfo.MobileNo;
-                msgText = "Congratulations! your payment is successfully paid";
+                msgText = "Congratulations! your payment has been successfully paid";
 
                 //For Common Code
                 if (meritStudent != null)
@@ -154,22 +162,26 @@ namespace OnlineAdmission.APP.Controllers
                     if (newPayment.PaymentTypeId==2)
                     {
                         meritStudent.PaymentStatus = true;
-                    }
+                        meritStudent.PaymentTransactionId = newPayment.Id;
+                        meritStudent.StudentCategoryId = newPayment.StudentCategoryId;
+                        await meritStudentManager.UpdateAsync(meritStudent);
+                    }                   
                     
-                    meritStudent.PaymentTransactionId = newPayment.Id;
-                    meritStudent.StudentCategoryId = newPayment.StudentCategoryId;
-                    await meritStudentManager.UpdateAsync(meritStudent);
                 }
-                
 
-                if (newPayment.StudentCategoryId == 1) //For Hon's General Student
-                {
-                    //AppliedStudent newStudent = await appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll);
-                    AppliedStudent newStudent = await _appliedStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll), (int)newPayment.StudentCategoryId);
-                    phoneNumber = newStudent.MobileNo.ToString();
-                    msgText = "Congratulations! " + newStudent.ApplicantName + "(NU Roll:" + newStudent.NUAdmissionRoll + ") , your admission payment is successfully paid";
-                }
-                
+
+                //if (newPayment.StudentCategoryId == 1) //For Hon's General Student
+                //{
+                //    //AppliedStudent newStudent = await appliedStudentManager.GetByAdmissionRollAsync(meritStudent.NUAdmissionRoll);
+                //    //AppliedStudent newStudent = await _appliedStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll), (int)newPayment.StudentCategoryId);
+                //    AppliedStudent newStudent = await _appliedStudentManager.GetAppliedStudentAsync((int)MerchantInfo.NuAdmissionRoll, (int)newPayment.StudentCategoryId, MerchantInfo.sessionId);
+                //    phoneNumber = newStudent.MobileNo.ToString();
+                //    msgText = "Congratulations! " + newStudent.ApplicantName + "(NU Roll:" + newStudent.NUAdmissionRoll + ") , your admission payment is successfully paid";
+                //}
+
+                AppliedStudent newStudent = await _appliedStudentManager.GetAppliedStudentAsync((int)MerchantInfo.NuAdmissionRoll, (int)newPayment.StudentCategoryId, MerchantInfo.sessionId);
+                phoneNumber = newStudent.MobileNo.ToString();
+                msgText = "Congratulations! " + newStudent.ApplicantName + "(NU Roll:" + newStudent.NUAdmissionRoll + ") , your admission payment is successfully paid";
 
                 //////////Code for SMS Sending and Saving///
 
@@ -189,26 +201,28 @@ namespace OnlineAdmission.APP.Controllers
                     await _smsManager.AddAsync(newSMS);
                 }
 
-                if (MerchantInfo.StudentType == 1)
-                {
-                    return RedirectToAction("PaymentConfirmation", "Students", new { NuAdmissionRoll = newPayment.ReferenceNo, notification = successNotification });
-                }
-                if (MerchantInfo.StudentType==2)
-                {
-                    return RedirectToAction("ProfessionalSearch", "Students", new { professionalRoll = newPayment.ReferenceNo, notification = successNotification });
-                }
-                if (MerchantInfo.StudentType==3)
-                {
-                    return RedirectToAction("MastersSearch", "Students", new { mastersRoll = newPayment.ReferenceNo, notification = successNotification });
-                }
-                if (MerchantInfo.StudentType == 4)
-                {
-                    return RedirectToAction("MastersSearchGeneral", "Students", new { mastersRoll = newPayment.ReferenceNo, notification = successNotification });
-                }
-                if (MerchantInfo.StudentType == 5)
-                {
-                    return RedirectToAction("DegreeSearch", "Students", new { degreePassRoll = newPayment.ReferenceNo, notification = successNotification });
-                }
+                return RedirectToAction("PaymentConfirmation", "Students", new { NuAdmissionRoll = newPayment.ReferenceNo, notification = successNotification });
+
+                //if (MerchantInfo.StudentType == 1)
+                //{
+                //    return RedirectToAction("PaymentConfirmation", "Students", new { NuAdmissionRoll = newPayment.ReferenceNo, notification = successNotification });
+                //}
+                //if (MerchantInfo.StudentType==2)
+                //{
+                //    return RedirectToAction("ProfessionalSearch", "Students", new { professionalRoll = newPayment.ReferenceNo, notification = successNotification });
+                //}
+                //if (MerchantInfo.StudentType==3)
+                //{
+                //    return RedirectToAction("MastersSearch", "Students", new { mastersRoll = newPayment.ReferenceNo, notification = successNotification });
+                //}
+                //if (MerchantInfo.StudentType == 4)
+                //{
+                //    return RedirectToAction("MastersSearchGeneral", "Students", new { mastersRoll = newPayment.ReferenceNo, notification = successNotification });
+                //}
+                //if (MerchantInfo.StudentType == 5)
+                //{
+                //    return RedirectToAction("DegreeSearch", "Students", new { degreePassRoll = newPayment.ReferenceNo, notification = successNotification });
+                //}
             }
 
             return  Ok();

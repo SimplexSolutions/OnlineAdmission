@@ -9,16 +9,16 @@
         Layout = "~/Views/Shared/_LayoutStudent.cshtml";
     }
     string studentCategoryName = "";
-    if (ViewBag.studentCategoryName!=null)
-    {
-        studentCategoryName = ViewBag.studentCategoryName;
-    }
-    
-    int studentCategory = 1;
-    if (ViewBag.studentCategory!=null)
-    {
-        studentCategory = ViewBag.studentCategory;
-    }
+    //if (ViewBag.studentCategoryName!=null)
+    //{
+    //    studentCategoryName = ViewBag.studentCategoryName;
+    //}
+
+    //int studentCategory = 1;
+    //if (ViewBag.studentCategory!=null)
+    //{
+    //    studentCategory = ViewBag.studentCategory;
+    //}
  }
 
 <h4>@studentCategoryName Student Apply Form <br />(<span class="text-danger">Fill the form carefully as per your certificates since there is no scope for editing.</span>)</h4>
@@ -27,12 +27,13 @@
     <div class="col-md-12">
         <form asp-action="Create" asp-controller="AppliedStudents" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" name="nuRoll" value="@ViewBag.nuRoll" />
-            <input type="hidden" name="studentCat" value="@studentCategory" />
+            <input type="hidden" name="nuRoll" value="@Model.NUAdmissionRoll" />
+            <input type="hidden" name="StudentCategoryId" value="@Model.StudentCategoryId" />
+            <input type="hidden" name="AcademicSessionId" value="@Model.AcademicSessionId" />
             <div class="form-group row">
                 <label asp-for="NUAdmissionRoll" class="control-label col-md-2 text-right"></label>
                 <div class="col-md-10">
-                    <input readonly asp-for="NUAdmissionRoll" class="form-control" value="@ViewBag.nuRoll" />
+                    <input readonly asp-for="NUAdmissionRoll" class="form-control" value="@Model.NUAdmissionRoll" />
                     <span asp-validation-for="NUAdmissionRoll" class="text-danger"></span>
                 </div>
             </div>

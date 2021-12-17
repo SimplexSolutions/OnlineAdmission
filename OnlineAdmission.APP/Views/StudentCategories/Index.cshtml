@@ -15,7 +15,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.CategoryName)
             </th>
-
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryShortCode)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -24,6 +26,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryShortCode)
             </td>
 
             <td>

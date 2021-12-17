@@ -46,8 +46,12 @@ namespace OnlineAdmission.APP.Controllers
         private readonly IStudentPaymentTypeManager _studentPaymentTypeManager;
         private readonly IMeritTypeManager _meritTypeManager;
         private readonly IAcademicSessionManager _academicSessionManager;
+        private readonly IPaymentTypeManager _paymentTypeManager;
 
-        public StudentsController(IStudentManager studentManager, IWebHostEnvironment host, IMeritStudentManager meritStudentManager, IMapper mapper, IDistrictManager districtManager, ISubjectManager subjectManager, IAppliedStudentManager appliedStudentManager, IPaymentTransactionManager paymentTransactionManager, ISecurityKey securityKey, ISMSManager smsManager, UserManager<IdentityUser> userManager, IStudentCategoryManager studentCategoryManager, ILogger<StudentsController> logger, IStudentPaymentTypeManager studentPaymentTypeManager, IMeritTypeManager meritTypeManager, IAcademicSessionManager academicSessionManager)
+        public StudentsController(IStudentManager studentManager, IWebHostEnvironment host, IMeritStudentManager meritStudentManager, IMapper mapper, IDistrictManager districtManager, 
+            ISubjectManager subjectManager, IAppliedStudentManager appliedStudentManager, IPaymentTransactionManager paymentTransactionManager, ISecurityKey securityKey, ISMSManager smsManager, 
+            UserManager<IdentityUser> userManager, IStudentCategoryManager studentCategoryManager, ILogger<StudentsController> logger,IStudentPaymentTypeManager studentPaymentTypeManager, 
+            IMeritTypeManager meritTypeManager, IAcademicSessionManager academicSessionManager,IPaymentTypeManager paymentTypeManager)
         {
             _studentManager = studentManager;
             _host = host;
@@ -65,6 +69,7 @@ namespace OnlineAdmission.APP.Controllers
             _studentPaymentTypeManager = studentPaymentTypeManager;
             _meritTypeManager = meritTypeManager;
             _academicSessionManager = academicSessionManager;
+            _paymentTypeManager = paymentTypeManager;
         }
 
         ApplicationAPI _api = new ApplicationAPI();
@@ -518,6 +523,8 @@ namespace OnlineAdmission.APP.Controllers
             }
             var stuPaymentType = await _studentPaymentTypeManager.GetByIdAsync(studentPaymentTypeId);
             var meritType = await _meritTypeManager.GetByIdAsync((int)stuPaymentType.MeritTypeId);
+            var category = await _studentCategoryManager.GetByIdAsync((int)stuPaymentType.StudentCategoryId);
+            var paymentType = await _paymentTypeManager.GetByIdAsync((int)stuPaymentType.PaymentTypeId);
             //var meritType = await _meritTypeManager.GetByIdAsync(1);
             //StudentDynamicInfoVM studentDynamicInfoVM = new StudentDynamicInfoVM();
             StudentDynamicInfoVM studentDynamicInfoVM = new StudentDynamicInfoVM()
@@ -526,7 +533,9 @@ namespace OnlineAdmission.APP.Controllers
                 SessionId = stuPaymentType.AcademicSessionId,
                 MeritTypeId = (int)stuPaymentType.MeritTypeId,
                 MeritType = meritType,
-                PaymentTypeId = stuPaymentType.PaymentTypeId
+                PaymentTypeId = stuPaymentType.PaymentTypeId,
+                PaymentTypeShortCode=paymentType.PaymentTypeShortCode,
+                CategoryShortCode=category.CategoryShortCode
             };
             //StudentCategory studentCategory = await _studentCategoryManager.GetByIdAsync(stuPaymentType.StudentCategoryId);
             ViewBag.FormTitle = stuPaymentType.StudentCategory.CategoryName + " " + stuPaymentType.PaymentType.PaymentTypeName + " " + (stuPaymentType.AcademicSession.SessionName);
@@ -595,7 +604,7 @@ namespace OnlineAdmission.APP.Controllers
                 }
                 else if (meritStudent.PaymentStatus == false)
                 {
-                    ViewBag.paymentNotCompleted = "Your payment is not complete yet";
+                    ViewBag.paymentNotCompleted = "Your payment is not completed";
                     return View(model);
                 }
 
@@ -1130,9 +1139,9 @@ namespace OnlineAdmission.APP.Controllers
             double paymentForSubjectChange = 0.00;
             if (subjectChange==1)
             {
-                Student existingStudent = await _studentManager.GetStudentByHSCRollAsync(meritStudent.HSCRoll);
+                Student existingStudent = await _studentManager.GetStudentAsync(model.NuRoll,model.CategoryId,model.SessionId);
                 Subject ChangedSubject = await _subjectManager.GetByIdAsync(existingStudent.SubjectId);
-                OrderId = model.NuRoll + "" + ChangedSubject.Code + "" + DateTime.Now.ToString("HHmmss");
+                OrderId = model.NuRoll + "" + paymentshortcode + "" + DateTime.Now.ToString("HHmmss");
 
                 var payments = await _paymentTransactionManager.GetAllPaymentTrancsactionByNuRoll(model.NuRoll);
                 var paidForAdmission = payments.Where(p => p.PaymentTypeId == 2).Sum(p => p.AdmissionFee);
@@ -1253,11 +1262,7 @@ namespace OnlineAdmission.APP.Controllers
                 orderId = OrderId,
                 currencyCode = "050",
                 amount = totalAmount,
-                challenge = challenge,
-                subjectChange = subjectChange,
-                meritType = model.MeritTypeId,
-                sessionId = model.SessionId,
-                categoryId = model.CategoryId
+                challenge = challenge
             };
 
             string paymentJsonData = JsonConvert.SerializeObject(paymentJSON);
@@ -1286,7 +1291,10 @@ namespace OnlineAdmission.APP.Controllers
                 SubjectId = subject.Id,
                 NuAdmissionRoll = model.NuRoll,
                 StudentCategory= model.CategoryId,
-                PaymentType = model.PaymentTypeId
+                PaymentType = model.PaymentTypeId,
+                subjectChange = subjectChange,
+                meritType = model.MeritTypeId,
+                sessionId = model.SessionId
             };
 
             var paymentFinalJSON = new

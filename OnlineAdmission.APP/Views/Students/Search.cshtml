@@ -30,6 +30,8 @@
                                 <input asp-for="SessionId" type="hidden" />
                                 <input asp-for="MeritType.Id" type="hidden" />
                                 <input asp-for="MeritTypeId" type="hidden" />
+                                <input asp-for="PaymentTypeShortCode" type="hidden" />
+                                <input asp-for="CategoryShortCode" type="hidden" />
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="NuRoll">NU Roll</span>
@@ -53,7 +55,7 @@
             @if (ViewBag.provideAppliedInformation != null)
             {
                 <div class="card-footer">
-                    <div class="col-md-6 offset-3">
+                    <div class="col-md-6 offset-3">                        
                         <span class="alert alertify-notifier">@ViewBag.provideAppliedInformation</span>
                         <form asp-action="create" asp-controller="AppliedStudents" method="get">
                             <input type="hidden" asp-for="NuRoll" />
@@ -130,7 +132,9 @@
                             <input type="hidden" asp-for="CategoryId" />
                             <input type="hidden" asp-for="SessionId" />
                             <input type="hidden" asp-for="MeritTypeId" />
-                            <input class="btn btn-info" type="submit" value="Go for Payment" />
+                            <input type="hidden" asp-for="CategoryShortCode" />
+                            <input type="hidden" asp-for="PaymentTypeShortCode" />
+                            <input class="btn btn-info" type="submit" value="Make Payment" />
                         </form>
                     </div>
                 </div>

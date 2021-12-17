@@ -90,10 +90,17 @@ namespace OnlineAdmission.APP.Controllers
 
 
         [AllowAnonymous]
-        public async Task<IActionResult> Create(StudentDynamicInfoVM model, int nuRoll, int? studentCat, int? AcademicSessionId)
+        public async Task<IActionResult> Create(StudentDynamicInfoVM model)
         {
             string Action = "Search";
             ViewBag.returnAction = Action;
+            AppliedStudentVM student = new()
+            {
+                NUAdmissionRoll = model.NuRoll,
+                AcademicSessionId = model.SessionId,
+                StudentCategoryId = model.CategoryId
+            };
+
             //if (studentCat == 3)
             //{
             //    ViewBag.studentCategory = 3;
@@ -130,60 +137,61 @@ namespace OnlineAdmission.APP.Controllers
             //    ViewBag.returnAction = Action;
             //}
 
-           // var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll, (int)studentCat);
+            // var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(nuRoll, (int)studentCat);
             var existAppliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(model.NuRoll, model.CategoryId, model.SessionId);
             if (existAppliedStudent != null)
             {
                 TempData["msg"] = "You have already applied";
                 return RedirectToAction(Action, "Students");
             }
-            ViewBag.nuRoll = nuRoll;
-            return View();
+            //ViewBag.nuRoll = model.NuRoll;
+            return View(student);
         }
 
         [HttpPost, AllowAnonymous]
-        public async Task<IActionResult> Create(AppliedStudentVM vModel, int nuRoll, int? studentCat)
+        public async Task<IActionResult> Create(AppliedStudentVM vModel)
         {
             string Action = "Search";
             ViewBag.returnAction = Action;
-            if (studentCat == 3)
-            {
-                ViewBag.studentCategory = 3;
-                Action = "MastersSearch";
-                ViewBag.studentCategoryName = "Masters(MBA)";
-                ViewBag.returnAction = Action;
-            }
-            else if (studentCat == 2)
-            {
-                ViewBag.studentCategory = 2;
-                Action = "ProfessionalSearch";
-                ViewBag.studentCategoryName = "Honors(Prfessional)";
-                ViewBag.returnAction = Action;
-            }
-            else if (studentCat == 4)
-            {
-                ViewBag.studentCategory = 4;
-                Action = "MastersSearchGeneral";
-                ViewBag.studentCategoryName = "Masters(General)";
-                ViewBag.returnAction = Action;
-            }
-            else
-            {
-                ViewBag.studentCategory = 1;
-                Action = "Search";
-                ViewBag.studentCategoryName = "General";
-                ViewBag.returnAction = Action;
-            }
+            //if (studentCat == 3)
+            //{
+            //    ViewBag.studentCategory = 3;
+            //    Action = "MastersSearch";
+            //    ViewBag.studentCategoryName = "Masters(MBA)";
+            //    ViewBag.returnAction = Action;
+            //}
+            //else if (studentCat == 2)
+            //{
+            //    ViewBag.studentCategory = 2;
+            //    Action = "ProfessionalSearch";
+            //    ViewBag.studentCategoryName = "Honors(Prfessional)";
+            //    ViewBag.returnAction = Action;
+            //}
+            //else if (studentCat == 4)
+            //{
+            //    ViewBag.studentCategory = 4;
+            //    Action = "MastersSearchGeneral";
+            //    ViewBag.studentCategoryName = "Masters(General)";
+            //    ViewBag.returnAction = Action;
+            //}
+            //else
+            //{
+            //    ViewBag.studentCategory = 1;
+            //    Action = "Search";
+            //    ViewBag.studentCategoryName = "General";
+            //    ViewBag.returnAction = Action;
+            //}
 
-            
-            if (nuRoll != vModel.NUAdmissionRoll)
-            {
-                return RedirectToAction(Action, "Students");
-            }
-            ViewBag.nuRoll = nuRoll;
+
+            //if (nuRoll != vModel.NUAdmissionRoll)
+            //{
+            //    return RedirectToAction(Action, "Students");
+            //}
+           // ViewBag.nuRoll = nuRoll;
             if (ModelState.IsValid)
             {
-                var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(vModel.NUAdmissionRoll, (int)studentCat);
+                var existAppliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(vModel.NUAdmissionRoll,vModel.StudentCategoryId,vModel.AcademicSessionId);
+                //var existAppliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(vModel.NUAdmissionRoll, (int)studentCat);
                 var isMobileNumberUsed = await _appliedStudentManager.GetByMobileNumber(vModel.MobileNo);
                 if (isMobileNumberUsed!=null)
                 {
@@ -192,21 +200,20 @@ namespace OnlineAdmission.APP.Controllers
                 }
                 if (existAppliedStudent!=null)
                 {
-                    TempData["msg"] = "You are already applied";
+                    TempData["msg"] = "You have already applied";
                     return RedirectToAction(Action, "Students");
                 }
 
                 AppliedStudent aStudent = _mapper.Map<AppliedStudent>(vModel);
-                aStudent.StudentCategoryId = studentCat;
+                aStudent.StudentCategoryId = vModel.StudentCategoryId;
                 await _appliedStudentManager.AddAsync(aStudent);
                 if (!_signInManager.IsSignedIn(User))
                 {
-                    TempData["msg"] = "Information Updated, Search Again";
+                    TempData["msg"] = "Basic Information submitted Successfully, Search Again";
                     return RedirectToAction(Action, "Students");
                 }
                 return RedirectToAction("Index");
             }
-
             return View();
         }
 

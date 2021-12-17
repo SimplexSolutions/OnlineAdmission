@@ -65,15 +65,17 @@ namespace OnlineAdmission.APP.Controllers
         }
 
         // GET: PaymentTypesController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var paymentTypes = await _paymentTypeManager.GetByIdAsync(id);
+
+            return View(paymentTypes);
         }
 
         // POST: PaymentTypesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, PaymentType paymentType)
+        public async Task<ActionResult> Edit(int id, PaymentType model)
         {
             //try
             //{
@@ -83,36 +85,39 @@ namespace OnlineAdmission.APP.Controllers
             //{
             //    return View();
             //}
-            if (id != paymentType.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
             if (ModelState.IsValid)
             {
-                var paymentTypeList = await _paymentTypeManager.GetAllAsync();
-                var paymentTypeExist = paymentTypeList.FirstOrDefault(p => p.PaymentTypeName==paymentType.PaymentTypeName && p.Id != id);
-                if (paymentTypeExist == null)
-                {
+                //var paymentTypeList = await _paymentTypeManager.GetAllAsync();
+                //var paymentTypeExist = paymentTypeList.FirstOrDefault(p => p.PaymentTypeName==model.PaymentTypeName && p.Id != id);
+                //if (paymentTypeExist == null)
+                //{
                     try
                     {
-                        paymentType.UpdatedAt = DateTime.Now;
-                        paymentType.UpdatedBy = HttpContext.Session.GetString("UserId");
-                        bool isSaved = await _paymentTypeManager.AddAsync(paymentType);
-                        if (isSaved)
-                        {
-                            return RedirectToAction(nameof(Index));
-                        }
-                        ViewBag.msg = "Not updated";
-                        return View(paymentType);
+                        model.UpdatedAt = DateTime.Now;
+                        model.UpdatedBy = HttpContext.Session.GetString("UserId");
+                        //bool isSaved = await _paymentTypeManager.UpdateAsync(paymentType);
+                        //if (isSaved)
+                        //{
+                        //    return RedirectToAction(nameof(Index));
+                        //}
+                        //ViewBag.msg = "Not updated";
+
+                        //return View(paymentType);
+                        await _paymentTypeManager.UpdateAsync(model);
+                        return RedirectToAction("Index");
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        return View();
+                        return View(ex);
                     }
-                }
-                ViewBag.msg = "This session is already exist.";
+                //}
+                //ViewBag.msg = "This session is already exist.";
             }
-            return View(paymentType);
+            return View(model);
         }
 
         // GET: PaymentTypesController/Delete/5
