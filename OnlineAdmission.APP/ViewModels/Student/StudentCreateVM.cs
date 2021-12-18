@@ -159,6 +159,7 @@ namespace OnlineAdmission.APP.ViewModels.Student
         [Display(Name = "Mother's NID")]
         public string MotherNID { get; set; }
 
+        public int AcademicSessionId { get; set; }
         public ICollection<SelectListItem> DistrictList { get; set; }
         public ICollection<SelectListItem> SubjectList { get; set; }
     }

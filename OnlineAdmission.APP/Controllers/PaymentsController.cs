@@ -122,186 +122,7 @@ namespace OnlineAdmission.APP.Controllers
             return View(await PaginatedList<PaymentReceiptVM>.CreateAsync(paymentReceiptVMs, page, pageSize));
         }
         // GET: Payments
-        public async Task<IActionResult> Index1(int studentCategoryId, int paymentTypeId, string usrtext, string sortRoll, string sortNURoll, int page, int pagesize, DateTime? fromdate, DateTime? todate,int paymentType)
-        {
-
-            ViewBag.action = "Index";
-            ViewBag.controller = "Payments";
-            ViewBag.paymentType = paymentType;
-            if (paymentType == 1)
-            {
-                ViewBag.pageTitle = "Hons General Application Payment";
-            }
-            else {
-                ViewBag.pageTitle = "Hons General Admission Payment";
-            }           
-            
-
-            if (TempData["msg"]!=null)
-            {
-                ViewBag.msg = TempData["msg"].ToString();
-            }
-           
-                IQueryable<PaymentReceiptVM> paymentReceiptVMs = from t in _paymentTransactionManager.GetIQueryableData().Where(a => a.StudentCategoryId == 1 && a.PaymentTypeId == paymentType)
-                                                                 from m in _meritStudentManager.GetIQueryableData().Where(a => a.NUAdmissionRoll == t.ReferenceNo && a.PaymentStatus == true)
-                                                                 from sub in _subjectManager.GetIQueryableData().Where(a => a.Code == m.SubjectCode)
-                                                                 from s in _appliedStudentManager.GetIQueryableData().Where(a => a.NUAdmissionRoll == t.ReferenceNo)
-                                                                 join stu in _studentManager.GetIQueryableData().Where(a => a.Status == true) on m.NUAdmissionRoll equals stu.NUAdmissionRoll into myList
-                                                                 from subList in myList.DefaultIfEmpty()
-                                                                 select new PaymentReceiptVM
-                                                                 {
-                                                                     PaymentTransaction = t,
-                                                                     MeritStudent = m,
-                                                                     Subject = sub,
-                                                                     AppliedStudent = s,
-                                                                     Student = subList
-                                                                 };
-            
-            //paymentReceiptVMs = paymentReceiptVMs.OrderBy(m=>m.PaymentTransaction.ReferenceNo);
-            if (sortRoll == null && sortNURoll == null)
-            {
-                ViewBag.sortNURoll = string.IsNullOrEmpty(sortNURoll) ? "desc" : "";
-                ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : "";
-                switch (sortNURoll)
-                {
-                    case "desc":
-                        paymentReceiptVMs = paymentReceiptVMs.OrderByDescending(m => m.PaymentTransaction.ReferenceNo);
-                        break;
-                    default:
-                        paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.PaymentTransaction.ReferenceNo);
-                        break;
-                }
-            }
-            else if (sortNURoll == "desc" && sortRoll == null)
-            {
-                ViewBag.sortNURoll = string.IsNullOrEmpty(sortNURoll) ? "desc" : "";
-                ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : "";
-                switch (sortNURoll)
-                {
-                    case "desc":
-                        paymentReceiptVMs = paymentReceiptVMs.OrderByDescending(m => m.PaymentTransaction.ReferenceNo);
-                        break;
-                    default:
-                        paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.PaymentTransaction.ReferenceNo);
-                        break;
-                }
-                //switch (sortRoll)
-                //{
-                //    case "desc":
-                //        paymentReceiptVMs = paymentReceiptVMs.OrderByDescending(m => m.Student.CollegeRoll);
-                //        break;
-                //    default:
-                //        paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.Student.CollegeRoll);
-                //        break;
-                //}
-            }
-            else if (sortNURoll == "desc")
-            {
-                ViewBag.sortNURoll = string.IsNullOrEmpty(sortNURoll) ? "desc" : "";
-                ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : "";
-                switch (sortNURoll)
-                {
-                    case "desc":
-                        paymentReceiptVMs = paymentReceiptVMs.OrderByDescending(m => m.PaymentTransaction.ReferenceNo);
-                        break;
-                    default:
-                        paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.PaymentTransaction.ReferenceNo);
-                        break;
-                }
-            }
-            else if (sortRoll == "desc" || sortRoll == "asc")
-            {
-                ViewBag.sortNURoll = string.IsNullOrEmpty(sortNURoll) ? "desc" : "";
-                switch (sortRoll)
-                {
-                    case "desc":
-                        paymentReceiptVMs = paymentReceiptVMs.OrderByDescending(m => m.Student.CollegeRoll);
-                        ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : "asc";
-                        break;
-                    default:
-                        paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.Student.CollegeRoll);
-                        ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "asc" : "desc";
-                        break;
-                }
-            }
-            else
-            {
-                ViewBag.sortNURoll = string.IsNullOrEmpty(sortNURoll) ? "desc" : "";
-                ViewBag.sortByRoll = string.IsNullOrEmpty(sortRoll) ? "desc" : "";
-                switch (sortRoll)
-                {
-                    case "desc":
-                        paymentReceiptVMs = paymentReceiptVMs.OrderByDescending(m => m.Student.CollegeRoll);
-                        break;
-                    default:
-                        paymentReceiptVMs = paymentReceiptVMs.OrderBy(m => m.Student.CollegeRoll);
-                        break;
-                }
-
-            }
-            
-
-            ViewBag.data = usrtext;
-            ViewBag.fromdate = fromdate;
-            ViewBag.todate = todate;
-            int pageSize = pagesize <= 0 ? 50 : pagesize;
-            
-            if (page <= 0) page = 1;
-
-            if (pageSize == 5001)
-            {
-                pageSize = paymentReceiptVMs.Count();
-            }
-            ViewBag.pagesize = pageSize;
-            if (fromdate != null || todate != null)
-            {
-                if (fromdate != null && todate != null)
-                {
-                    paymentReceiptVMs = from a in paymentReceiptVMs
-                                        where (a.PaymentTransaction.TransactionDate.Date >= fromdate && a.PaymentTransaction.TransactionDate.Date <= todate)
-                                        select a;
-                }
-                else if (fromdate != null && todate == null)
-                {
-                    paymentReceiptVMs = from a in paymentReceiptVMs
-                                        where (a.PaymentTransaction.TransactionDate.Date >= fromdate)
-                                        select a;
-                }
-                else if (fromdate == null && todate != null)
-                {
-                    paymentReceiptVMs = from a in paymentReceiptVMs
-                                        where (a.PaymentTransaction.TransactionDate.Date <= todate)
-                                        select a;
-                }
-                if (pageSize == 5001)
-                {
-                    pageSize = paymentReceiptVMs.Count();
-                }
-
-            }
-
-            if (!string.IsNullOrEmpty(usrtext))
-            {
-                usrtext = usrtext.Trim().ToLower();
-
-                paymentReceiptVMs = paymentReceiptVMs.Where(m => m.AppliedStudent.ApplicantName.ToLower().Contains(usrtext) || m.PaymentTransaction.AccountNo.ToLower() == usrtext || m.PaymentTransaction.TransactionId.ToLower() == usrtext || m.AppliedStudent.NUAdmissionRoll.ToString().ToLower() == usrtext || m.Subject.SubjectName.ToLower() == usrtext || m.PaymentTransaction.Amount.ToString().ToLower() == usrtext || m.PaymentTransaction.TransactionDate.ToString().Contains(usrtext));
-                ViewBag.count = paymentReceiptVMs.Count();
-                if (pageSize == 5001)
-                {
-                    pageSize = paymentReceiptVMs.Count();
-                }
-                return View(await PaginatedList<PaymentReceiptVM>.CreateAsync(paymentReceiptVMs, page, pageSize));
-            }
-            ViewBag.count = paymentReceiptVMs.Count();
-            if (pageSize == 5001)
-            {
-                pageSize = paymentReceiptVMs.Count();
-            }
-            return View(await PaginatedList<PaymentReceiptVM>.CreateAsync(paymentReceiptVMs, page, pageSize));
-
-        }
-
-
+        
         public async Task<IActionResult> ProfessionalIndex(string usrtext, string sortRoll, int page, int pagesize, DateTime? fromdate, DateTime? todate, int paymentType)
         {
             ViewBag.action = "ProfessionalIndex";
@@ -773,44 +594,7 @@ namespace OnlineAdmission.APP.Controllers
         public async Task<IActionResult> SummeryReport()
         {
             List<PaymentTransaction> payments = await _paymentTransactionManager.GetAllAsync();
-            //List<Student> students = await _studentManager.GetAllAsync();
-
-            //ViewBag.applicationPaymentCount = payments.Where(s => s.PaymentType == 1).Count();
-            //ViewBag.admissionPaymentCount = payments.Where(s => s.PaymentType == 2).Count();
-            //ViewBag.totalApplicationPayment = payments.Where(s => s.PaymentType == 1).Sum(s => s.Amount);
-            //ViewBag.totalAdmissionPayment = payments.Where(s => s.PaymentType == 2).Sum(s => s.Amount);
-            //ViewBag.totalPayment = payments.Sum(s => s.Amount);
-
-            //ViewBag.honorsApplicationPaymentCount = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 1).Count();
-            //ViewBag.honorsApplicationPaymentSum = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 1).Sum(m => m.Amount);
-
-            //ViewBag.honorsProApplicationPaymentCount = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 1).Count();
-            //ViewBag.honorsProApplicationPaymentSum = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 1).Sum(m => m.Amount);
-
-            //ViewBag.mastersApplicationPaymentCount = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 1).Count();
-            //ViewBag.mastersApplicationPaymentSum = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 1).Sum(p => p.Amount);
-
-            //ViewBag.mastersProApplicationPaymentCount = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 1).Count();
-            //ViewBag.mastersProApplicationPaymentSum = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 1).Sum(p=> p.Amount);
-
-            //ViewBag.degreeApplicationPaymentCount = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 1).Count();
-            //ViewBag.degreeApplicationPaymentSum = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 1).Sum(p => p.Amount);
-
-            //ViewBag.honorsAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 2).Count();
-            //ViewBag.honorsAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 1 && p.PaymentType == 2).Sum(p => p.Amount);
-
-            //ViewBag.honorsProAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 2).Count();
-            //ViewBag.honorsProAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 2 && p.PaymentType == 2).Sum(p => p.Amount);
-
-            //ViewBag.mastersAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 2).Count();
-            //ViewBag.mastersAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 4 && p.PaymentType == 2).Sum(p => p.Amount);
-
-            //ViewBag.mastersProAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 2).Count();
-            //ViewBag.mastersProAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 3 && p.PaymentType == 2).Sum(p => p.Amount);
-
-            //ViewBag.degreeAdmissionPaymentCount = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 2).Count();
-            //ViewBag.degreeAdmissionPaymentSum = payments.Where(p => p.StudentCategory == 5 && p.PaymentType == 2).Sum(p => p.Amount);
-
+            
             return View(payments);
         }
 
@@ -820,8 +604,6 @@ namespace OnlineAdmission.APP.Controllers
             ViewBag.FromDate =Convert.ToDateTime(fromDate).Date.ToShortDateString();
             ViewBag.ToDate =Convert.ToDateTime(toDate).Date.ToShortDateString();
             List<PaymentTransaction> payments = await _paymentTransactionManager.GetAllAsync();
-
-
 
             if (fromDate != null && toDate != null)
             {
@@ -841,16 +623,16 @@ namespace OnlineAdmission.APP.Controllers
             }
 
             ViewBag.totalPaymentCount = payments.Count();
-            ViewBag.applicationPaymentCount = payments.Where(s => s.PaymentTypeId == 1).Count();
-            ViewBag.admissionPaymentCount = payments.Where(s => s.PaymentTypeId == 2).Count();
+            ViewBag.applicationPaymentCount = payments.Where(s => s.PaymentTypeId == 2).Count();
+            ViewBag.admissionPaymentCount = payments.Where(s => s.PaymentTypeId == 1).Count();
 
-            ViewBag.totalApplicationPayment = payments.Where(s => s.PaymentTypeId == 1).Sum(s => s.Amount);
-            ViewBag.totalApplicationPaymentService = payments.Where(s => s.PaymentTypeId == 1).Sum(s => s.ServiceCharge);
-            ViewBag.totalApplicationPaymentNet = payments.Where(s => s.PaymentTypeId == 1).Sum(s => s.Amount)- payments.Where(s => s.PaymentTypeId == 1).Sum(s => s.ServiceCharge);
+            ViewBag.totalApplicationPayment = payments.Where(s => s.PaymentTypeId == 2).Sum(s => s.Amount);
+            ViewBag.totalApplicationPaymentService = payments.Where(s => s.PaymentTypeId == 2).Sum(s => s.ServiceCharge);
+            ViewBag.totalApplicationPaymentNet = payments.Where(s => s.PaymentTypeId == 2).Sum(s => s.Amount)- ViewBag.totalApplicationPaymentService;
 
-            ViewBag.totalAdmissionPayment = payments.Where(s => s.PaymentTypeId == 2).Sum(s => s.Amount);
-            ViewBag.totalAdmissionPaymentService = payments.Where(s => s.PaymentTypeId == 2).Sum(s => s.ServiceCharge);
-            ViewBag.totalAdmissionPaymentNet = payments.Where(s => s.PaymentTypeId == 2).Sum(s => s.Amount) - payments.Where(s => s.PaymentTypeId == 2).Sum(s => s.ServiceCharge);
+            ViewBag.totalAdmissionPayment = payments.Where(s => s.PaymentTypeId == 1).Sum(s => s.Amount);
+            ViewBag.totalAdmissionPaymentService = payments.Where(s => s.PaymentTypeId == 1).Sum(s => s.ServiceCharge);
+            ViewBag.totalAdmissionPaymentNet = payments.Where(s => s.PaymentTypeId == 1).Sum(s => s.Amount) - ViewBag.totalAdmissionPaymentService;
 
             ViewBag.totalPayment = payments.Sum(s => s.Amount);
             ViewBag.totalPaymentService = payments.Sum(s => s.ServiceCharge);

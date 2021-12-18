@@ -199,27 +199,27 @@ namespace OnlineAdmission.APP.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
-        public async Task<ActionResult> Create(StudentCreateVM student, IFormFile photo)
+        public async Task<ActionResult> Create(StudentCreateVM model, IFormFile photo)
         {
-            student.DistrictList = new SelectList(await _districtManager.GetAllAsync(), "Id", "DistrictName").ToList();
+            model.DistrictList = new SelectList(await _districtManager.GetAllAsync(), "Id", "DistrictName").ToList();
 
             string msg = "";
-            var existingSubject = await _subjectManager.GetByIdAsync(student.SubjectId);
-            student.Subject = existingSubject;
-            var existStudent = await _studentManager.GetStudentByHSCRollAsync(student.HSCRoll);
-            if (existStudent != null)
-            {
-                msg = "HSC Roll is already Exist";
-                ViewBag.msg = msg;
-                return View(student);
-            }
-            existStudent = await _studentManager.GetStudentBySSCRollAsync(student.SSCRoll, student.SSCBoard);
-            if (existStudent != null)
-            {
-                msg = "SSC Roll is already Exist";
-                ViewBag.msg = msg;
-                return View(student);
-            }
+            var existingSubject = await _subjectManager.GetByIdAsync(model.SubjectId);
+            model.Subject = existingSubject;
+            var existStudent = await _studentManager.GetStudentAsync(model.NuAdmissionRoll,model.StudentCategory,model.AcademicSessionId);
+            //if (existStudent != null)
+            //{
+            //    msg = "HSC Roll is already Exist";
+            //    ViewBag.msg = msg;
+            //    return View(model);
+            //}
+            //existStudent = await _studentManager.GetStudentBySSCRollAsync(model.SSCRoll, model.SSCBoard);
+            //if (existStudent != null)
+            //{
+            //    msg = "SSC Roll is already Exist";
+            //    ViewBag.msg = msg;
+            //    return View(model);
+            //}
 
             if (existStudent == null)
             {
@@ -231,7 +231,7 @@ namespace OnlineAdmission.APP.Controllers
                         if (photo.Length > allowedImgSize)
                         {
                             ViewBag.msg = "File size should not more than 200 KB.";
-                            return View(student);
+                            return View(model);
                         }
 
                         string[] supportedExt = { ".jpg", ".jpeg", ".png" };
@@ -247,18 +247,18 @@ namespace OnlineAdmission.APP.Controllers
                         if (validImage==false)
                         {
                             ViewBag.msg = "Image file is not valid. Upload only supported file(.jpg, .png, .jpeg)";
-                            return View(student);
+                            return View(model);
                         }
                         string root = _host.WebRootPath;
                         string folder = "Images/Students/";
-                        string attachFile = "p_" + student.HSCRoll.ToString().Trim() + "_" + student.HSCPassingYear.ToString().Trim() + ext;
+                        string attachFile = "p_" + model.HSCRoll.ToString().Trim() + "_" + model.HSCPassingYear.ToString().Trim() + ext;
                         string f = Path.Combine(root, folder, attachFile);
                         using (var stream = new FileStream(f, FileMode.Create))
                         {
                             await photo.CopyToAsync(stream);
                             msg = "File has been uploaded successfully";
                         }
-                        student.Photo = attachFile;
+                        model.Photo = attachFile;
                     }
                     else
                     {
@@ -275,19 +275,19 @@ namespace OnlineAdmission.APP.Controllers
                     
                     if (subjectCode<10)
                     {
-                        student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "0" + subjectCode + "" + sl);
+                        model.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "0" + subjectCode + "" + sl);
                     }
                     else
                     {
-                        student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + subjectCode + "" + sl);
+                        model.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + subjectCode + "" + sl);
                     }
                     
                     
                     
                     
-                    Student newStudent = _mapper.Map<Student>(student);                    
+                    Student newStudent = _mapper.Map<Student>(model);                    
                     newStudent.Status = true;
-                    newStudent.Photo = student.Photo;
+                    newStudent.Photo = model.Photo;
                     newStudent.CreatedAt = DateTime.Now;
                     newStudent.CreatedBy = HttpContext.Session.GetString("User");
                     
@@ -317,9 +317,9 @@ namespace OnlineAdmission.APP.Controllers
             }
 
 
-            student.DistrictList = new SelectList(await _districtManager.GetAllAsync(), "Id", "DistrictName").ToList();
+            model.DistrictList = new SelectList(await _districtManager.GetAllAsync(), "Id", "DistrictName").ToList();
 
-            return View(student);
+            return View(model);
 
         }
         // GET: StudentsController/Edit/5
@@ -939,7 +939,7 @@ namespace OnlineAdmission.APP.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> PaymentConfirmation(int NuAdmissionRoll, string notification)
+        public async Task<IActionResult> PaymentConfirmation(int NuAdmissionRoll, string notification, int academicSessionId)
         {
             string msg = "";
             if (NuAdmissionRoll > 0)
@@ -959,7 +959,7 @@ namespace OnlineAdmission.APP.Controllers
 
                 if (selectedStudent != null)
                 {
-                    var admittedStudent = await _studentManager.GetStudentByHSCRollAsync(selectedStudent.MeritStudent.HSCRoll);
+                    var admittedStudent = await _studentManager.GetStudentAsync(NuAdmissionRoll, (int)meritStudent.StudentCategoryId, academicSessionId);
                     if (admittedStudent != null)
                     {
                         msg = "Congratulations! You are already admitted.";
