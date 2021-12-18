@@ -18,7 +18,7 @@
     DateTime todate = ViewBag.todate == null ? DateTime.Today : ViewBag.todate;
     DateTime fromdate = ViewBag.fromdate == null ? newDateTime : ViewBag.fromdate;
     string pagecontroller = ViewBag.controller == null ? "home" : ViewBag.controller; ;
-    string pageaction = ViewBag.action == null ? "index" : ViewBag.action;
+    string pageaction = ViewBag.action == null ? "Index" : ViewBag.action;
 
     int paymentType = 0;
     if (ViewBag.paymentType!=null)
@@ -64,7 +64,7 @@
                                asp-route-usrtext="@ViewBag.data"
                                asp-route-page="@p"
                                asp-route-pagesize="@pagesize"
-                               asp-route-paymentType="@paymentType"
+                               asp-route-paymentTypeId="@paymentType"
                                class="page-link">@p</a>
                         </li>
                     }
@@ -75,7 +75,7 @@
                                asp-route-usrtext="@ViewBag.data"
                                asp-route-page="@p"
                                asp-route-pagesize="@pagesize"
-                               asp-route-paymentType="@paymentType"
+                               asp-route-paymentTypeId="@paymentType"
                                class="page-link">@p</a>
                         </li>
                     }
@@ -87,7 +87,8 @@
                    asp-route-usrtext="@ViewBag.data"
                    asp-route-page="@(cp+1)"
                    asp-route-pagesize="@pagesize"
-                   asp-route-paymentType="@paymentType"
+                   asp-route-paymentTypeId="@paymentType"
+                   asp-route-studentCategoryId="@ViewBag.studentCategoryId"
                    class="page-link @dnext">Next</a>
             </li>
             <li class="page-item">
@@ -95,14 +96,15 @@
                    asp-route-usrtext="@ViewBag.data"
                    asp-route-page="@tp"
                    asp-route-pagesize="@pagesize"
-                   asp-route-paymentType="@paymentType"
+                   asp-route-paymentTypeId="@paymentType"
                    class="page-link">Last</a>
             </li>
             <li class="float-right">
                 <form id="frm" class="form-inline" asp-action="@pageaction" method="post">
 
                     <input type="hidden" name="usrtext" value="@ViewBag.data" class="form-control" placeholder="Search...." />
-                    <input type="hidden" name="paymentType" value="@ViewBag.paymentType" />
+                    <input type="hidden" name="paymentTypeId" value="@ViewBag.paymentType" />
+                    <input type="hidden" name="studentCategoryId" value="@ViewBag.studentCategoryId" />
                     <input type="datetime" name="fromdate" value="@ViewBag.fromdate" style="display:none"/>
                     <input type="datetime" name="todate" value="@ViewBag.todate" style="display:none"/>
                     <select id="pagesize" name="pagesize" class="form-control">

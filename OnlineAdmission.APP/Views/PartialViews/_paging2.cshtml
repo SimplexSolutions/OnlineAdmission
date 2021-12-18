@@ -20,12 +20,12 @@
     string pagecontroller = ViewBag.controller == null ? "home" : ViewBag.controller; ;
     string pageaction = ViewBag.action == null ? "index" : ViewBag.action;
     int studentCategoryId = 0;
-    if (ViewBag.category>0)
+    if (ViewBag.category != null)
     {
         studentCategoryId = ViewBag.category;
     }
     int subjectid = 0;
-    if (ViewBag.subject>0)
+    if (ViewBag.subject != null)
     {
         subjectid = ViewBag.subject;
     }
@@ -34,7 +34,7 @@
     {
         paymentType = ViewBag.paymentType;
     }
-    string meritType = "";
+    int meritType = 0;
     if (ViewBag.meritType!=null)
     {
         meritType = ViewBag.meritType;

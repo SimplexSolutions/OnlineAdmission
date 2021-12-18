@@ -22,19 +22,109 @@ namespace OnlineAdmission.APP.Controllers
         private readonly ISubjectManager _subjectManager;
         private readonly IMeritStudentManager _meritStudentManager;
         private readonly IAppliedStudentManager _appliedStudentManager;
+        private readonly IStudentCategoryManager _studentCategoryManager;
+        private readonly IPaymentTypeManager _paymentTypeManager;
 
-        public PaymentsController(IPaymentTransactionManager paymentTransactionManager, IStudentManager studentManager, ISubjectManager subjectManager, IMeritStudentManager meritStudentManager, IAppliedStudentManager appliedStudentManager)
+        public PaymentsController(IPaymentTransactionManager paymentTransactionManager, IStudentManager studentManager, ISubjectManager subjectManager, IMeritStudentManager meritStudentManager, IAppliedStudentManager appliedStudentManager, IStudentCategoryManager studentCategoryManager, IPaymentTypeManager paymentTypeManager)
         {
             _paymentTransactionManager = paymentTransactionManager;
             _studentManager = studentManager;
             _subjectManager = subjectManager;
             _meritStudentManager = meritStudentManager;
             _appliedStudentManager = appliedStudentManager;
+            _studentCategoryManager = studentCategoryManager;
+            _paymentTypeManager = paymentTypeManager;
         }
 
-        // GET: Payments
-        public async Task<IActionResult> Index(string usrtext, string sortRoll, string sortNURoll, int page, int pagesize, DateTime? fromdate, DateTime? todate,int paymentType)
+
+        public async Task<IActionResult> Index(int studentCategoryId, int paymentTypeId, int page, int pageSize, string usrtext, DateTime? fromdate, DateTime? todate)
         {
+            var students = _studentManager.GetIQueryableData();
+            var appliedStudents = _appliedStudentManager.GetIQueryableData();
+            var meritStudents = _meritStudentManager.GetIQueryableData();
+            var paymentTransactions = _paymentTransactionManager.GetIQueryableData();
+            var subjects = _subjectManager.GetIQueryableData();
+            string pageTitle = "";
+            if (studentCategoryId > 0)
+            {
+                ViewBag.studentCategoryId = studentCategoryId;
+                StudentCategory studentCategory= await _studentCategoryManager.GetByIdAsync(studentCategoryId);
+                pageTitle = studentCategory.CategoryName;
+                students = students.Where(s => s.StudentCategoryId == studentCategoryId);
+                appliedStudents = appliedStudents.Where(s => s.StudentCategoryId == studentCategoryId);
+                meritStudents = meritStudents.Where(m => m.StudentCategoryId == studentCategoryId);
+
+            }
+            if (paymentTypeId>0)
+            {
+                ViewBag.paymentType = paymentTypeId;
+                PaymentType paymentType = await _paymentTypeManager.GetByIdAsync(paymentTypeId);
+                pageTitle = pageTitle + " (" + paymentType.PaymentTypeName + ")";
+                paymentTransactions = paymentTransactions.Where(s => s.PaymentTypeId == paymentTypeId);
+            }
+            ViewBag.pageTitle = pageTitle;
+            ViewBag.paymentTypes = new SelectList(await _paymentTypeManager.GetAllAsync(),"Id","PaymentTypeName", paymentTypeId);
+            IQueryable<PaymentReceiptVM> paymentReceiptVMs = from stu in students
+                                                             from aStu in appliedStudents.Where(a => a.NUAdmissionRoll == stu.NUAdmissionRoll)
+                                                             from mStu in meritStudents.Where(m => m.NUAdmissionRoll == stu.NUAdmissionRoll)
+                                                             from pt in paymentTransactions.Where(p => p.ReferenceNo == stu.NUAdmissionRoll)
+                                                             from sub in subjects.Where(s => s.Code == mStu.SubjectCode)
+                                                             select new PaymentReceiptVM
+                                                             { 
+                                                                 PaymentTransaction = pt,
+                                                                 MeritStudent = mStu,
+                                                                 Subject = sub,
+                                                                 AppliedStudent = aStu,
+                                                                 Student = stu
+                                                             };
+
+            ViewBag.controller = "Payments";
+            ViewBag.action = "Index";
+            ViewBag.data = usrtext;
+            ViewBag.fromdate = fromdate;
+            ViewBag.todate = todate;
+            ViewBag.pagesize = pageSize;
+            pageSize = pageSize <= 0 ? 50 : pageSize;
+            page = page <= 0? 1: page;
+            if (fromdate != null || todate != null)
+            {
+                if (fromdate != null && todate != null)
+                {
+                    paymentReceiptVMs = from a in paymentReceiptVMs
+                                        where (a.PaymentTransaction.TransactionDate.Date >= fromdate && a.PaymentTransaction.TransactionDate.Date <= todate)
+                                        select a;
+                }
+                else if (fromdate != null && todate == null)
+                {
+                    paymentReceiptVMs = from a in paymentReceiptVMs
+                                        where (a.PaymentTransaction.TransactionDate.Date >= fromdate)
+                                        select a;
+                }
+                else if (fromdate == null && todate != null)
+                {
+                    paymentReceiptVMs = from a in paymentReceiptVMs
+                                        where (a.PaymentTransaction.TransactionDate.Date <= todate)
+                                        select a;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(usrtext))
+            {
+                usrtext = usrtext.Trim().ToLower();
+
+                paymentReceiptVMs = paymentReceiptVMs.Where(m => m.AppliedStudent.ApplicantName.ToLower().Contains(usrtext) || m.PaymentTransaction.AccountNo.ToLower() == usrtext || m.PaymentTransaction.TransactionId.ToLower() == usrtext || m.Student.CollegeRoll.ToString() == usrtext || m.AppliedStudent.NUAdmissionRoll.ToString().ToLower() == usrtext || m.Subject.SubjectName.ToLower() == usrtext || m.PaymentTransaction.Amount.ToString().ToLower() == usrtext || m.PaymentTransaction.TransactionDate.ToString().Contains(usrtext));
+            }
+            ViewBag.count = paymentReceiptVMs.Count();
+            if (pageSize == 5001)
+            {
+                pageSize = paymentReceiptVMs.Count();
+            }
+            return View(await PaginatedList<PaymentReceiptVM>.CreateAsync(paymentReceiptVMs, page, pageSize));
+        }
+        // GET: Payments
+        public async Task<IActionResult> Index1(int studentCategoryId, int paymentTypeId, string usrtext, string sortRoll, string sortNURoll, int page, int pagesize, DateTime? fromdate, DateTime? todate,int paymentType)
+        {
+
             ViewBag.action = "Index";
             ViewBag.controller = "Payments";
             ViewBag.paymentType = paymentType;

@@ -10,7 +10,8 @@
     {
         todate = ViewBag.todate;
     }
-    int paymentType = ViewBag.paymentType;
+    int paymentTypeId = ViewBag.paymentType > 0? ViewBag.paymentType:0;
+    int studentCategoryId = ViewBag.studentCategoryId > 0 ? ViewBag.studentCategoryId : 0;
 }
 @if (ViewBag.action != null)
 {
@@ -19,6 +20,8 @@
 <div class="">
 
     <form asp-action="@actionName" class="form-inline" method="post">
+        <input type="hidden" name="studentCategoryId" value="@studentCategoryId" />
+        <input type="hidden" name="paymentTypeId" value="@paymentTypeId" />
         <div class="col-md-6">
             <div class="form-inline">
                 <div class="form-group">
@@ -39,7 +42,7 @@
                 {
                     <span>Total found @ViewBag.count</span>
                 }
-            <input type="hidden" name="paymentType" value="@paymentType" />
+
                 <input type="text" name="usrtext" value="@ViewBag.data" class="form-control" placeholder="Search...." />
 
                 <button class="btn-info form-control" type="submit">Search</button>

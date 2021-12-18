@@ -271,25 +271,7 @@ namespace OnlineAdmission.APP.Controllers
                     int subjectCode = existingSubject.Code;
                     int count = await _studentManager.GetCountAsync(existingSubject.Id)+1;
                     string sl = count.ToString("D3");
-                    //if (count < 100)
-                    //{
-                    //    if (count == 0)
-                    //    {
-                    //        sl = "001";
-                    //    }
-                    //    else if (count < 10)
-                    //    {
-                    //        sl = "00" + count.ToString();
-                    //    }
-                    //    else if (count < 100 && count > 9)
-                    //    {
-                    //        sl = "0" + count.ToString();
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    sl = count.ToString();
-                    //}
+                    
                     
                     if (subjectCode<10)
                     {
@@ -307,7 +289,7 @@ namespace OnlineAdmission.APP.Controllers
                     newStudent.Status = true;
                     newStudent.Photo = student.Photo;
                     newStudent.CreatedAt = DateTime.Now;
-                    newStudent.CreatedBy = "Online User"; /*HttpContext.Session.GetString("User")*/
+                    newStudent.CreatedBy = HttpContext.Session.GetString("User");
                     
                     await _studentManager.AddAsync(newStudent);
 

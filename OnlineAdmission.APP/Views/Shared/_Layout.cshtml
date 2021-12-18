@@ -84,7 +84,8 @@
                                     </li>
                                     @foreach (var item in studentCategoryList)
                                     {
-                                        <li><a href="@item.PaymentURL">@item.CategoryName</a></li>
+                                        @*<li><a href="@item.PaymentURL">@item.CategoryName</a></li>*@
+                                        <li><a asp-action="Index" asp-controller="payments" asp-route-studentCategoryId="@item.Id" >@item.CategoryName</a></li>
                                     }
                                     @*<li>
                                         <a href="subMenuTopper" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">payments</a>
