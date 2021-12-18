@@ -503,6 +503,7 @@ namespace OnlineAdmission.APP.Controllers
                     studentPaymentTypeId = 1;
                 }
             }
+
             var stuPaymentType = await _studentPaymentTypeManager.GetByIdAsync(studentPaymentTypeId);
             var meritType = await _meritTypeManager.GetByIdAsync((int)stuPaymentType.MeritTypeId);
             var category = await _studentCategoryManager.GetByIdAsync((int)stuPaymentType.StudentCategoryId);
@@ -517,7 +518,8 @@ namespace OnlineAdmission.APP.Controllers
                 MeritType = meritType,
                 PaymentTypeId = stuPaymentType.PaymentTypeId,
                 PaymentTypeShortCode=paymentType.PaymentTypeShortCode,
-                CategoryShortCode=category.CategoryShortCode
+                CategoryShortCode=category.CategoryShortCode,
+                StudentPaymentTypeId = studentPaymentTypeId
             };
             //StudentCategory studentCategory = await _studentCategoryManager.GetByIdAsync(stuPaymentType.StudentCategoryId);
             ViewBag.FormTitle = stuPaymentType.StudentCategory.CategoryName + " " + stuPaymentType.PaymentType.PaymentTypeName + " " + (stuPaymentType.AcademicSession.SessionName);
@@ -527,6 +529,8 @@ namespace OnlineAdmission.APP.Controllers
                 ViewBag.msg = TempData["msg"].ToString();
             }
             ViewBag.notify = notification;
+            //ViewBag.studentPaymentTypeId = studentPaymentTypeId;
+            //ViewBag.studentCategoryId = category.CategoryName;
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user!=null)
             {
@@ -540,6 +544,9 @@ namespace OnlineAdmission.APP.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Search(StudentDynamicInfoVM model)
         {
+            var stuPaymentType = await _studentPaymentTypeManager.GetByIdAsync(model.StudentPaymentTypeId);            
+
+            ViewBag.FormTitle = stuPaymentType.StudentCategory.CategoryName + " " + stuPaymentType.PaymentType.PaymentTypeName + " " + (stuPaymentType.AcademicSession.SessionName);
 
             if (model.NuRoll>0)
             {
@@ -574,13 +581,6 @@ namespace OnlineAdmission.APP.Controllers
                 model.AppliedStudent = appliedStudent;
                 if (meritStudent.PaymentStatus == true)
                 {
-                    //var existPayment = await _paymentTransactionManager.GetPaymentTransactionAsync(model.NuRoll, model.CategoryId, model.SessionId, model.PaymentTypeId);
-                    //if (existPayment != null)
-                    //{
-                    //    ViewBag.paidNotAdmitted = "Congratulations! Your payment is completed";
-                    //    return View(model);
-                    //}
-                    //ViewBag.paymentNotCompleted = "Your payment is not completed yet";
                     ViewBag.paidNotAdmitted = "Congratulations! Your payment is completed";
                     return View(model);
                 }

@@ -32,6 +32,7 @@
                                 <input asp-for="MeritTypeId" type="hidden" />
                                 <input asp-for="PaymentTypeShortCode" type="hidden" />
                                 <input asp-for="CategoryShortCode" type="hidden" />
+                                <input type="hidden" asp-for="StudentPaymentTypeId"/>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="NuRoll">NU Roll</span>
@@ -79,12 +80,12 @@
                         <tr>
                             <td class="" style="width:200px">Academic Session</td>
                             <td>:</td>
-                            <td class="">@Model.SessionId</td>
+                            <td class="">@ViewBag.alreadyAdmittedStudent.AcademicSession.SessionName</td>
                         </tr>
                         <tr>
                             <td class="" style="width:200px">Department</td>
                             <td>:</td>
-                            <td class="">@ViewBag.alreadyAdmittedStudent.SubjectId</td>
+                            <td class="">@ViewBag.alreadyAdmittedStudent.Subject.SubjectName</td>
                         </tr>
                         <tr>
                             <td class="" style="width:200px">Class Roll</td>

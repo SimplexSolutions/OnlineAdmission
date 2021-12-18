@@ -81,7 +81,10 @@ namespace OnlineAdmission.DAL.Repository
         public async Task<Student> GetStudentAsync(int nuRoll, int studentCategoryId, int academicSessionId)
         {
             //var selectedStudent = await _context.Students.FirstOrDefault(s => s.NUAdmissionRoll == nuRoll && s.StudentCategoryId == studentCategoryId && s.AcademicSessionId == academicSessionId);
-            var selectedStudent = await _context.Students.FirstOrDefaultAsync(s=>s.NUAdmissionRoll==nuRoll&&s.StudentCategoryId==studentCategoryId&&s.AcademicSessionId==academicSessionId);
+            var selectedStudent = await _context.Students
+                .Include(s => s.AcademicSession)
+                .Include(s => s.Subject)
+                .FirstOrDefaultAsync(s=>s.NUAdmissionRoll==nuRoll&&s.StudentCategoryId==studentCategoryId&&s.AcademicSessionId==academicSessionId);
             return selectedStudent;
         }
     }
