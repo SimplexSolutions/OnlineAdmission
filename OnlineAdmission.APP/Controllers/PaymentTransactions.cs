@@ -58,21 +58,26 @@ namespace OnlineAdmission.APP.Controllers
                 var additionalMerchantInfo = (responsevalue.additionalMerchantInfo).Value;
                 dynamic MerchantInfo = JObject.Parse(additionalMerchantInfo);
 
-                
+                int nuRoll = MerchantInfo.NuAdmissionRoll;
+                int stuCat = MerchantInfo.StudentCategory;
+                int patType = MerchantInfo.PaymentType;
+                int sessionId = MerchantInfo.sessionId;
+                int meritTypeId = MerchantInfo.meritType;
+
                 PaymentTransaction newPayment = new PaymentTransaction{
                     Amount = responsevalue.amount,
                     TransactionDate = DateTime.Today,
                     Balance = 0,
                     AccountNo = responsevalue.clientMobileNo,
                     TransactionId = responsevalue.orderId,
-                    ReferenceNo = MerchantInfo.NuAdmissionRoll,
+                    ReferenceNo = nuRoll,
                     AdmissionFee = MerchantInfo.AdmissionFee,
                     ServiceCharge = MerchantInfo.ServiceCharge,
                     StudentName = MerchantInfo.StudentName,
                     MobileNumber = MerchantInfo.MobileNo,
-                    StudentCategoryId = MerchantInfo.StudentCategory,
-                    PaymentTypeId = MerchantInfo.PaymentType,
-                    AcademicSessionId=MerchantInfo.sessionId
+                    StudentCategoryId = stuCat,
+                    PaymentTypeId = patType,
+                    AcademicSessionId= sessionId
                 };
                 //newPayment.ApplicantName = MerchantInfo.StudentName;
                 //newPayment.MobileNo = MerchantInfo.MobileNo;
@@ -118,10 +123,12 @@ namespace OnlineAdmission.APP.Controllers
                 //MeritStudent meritStudent = new MeritStudent();
                 //meritStudent = await _meritStudentManager.GetMeritStudentAsync((int)MerchantInfo.NuAdmissionRoll, (int)MerchantInfo.StudentCategory,
                 //        MerchantInfo.meritType, MerchantInfo.sessionId);
-                var meritStudent = await _meritStudentManager.GetMeritStudentAsync(MerchantInfo.NuAdmissionRoll, MerchantInfo.StudentCategory,
-                    MerchantInfo.meritType, MerchantInfo.sessionId);
-                //MeritStudent meritStudent = new MeritStudent();
-                //meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll), (int)newPayment.StudentCategoryId, MerchantInfo.meritType);
+                //var meritStudent = await _meritStudentManager.GetMeritStudentAsync(MerchantInfo.NuAdmissionRoll, MerchantInfo.StudentCategory,
+                //    MerchantInfo.meritType, MerchantInfo.sessionId);
+                //var existingStudent2 = await _studentManager.GetStudentAsync(MerchantInfo.NuAdmissionRoll, MerchantInfo.StudentCategory, MerchantInfo.sessionId);
+
+                MeritStudent meritStudent = new MeritStudent();
+                 meritStudent = await _meritStudentManager.GetMeritStudentAsync(nuRoll, stuCat, meritTypeId, sessionId);
                 // var meritStudent = await meritStudentManager.GetMeritStudentAsync(model.NuRoll, model.CategoryId, model.MeritTypeId, model.SessionId);
 
                 //if (newPayment.StudentCategory == 1)
@@ -174,8 +181,9 @@ namespace OnlineAdmission.APP.Controllers
                 //    phoneNumber = newStudent.MobileNo.ToString();
                 //    msgText = "Congratulations! " + newStudent.ApplicantName + "(NU Roll:" + newStudent.NUAdmissionRoll + ") , your admission payment is successfully paid";
                 //}
+               // nuRoll, stuCat, meritTypeId, sessionId
 
-                AppliedStudent newStudent = await _appliedStudentManager.GetAppliedStudentAsync((int)MerchantInfo.NuAdmissionRoll, (int)newPayment.StudentCategoryId, MerchantInfo.sessionId);
+                AppliedStudent newStudent = await _appliedStudentManager.GetAppliedStudentAsync(nuRoll,stuCat, sessionId);
                 phoneNumber = newStudent.MobileNo.ToString();
                 msgText = "Congratulations! " + newStudent.ApplicantName + "(NU Roll:" + newStudent.NUAdmissionRoll + ") , your admission payment is successfully paid";
 
@@ -197,7 +205,9 @@ namespace OnlineAdmission.APP.Controllers
                     await _smsManager.AddAsync(newSMS);
                 }
 
-                return RedirectToAction("PaymentConfirmation", "Students", new { NuAdmissionRoll = newPayment.ReferenceNo, notification = successNotification });
+                return RedirectToAction("PaymentConfirmation", "Students", new { NuAdmissionRoll = newPayment.ReferenceNo,
+                    CategoryId= stuCat, academicSessionId =sessionId, 
+                    notification = successNotification });
 
                 //if (MerchantInfo.StudentType == 1)
                 //{

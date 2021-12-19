@@ -939,13 +939,22 @@ namespace OnlineAdmission.APP.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> PaymentConfirmation(int NuAdmissionRoll, string notification, int academicSessionId)
+        public async Task<IActionResult> PaymentConfirmation(int NuAdmissionRoll,int CategoryId, int academicSessionId, string notification)
         {
             string msg = "";
             if (NuAdmissionRoll > 0)
             {
+                //var meritStudent = await _meritStudentManager.GetMeritStudentAsync(model.NuRoll, model.CategoryId, model.MeritTypeId, model.SessionId);
+
+                //if (meritStudent == null)
+                //{
+                //    ViewBag.NotSelected = "Sorry! You are not selected for admission.";
+                //    return View();
+                //}
+
+                //var appliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(model.NuRoll, model.CategoryId, model.SessionId);
                 var meritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(NuAdmissionRoll);
-                var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(NuAdmissionRoll, (int)meritStudent.StudentCategoryId);
+                var appliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(NuAdmissionRoll, CategoryId, academicSessionId);
 
                 var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
 
@@ -1236,7 +1245,8 @@ namespace OnlineAdmission.APP.Controllers
                 }
             }
             double serviceCharge =  amount * .0157;
-            double totalAmount = Math.Round((amount + serviceCharge),2); 
+            double totalAmount = Math.Round((amount + serviceCharge),2);
+            serviceCharge= Math.Round((amount * .0157),2);
 
             // Create JSON Object
             var paymentJSON = new
