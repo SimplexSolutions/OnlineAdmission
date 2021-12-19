@@ -32,7 +32,7 @@
                                 <input asp-for="MeritTypeId" type="hidden" />
                                 <input asp-for="PaymentTypeShortCode" type="hidden" />
                                 <input asp-for="CategoryShortCode" type="hidden" />
-                                <input type="hidden" asp-for="StudentPaymentTypeId"/>
+                                <input asp-for="StudentPaymentTypeId" type="hidden"/>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="NuRoll">NU Roll</span>
@@ -135,6 +135,8 @@
                             <input type="hidden" asp-for="MeritTypeId" />
                             <input type="hidden" asp-for="CategoryShortCode" />
                             <input type="hidden" asp-for="PaymentTypeShortCode" />
+                            <input type="hidden" asp-for="PaymentTypeId" />                            
+                            <input type="hidden" asp-for="StudentPaymentTypeId" />
                             <input class="btn btn-info" type="submit" value="Make Payment" />
                         </form>
                     </div>

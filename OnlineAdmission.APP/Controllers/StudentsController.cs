@@ -1119,6 +1119,7 @@ namespace OnlineAdmission.APP.Controllers
             string paymentshortcode = model.CategoryShortCode + model.PaymentTypeShortCode;
             OrderId = meritStudent.NUAdmissionRoll + "" + paymentshortcode + "" + DateTime.Now.ToString("HHmmss");
             double paymentForSubjectChange = 0.00;
+            int AA = model.PaymentTypeId;
             if (subjectChange==1)
             {
                 Student existingStudent = await _studentManager.GetStudentAsync(model.NuRoll,model.CategoryId,model.SessionId);
