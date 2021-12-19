@@ -206,8 +206,8 @@ namespace OnlineAdmission.APP.Controllers
                 }
 
                 return RedirectToAction("PaymentConfirmation", "Students", new { NuAdmissionRoll = newPayment.ReferenceNo,
-                    CategoryId= stuCat, academicSessionId =sessionId, 
-                    notification = successNotification });
+                    CategoryId= stuCat,MeritTypeId=meritTypeId, academicSessionId =sessionId,
+                    paymentTransactionId = newPayment.Id, notification = successNotification });
 
                 //if (MerchantInfo.StudentType == 1)
                 //{

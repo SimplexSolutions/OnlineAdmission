@@ -46,7 +46,14 @@
                             <h5>Payment Completed</h5>
                         </div>
                         <div class="col-md-6">
-                            <a class="btn btn-outline-info" asp-action="Create" asp-controller="Students" asp-route-nuAdmissionRoll="@Model.AppliedStudent.NUAdmissionRoll">Admission Form</a>
+                            @*<a class="btn btn-outline-info" asp-action="Create" asp-controller="Students" asp-route-nuAdmissionRoll="@Model.AppliedStudent.NUAdmissionRoll">Admission Form</a>*@
+                            <form asp-action="create" asp-controller="Students" method="get">
+                                <input type="hidden" asp-for="NuRoll" />
+                                <input type="hidden" asp-for="CategoryId" />
+                                <input type="hidden" asp-for="SessionId" />
+                                <input type="hidden" asp-for="MeritTypeId" />
+                                <input class="btn btn-info" type="submit" value="Fillup Admission Form" />
+                            </form>
                         </div>
                     </div>
                     }

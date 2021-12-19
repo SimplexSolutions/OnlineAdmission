@@ -46,6 +46,12 @@ namespace OnlineAdmission.DAL.Repository
             return existingTransaction;
         }
 
+        public async Task<PaymentTransaction> GetPaymentTransactionById(int id)
+        {
+            var existingTransaction = await _context.PaymentTransactions.FirstOrDefaultAsync(t => t.Id == id);
+            return existingTransaction;
+        }
+
         public async Task<List<PaymentTransaction>> GetAllPaymentTrancsactionByNuRoll(int nuRoll)
         {
             return await _context.PaymentTransactions.Where(p => p.ReferenceNo == nuRoll).ToListAsync();

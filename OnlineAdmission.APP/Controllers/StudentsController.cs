@@ -939,7 +939,8 @@ namespace OnlineAdmission.APP.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> PaymentConfirmation(int NuAdmissionRoll,int CategoryId, int academicSessionId, string notification)
+        public async Task<IActionResult> PaymentConfirmation(int NuAdmissionRoll,int CategoryId,int MeritTypeId, int academicSessionId,
+          int  PaymentTransactionId,string notification)
         {
             string msg = "";
             if (NuAdmissionRoll > 0)
@@ -953,22 +954,33 @@ namespace OnlineAdmission.APP.Controllers
                 //}
 
                 //var appliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(model.NuRoll, model.CategoryId, model.SessionId);
-                var meritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(NuAdmissionRoll);
+               // var meritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(NuAdmissionRoll);
+                var meritStudent = await _meritStudentManager.GetMeritStudentAsync(NuAdmissionRoll, CategoryId,MeritTypeId, academicSessionId);
                 var appliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(NuAdmissionRoll, CategoryId, academicSessionId);
 
                 var subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
+
+                //var stuPaymentType = await _studentPaymentTypeManager.GetByIdAsync(studentPaymentTypeId);
+                //var meritType = await _meritTypeManager.GetByIdAsync((int)meritStudent.MeritTypeId);
+                //var category = await _studentCategoryManager.GetByIdAsync((int)meritStudent.StudentCategoryId);
+                //PaymentTransaction exPT = await _paymentTransactionManager.GetPaymentTransactionById(PaymentTransactionId);
+                //var paymentType = await _paymentTypeManager.GetByIdAsync((int)stuPaymentType.PaymentTypeId);
 
                 SelectedStudentVM selectedStudent = new SelectedStudentVM()
                 {
                     MeritStudent = meritStudent,
                     AppliedStudent = appliedStudent,
-                    Subject = subject
+                    Subject = subject,
+                    NuRoll = meritStudent.NUAdmissionRoll,
+                    CategoryId = (int)meritStudent.StudentCategoryId,
+                    SessionId=(int)meritStudent.AcademicSessionId,
+                    MeritTypeId=(int)meritStudent.MeritTypeId
                 };
 
 
                 if (selectedStudent != null)
                 {
-                    var admittedStudent = await _studentManager.GetStudentAsync(NuAdmissionRoll, (int)meritStudent.StudentCategoryId, academicSessionId);
+                    var admittedStudent = await _studentManager.GetStudentAsync(NuAdmissionRoll, CategoryId, academicSessionId);
                     if (admittedStudent != null)
                     {
                         msg = "Congratulations! You are already admitted.";
