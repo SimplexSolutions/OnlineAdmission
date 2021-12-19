@@ -57,7 +57,7 @@
             {
                 <div class="card-footer">
                     <div class="col-md-6 offset-3">                        
-                        <span class="alert alertify-notifier">@ViewBag.provideAppliedInformation</span>
+                        <span class="alert">@ViewBag.provideAppliedInformation</span>
                         <form asp-action="create" asp-controller="AppliedStudents" method="get">
                             <input type="hidden" asp-for="NuRoll" />
                             <input type="hidden" asp-for="CategoryId" />
@@ -104,7 +104,7 @@
             {
                 <div class="card-footer">
                     <div class="col-md-6 offset-3">
-                        <span class="alert alertify-notifier">@ViewBag.paidNotAdmitted</span>
+                        <span class="alert alert-success">@ViewBag.paidNotAdmitted</span>
                         <form asp-action="create" asp-controller="Students" method="get">
                             <input type="hidden" asp-for="NuRoll" />
                             <input type="hidden" asp-for="CategoryId" />
@@ -127,7 +127,7 @@
             {
                 <div class="card-footer">
                     <div class="col-md-6 offset-3">
-                        <span class="alert alertify-notifier text-warning font-weight-bold">@ViewBag.paymentNotCompleted</span>
+                        <span class="alert text-warning font-weight-bold">@ViewBag.paymentNotCompleted</span>
                         <form asp-action="NagadPayment" asp-controller="Students" method="get">
                             <input type="hidden" asp-for="NuRoll" />
                             <input type="hidden" asp-for="CategoryId" />
