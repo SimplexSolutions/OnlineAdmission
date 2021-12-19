@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace OnlineAdmission.Entity
 {
-    public class AppliedStudent 
+    public class AppliedStudent : BaseProps
     {
-        public int Id { get; set; }
 
         [Display(Name = "NU Roll")]
 
