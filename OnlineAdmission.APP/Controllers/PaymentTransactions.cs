@@ -20,25 +20,19 @@ namespace OnlineAdmission.APP.Controllers
     [ApiController]
     public class PaymentTransactions : ControllerBase
     {
-        private readonly IMeritStudentManager meritStudentManager;
+        private readonly IMeritStudentManager _meritStudentManager;
         private readonly IPaymentTransactionManager paymentTransactionManager;
         private HttpClient httpClient;
-
         private readonly IAppliedStudentManager _appliedStudentManager;
-        //private readonly ISubjectManager subjectManager;
         private readonly IStudentManager _studentManager;
-        //private readonly INagadManager nagadManager;
-        
-
-
         private readonly ISMSManager _smsManager;
 
-        public PaymentTransactions(IMeritStudentManager meritStudentManager,IPaymentTransactionManager paymentTransactionManager, ISMSManager sMSManager, IStudentManager studentManager, IAppliedStudentManager appliedStudentManager)
+        public PaymentTransactions(IMeritStudentManager meritStudentManager, IPaymentTransactionManager paymentTransactionManager, ISMSManager sMSManager, 
+            IStudentManager studentManager, IAppliedStudentManager appliedStudentManager)
         {
-            this.meritStudentManager = meritStudentManager;
+            _meritStudentManager = meritStudentManager;
             this.paymentTransactionManager = paymentTransactionManager;
             _appliedStudentManager = appliedStudentManager;
-            //this.subjectManager = subjectManager;
             _studentManager = studentManager;
             _smsManager = sMSManager;
         }
@@ -49,8 +43,8 @@ namespace OnlineAdmission.APP.Controllers
 
             // Status Check
             //Call Status Check API with Payment Ref ID
-            var paymentDetails = "https://api.mynagad.com/api/dfs/verify/payment/" + payment_ref_id;
-            //var paymentDetails = "http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs//verify/payment/" + payment_ref_id;
+            //var paymentDetails = "https://api.mynagad.com/api/dfs/verify/payment/" + payment_ref_id;
+            var paymentDetails = "http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs//verify/payment/" + payment_ref_id;
             httpClient = new HttpClient(); 
             var responseContent =  await httpClient.GetAsync(paymentDetails);
             var  br_ResponseContent = await responseContent.Content.ReadAsStringAsync();
@@ -86,7 +80,7 @@ namespace OnlineAdmission.APP.Controllers
                 if (responsevalue.subjectChange == 1)
                 {
                    // MeritStudent existingMeritStudent = await meritStudentManager.GetHonsByAdmissionRollAsync(MerchantInfo.NuAdmissionRoll);
-                    MeritStudent existingMeritStudent= await meritStudentManager.GetMeritStudentAsync(MerchantInfo.MerchantInfo.NuAdmissionRoll, MerchantInfo.StudentCategory,
+                    MeritStudent existingMeritStudent= await _meritStudentManager.GetMeritStudentAsync(MerchantInfo.MerchantInfo.NuAdmissionRoll, MerchantInfo.StudentCategory,
                         MerchantInfo.meritType, MerchantInfo.sessionId);
                     //var existingStudent = await _studentManager.GetStudentByHSCRollAsync(existingMeritStudent.HSCRoll);
                     var existingStudent = await _studentManager.GetStudentAsync(MerchantInfo.NuAdmissionRoll, MerchantInfo.StudentCategory, MerchantInfo.sessionId);
@@ -121,12 +115,14 @@ namespace OnlineAdmission.APP.Controllers
                     //}
                 }
                 await paymentTransactionManager.AddAsync(newPayment);
-
-                MeritStudent meritStudent = await meritStudentManager.GetMeritStudentAsync((int)MerchantInfo.NuAdmissionRoll, (int)MerchantInfo.StudentCategory,
-                        MerchantInfo.meritType, MerchantInfo.sessionId);
+                //MeritStudent meritStudent = new MeritStudent();
+                //meritStudent = await _meritStudentManager.GetMeritStudentAsync((int)MerchantInfo.NuAdmissionRoll, (int)MerchantInfo.StudentCategory,
+                //        MerchantInfo.meritType, MerchantInfo.sessionId);
+                var meritStudent = await _meritStudentManager.GetMeritStudentAsync(MerchantInfo.NuAdmissionRoll, MerchantInfo.StudentCategory,
+                    MerchantInfo.meritType, MerchantInfo.sessionId);
                 //MeritStudent meritStudent = new MeritStudent();
                 //meritStudent = await meritStudentManager.GetByAdmissionRollAsync(Convert.ToInt32(MerchantInfo.NuAdmissionRoll), (int)newPayment.StudentCategoryId, MerchantInfo.meritType);
-               // var meritStudent = await meritStudentManager.GetMeritStudentAsync(model.NuRoll, model.CategoryId, model.MeritTypeId, model.SessionId);
+                // var meritStudent = await meritStudentManager.GetMeritStudentAsync(model.NuRoll, model.CategoryId, model.MeritTypeId, model.SessionId);
 
                 //if (newPayment.StudentCategory == 1)
                 //{
@@ -164,7 +160,7 @@ namespace OnlineAdmission.APP.Controllers
                         meritStudent.PaymentStatus = true;
                         meritStudent.PaymentTransactionId = newPayment.Id;
                         meritStudent.StudentCategoryId = newPayment.StudentCategoryId;
-                        await meritStudentManager.UpdateAsync(meritStudent);
+                        await _meritStudentManager.UpdateAsync(meritStudent);
                     }                   
                     
                 }
