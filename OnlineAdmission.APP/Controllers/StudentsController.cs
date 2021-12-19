@@ -491,8 +491,8 @@ namespace OnlineAdmission.APP.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Search(string notification, int studentPaymentTypeId)
         {
-            
-            if (studentPaymentTypeId<=0)
+
+            if (studentPaymentTypeId <= 0)
             {
                 var stuPayType = await _studentPaymentTypeManager.GetAllAsync();
                 studentPaymentTypeId = (from spt in stuPayType
@@ -517,14 +517,14 @@ namespace OnlineAdmission.APP.Controllers
                 MeritTypeId = (int)stuPaymentType.MeritTypeId,
                 MeritType = meritType,
                 PaymentTypeId = stuPaymentType.PaymentTypeId,
-                PaymentTypeShortCode=paymentType.PaymentTypeShortCode,
-                CategoryShortCode=category.CategoryShortCode,
+                PaymentTypeShortCode = paymentType.PaymentTypeShortCode,
+                CategoryShortCode = category.CategoryShortCode,
                 StudentPaymentTypeId = studentPaymentTypeId
             };
             //StudentCategory studentCategory = await _studentCategoryManager.GetByIdAsync(stuPaymentType.StudentCategoryId);
             ViewBag.FormTitle = stuPaymentType.StudentCategory.CategoryName + " " + stuPaymentType.PaymentType.PaymentTypeName + " " + (stuPaymentType.AcademicSession.SessionName);
 
-            if (TempData["msg"]!=null)
+            if (TempData["msg"] != null)
             {
                 ViewBag.msg = TempData["msg"].ToString();
             }
@@ -532,11 +532,11 @@ namespace OnlineAdmission.APP.Controllers
             //ViewBag.studentPaymentTypeId = studentPaymentTypeId;
             //ViewBag.studentCategoryId = category.CategoryName;
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (user!=null)
+            if (user != null)
             {
                 HttpContext.Session.SetString("UserId", user.Id);
             }
-            
+
             return View(studentDynamicInfoVM);
         }
 

@@ -18,7 +18,9 @@ namespace OnlineAdmission.Entity
 
         public int AcademicSessionId { get; set; }
         public AcademicSession AcademicSession { get; set; }
+        public string Remarks { get; set; }
 
         public bool Status { get; set; }
+        
     }
 }
