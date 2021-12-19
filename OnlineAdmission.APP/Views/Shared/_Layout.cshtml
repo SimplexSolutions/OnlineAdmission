@@ -84,52 +84,9 @@
                                     </li>
                                     @foreach (var item in studentCategoryList)
                                     {
-                                        @*<li><a href="@item.PaymentURL">@item.CategoryName</a></li>*@
                                         <li><a asp-action="Index" asp-controller="payments" asp-route-studentCategoryId="@item.Id" >@item.CategoryName</a></li>
                                     }
-                                    @*<li>
-                                        <a href="subMenuTopper" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">payments</a>
-                                        <ul class="collapse list-unstyled components" id="subMenuTopper">
-                                            @foreach (var item in studentCategoryList)
-                                            {
-                                                <li><a href="@item.PaymentURL">@item.CategoryName</a></li>
-                                                <li>
-                                                    <a href="subSubMenu_@(++subMenu)" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">@item.CategoryName</a>
-                                                    <ul class="list-unstyled components mb-5" id="subSubMenu_@(subMenu)">
-                                                        <li><a href="#">Application</a></li>
-                                                        <li><a href="#">Admission</a></li>
-                                                    </ul>
-                                                </li>
-                                            }
-                                        </ul>
-                                    </li>*@
-                                    @*<li>
-                <a asp-action="Index" asp-controller="Payments" asp-route-paymentType=1>Hons General (Application)</a>
-            </li>
-            <li>
-                <a asp-action="Index" asp-controller="Payments" asp-route-paymentType=2>Hons General (Admission)</a>
-            </li>
-            <li>
-                <a asp-action="ProfessionalIndex" asp-controller="Payments" asp-route-paymentType=1>Hons Professional (Application)</a>
-            </li>
-            <li>
-                <a asp-action="ProfessionalIndex" asp-controller="Payments" asp-route-paymentType=2>Hons Professional (Admission)</a>
-            </li>
-            <li>
-                <a asp-action="MastersGeneralIndex" asp-controller="Payments" asp-route-paymentType=1>Masters Regular Application</a>
-            </li>
-            <li>
-                <a asp-action="MastersGeneralIndex" asp-controller="Payments" asp-route-paymentType=2>Masters Regular Admission</a>
-            </li>
-            <li>
-                <a asp-action="mastersIndex" asp-controller="Payments" asp-route-paymentType=1>Masters Professional(MBA) Application</a>
-            </li>
-            <li>
-                <a asp-action="mastersIndex" asp-controller="Payments" asp-route-paymentType=2>Masters Professional(MBA) Admission</a>
-            </li>
-            <li>
-                <a asp-action="DegreeIndex" asp-controller="Payments" asp-route-paymentType=1>Degree Pass Application</a>
-            </li>*@
+                                    
                                 }
                                 @if (User.IsInRole("SuperAdmin"))
                                 {
@@ -156,6 +113,12 @@
                                     </li>
                                     <li>
                                         <a asp-action="Index" asp-controller="StudentCategories">Student Category</a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="Index" asp-controller="MeritTypes">Merit Type</a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="Index" asp-controller="StudentPaymentTypes">Student payment Type</a>
                                     </li>
                                 </ul>
                             </li>
