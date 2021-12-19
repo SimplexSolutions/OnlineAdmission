@@ -1,0 +1,132 @@
+﻿@model OnlineAdmission.APP.ViewModels.PaymentsVM.SummeryReportVM
+
+@if (Model != null)
+{
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <form asp-action="SummeryReport1" asp-controller="Payments" method="post">
+                <div class="form-group row">
+                    <Label class="col-md-2 text-md-right col-form-label">From</Label>
+                    <div class="col-md-3">
+                        <input type="date" name="FromDate" value="@ViewBag.FromDate" class="form-control" required />
+                    </div>
+                    <Label class="col-md-2 text-md-right col-form-label"> To</Label>
+                    <div class="col-md-3">
+                        <input type="date" name="ToDate" value="@ViewBag.ToDate" class="form-control" required />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="submit" class="btn-block btn-info form-control" value="Search" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="printableArea">
+        <div class="row">
+            <div class="col-md-10 offset-md-1 text-center">
+                <h2>Tejgaon College</h2>
+                <h3>Student Payment (Summery Report)</h3>
+                <hr />
+            </div>
+        </div>
+        @if (ViewBag.FromDate != null || ViewBag.Todate != null)
+        {
+            <div class="row">
+                <div class="col-md-10 offset-md-1">
+                    <span class="alert h5">From : <span class="font-weight-bold">@ViewBag.FromDate </span> - To : <span class="font-weight-bold">@ViewBag.ToDate</span></span>
+                </div>
+            </div>
+        }
+        <div class="row">
+            @foreach (var paymentType in Model.PaymentTypes)
+            {
+                <div class="col-md-10 offset-md-1">
+                    <table class="table table-secondary table-bordered">
+                        <thead class="font-weight-bold">
+                            <tr class="bg-info">
+                                <td colspan="6" class="text-center h6 font-weight-bold">@paymentType.PaymentTypeName Payment Summery</td>
+                            </tr>
+                            <tr>
+                                <td>#</td>
+                                <td>Student Category</td>
+                                <td class="text-right">Students</td>
+                                <td class="text-right">Received Amount</td>
+                                <td class="text-right">Service Charge</td>
+                                <td class="text-right">Net Amount</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{int i = 0;}
+                            @foreach (var category in Model.StudentCategories)
+                            {
+                                if (@Model.PaymentTransactions.Where(p => p.PaymentTypeId == paymentType.Id && p.StudentCategoryId == category.Id).Count() > 0)
+                                {
+                                    <tr>
+                                        <td>@(++i)</td>
+                                        <td>@category.CategoryName</td>
+                                        <td class="text-right">@Model.PaymentTransactions.Where(p => p.PaymentTypeId == paymentType.Id && p.StudentCategoryId == category.Id).Count()</td>
+                                        <td class="text-right">@string.Format(new System.Globalization.CultureInfo("hi-IN"), "{0:#,#.00}", @Model.PaymentTransactions.Where(p => p.PaymentTypeId == paymentType.Id && p.StudentCategoryId == category.Id).Sum(p => p.Amount - p.Amount * 0.015))  </td>
+                                        <td class="text-right">@string.Format(new System.Globalization.CultureInfo("hi-IN"), "{0:#,#.00}", @Model.PaymentTransactions.Where(p => p.PaymentTypeId == paymentType.Id && p.StudentCategoryId == category.Id).Sum(p => p.Amount * 0.015))</td>
+                                        <td class="text-right">@string.Format(new System.Globalization.CultureInfo("hi-IN"), "{0:#,#.00}", @Model.PaymentTransactions.Where(p => p.PaymentTypeId == paymentType.Id && p.StudentCategoryId == category.Id).Sum(p => p.Amount))</td>
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <table class="table table-warning table-bordered">
+                    <thead>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td class="text-right">Total Students</td>
+                            <td class="text-right">Total Received Amount</td>
+                            <td class="text-right">Service Charge</td>
+                            <td class="text-right">Net Amount</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="font-weight-bolder">
+                            <td colspan="3" class="text-md-right">Total(Application+Admission)</td>
+                            <td class="text-right">@Model.PaymentTransactions.Count()</td>
+                            <td class="text-right">@string.Format(new System.Globalization.CultureInfo("hi-IN"), "{0:#,#.00}", @Model.PaymentTransactions.Sum(p => p.Amount - (p.Amount * 0.015)))</td>
+                            <td class="text-right">@string.Format(new System.Globalization.CultureInfo("hi-IN"), "{0:#,#.00}", @Model.PaymentTransactions.Sum(p => p.Amount * 0.015))</td>
+                            <td class="text-right">@string.Format(new System.Globalization.CultureInfo("hi-IN"), "{0:#,#.00}", @Model.PaymentTransactions.Sum(p => p.Amount))</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 offset-md-1 text-md-right">
+            <button class="btn btn-default btn-info" onclick="printDiv('printableArea')"><i class="fa fa-print" aria-hidden="true" style="    font-size: 17px;"> Print</i></button>
+        </div>
+    </div>
+}
+
+else
+{
+    <div class="row">
+        <div class="col-md-10 offset-md-1 text-center">
+            <span class="h4 alert">No data found</span>
+        </div>
+    </div>
+}
+
+@section Scripts{
+    <script>
+        function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+    </script>
+
+}

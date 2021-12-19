@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OnlineAdmission.Entity
 {
-    public class MeritStudent
+    public class MeritStudent 
     {
         public int Id { get; set; }
 

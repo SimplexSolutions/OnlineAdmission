@@ -498,6 +498,7 @@ namespace OnlineAdmission.APP.Controllers
                 studentPaymentTypeId = (from spt in stuPayType
                                         where spt.Status == true
                                         select spt.Id).FirstOrDefault();
+
                 if (studentPaymentTypeId <= 0)
                 {
                     studentPaymentTypeId = 1;

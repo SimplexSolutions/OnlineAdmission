@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineAdmission.APP.ViewModels;
+using OnlineAdmission.APP.ViewModels.PaymentsVM;
 using OnlineAdmission.APP.ViewModels.Student;
 using OnlineAdmission.BLL.IManager;
 using OnlineAdmission.DB;
@@ -593,8 +594,7 @@ namespace OnlineAdmission.APP.Controllers
         [HttpGet]
         public async Task<IActionResult> SummeryReport()
         {
-            List<PaymentTransaction> payments = await _paymentTransactionManager.GetAllAsync();
-            
+            List<PaymentTransaction> payments = await _paymentTransactionManager.GetAllAsync();            
             return View(payments);
         }
 
@@ -621,6 +621,7 @@ namespace OnlineAdmission.APP.Controllers
             {
                 payments = new List<PaymentTransaction>();
             }
+
 
             ViewBag.totalPaymentCount = payments.Count();
             ViewBag.applicationPaymentCount = payments.Where(s => s.PaymentTypeId == 2).Count();
@@ -699,12 +700,55 @@ namespace OnlineAdmission.APP.Controllers
             ViewBag.degreeAdmissionPaymentService = payments.Where(p => p.StudentCategoryId == 5 && p.PaymentTypeId == 2).Sum(p => p.Amount);
             ViewBag.degreeAdmissionPaymentSumNet = payments.Where(p => p.StudentCategoryId == 5 && p.PaymentTypeId == 2).Sum(p => p.Amount) - payments.Where(p => p.StudentCategoryId == 5 && p.PaymentTypeId == 2).Sum(p => p.Amount);
 
-            /////////////////// ADMISSION PAYMENT START //////////////////////////////////
+            /////////////////// ADMISSION PAYMENT END //////////////////////////////////
 
 
 
             return View(payments);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SummeryReport1(DateTime? fromDate, DateTime? toDate)
+        {
+            if (fromDate != null)
+            {
+                ViewBag.FromDate = Convert.ToDateTime(fromDate).ToString("dd-MMM-yyyy");
+            }
+            if (toDate != null)
+            {
+                ViewBag.ToDate = Convert.ToDateTime(toDate).ToString("dd-MMM-yyyy");
+            }
+            List<PaymentTransaction> payments = await _paymentTransactionManager.GetAllAsync();
+            List<StudentCategory> categories = await _studentCategoryManager.GetAllAsync();
+
+            if (fromDate != null && toDate != null)
+            {
+                payments = payments.Where(p => p.TransactionDate.Date >= (DateTime)fromDate && p.TransactionDate.Date <= (DateTime)toDate).ToList();
+            }
+            else if (fromDate == null && toDate != null)
+            {
+                payments = payments.Where(p => p.TransactionDate.Date <= (DateTime)toDate).ToList();
+            }
+            else if (fromDate != null && toDate == null)
+            {
+                payments = payments.Where(p => p.TransactionDate.Date >= (DateTime)fromDate).ToList();
+            }
+            else
+            {
+                payments = new List<PaymentTransaction>();
+            }
+
+            List<PaymentType> paymentTypes = await _paymentTypeManager.GetAllAsync();
+
+            SummeryReportVM summeryReportVM = new SummeryReportVM();
+            summeryReportVM.PaymentTransactions = payments;
+            summeryReportVM.StudentCategories = categories;
+            summeryReportVM.PaymentTypes = paymentTypes;
+
+
+            return View(summeryReportVM);
+        }
+
         // GET: Payments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
