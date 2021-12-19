@@ -203,7 +203,7 @@ namespace OnlineAdmission.APP.Controllers
         {
             model.DistrictList = new SelectList(await _districtManager.GetAllAsync(), "Id", "DistrictName").ToList();
 
-            string msg = "";
+            //string msg = "";
             var existingSubject = await _subjectManager.GetByIdAsync(model.SubjectId);
             model.Subject = existingSubject;
             var existStudent = await _studentManager.GetStudentAsync(model.NuAdmissionRoll,model.StudentCategory,model.AcademicSessionId);
@@ -256,13 +256,13 @@ namespace OnlineAdmission.APP.Controllers
                         using (var stream = new FileStream(f, FileMode.Create))
                         {
                             await photo.CopyToAsync(stream);
-                            msg = "File has been uploaded successfully";
+                            //string msg = "File has been uploaded successfully";
                         }
                         model.Photo = attachFile;
                     }
                     else
                     {
-                        msg = "Please upload an image";
+                        //string msg = "Please upload an image";
                     }
                     
 
