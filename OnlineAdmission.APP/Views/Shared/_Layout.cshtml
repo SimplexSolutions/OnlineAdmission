@@ -37,7 +37,7 @@
     <link href="~/lib/datatable/datatables.min.css" rel="stylesheet" />
     @*Custom Style*@
     <link href="~/css/_Layout.css" rel="stylesheet" />
-
+    
 
 </head>
 <body>
@@ -84,9 +84,9 @@
                                     </li>
                                     @foreach (var item in studentCategoryList)
                                     {
-                                        <li><a asp-action="Index" asp-controller="payments" asp-route-studentCategoryId="@item.Id" >@item.CategoryName</a></li>
+                                        <li><a asp-action="Index" asp-controller="payments" asp-route-studentCategoryId="@item.Id">@item.CategoryName</a></li>
                                     }
-                                    
+
                                 }
                                 @if (User.IsInRole("SuperAdmin"))
                                 {
@@ -172,7 +172,7 @@
                                     @foreach (var item in studentPaymentTypeList.Where(s => s.Status == true))
                                     {
                                         <li><a class="nav-link" asp-action="Search" asp-controller="Students" asp-route-studentPaymentTypeId="@item.Id">@item.StudentCategory.CategoryName @item.PaymentType.PaymentTypeName (@item.AcademicSession.SessionName)</a></li>
-                                        
+
                                     }
                                 </ul>
                             </li>
@@ -215,12 +215,17 @@
     <script src="~/lib/Select2/js/select2.min.js"></script>
     <script src="~/theme/js/main.js"></script>
 
+
+
+
     <!--<script src="~/lib/jquery/dist/jquery.min.js"></script>--> @*//JQuery 3.5.1*@
     <script src="~/lib/datatable/datatables.min.js"></script>
     <script src="~/lib/datatable/dataTables.buttons.min.js"></script>
     <script src="~/lib/datatable/buttons.print.min.js"></script>
 
     <script src="~/lib/alertify/alertify.min.js"></script>
+
+    
     @await RenderSectionAsync("Scripts", required: false)
     @RenderSection("Styles", required: false)
     <script>
