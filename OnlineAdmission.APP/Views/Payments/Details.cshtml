@@ -127,12 +127,6 @@
                             <dd class="col-md-8">
                                 @Html.DisplayFor(model => model.PaymentTransaction.TransactionId)
                             </dd>
-                            @*<dt class="col-md-4">
-                                @Html.DisplayNameFor(model => model.PaymentTransaction.AdmissionFee)
-                            </dt>
-                            <dd class="col-md-8">
-                                @Html.DisplayFor(model => model.PaymentTransaction.AdmissionFee)
-                            </dd>*@
                         </dl>
                     </div>
                     <div class="card-footer text-muted text-md-right">
@@ -148,9 +142,8 @@
 </div>
 <div class="row noPrint">
     <div class="col-md-12 text-md-right">
-        @*<button class="btn btn-success" onclick="printContent('PrintArea')"><i class="fa fa-print"></i> Print</button>*@
         <button onclick="window.print()" class="btn btn-success"><i class="fa fa-print"></i> Print</button>
-        <a asp-controller="Payments" asp-action="@ViewBag.action" asp-route-paymentType="@ViewBag.paymentType" class="btn btn-info">Back To List</a>
+        <a asp-controller="Payments" asp-action="Index" asp-route-studentCategoryId="@ViewBag.studentCategoryId" class="btn btn-info">Back To List</a>
     </div>
 </div>
 

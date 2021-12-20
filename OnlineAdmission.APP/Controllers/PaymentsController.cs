@@ -449,7 +449,7 @@ namespace OnlineAdmission.APP.Controllers
 
 
         // GET: Payments/Details/5
-        public async Task<IActionResult> Details(int? id, int studentCategory)
+        public async Task<IActionResult> Details(int? id, int studentCategoryId, int academicSessionId, int meritTypeId)
         {
             if (id == null)
             {
@@ -458,41 +458,17 @@ namespace OnlineAdmission.APP.Controllers
             var allMeritStudents = await _meritStudentManager.GetAllAsync();
 
             var paymentTransaction = await _paymentTransactionManager.GetByIdAsync((int)id);
-            ViewBag.paymentType = paymentTransaction.PaymentTypeId;
-            MeritStudent existMeritStudent = new MeritStudent();
-            if (studentCategory==1)
-            {
-                existMeritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(paymentTransaction.ReferenceNo);
-                ViewBag.action = "Index";
-            }
-            if (studentCategory==2)
-            {
-                existMeritStudent = await _meritStudentManager.GetProByAdmissionRollAsync(paymentTransaction.ReferenceNo);
-                ViewBag.action = "professionalIndex";
-            }
-            if (studentCategory==3)
-            {
-                existMeritStudent = await _meritStudentManager.GetProMBAByAdmissionRollAsync(paymentTransaction.ReferenceNo);
-                ViewBag.action = "mastersIndex";
-            }
-            if (studentCategory == 4)
-            {
-                existMeritStudent = await _meritStudentManager.GetGenMastersByAdmissionRollAsync(paymentTransaction.ReferenceNo);
-                ViewBag.action = "MastersGeneralIndex";
-            }
+            StudentCategory studentCategory = await _studentCategoryManager.GetByIdAsync(studentCategoryId);
+            ViewBag.studentCategoryId = studentCategoryId;
+            MeritStudent existMeritStudent = await _meritStudentManager.GetMeritStudentAsync(paymentTransaction.ReferenceNo, studentCategoryId, meritTypeId, academicSessionId);
 
-            if (studentCategory == 5)
-            {
-                existMeritStudent = await _meritStudentManager.GetDegreeByAdmissionRollAsync(paymentTransaction.ReferenceNo);
-                ViewBag.action = "DegreeIndex";
-            }
-            var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(paymentTransaction.ReferenceNo, studentCategory);
+            var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(paymentTransaction.ReferenceNo, studentCategoryId);
             Subject existSubject = new Subject();
             Student student = new Student();
             if (existMeritStudent!=null)
             {
                 existSubject = await _subjectManager.GetByCodeAsync(existMeritStudent.SubjectCode);
-                student = await _studentManager.GetByAdmissionRollAsync(existMeritStudent.NUAdmissionRoll, studentCategory);
+                student = await _studentManager.GetByAdmissionRollAsync(existMeritStudent.NUAdmissionRoll, studentCategoryId);
             }
 
             PaymentReceiptVM paymentReceiptVM = new PaymentReceiptVM();

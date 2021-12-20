@@ -100,27 +100,7 @@ namespace OnlineAdmission.APP.Controllers
                 if (exPT!=null)
                 {
                     return RedirectToAction("Search", "Students");
-                    //if (newPayment.StudentCategoryId==1)
-                    //{
-
-                    //    return RedirectToAction("Search", "Students");
-                    //}
-                    //else if (newPayment.StudentCategoryId==2)
-                    //{
-                    //    return RedirectToAction("ProfessionalSearch", "Students");
-                    //}
-                    //else if (newPayment.StudentCategoryId == 3)
-                    //{
-                    //    return RedirectToAction("MastersSearch", "Students");
-                    //}
-                    //else if (newPayment.StudentCategoryId == 4)
-                    //{
-                    //    return RedirectToAction("MastersSearchGeneral", "Students");
-                    //}
-                    //else if (newPayment.StudentCategoryId == 5)
-                    //{
-                    //    return RedirectToAction("DegreeSearch", "Students");
-                    //}
+                    
                 }
                 await paymentTransactionManager.AddAsync(newPayment);
                 //MeritStudent meritStudent = new MeritStudent();

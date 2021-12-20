@@ -166,9 +166,8 @@
                             @Math.Round(item.PaymentTransaction.AdmissionFee, 2)
                         </td>
                         <td class="noPrint">
-                            @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
-                            <a asp-action="Details" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategory="1">Details</a>
-                            @*<a asp-action="Delete" asp-route-id="@item.PaymentTransaction.Id">Delete</a>*@
+                            <a asp-action="Details" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.MeritStudent.StudentCategoryId" asp-route-academicSessionId="@item.MeritStudent.AcademicSessionId" asp-route-meritTypeId="@item.MeritStudent.MeritTypeId">Details</a>
+                            
                         </td>
                     </tr>
                     i++;
