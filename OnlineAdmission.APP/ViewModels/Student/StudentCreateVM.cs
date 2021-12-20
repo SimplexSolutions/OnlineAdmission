@@ -11,12 +11,14 @@ namespace OnlineAdmission.APP.ViewModels.Student
     public class StudentCreateVM
     {
 
+        public int NuAdmissionRoll { get; set; }
+
         [Display(Name = "Subject")]
         public int SubjectId { get; set; }
         public Subject Subject { get; set; }
         //[Display(Name = "District")]
         //public int DistrictId { get; set; }
-        public int StudentCategory { get; set; }
+        public int? StudentCategoryId { get; set; }
         [Required, StringLength(150)]
         public string Name { get; set; }
 
@@ -146,9 +148,11 @@ namespace OnlineAdmission.APP.ViewModels.Student
         public string HSCRemark { get; set; }
         public string HONSRemark { get; set; }
 
-        public int NuAdmissionRoll { get; set; }
 
         public bool? Status { get; set; }
+
+        // 1=Regular Student, 2=SubjectChanged, 3 = CollegeChanged
+        public int? StudentType { get; set; } = 1;
 
         [Display(Name = "Student NID")]
         public string StudentNID { get; set; }
@@ -159,7 +163,7 @@ namespace OnlineAdmission.APP.ViewModels.Student
         [Display(Name = "Mother's NID")]
         public string MotherNID { get; set; }
 
-        public int AcademicSessionId { get; set; }
+        public int? AcademicSessionId { get; set; }
         public ICollection<SelectListItem> DistrictList { get; set; }
         public ICollection<SelectListItem> SubjectList { get; set; }
     }

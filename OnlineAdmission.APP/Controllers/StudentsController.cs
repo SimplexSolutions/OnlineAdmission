@@ -176,7 +176,9 @@ namespace OnlineAdmission.APP.Controllers
                 student.SubjectId = existingSubject.Id;
                 student.Subject = existingSubject;
                 student.NuAdmissionRoll = model.NuRoll;
-                student.StudentCategory = (int)existingMeritStudent.StudentCategoryId;
+                student.StudentCategoryId = (int)existingMeritStudent.StudentCategoryId;
+                student.AcademicSessionId = model.SessionId;
+
                 if (subjectCode < 10)
                 {
                     student.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "0" + subjectCode + "" + sl);
@@ -206,7 +208,7 @@ namespace OnlineAdmission.APP.Controllers
             //string msg = "";
             var existingSubject = await _subjectManager.GetByIdAsync(model.SubjectId);
             model.Subject = existingSubject;
-            var existStudent = await _studentManager.GetStudentAsync(model.NuAdmissionRoll,model.StudentCategory,model.AcademicSessionId);
+            var existStudent = await _studentManager.GetStudentAsync(model.NuAdmissionRoll,(int)model.StudentCategoryId, (int)model.AcademicSessionId);
             //if (existStudent != null)
             //{
             //    msg = "HSC Roll is already Exist";
@@ -281,8 +283,6 @@ namespace OnlineAdmission.APP.Controllers
                     {
                         model.CollegeRoll = Convert.ToInt32(year.Substring(year.Length - 2) + "" + subjectCode + "" + sl);
                     }
-                    
-                    
                     
                     
                     Student newStudent = _mapper.Map<Student>(model);                    

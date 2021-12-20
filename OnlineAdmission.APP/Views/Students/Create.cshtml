@@ -49,7 +49,10 @@
         <form asp-action="Create" enctype="multipart/form-data" method="post">
             <input asp-for="CollegeRoll" type="hidden" />
             <input asp-for="NuAdmissionRoll" type="hidden" />
-            <input asp-for="StudentCategory" type="hidden" />
+            <input asp-for="StudentCategoryId" type="hidden" />
+            <input type="hidden" asp-for="StudentType" value="1" />
+            <input type="hidden" asp-for="AcademicSessionId" />
+            
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group row">
                 <label asp-for="SubjectId" class="col-form-label col-md-2 text-md-right text-left">Subject: </label>
