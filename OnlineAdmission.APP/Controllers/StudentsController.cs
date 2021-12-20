@@ -520,7 +520,8 @@ namespace OnlineAdmission.APP.Controllers
                 PaymentTypeId = stuPaymentType.PaymentTypeId,
                 PaymentTypeShortCode = paymentType.PaymentTypeShortCode,
                 CategoryShortCode = category.CategoryShortCode,
-                StudentPaymentTypeId = studentPaymentTypeId
+                StudentPaymentTypeId = studentPaymentTypeId,
+                Remarks=stuPaymentType.Remarks
             };
             //StudentCategory studentCategory = await _studentCategoryManager.GetByIdAsync(stuPaymentType.StudentCategoryId);
             ViewBag.FormTitle = stuPaymentType.StudentCategory.CategoryName + " " + stuPaymentType.PaymentType.PaymentTypeName + " " + (stuPaymentType.AcademicSession.SessionName);

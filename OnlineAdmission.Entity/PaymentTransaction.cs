@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace OnlineAdmission.Entity
 {
-    public class PaymentTransaction
+    public class PaymentTransaction : BaseProps
     {
-        public int Id { get; set; }
         public double Amount { get; set; }
 
         [Display(Name = "Student Name")]

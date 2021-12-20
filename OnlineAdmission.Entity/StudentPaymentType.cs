@@ -19,7 +19,8 @@ namespace OnlineAdmission.Entity
         public int AcademicSessionId { get; set; }
         public AcademicSession AcademicSession { get; set; }
         public string Remarks { get; set; }
-
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public bool Status { get; set; }
         
     }

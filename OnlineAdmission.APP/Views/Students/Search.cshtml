@@ -18,7 +18,7 @@
     <div class="col-md-12 text-center">
         <div class="card">
             <div class="card-header">
-                <span class="text-info font-weight-bold h5">@ViewBag.FormTitle</span>
+                <span class="text-info font-weight-bold h5">@ViewBag.FormTitle <br />@Model.MeritType.MeritTypeName</span>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -32,7 +32,9 @@
                                 <input asp-for="MeritTypeId" type="hidden" />
                                 <input asp-for="PaymentTypeShortCode" type="hidden" />
                                 <input asp-for="CategoryShortCode" type="hidden" />
-                                <input asp-for="StudentPaymentTypeId" type="hidden"/>
+                                <input asp-for="StudentPaymentTypeId" type="hidden" />
+                                <input asp-for="@Model.MeritType.MeritTypeName" type="hidden" />
+                                <input asp-for="@Model.Remarks" type="hidden" />
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="NuRoll">NU Roll</span>
@@ -125,22 +127,49 @@
             }
             @if (ViewBag.paymentNotCompleted != null)
             {
-                <div class="card-footer">
-                    <div class="col-md-6 offset-3">
-                        <span class="alert text-warning font-weight-bold">@ViewBag.paymentNotCompleted</span>
-                        <form asp-action="NagadPayment" asp-controller="Students" method="get">
-                            <input type="hidden" asp-for="NuRoll" />
-                            <input type="hidden" asp-for="CategoryId" />
-                            <input type="hidden" asp-for="SessionId" />
-                            <input type="hidden" asp-for="MeritTypeId" />
-                            <input type="hidden" asp-for="CategoryShortCode" />
-                            <input type="hidden" asp-for="PaymentTypeShortCode" />
-                            <input type="hidden" asp-for="PaymentTypeId" />                            
-                            <input type="hidden" asp-for="StudentPaymentTypeId" />
-                            <input class="btn btn-info" type="submit" value="Make Payment" />
-                        </form>
-                    </div>
-                </div>
+        <div class="card-footer">
+
+            <div class="col-md-6 offset-3">
+                <table class="table table-bordered">
+                    <thead class="thead-light bg-primary text-white">
+                        <tr>
+                            <td>NU Roll</td>
+                            <td>Name</td>
+                            <td>Subject</td>
+                            <td>Merit List</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.NuRoll</td>
+                            <td>@Model.AppliedStudent.ApplicantName</td>
+                            <td>@Model.MeritType.MeritTypeName</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6 offset-3">
+                <span class="alert text-warning font-weight-bold">@ViewBag.paymentNotCompleted</span>
+                <form asp-action="NagadPayment" asp-controller="Students" method="get">
+                    <input type="hidden" asp-for="NuRoll" />
+                    <input type="hidden" asp-for="CategoryId" />
+                    <input type="hidden" asp-for="SessionId" />
+                    <input type="hidden" asp-for="MeritTypeId" />
+                    <input type="hidden" asp-for="CategoryShortCode" />
+                    <input type="hidden" asp-for="PaymentTypeShortCode" />
+                    <input type="hidden" asp-for="PaymentTypeId" />
+                    <input type="hidden" asp-for="StudentPaymentTypeId" />
+                    <input class="btn btn-info" type="submit" value="Make Payment" />
+                </form>
+            </div>
+            <div class="note bg-danger mt-1 mb-1 p-1">
+                <span class="text-justify text-light">
+                    @ViewBag.Remarks
+                    [শিক্ষার্থীকে জাতীয় বিশ্ববিদ্যালয়ের ভর্তি বিষয়ক ওয়েবসাইটের (www.nu.ac.bd/admissions) Applicant Login অপশনে Honours Login লিংকে গিয়ে সঠিক রোল নম্বর ও পিন এন্ট্রি দিয়ে 21-12-2021 তারিখের মধ্যে চূড়ান্ত ভর্তি ফরম পূরণ করতে হবে।
+                    <span style="color:#9dfb14">(সর্তকতাঃ জাঃ বিঃ-র ওয়েবসাইট থেকে চূড়ান্ত ভর্তি ফরম পূরণ করে প্রিন্ট কপি সংগ্রহ না করলে ভর্তি নিশ্চিত হবে না। )]</span>
+                </span>
+            </div>
+        </div>
             }
         </div>
     </div>

@@ -64,7 +64,7 @@ namespace OnlineAdmission.APP.Controllers
                 int sessionId = MerchantInfo.sessionId;
                 int meritTypeId = MerchantInfo.meritType;
 
-                PaymentTransaction newPayment = new PaymentTransaction{
+                PaymentTransaction newPayment = new PaymentTransaction {
                     Amount = responsevalue.amount,
                     TransactionDate = DateTime.Today,
                     Balance = 0,
@@ -77,8 +77,11 @@ namespace OnlineAdmission.APP.Controllers
                     MobileNumber = MerchantInfo.MobileNo,
                     StudentCategoryId = stuCat,
                     PaymentTypeId = patType,
-                    AcademicSessionId= sessionId
+                    AcademicSessionId = sessionId,
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = HttpContext.Session.GetString("UserId")
                 };
+                
                 //newPayment.ApplicantName = MerchantInfo.StudentName;
                 //newPayment.MobileNo = MerchantInfo.MobileNo;
                 //newPayment.SubjectId = MerchantInfo.SubjectId;
