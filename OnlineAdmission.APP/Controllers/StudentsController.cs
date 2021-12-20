@@ -575,6 +575,7 @@ namespace OnlineAdmission.APP.Controllers
                 if (appliedStudent == null)
                 {
                     ViewBag.provideAppliedInformation = "Please submit your basic information.";
+                    ViewBag.Remarks = stuPaymentType.Remarks;
                     ViewBag.infoCollection = true;
                     return View(model);
                 }
