@@ -243,7 +243,9 @@ namespace OnlineAdmission.APP.Controllers
                             SubjectCode = Convert.ToInt32(reader.GetValue(3).ToString()),
                             Comments = reader.GetValue(4).ToString(),
                             StudentCategoryId = Convert.ToInt32(reader.GetValue(5).ToString()),
-                            HonorsRoll = Convert.ToInt64(reader.GetValue(6).ToString())
+                            HonorsRoll = Convert.ToInt64(reader.GetValue(6).ToString()),
+                            AcademicSessionId = Convert.ToInt32(reader.GetValue(7).ToString()),
+                            MeritTypeId = Convert.ToInt32(reader.GetValue(8).ToString())
                         });
 
                     }

@@ -23,11 +23,59 @@
         </form>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-12 mb-2">
+        <button id="showButton" class="btn btn-info">Show Formate</button>
+        <button id="hideButton" class="btn btn-info" style="display:none">Hide Formate</button>
+    </div>
+    <div class="col-md-12">
+        <div id="formateTable" style="display:none">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>6</td>
+                        <td>7</td>
+                        <td>8</td>
+                        <td>9</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>NU Roll</td>
+                        <td>HSC Roll</td>
+                        <td>Merit Position</td>
+                        <td>Subject Code</td>
+                        <td>Comments</td>
+                        <td>Student Category Id</td>
+                        <td>Honors Roll</td>
+                        <td>Academic Session Id</td>
+                        <td>Merit Type Id</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 @section Scripts{ 
 <script>
     $(document).ready(function () {
         $('#msgId').fadeOut(12000);
+        $('#showButton').click(function () {
+            $(this).hide();
+            $('#hideButton').css('display','block');
+            $('#formateTable').css('display','block');
+        });
+        $('#hideButton').click(function () {
+            $(this).hide();
+            $('#showButton').css('display','block');
+            $('#formateTable').css('display','none');
+        });
     });
 </script>
 }
