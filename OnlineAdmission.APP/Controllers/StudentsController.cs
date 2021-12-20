@@ -576,7 +576,7 @@ namespace OnlineAdmission.APP.Controllers
                 {
                     ViewBag.provideAppliedInformation = "Please submit your basic information.";
                     ViewBag.infoCollection = true;
-                    return View();
+                    return View(model);
                 }
 
                 model.MeritStudent = meritStudent;
@@ -605,7 +605,7 @@ namespace OnlineAdmission.APP.Controllers
                 ViewBag.msg = "Please enter a valid roll.";
 
             }
-            return View();
+            return View(model);
         }
 
         private Exception Exception(string v)
