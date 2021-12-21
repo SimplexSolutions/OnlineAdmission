@@ -101,7 +101,8 @@ namespace OnlineAdmission.APP.Controllers
                                                                  PaymentTransaction = pt,
                                                                  Student = s,
                                                                  MeritStudent=ms,
-                                                                 AppliedStudent=astu
+                                                                 AppliedStudent=astu,
+                                                                 AcademicSession = ms.AcademicSession
                                                              };
 
 

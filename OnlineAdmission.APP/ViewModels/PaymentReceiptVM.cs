@@ -13,5 +13,6 @@ namespace OnlineAdmission.APP.ViewModels
         public MeritStudent MeritStudent { get; set; }
         public AppliedStudent AppliedStudent { get; set; }
         public OnlineAdmission.Entity.Student Student { get; set; }
+        public AcademicSession AcademicSession { get; set;}
     }
 }

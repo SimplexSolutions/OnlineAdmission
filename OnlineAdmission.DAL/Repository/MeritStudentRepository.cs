@@ -62,7 +62,7 @@ namespace OnlineAdmission.DAL.Repository
 
         public IQueryable<MeritStudent> GetMeritStudents()
         {
-            IQueryable<MeritStudent> meritStudents =_context.MeritStudents;
+            IQueryable<MeritStudent> meritStudents =_context.MeritStudents.Include(m => m.AcademicSession);
             return meritStudents;
         }
         public IQueryable<MeritStudent> GetMeritStudentsByCategory(int cat)
