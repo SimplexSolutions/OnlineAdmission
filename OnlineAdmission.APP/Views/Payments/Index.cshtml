@@ -62,7 +62,7 @@
                         <option selected disabled>-Select Type-</option>
                     </select>
                     <div class="input-group-append">
-                        <button class="btn btn-info" type="submit">Search</button>
+                        <button class="btn btn-info" type="submit">Search By Payment Type</button>
                     </div>
                 </div>
             </div>
@@ -124,52 +124,64 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>
-                            @(i).
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AppliedStudent.ApplicantName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AppliedStudent.NUAdmissionRoll)
-                        </td>
-                        <td class="text-md-center">
-                            @if (item.Student != null)
-                            {
-                                @Html.DisplayFor(modelItem => item.Student.CollegeRoll)
-                            }
-                            else
-                            {
-                                <span>N/A</span>
-                            }
-                        </td>
-                        <td>
-                            2021-2022
-                        </td>
-                        <td>
-                            @(item.AppliedStudent.MobileNo)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Subject.SubjectName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PaymentTransaction.TransactionId)
-                        </td>
-                        <td>
-                            @item.PaymentTransaction.AccountNo
-                        </td>
-                        <td>
-                            @item.PaymentTransaction.TransactionDate.ToString("yyyy-MM-dd")
-                        </td>
-                        <td class="text-right">
-                            @Math.Round(item.PaymentTransaction.AdmissionFee, 2)
-                        </td>
-                        <td class="noPrint">
-                            <a asp-action="Details" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.MeritStudent.StudentCategoryId" asp-route-academicSessionId="@item.MeritStudent.AcademicSessionId" asp-route-meritTypeId="@item.MeritStudent.MeritTypeId">Details</a>
-                            
-                        </td>
-                    </tr>
+                <tr>
+                    <td>
+                        @(i).
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PaymentTransaction.StudentName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PaymentTransaction.ReferenceNo)
+                    </td>
+                    <td class="text-md-center">
+                        @if (item.Student != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.Student.CollegeRoll)
+                        }
+                        else
+                        {
+                            <span>N/A</span>
+                        }
+                    </td>
+                    <td>
+                        2021-2022
+                    </td>
+                    <td>
+                        @(item.PaymentTransaction.MobileNumber)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.Subject.SubjectName)
+                    </td>*@
+                    
+                <td>
+                    @if (item.Subject != null)
+                    {
+                        @Html.DisplayFor(modelItem => item.Subject.SubjectName)
+                    }
+                    else
+                    {
+                        <span>N/A</span>
+                    }
+
+                </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PaymentTransaction.TransactionId)
+                    </td>
+                    <td>
+                        @item.PaymentTransaction.AccountNo
+                    </td>
+                    <td>
+                        @item.PaymentTransaction.TransactionDate.ToString("yyyy-MM-dd")
+                    </td>
+                    <td class="text-right">
+                        @Math.Round(item.PaymentTransaction.AdmissionFee, 2)
+                    </td>
+                    <td class="noPrint">
+                        <a asp-action="Details" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.PaymentTransaction.StudentCategoryId" asp-route-academicSessionId="@item.PaymentTransaction.AcademicSessionId" >Details</a>
+
+                    </td>
+                </tr>
                     i++;
                     total = total + item.PaymentTransaction.AdmissionFee;
                 }

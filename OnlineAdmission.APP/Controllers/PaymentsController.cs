@@ -65,18 +65,50 @@ namespace OnlineAdmission.APP.Controllers
             }
             ViewBag.pageTitle = pageTitle;
             ViewBag.paymentTypes = new SelectList(await _paymentTypeManager.GetAllAsync(),"Id","PaymentTypeName", paymentTypeId);
-            IQueryable<PaymentReceiptVM> paymentReceiptVMs = from mStu in meritStudents
-                                                              from aStu in appliedStudents.Where(a => a.NUAdmissionRoll == mStu.NUAdmissionRoll)
-                                                              //from stu in students.Where(s => s.NUAdmissionRoll == mStu.NUAdmissionRoll)
-                                                              from pt in paymentTransactions.Where(p => p.ReferenceNo == mStu.NUAdmissionRoll)
-                                                              from sub in subjects.Where(s => s.Code == mStu.SubjectCode)
-                                                              select new PaymentReceiptVM
-                                                              {
-                                                                  PaymentTransaction = pt,
-                                                                  MeritStudent = mStu,
-                                                                  Subject = sub,
-                                                                  AppliedStudent = aStu
-                                                              };
+
+            //IQueryable<PaymentReceiptVM> paymentReceiptVMs = from mStu in meritStudents
+            //                                                 from aStu in appliedStudents.Where(a => a.NUAdmissionRoll == mStu.NUAdmissionRoll
+            //                                                 && a.AcademicSessionId==mStu.AcademicSessionId)
+            //                                                 from stu in students.Where(a => a.NUAdmissionRoll == mStu.NUAdmissionRoll
+            //                                                 && a.AcademicSessionId == mStu.AcademicSessionId&& a.Status==true)
+            //                                                 from pt in paymentTransactions.Where(a => a.ReferenceNo == mStu.NUAdmissionRoll
+            //                                                 && a.AcademicSessionId == mStu.AcademicSessionId)
+            //                                                 from sub in subjects.Where(s => s.Code == mStu.SubjectCode)
+            //                                                 select new PaymentReceiptVM
+            //                                                 {
+            //                                                     PaymentTransaction = pt,
+            //                                                     MeritStudent = mStu,
+            //                                                     Subject = sub,
+            //                                                     AppliedStudent = aStu
+            //                                                 };
+
+            IQueryable<PaymentReceiptVM> paymentReceiptVMs = from pt in paymentTransactions
+                                                             
+                                                             join s in students
+                                                             on pt.ReferenceNo equals s.NUAdmissionRoll into ptsGroup
+                                                             from s in ptsGroup.DefaultIfEmpty()
+                                                             
+                                                             join ms in meritStudents
+                                                             on pt.ReferenceNo equals ms.NUAdmissionRoll into ptmsGroup
+                                                             from ms in ptmsGroup.DefaultIfEmpty()
+                                                             
+                                                             join astu in appliedStudents
+                                                             on pt.ReferenceNo equals astu.NUAdmissionRoll into ptastuGroup
+                                                             from astu in ptastuGroup.DefaultIfEmpty()
+
+                                                             select new PaymentReceiptVM
+                                                             {
+                                                                 PaymentTransaction = pt,
+                                                                 Student = s,
+                                                                 MeritStudent=ms,
+                                                                 AppliedStudent=astu
+                                                             };
+
+
+
+
+            // string sql = paymentReceiptVMs.Select.ToString();
+
 
 
             ViewBag.controller = "Payments";
@@ -87,12 +119,17 @@ namespace OnlineAdmission.APP.Controllers
             ViewBag.pagesize = pageSize;
             pageSize = pageSize <= 0 ? 50 : pageSize;
             page = page <= 0? 1: page;
+            //var sss= DateTime.ParseExact(fromdate, "dd-MM-yyyy");
+            //var  YearMonth = (DateTime)fromdate.ToString("") .ToString("dddd, yyyy-mm-dd");
+            //((DateTime)fromdate).Date && a.PaymentTransaction.TransactionDate.Date >= ((DateTime)todate).Date) 
+            
             if (fromdate != null || todate != null)
             {
+                var ddddd = ((DateTime)fromdate).Date.ToString("dd-MM-yyyy");
                 if (fromdate != null && todate != null)
                 {
                     paymentReceiptVMs = from a in paymentReceiptVMs
-                                        where (a.PaymentTransaction.TransactionDate.Date >= ((DateTime)fromdate).Date && a.PaymentTransaction.TransactionDate.Date >= ((DateTime)todate).Date) 
+                                        where (a.PaymentTransaction.TransactionDate>= fromdate && a.PaymentTransaction.TransactionDate <= todate) 
                                         select a;
                 }
                 else if (fromdate != null && todate == null)
@@ -107,6 +144,13 @@ namespace OnlineAdmission.APP.Controllers
                                         where (a.PaymentTransaction.TransactionDate.Date <= todate)
                                         select a;
                 }
+            }
+
+            if (paymentTypeId ==2)
+            {
+                paymentReceiptVMs = from a in paymentReceiptVMs
+                                    from sub in subjects.Where(s => s.Code == a.MeritStudent.SubjectCode)
+                                    select a;
             }
 
             if (!string.IsNullOrEmpty(usrtext))
