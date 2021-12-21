@@ -69,6 +69,25 @@
                     <span asp-validation-for="ServiceCharge" class="text-danger"></span>
                 </div>
             </div>
+            <div class="form-group row">
+                <label asp-for="AcademicSessionId" class="control-label col-md-2 text-md-right"></label>
+                <div class="col-md-6">
+                    <select asp-for="AcademicSessionId" asp-items="ViewBag.academicSessionList" class="form-control">
+                        <option disabled selected>Select Academic Session</option>
+                    </select>
+                    <span asp-validation-for="AcademicSessionId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="PaymentTypeId" class="control-label col-md-2 text-md-right"></label>
+                <div class="col-md-6">
+                    <select asp-for="PaymentTypeId" asp-items="ViewBag.paymentTypeList" class="form-control">
+                        <option disabled selected>Select Payment Type</option>
+                    </select>
+                    <span asp-validation-for="PaymentTypeId" class="text-danger"></span>
+                </div>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

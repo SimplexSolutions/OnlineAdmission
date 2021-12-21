@@ -1,4 +1,5 @@
 ﻿@*@model PaginatedList<OnlineAdmission.Entity.PaymentTransaction>*@
+
 @model PaginatedList<OnlineAdmission.APP.ViewModels.PaymentReceiptVM>
 @{
     ViewData["Title"] = "Index";
@@ -7,7 +8,7 @@
 
     string actionName = ViewBag.action != null ? ViewBag.action : "Index";
     string controllerName = ViewBag.controller != null ? ViewBag.controller : "Payments";
-    string pageTitle = ViewBag.pageTitle!=null? ViewBag.pageTitle:"Page Title";
+    string pageTitle = ViewBag.pageTitle != null ? ViewBag.pageTitle : "Page Title";
 
     ViewBag.search = ViewBag.data;
     double total = 0;
@@ -42,8 +43,9 @@
                 left: 0;
                 top: 20px;
             }
-            .noPrint{
-                visibility:hidden;
+
+            .noPrint {
+                visibility: hidden;
             }
         }
     </style>
@@ -52,7 +54,7 @@
     <div class="col-md-6">
         <h4>@pageTitle</h4>
     </div>
-  
+
     <div class="col-md-6">
         <form asp-action="Index">
             <input type="hidden" name="studentCategoryId" value="@studentCategoryId" />
@@ -72,7 +74,7 @@
 </div>
 
 <partial name="~/Views/PartialViews/_Search_Date_Range.cshtml">
-    
+
     @*@if (ViewBag.msg!=null)
         {
             <br />
@@ -90,13 +92,13 @@
                         Name
                     </th>
                     <th>
-                       
+
                         <a asp-action="@actionName" asp-controller="@controllerName" asp-route-sortNURoll="@ViewBag.sortNURoll"> NU Roll</a>
                     </th>
                     <th>
                         <a asp-action="@actionName" asp-controller="@controllerName" asp-route-sortRoll="@ViewBag.sortByRoll">College Roll</a>
-                        
-                        
+
+
                     </th>
                     <th>
                         Session
@@ -125,80 +127,83 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
-                    <td>
-                        @(i).
-                    </td>
-                    <td>
-                        @if (item.AppliedStudent != null)
-                        {
-                            <span>@item.AppliedStudent.ApplicantName</span>
-                        }
-                        else
-                        {
-                            @Html.DisplayFor(modelItem => item.PaymentTransaction.StudentName)
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PaymentTransaction.ReferenceNo)
-                    </td>
-                    <td class="text-md-center">
-                        @if (item.Student != null)
-                        {
-                            @Html.DisplayFor(modelItem => item.Student.CollegeRoll)
-                        }
-                        else
-                        {
-                            <span>N/A</span>
-                        }
-                    </td>
-                    <td>
-                        @if (item.AcademicSession == null)
-                        {
-                            <span>Not Found</span>
-                        }
-                        else
-                        {
-                            <span>@item.AcademicSession.SessionName</span>
-                        }
-                    </td>
-                    <td>
-                        @(item.PaymentTransaction.MobileNumber)
-                    </td>
-                    @*<td>
-                        @Html.DisplayFor(modelItem => item.Subject.SubjectName)
-                    </td>*@
-                    
-                <td>
-                    @if (item.Subject != null)
-                    {
-                        @Html.DisplayFor(modelItem => item.Subject.SubjectName)
-                    }
-                    else
-                    {
-                        <span>N/A</span>
-                    }
+                    <tr>
+                        <td>
+                            @(i).
+                        </td>
+                        <td>
+                            @if (item.AppliedStudent != null)
+                            {
+                                <span>@item.AppliedStudent.ApplicantName</span>
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => item.PaymentTransaction.StudentName)
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PaymentTransaction.ReferenceNo)
+                        </td>
+                        <td class="text-md-center">
+                            @if (item.Student != null)
+                            {
+                                @Html.DisplayFor(modelItem => item.Student.CollegeRoll)
+                            }
+                            else
+                            {
+                                <span>N/A</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.AcademicSession == null)
+                            {
+                                <span>Not Found</span>
+                            }
+                            else
+                            {
+                                <span>@item.AcademicSession.SessionName</span>
+                            }
+                        </td>
+                        <td>
+                            @(item.PaymentTransaction.MobileNumber)
+                        </td>
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.Subject.SubjectName)
+                            </td>*@
 
-                </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PaymentTransaction.TransactionId)
-                    </td>
-                    <td>
-                        @item.PaymentTransaction.AccountNo
-                    </td>
-                    <td>
-                        @item.PaymentTransaction.TransactionDate.ToString("yyyy-MM-dd")
-                    </td>
-                    <td class="text-right">
-                        @Math.Round(item.PaymentTransaction.Amount, 2)
-                    </td>
-                    <td class="noPrint">
-                        <a asp-action="Details" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.PaymentTransaction.StudentCategoryId" asp-route-academicSessionId="@item.PaymentTransaction.AcademicSessionId" asp-route-meritTypeId="@item.MeritStudent.MeritTypeId" >Details</a>
+                        <td>
+                            @if (item.Subject != null)
+                            {
+                                @Html.DisplayFor(modelItem => item.Subject.SubjectName)
+                            }
+                            else
+                            {
+                                <span>N/A</span>
+                            }
 
-                    </td>
-                </tr>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PaymentTransaction.TransactionId)
+                        </td>
+                        <td>
+                            @item.PaymentTransaction.AccountNo
+                        </td>
+                        <td>
+                            @item.PaymentTransaction.TransactionDate.ToString("yyyy-MM-dd")
+                        </td>
+                        <td class="text-right">
+                            @Math.Round(item.PaymentTransaction.Amount, 2)
+                        </td>
+                        <td class="noPrint">
+                            <a class="btn-info btn-sm" asp-action="Details" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.PaymentTransaction.StudentCategoryId" asp-route-academicSessionId="@item.PaymentTransaction.AcademicSessionId" asp-route-meritTypeId="@item.MeritStudent.MeritTypeId">Details</a>
+                            @if (User.IsInRole("SuperAdmin"))
+                            {
+                                <a class="btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.PaymentTransaction.StudentCategoryId" asp-route-academicSessionId="@item.PaymentTransaction.AcademicSessionId" asp-route-meritTypeId="@item.MeritStudent.MeritTypeId">Edit</a>
+                            }
+                        </td>
+                    </tr>
                     i++;
-                    total = total + item.PaymentTransaction.AdmissionFee;
+                    total = total + item.PaymentTransaction.Amount;
                 }
                 <tr class="" style="background-color:#f7f0f0">
                     <td colspan="10" class="text-md-right">TOTAL</td>

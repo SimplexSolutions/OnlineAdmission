@@ -1,7 +1,7 @@
 ﻿@{ 
     string actionName = "Index";
-    DateTime fromdate = DateTime.Today.Date.AddDays(-10);// new DateTime(2001-1-1).Date;
-    DateTime todate = DateTime.Today.Date;
+    DateTime fromdate = new DateTime(); /*= DateTime.Today.Date;*//*AddDays(-10);*/// new DateTime(2001-1-1).Date;
+    DateTime todate = new DateTime(); /*= DateTime.Today.Date;*/
     if (ViewBag.fromdate!=null)
     {
         fromdate = ViewBag.fromdate;

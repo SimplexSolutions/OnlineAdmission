@@ -25,8 +25,9 @@ namespace OnlineAdmission.APP.Controllers
         private readonly IAppliedStudentManager _appliedStudentManager;
         private readonly IStudentCategoryManager _studentCategoryManager;
         private readonly IPaymentTypeManager _paymentTypeManager;
+        private readonly IAcademicSessionManager _academicSessionManager;
 
-        public PaymentsController(IPaymentTransactionManager paymentTransactionManager, IStudentManager studentManager, ISubjectManager subjectManager, IMeritStudentManager meritStudentManager, IAppliedStudentManager appliedStudentManager, IStudentCategoryManager studentCategoryManager, IPaymentTypeManager paymentTypeManager)
+        public PaymentsController(IPaymentTransactionManager paymentTransactionManager, IStudentManager studentManager, ISubjectManager subjectManager, IMeritStudentManager meritStudentManager, IAppliedStudentManager appliedStudentManager, IStudentCategoryManager studentCategoryManager, IPaymentTypeManager paymentTypeManager, IAcademicSessionManager academicSessionManager)
         {
             _paymentTransactionManager = paymentTransactionManager;
             _studentManager = studentManager;
@@ -35,6 +36,8 @@ namespace OnlineAdmission.APP.Controllers
             _appliedStudentManager = appliedStudentManager;
             _studentCategoryManager = studentCategoryManager;
             _paymentTypeManager = paymentTypeManager;
+            _academicSessionManager = academicSessionManager;
+
         }
 
 
@@ -557,8 +560,11 @@ namespace OnlineAdmission.APP.Controllers
 
         // GET: Payments/Create
         [Authorize(Roles = "SuperAdmin, Admin")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewBag.academicSessionList = new SelectList(await _academicSessionManager.GetAllAsync(),"Id","SessionName");
+            ViewBag.paymentTypeList = new SelectList(await _paymentTypeManager.GetAllAsync(), "Id", "PaymentTypeName");
+
             return View();
         }
 
@@ -580,6 +586,9 @@ namespace OnlineAdmission.APP.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
+
+            ViewBag.academicSessionList = new SelectList(await _academicSessionManager.GetAllAsync(), "Id", "SessionName", paymentTransaction.AcademicSessionId);
+            ViewBag.paymentTypeList = new SelectList(await _paymentTypeManager.GetAllAsync(), "Id", "PaymentTypeName", paymentTransaction.PaymentTypeId);
             return View(paymentTransaction);
         }
 
@@ -596,6 +605,9 @@ namespace OnlineAdmission.APP.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.academicSessionList = new SelectList(await _academicSessionManager.GetAllAsync(), "Id", "SessionName", paymentTransaction.AcademicSessionId);
+            ViewBag.paymentTypeList = new SelectList(await _paymentTypeManager.GetAllAsync(), "Id", "PaymentTypeName", paymentTransaction.PaymentTypeId);
             return View(paymentTransaction);
         }
 
@@ -604,7 +616,7 @@ namespace OnlineAdmission.APP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Amount,TransactionDate,Balance,AccountNo,TransactionId,ReferenceNo,AdmissionFee,ServiceCharge")] PaymentTransaction paymentTransaction)
+        public async Task<IActionResult> Edit(int id, PaymentTransaction paymentTransaction)
         {
             if (id != paymentTransaction.Id)
             {
@@ -630,6 +642,9 @@ namespace OnlineAdmission.APP.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.academicSessionList = new SelectList(await _academicSessionManager.GetAllAsync(), "Id", "SessionName", paymentTransaction.AcademicSessionId);
+            ViewBag.paymentTypeList = new SelectList(await _paymentTypeManager.GetAllAsync(), "Id", "PaymentTypeName", paymentTransaction.PaymentTypeId);
             return View(paymentTransaction);
         }
 

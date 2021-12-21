@@ -46,9 +46,11 @@ namespace OnlineAdmission.Entity
 
         //Application Fee = 1
         //Addmission Fee = 2
+        [Display(Name = "Payment Type")] 
         public int? PaymentTypeId { get; set; }
         //public PaymentType PaymentType { get; set; }
 
+        [Display(Name ="Academic Session")]
         public int? AcademicSessionId { get; set; }
         public AcademicSession AcademicSession { get; set; }
     }
