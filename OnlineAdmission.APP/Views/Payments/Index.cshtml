@@ -129,7 +129,14 @@
                         @(i).
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PaymentTransaction.StudentName)
+                        @if (item.AppliedStudent != null)
+                        {
+                            <span>@item.AppliedStudent.ApplicantName</span>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.PaymentTransaction.StudentName)
+                        }
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.PaymentTransaction.ReferenceNo)
@@ -145,7 +152,14 @@
                         }
                     </td>
                     <td>
-                        @(item.AcademicSession.SessionName)
+                        @if (item.AcademicSession == null)
+                        {
+                            <span>Not Found</span>
+                        }
+                        else
+                        {
+                            <span>@item.AcademicSession.SessionName</span>
+                        }
                     </td>
                     <td>
                         @(item.PaymentTransaction.MobileNumber)
@@ -178,7 +192,7 @@
                         @Math.Round(item.PaymentTransaction.AdmissionFee, 2)
                     </td>
                     <td class="noPrint">
-                        <a asp-action="Details" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.PaymentTransaction.StudentCategoryId" asp-route-academicSessionId="@item.PaymentTransaction.AcademicSessionId" >Details</a>
+                        <a asp-action="Details" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.PaymentTransaction.StudentCategoryId" asp-route-academicSessionId="@item.PaymentTransaction.AcademicSessionId" asp-route-meritTypeId="@item.MeritStudent.MeritTypeId" >Details</a>
 
                     </td>
                 </tr>
