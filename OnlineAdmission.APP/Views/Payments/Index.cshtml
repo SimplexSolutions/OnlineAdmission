@@ -52,8 +52,9 @@
     <div class="col-md-6">
         <h4>@pageTitle</h4>
     </div>
+  
     <div class="col-md-6">
-        <form asp-action="Index"  >
+        <form asp-action="Index">
             <input type="hidden" name="studentCategoryId" value="@studentCategoryId" />
             <div class="form-group row">
                 <div class="input-group mb-3">
@@ -145,7 +146,15 @@
                         }
                     </td>
                     <td>
-                        @(item.AcademicSession.SessionName)
+                        @if (item.AcademicSession != null)
+                        {
+                            @(item.AcademicSession.SessionName)
+                        }
+                        else
+                        {
+                            <span>N/A</span>
+                        }
+
                     </td>
                     <td>
                         @(item.PaymentTransaction.MobileNumber)

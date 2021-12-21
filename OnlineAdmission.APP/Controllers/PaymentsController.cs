@@ -105,13 +105,6 @@ namespace OnlineAdmission.APP.Controllers
                                                                  AcademicSession = ms.AcademicSession
                                                              };
 
-
-
-
-            // string sql = paymentReceiptVMs.Select.ToString();
-
-
-
             ViewBag.controller = "Payments";
             ViewBag.action = "Index";
             ViewBag.data = usrtext;
@@ -126,12 +119,13 @@ namespace OnlineAdmission.APP.Controllers
             
             if (fromdate != null || todate != null)
             {
-                var ddddd = ((DateTime)fromdate).Date.ToString("dd-MM-yyyy");
                 if (fromdate != null && todate != null)
                 {
                     paymentReceiptVMs = from a in paymentReceiptVMs
                                         where (a.PaymentTransaction.TransactionDate>= fromdate && a.PaymentTransaction.TransactionDate <= todate) 
                                         select a;
+                    //ViewBag.fromdate = ((DateTime)fromdate).Date.ToString("dd-MM-yyyy"); 
+                    //ViewBag.todate = ((DateTime)todate).Date.ToString("dd-MM-yyyy"); 
                 }
                 else if (fromdate != null && todate == null)
                 {
@@ -145,6 +139,14 @@ namespace OnlineAdmission.APP.Controllers
                                         where (a.PaymentTransaction.TransactionDate.Date <= todate)
                                         select a;
                 }
+            }
+            else if (fromdate == null && todate == null)
+            {
+                fromdate = DateTime.Now.AddDays(-10);
+                todate = DateTime.Now;
+                paymentReceiptVMs = from a in paymentReceiptVMs
+                                    where (a.PaymentTransaction.TransactionDate >= fromdate && a.PaymentTransaction.TransactionDate <= todate)
+                                    select a;
             }
 
             if (paymentTypeId ==2)
