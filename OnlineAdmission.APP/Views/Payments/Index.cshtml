@@ -195,7 +195,7 @@
                             @Math.Round(item.PaymentTransaction.Amount, 2)
                         </td>
                         <td class="noPrint">
-                            <a class="btn-info btn-sm" asp-action="Details" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.PaymentTransaction.StudentCategoryId" asp-route-academicSessionId="@item.PaymentTransaction.AcademicSessionId" asp-route-meritTypeId="@item.MeritStudent.MeritTypeId">Details</a>
+                            <a class="btn-info btn-sm" asp-action="Details" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.PaymentTransaction.StudentCategoryId" asp-route-academicSessionId="@item.PaymentTransaction.AcademicSessionId" asp-route-meritTypeId="@item.MeritStudent.MeritTypeId" >Details</a>
                             @if (User.IsInRole("SuperAdmin"))
                             {
                                 <a class="btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.PaymentTransaction.StudentCategoryId" asp-route-academicSessionId="@item.PaymentTransaction.AcademicSessionId" asp-route-meritTypeId="@item.MeritStudent.MeritTypeId">Edit</a>

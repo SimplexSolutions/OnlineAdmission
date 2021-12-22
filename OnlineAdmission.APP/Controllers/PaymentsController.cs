@@ -86,44 +86,46 @@ namespace OnlineAdmission.APP.Controllers
             //                                                     Student = stu
             //                                                 };
 
-            IQueryable<PaymentReceiptVM> paymentReceiptVMs =    from pt in paymentTransactions
-                                                                from mStu in meritStudents.Where(m => m.NUAdmissionRoll == pt.ReferenceNo)
-                                                                from aStu in appliedStudents.Where(a => a.NUAdmissionRoll == pt.ReferenceNo && a.AcademicSessionId == pt.AcademicSessionId)
-                                                                from stu in students.Where(s => s.AcademicSessionId == pt.AcademicSessionId && s.NUAdmissionRoll == pt.ReferenceNo && s.Status == true)
-                                                                from sub in subjects.Where(s => s.Code == mStu.SubjectCode)
-                                                                select new PaymentReceiptVM
-                                                                {
-                                                                    PaymentTransaction = pt,
-                                                                    MeritStudent = mStu,
-                                                                    Subject = sub,
-                                                                    AppliedStudent = aStu,
-                                                                    AcademicSession = mStu.AcademicSession,
-                                                                    Student = stu
-                                                                };
+            IQueryable<PaymentReceiptVM> paymentReceiptVMs = from pt in paymentTransactions
+                                                             from mStu in meritStudents.Where(m => m.NUAdmissionRoll == pt.ReferenceNo)
+                                                             from aStu in appliedStudents.Where(a => a.NUAdmissionRoll == pt.ReferenceNo && a.AcademicSessionId == pt.AcademicSessionId)
+                                                             from stu in students.Where(s => s.AcademicSessionId == pt.AcademicSessionId && s.NUAdmissionRoll == pt.ReferenceNo && s.Status == true)
+                                                             from sub in subjects.Where(s => s.Code == mStu.SubjectCode)
+                                                             select new PaymentReceiptVM
+                                                             {
+                                                                 PaymentTransaction = pt,
+                                                                 MeritStudent = mStu,
+                                                                 Subject = sub,
+                                                                 AppliedStudent = aStu,
+                                                                 AcademicSession = mStu.AcademicSession,
+                                                                 Student = stu
+                                                             };
 
 
 
             //IQueryable<PaymentReceiptVM> paymentReceiptVMs = from pt in paymentTransactions
 
-            //                                                 join s in students
-            //                                                 on pt.ReferenceNo equals s.NUAdmissionRoll into ptsGroup
-            //                                                 from stu in ptsGroup.DefaultIfEmpty()
+            //                                                 join s in students on new { NUAdmissionRoll = pt.ReferenceNo, StudentCategoryId = pt.StudentCategoryId, AcademicSessionId = pt.AcademicSessionId } equals new { s.NUAdmissionRoll, s.StudentCategoryId, s.AcademicSessionId } into ptsGroup
+            //                                                 from stu in ptsGroup
+            //                                                 where stu.Status == true
 
             //                                                 join ms in meritStudents
-            //                                                 on pt.ReferenceNo equals ms.NUAdmissionRoll into ptmsGroup
-            //                                                 from mStu in ptmsGroup.DefaultIfEmpty()
+            //                                                 on new { NUAdmissionRoll = pt.ReferenceNo, AcademicSessionId = pt.AcademicSessionId, StudentCategoryId = pt.StudentCategoryId } equals new { ms.NUAdmissionRoll, ms.AcademicSessionId, ms.StudentCategoryId } into ptmsGroup
+            //                                                 from mStu in ptmsGroup
 
-            //                                                 join astu in appliedStudents
-            //                                                 on pt.ReferenceNo equals astu.NUAdmissionRoll into ptastuGroup
-            //                                                 from aStudent in ptastuGroup.DefaultIfEmpty()
+            //                                                 join aStu in appliedStudents
+            //                                                 on new { NUAdmissionRoll = pt.ReferenceNo, StudentCategoryId = pt.StudentCategoryId, AcademicSessionId = pt.AcademicSessionId } equals new { aStu.NUAdmissionRoll, aStu.StudentCategoryId, aStu.AcademicSessionId } into ptastuGroup
+            //                                                 from aStudent in ptastuGroup
 
+            //                                                 join sub in subjects on mStu.SubjectCode equals sub.Code into subGroup
+            //                                                 from su in subGroup
             //                                                 select new PaymentReceiptVM
             //                                                 {
             //                                                     PaymentTransaction = pt,
             //                                                     Student = stu,
             //                                                     MeritStudent = mStu,
             //                                                     AppliedStudent = aStudent,
-            //                                                     Subject = stu.Subject,
+            //                                                     Subject = su,
             //                                                     AcademicSession = mStu.AcademicSession
             //                                                 };
 
