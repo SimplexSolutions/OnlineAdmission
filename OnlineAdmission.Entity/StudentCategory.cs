@@ -13,6 +13,7 @@ namespace OnlineAdmission.Entity
         public string CategoryName { get; set; }
         [Required, Display(Name = "Short Code"), StringLength(4)]
         public string CategoryShortCode { get; set; }
+        public double ApplicationFee { get; set; }
         //[Required, Display(Name = "AdmissionURL"), StringLength(100)]
         //public string AdmissionURL { get; set; }
         //[Required, Display(Name = "PaymentURL"), StringLength(100)]
