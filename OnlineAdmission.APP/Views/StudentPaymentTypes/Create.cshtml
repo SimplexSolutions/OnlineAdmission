@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Create";
 }
-
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <h1>Create</h1>
 
 <h4>StudentPaymentType</h4>
@@ -28,14 +28,6 @@
                 <label asp-for="AcademicSessionId" class="control-label"></label>
                 <select asp-for="AcademicSessionId" class="form-control" asp-items="ViewBag.AcademicSessionId"></select>
             </div>
-            @*<div class="form-group">
-            <label asp-for="StartDate" class="control-label"></label>
-            <select asp-for="StartDate" class="form-control" asp-items="ViewBag.StartDate"></select>
-        </div>
-        <div class="form-group">
-            <label asp-for="EndDate" class="control-label"></label>
-            <select asp-for="EndDate" class="form-control" asp-items="ViewBag.EndDate"></select>
-        </div>*@
             <label asp-for="StartDate" class="text-right col-form-label col-md-2"></label>
             <div class="col-md-5">
                 <input asp-for="StartDate" class="form-control" />
@@ -44,10 +36,10 @@
             <div class="col-md-5">
                 <input asp-for="EndDate" class="form-control" />
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label asp-for="Remarks" class="control-label"></label>
                 <textarea asp-for="Remarks" class="form-control" />
-            </div>
+            </div>*@
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Status" /> @Html.DisplayNameFor(model => model.Status)
@@ -59,11 +51,20 @@
         </form>
     </div>
 </div>
-
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+    <script>
+    $(document).ready(function () {
+        $('#Remarks').summernote({
+            height: 250
+        });
+
+    });
+    </script>
+
 }

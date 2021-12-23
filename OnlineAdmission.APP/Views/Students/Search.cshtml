@@ -17,9 +17,19 @@
 <div class="row">
     <div class="col-md-12 text-center">
         <div class="card">
-            <div class="card-header">
-                <span class="text-info font-weight-bold h5">@ViewBag.FormTitle <br />@Model.MeritType.MeritTypeName</span>
-            </div>
+            @if (Model.PaymentTypeId == 1)
+            {
+                <div class="card-header">
+                    <span class="text-info font-weight-bold h5">@ViewBag.FormTitle <br /> Model.MeritType.MeritTypeName</span>
+                </div>
+            }
+            else
+            {
+                <div class="card-header">
+                    <span class="text-info font-weight-bold h5">@ViewBag.FormTitle </span>
+                </div>
+            }
+
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6 offset-md-3">
@@ -55,128 +65,216 @@
                     </div>
                 </div>
             }
-            @if (ViewBag.provideAppliedInformation != null)
+            @if (ViewBag.isApplicationPaid != null)
             {
-                <div class="card-footer">
-                    <div class="col-md-6 offset-3">
-                        <span class="alert">@ViewBag.provideAppliedInformation</span>
-                        <form asp-action="create" asp-controller="AppliedStudents" method="get">
-                            <input type="hidden" asp-for="NuRoll" />
-                            <input type="hidden" asp-for="CategoryId" />
-                            <input type="hidden" asp-for="SessionId" />
-                            <input type="hidden" asp-for="MeritTypeId" />
-                            <input class="btn btn-outline-info" type="submit" value="Give Information" />
-                        </form>
-                    </div>
-                </div>
-                <div class="note bg-danger mt-1 mb-1 p-1">
-                    <span class="text-justify text-light">
-                        @ViewBag.Remarks
-                        
-                    </span>
-                </div>
-            }
-            @if (ViewBag.alreadyAdmittedStudent != null)
-            {
-                <div class="card-footer">
-                    <table class="text-left table table-hover border-0 table-responsive-sm">
-                        <tr>
-                            <td class="" style="width:200px">Applicant Name</td>
-                            <td>:</td>
-                            <td class="">@ViewBag.alreadyAdmittedStudent.Name</td>
-                        </tr>
-                        <tr>
-                            <td class="" style="width:200px">Academic Session</td>
-                            <td>:</td>
-                            <td class="">@ViewBag.alreadyAdmittedStudent.AcademicSession.SessionName</td>
-                        </tr>
-                        <tr>
-                            <td class="" style="width:200px">Department</td>
-                            <td>:</td>
-                            <td class="">@ViewBag.alreadyAdmittedStudent.Subject.SubjectName</td>
-                        </tr>
-                        <tr>
-                            <td class="" style="width:200px">Class Roll</td>
-                            <td>:</td>
-                            <td class="">@ViewBag.alreadyAdmittedStudent.CollegeRoll</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="card-footer">
-                    <div class="col-md-6 offset-3">
-                        <a asp-action="Details" asp-controller="Students" asp-route-id="@ViewBag.alreadyAdmittedStudent.Id" class="btn btn-info">View admission form</a>
-                    </div>
-                </div>
-            }
-            @if (ViewBag.paidNotAdmitted != null)
-            {
-                <div class="card-footer">
-                    <div class="col-md-6 offset-3">
-                        <span class="alert alert-success">@ViewBag.paidNotAdmitted</span>
-                        <form asp-action="create" asp-controller="Students" method="get">
-                            <input type="hidden" asp-for="NuRoll" />
-                            <input type="hidden" asp-for="CategoryId" />
-                            <input type="hidden" asp-for="SessionId" />
-                            <input type="hidden" asp-for="MeritTypeId" />
-                            <input class="btn btn-info" type="submit" value="Form Fillup" />
-                        </form>
-                    </div>
-                </div>
-            }
-            @if (ViewBag.NotSelected != null)
-            {
-                <div class="card-footer">
-                    <div class="col-md-6 offset-3">
-                        <span class="alert alertify-notifier text-danger font-weight-bold">@ViewBag.NotSelected</span>
-                    </div>
-                </div>
-            }
-            @if (ViewBag.paymentNotCompleted != null)
-            {
-                <div class="card-footer">
+                if (ViewBag.isApplicationPaid == true)
+                {
+                    <span>Your payment is already completed.</span>
+                }
+                else
+                {
+                    @if (ViewBag.provideAppliedInformation != null)
+                    {
+                        <div class="card-footer">
+                            <div class="col-md-6 offset-3">
+                                <span class="alert">@ViewBag.provideAppliedInformation</span>
+                                <form asp-action="create" asp-controller="AppliedStudents" method="get">
+                                    <input type="hidden" asp-for="NuRoll" />
+                                    <input type="hidden" asp-for="CategoryId" />
+                                    <input type="hidden" asp-for="SessionId" />
+                                    <input type="hidden" asp-for="MeritTypeId" />
+                                    <input class="btn btn-outline-info" type="submit" value="Give Information" />
+                                </form>
+                            </div>
+                        </div>
+                        <div class="note bg-danger mt-1 mb-1 p-1">
+                            <span class="text-justify text-light">
+                                @ViewBag.Remarks
 
-                    <div class="col-md-6 offset-3">
-                        <table class="table table-bordered">
-                            <thead class="thead-light bg-primary text-white">
-                                <tr>
-                                    <td>NU Roll</td>
-                                    <td>Name</td>
-                                    <td>Subject</td>
-                                    <td>Merit List</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>@Model.NuRoll</td>
-                                    <td>@Model.AppliedStudent.ApplicantName</td>
-                                    <td>@Model.MeritType.MeritTypeName</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            </span>
+                        </div>
+                    }
+                    <div class="row">
+                        <div class="col-md-10 offset-1 text-center">
+                            <span class="alert font-weight-bold text-info">@ViewBag.FormTitle</span><hr />
+                        </div>
                     </div>
-                    <div class="col-md-6 offset-3">
-                        <span class="alert text-warning font-weight-bold">@ViewBag.paymentNotCompleted</span>
-                        <form asp-action="NagadPayment" asp-controller="Students" method="get">
-                            <input type="hidden" asp-for="NuRoll" />
-                            <input type="hidden" asp-for="CategoryId" />
-                            <input type="hidden" asp-for="SessionId" />
-                            <input type="hidden" asp-for="MeritTypeId" />
-                            <input type="hidden" asp-for="CategoryShortCode" />
-                            <input type="hidden" asp-for="PaymentTypeShortCode" />
-                            <input type="hidden" asp-for="PaymentTypeId" />
-                            <input type="hidden" asp-for="StudentPaymentTypeId" />
-                            <input class="btn btn-info" type="submit" value="Make Payment" />
-                        </form>
+                    
+                    @if (ViewBag.paymentNotCompleted != null)
+                    {
+                        <div class="card-footer">
+
+                            <div class="col-md-6 offset-3">
+                                <table class="table table-bordered">
+                                    <thead class="thead-light bg-primary text-white">
+                                        <tr>
+                                            <td>NU Roll</td>
+                                            <td>Name</td>
+                                            <td>Mobile No.</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>@Model.NuRoll</td>
+                                            <td>@Model.AppliedStudent.ApplicantName</td>
+                                            <td>@Model.AppliedStudent.MobileNo</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6 offset-3">
+                                <span class="alert text-warning font-weight-bold">@ViewBag.paymentNotCompleted</span>
+                                <form asp-action="NagadPayment" asp-controller="Students" method="get">
+                                    <input type="hidden" asp-for="NuRoll" />
+                                    <input type="hidden" asp-for="CategoryId" />
+                                    <input type="hidden" asp-for="SessionId" />
+                                    <input type="hidden" asp-for="MeritTypeId" />
+                                    <input type="hidden" asp-for="CategoryShortCode" />
+                                    <input type="hidden" asp-for="PaymentTypeShortCode" />
+                                    <input type="hidden" asp-for="PaymentTypeId" />
+                                    <input type="hidden" asp-for="StudentPaymentTypeId" />
+                                    <input class="btn btn-info" type="submit" value="Make Payment" />
+                                </form>
+                            </div>
+                            <div class="note bg-danger mt-1 mb-1 p-1">
+                                <span class="text-justify text-light">
+                                    @ViewBag.Remarks
+                                    [শিক্ষার্থীকে জাতীয় বিশ্ববিদ্যালয়ের ভর্তি বিষয়ক ওয়েবসাইটের (www.nu.ac.bd/admissions) Applicant Login অপশনে Honours Login লিংকে গিয়ে সঠিক রোল নম্বর ও পিন এন্ট্রি দিয়ে 21-12-2021 তারিখের মধ্যে চূড়ান্ত ভর্তি ফরম পূরণ করতে হবে।
+                                    <span style="color:#9dfb14">(সর্তকতাঃ জাঃ বিঃ-র ওয়েবসাইট থেকে চূড়ান্ত ভর্তি ফরম পূরণ করে প্রিন্ট কপি সংগ্রহ না করলে ভর্তি নিশ্চিত হবে না। )]</span>
+                                </span>
+                            </div>
+                        </div>
+                    }
+                    
+                }
+            }
+            else
+            {
+                @if (ViewBag.provideAppliedInformation != null)
+                {
+                    <div class="card-footer">
+                        <div class="col-md-6 offset-3">
+                            <span class="alert">@ViewBag.provideAppliedInformation</span>
+                            <form asp-action="create" asp-controller="AppliedStudents" method="get">
+                                <input type="hidden" asp-for="NuRoll" />
+                                <input type="hidden" asp-for="CategoryId" />
+                                <input type="hidden" asp-for="SessionId" />
+                                <input type="hidden" asp-for="MeritTypeId" />
+                                <input class="btn btn-outline-info" type="submit" value="Give Information" />
+                            </form>
+                        </div>
                     </div>
                     <div class="note bg-danger mt-1 mb-1 p-1">
                         <span class="text-justify text-light">
                             @ViewBag.Remarks
-                            [শিক্ষার্থীকে জাতীয় বিশ্ববিদ্যালয়ের ভর্তি বিষয়ক ওয়েবসাইটের (www.nu.ac.bd/admissions) Applicant Login অপশনে Honours Login লিংকে গিয়ে সঠিক রোল নম্বর ও পিন এন্ট্রি দিয়ে 21-12-2021 তারিখের মধ্যে চূড়ান্ত ভর্তি ফরম পূরণ করতে হবে।
-                            <span style="color:#9dfb14">(সর্তকতাঃ জাঃ বিঃ-র ওয়েবসাইট থেকে চূড়ান্ত ভর্তি ফরম পূরণ করে প্রিন্ট কপি সংগ্রহ না করলে ভর্তি নিশ্চিত হবে না। )]</span>
+
                         </span>
                     </div>
-                </div>
+                }
+                @if (ViewBag.alreadyAdmittedStudent != null)
+                {
+                    <div class="card-footer">
+                        <table class="text-left table table-hover border-0 table-responsive-sm">
+                            <tr>
+                                <td class="" style="width:200px">Applicant Name</td>
+                                <td>:</td>
+                                <td class="">@ViewBag.alreadyAdmittedStudent.Name</td>
+                            </tr>
+                            <tr>
+                                <td class="" style="width:200px">Academic Session</td>
+                                <td>:</td>
+                                <td class="">@ViewBag.alreadyAdmittedStudent.AcademicSession.SessionName</td>
+                            </tr>
+                            <tr>
+                                <td class="" style="width:200px">Department</td>
+                                <td>:</td>
+                                <td class="">@ViewBag.alreadyAdmittedStudent.Subject.SubjectName</td>
+                            </tr>
+                            <tr>
+                                <td class="" style="width:200px">Class Roll</td>
+                                <td>:</td>
+                                <td class="">@ViewBag.alreadyAdmittedStudent.CollegeRoll</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        <div class="col-md-6 offset-3">
+                            <a asp-action="Details" asp-controller="Students" asp-route-id="@ViewBag.alreadyAdmittedStudent.Id" class="btn btn-info">View admission form</a>
+                        </div>
+                    </div>
+                }
+                @if (ViewBag.paidNotAdmitted != null)
+                {
+                    <div class="card-footer">
+                        <div class="col-md-6 offset-3">
+                            <span class="alert alert-success">@ViewBag.paidNotAdmitted</span>
+                            <form asp-action="create" asp-controller="Students" method="get">
+                                <input type="hidden" asp-for="NuRoll" />
+                                <input type="hidden" asp-for="CategoryId" />
+                                <input type="hidden" asp-for="SessionId" />
+                                <input type="hidden" asp-for="MeritTypeId" />
+                                <input class="btn btn-info" type="submit" value="Form Fillup" />
+                            </form>
+                        </div>
+                    </div>
+                }
+                @if (ViewBag.NotSelected != null)
+                {
+                    <div class="card-footer">
+                        <div class="col-md-6 offset-3">
+                            <span class="alert alertify-notifier text-danger font-weight-bold">@ViewBag.NotSelected</span>
+                        </div>
+                    </div>
+                }
+                @if (ViewBag.paymentNotCompleted != null)
+                {
+                    <div class="card-footer">
+
+                        <div class="col-md-6 offset-3">
+                            <table class="table table-bordered">
+                                <thead class="thead-light bg-primary text-white">
+                                    <tr>
+                                        <td>NU Roll</td>
+                                        <td>Name</td>
+                                        <td>Subject</td>
+                                        <td>Merit List</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>@Model.NuRoll</td>
+                                        <td>@Model.AppliedStudent.ApplicantName</td>
+                                        <td>@Model.Subject.SubjectName</td>
+                                        <td>@Model.MeritType.MeritTypeName</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-6 offset-3">
+                            <span class="alert text-warning font-weight-bold">@ViewBag.paymentNotCompleted</span>
+                            <form asp-action="NagadPayment" asp-controller="Students" method="get">
+                                <input type="hidden" asp-for="NuRoll" />
+                                <input type="hidden" asp-for="CategoryId" />
+                                <input type="hidden" asp-for="SessionId" />
+                                <input type="hidden" asp-for="MeritTypeId" />
+                                <input type="hidden" asp-for="CategoryShortCode" />
+                                <input type="hidden" asp-for="PaymentTypeShortCode" />
+                                <input type="hidden" asp-for="PaymentTypeId" />
+                                <input type="hidden" asp-for="StudentPaymentTypeId" />
+                                <input class="btn btn-info" type="submit" value="Make Payment" />
+                            </form>
+                        </div>
+                        <div class="note bg-danger mt-1 mb-1 p-1">
+                            <span class="text-justify text-light">
+                                @ViewBag.Remarks
+                                [শিক্ষার্থীকে জাতীয় বিশ্ববিদ্যালয়ের ভর্তি বিষয়ক ওয়েবসাইটের (www.nu.ac.bd/admissions) Applicant Login অপশনে Honours Login লিংকে গিয়ে সঠিক রোল নম্বর ও পিন এন্ট্রি দিয়ে 21-12-2021 তারিখের মধ্যে চূড়ান্ত ভর্তি ফরম পূরণ করতে হবে।
+                                <span style="color:#9dfb14">(সর্তকতাঃ জাঃ বিঃ-র ওয়েবসাইট থেকে চূড়ান্ত ভর্তি ফরম পূরণ করে প্রিন্ট কপি সংগ্রহ না করলে ভর্তি নিশ্চিত হবে না। )]</span>
+                            </span>
+                        </div>
+                    </div>
+                }
             }
+
         </div>
     </div>
 </div>
