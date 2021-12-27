@@ -54,7 +54,7 @@ namespace OnlineAdmission.APP.Controllers
                 ViewBag.studentCategoryId = studentCategoryId;
                 StudentCategory studentCategory= await _studentCategoryManager.GetByIdAsync(studentCategoryId);
                 pageTitle = studentCategory.CategoryName;
-                students = students.Where(s => s.StudentCategoryId == studentCategoryId);
+                students = students.Where(s => s.StudentCategoryId == studentCategoryId && s.Status == true).Distinct();
                 appliedStudents = appliedStudents.Where(s => s.StudentCategoryId == studentCategoryId);
                 meritStudents = meritStudents.Include(m => m.AcademicSession).Where(m => m.StudentCategoryId == studentCategoryId);
                 paymentTransactions = paymentTransactions.Where(s => s.StudentCategoryId == studentCategoryId);
