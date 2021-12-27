@@ -1161,7 +1161,7 @@ namespace OnlineAdmission.APP.Controllers
         {
             if (model.NuRoll<= 0)
             {
-                _logger.LogWarning("NU Roll is Invalid");
+               // _logger.LogWarning("NU Roll is Invalid");
                 return RedirectToAction("Search");
             }
 
@@ -1284,7 +1284,7 @@ namespace OnlineAdmission.APP.Controllers
                 MeritStudent meritStudent = await _meritStudentManager.GetMeritStudentAsync(model.NuRoll, model.CategoryId, model.MeritTypeId, model.SessionId);
                 if (meritStudent == null)
                 {
-                    _logger.LogWarning("Merit Student Not Found");
+                   // _logger.LogWarning("Merit Student Not Found");
                     return RedirectToAction("Search");
                 }
                 Subject subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);

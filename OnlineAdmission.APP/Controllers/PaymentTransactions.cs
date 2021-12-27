@@ -66,7 +66,7 @@ namespace OnlineAdmission.APP.Controllers
 
                 PaymentTransaction newPayment = new PaymentTransaction {
                     Amount = responsevalue.amount,
-                    TransactionDate = DateTime.Today,
+                    TransactionDate = DateTime.Now,
                     Balance = 0,
                     AccountNo = responsevalue.clientMobileNo,
                     TransactionId = responsevalue.orderId,

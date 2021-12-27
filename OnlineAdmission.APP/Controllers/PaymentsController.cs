@@ -44,23 +44,27 @@ namespace OnlineAdmission.APP.Controllers
         public async Task<IActionResult> Index(int studentCategoryId, int paymentTypeId, int page, int pageSize, string usrtext, DateTime? fromdate, DateTime? todate)
         {
             var students = _studentManager.GetIQueryableData();
+           // var cnt = students.Count();
             var appliedStudents = _appliedStudentManager.GetIQueryableData();
             var meritStudents = _meritStudentManager.GetIQueryableData();
             var paymentTransactions = _paymentTransactionManager.GetIQueryableData();
+            //var students = _studentManager.GetIQueryableData();
             var subjects = _subjectManager.GetIQueryableData();
             string pageTitle = "";
+            students = students.Where(s => s.Status == true);
+           // var cntWTrue = students.Count();
             if (studentCategoryId > 0)
             {
                 ViewBag.studentCategoryId = studentCategoryId;
                 StudentCategory studentCategory= await _studentCategoryManager.GetByIdAsync(studentCategoryId);
                 pageTitle = studentCategory.CategoryName;
-                students = students.Where(s => s.StudentCategoryId == studentCategoryId && s.Status == true).Distinct();
+                students = students.Where(s => s.StudentCategoryId == studentCategoryId).Distinct();
                 appliedStudents = appliedStudents.Where(s => s.StudentCategoryId == studentCategoryId);
                 meritStudents = meritStudents.Include(m => m.AcademicSession).Where(m => m.StudentCategoryId == studentCategoryId);
                 paymentTransactions = paymentTransactions.Where(s => s.StudentCategoryId == studentCategoryId);
             }
-
             
+
             if (paymentTypeId>0)
             {
                 ViewBag.paymentType = paymentTypeId;
@@ -71,21 +75,25 @@ namespace OnlineAdmission.APP.Controllers
             ViewBag.pageTitle = pageTitle;
             ViewBag.paymentTypes = new SelectList(await _paymentTypeManager.GetAllAsync(),"Id","PaymentTypeName", paymentTypeId);
 
-            
+           //List< Student> student = await _studentManager.GetAllAsync();
             IQueryable<PaymentReceiptVM> paymentReceiptVMs = from pt in paymentTransactions
 
                                                              join ms in meritStudents
-                                                             on new { NUAdmissionRoll = pt.ReferenceNo, AcademicSessionId = pt.AcademicSessionId, StudentCategoryId = pt.StudentCategoryId } equals new { ms.NUAdmissionRoll, ms.AcademicSessionId, ms.StudentCategoryId } into ptmsGroup
+                                                             on new { NUAdmissionRoll = pt.ReferenceNo, AcademicSessionId = pt.AcademicSessionId, StudentCategoryId = pt.StudentCategoryId } 
+                                                             equals new { ms.NUAdmissionRoll, ms.AcademicSessionId, ms.StudentCategoryId } into ptmsGroup
                                                              from mStu in ptmsGroup.DefaultIfEmpty()
 
-                                                             join s in students on new { NUAdmissionRoll = pt.ReferenceNo, StudentCategoryId = pt.StudentCategoryId, AcademicSessionId = pt.AcademicSessionId } equals new { s.NUAdmissionRoll, s.StudentCategoryId, s.AcademicSessionId } into ptsGroup
+                                                             join s in students on new { NUAdmissionRoll = pt.ReferenceNo, StudentCategoryId = pt.StudentCategoryId,
+                                                                 AcademicSessionId = pt.AcademicSessionId } 
+                                                             equals new { s.NUAdmissionRoll, s.StudentCategoryId, s.AcademicSessionId } into ptsGroup
                                                              from stu in ptsGroup.DefaultIfEmpty()
                                                              
                                                              join sub in subjects on mStu.SubjectCode equals sub.Code into subGroup
                                                              from su in subGroup.DefaultIfEmpty()
 
                                                              join aStu in appliedStudents
-                                                             on new { NUAdmissionRoll = pt.ReferenceNo, StudentCategoryId = pt.StudentCategoryId, AcademicSessionId = pt.AcademicSessionId } equals new { aStu.NUAdmissionRoll, aStu.StudentCategoryId, aStu.AcademicSessionId } into ptastuGroup
+                                                             on new { NUAdmissionRoll = pt.ReferenceNo, StudentCategoryId = pt.StudentCategoryId, AcademicSessionId = pt.AcademicSessionId } 
+                                                             equals new { aStu.NUAdmissionRoll, aStu.StudentCategoryId, aStu.AcademicSessionId } into ptastuGroup
                                                              from aStudent in ptastuGroup.DefaultIfEmpty()
                                                              select new PaymentReceiptVM
                                                              {
