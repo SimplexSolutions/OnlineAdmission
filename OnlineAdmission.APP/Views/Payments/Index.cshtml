@@ -195,7 +195,15 @@
                             @Math.Round(item.PaymentTransaction.Amount, 2)
                         </td>
                         <td class="noPrint">
-                            <a class="btn-info btn-sm" asp-action="Details" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.PaymentTransaction.StudentCategoryId" asp-route-academicSessionId="@item.PaymentTransaction.AcademicSessionId" asp-route-meritTypeId="@item.MeritStudent.MeritTypeId" >Details</a>
+                            @if (item.MeritStudent != null)
+                            {
+                                <a class="btn-info btn-sm" asp-action="Details" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.PaymentTransaction.StudentCategoryId" asp-route-academicSessionId="@item.PaymentTransaction.AcademicSessionId" asp-route-meritTypeId="@item.MeritStudent.MeritTypeId">Details</a>
+
+                            }
+                            else
+                            {
+                                <a class="btn-info btn-sm" asp-action="Details" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.PaymentTransaction.StudentCategoryId" asp-route-academicSessionId="@item.PaymentTransaction.AcademicSessionId">Details</a>
+                            }
                             @if (User.IsInRole("SuperAdmin"))
                             {
                                 if (item.MeritStudent != null)
@@ -204,7 +212,7 @@
                                 }
                                 else
                                 {
-                                    <a class="btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.PaymentTransaction.StudentCategoryId" asp-route-academicSessionId="@item.PaymentTransaction.AcademicSessionId" >Edit</a>
+                                    <a class="btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.PaymentTransaction.StudentCategoryId" asp-route-academicSessionId="@item.PaymentTransaction.AcademicSessionId">Edit</a>
                                 }
 
                             }
