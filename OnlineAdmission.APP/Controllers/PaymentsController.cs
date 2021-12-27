@@ -99,32 +99,6 @@ namespace OnlineAdmission.APP.Controllers
 
 
 
-            //IQueryable<PaymentReceiptVM> paymentReceiptVMs = from pt in paymentTransactions
-
-            //                                                 join s in students on new { NUAdmissionRoll = pt.ReferenceNo, StudentCategoryId = pt.StudentCategoryId, AcademicSessionId = pt.AcademicSessionId } equals new { s.NUAdmissionRoll, s.StudentCategoryId, s.AcademicSessionId } into ptsGroup
-            //                                                 from stu in ptsGroup
-            //                                                 where stu.Status == true
-
-            //                                                 join ms in meritStudents
-            //                                                 on new { NUAdmissionRoll = pt.ReferenceNo, AcademicSessionId = pt.AcademicSessionId, StudentCategoryId = pt.StudentCategoryId } equals new { ms.NUAdmissionRoll, ms.AcademicSessionId, ms.StudentCategoryId } into ptmsGroup
-            //                                                 from mStu in ptmsGroup
-
-            //                                                 join aStu in appliedStudents
-            //                                                 on new { NUAdmissionRoll = pt.ReferenceNo, StudentCategoryId = pt.StudentCategoryId, AcademicSessionId = pt.AcademicSessionId } equals new { aStu.NUAdmissionRoll, aStu.StudentCategoryId, aStu.AcademicSessionId } into ptastuGroup
-            //                                                 from aStudent in ptastuGroup
-
-            //                                                 join sub in subjects on mStu.SubjectCode equals sub.Code into subGroup
-            //                                                 from su in subGroup
-            //                                                 select new PaymentReceiptVM
-            //                                                 {
-            //                                                     PaymentTransaction = pt,
-            //                                                     Student = stu,
-            //                                                     MeritStudent = mStu,
-            //                                                     AppliedStudent = aStudent,
-            //                                                     Subject = su,
-            //                                                     AcademicSession = mStu.AcademicSession
-            //                                                 };
-
             ViewBag.controller = "Payments";
             ViewBag.action = "Index";
             ViewBag.data = usrtext;
