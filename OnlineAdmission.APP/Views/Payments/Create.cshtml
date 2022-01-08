@@ -4,9 +4,12 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
 
-<h4>PaymentTransaction</h4>
+<h4>Create Payment Transaction</h4>
+@if (ViewBag.msg != null)
+{
+    <span class="h4 text-danger msgFadeOut">@ViewBag.msg</span>
+}
 <hr />
 <div class="row">
     <div class="col-md-10">
@@ -79,12 +82,29 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label asp-for="StudentCategoryId" class="control-label col-md-2 text-md-right"></label>
+                <div class="col-md-6">
+                    <select asp-for="StudentCategoryId" asp-items="ViewBag.studentCategoryList" class="form-control">
+                        <option disabled selected>Select Student Category</option>
+                    </select>
+                    <span asp-validation-for="AcademicSessionId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
                 <label asp-for="PaymentTypeId" class="control-label col-md-2 text-md-right"></label>
                 <div class="col-md-6">
                     <select asp-for="PaymentTypeId" asp-items="ViewBag.paymentTypeList" class="form-control">
                         <option disabled selected>Select Payment Type</option>
                     </select>
                     <span asp-validation-for="PaymentTypeId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label  class="control-label col-md-2 text-md-right">Merit Type</label>
+                <div class="col-md-6">
+                    <select name="meritTypeId"  asp-items="ViewBag.meritTypeList" class="form-control">
+                        <option disabled selected>Select Merit Type</option>
+                    </select>
                 </div>
             </div>
 
@@ -101,4 +121,10 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script>
+    $(document).ready(function () {
+        $('.msgFadeOut').fadeOut(8000);
+    });
+</script>
 }

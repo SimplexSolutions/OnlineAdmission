@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -26,8 +27,9 @@ namespace OnlineAdmission.APP.Controllers
         private readonly IStudentCategoryManager _studentCategoryManager;
         private readonly IPaymentTypeManager _paymentTypeManager;
         private readonly IAcademicSessionManager _academicSessionManager;
+        private readonly IMeritTypeManager _meritTypeManager;
 
-        public PaymentsController(IPaymentTransactionManager paymentTransactionManager, IStudentManager studentManager, ISubjectManager subjectManager, IMeritStudentManager meritStudentManager, IAppliedStudentManager appliedStudentManager, IStudentCategoryManager studentCategoryManager, IPaymentTypeManager paymentTypeManager, IAcademicSessionManager academicSessionManager)
+        public PaymentsController(IPaymentTransactionManager paymentTransactionManager, IStudentManager studentManager, ISubjectManager subjectManager, IMeritStudentManager meritStudentManager, IAppliedStudentManager appliedStudentManager, IStudentCategoryManager studentCategoryManager, IPaymentTypeManager paymentTypeManager, IAcademicSessionManager academicSessionManager, IMeritTypeManager meritTypeManager)
         {
             _paymentTransactionManager = paymentTransactionManager;
             _studentManager = studentManager;
@@ -37,7 +39,7 @@ namespace OnlineAdmission.APP.Controllers
             _studentCategoryManager = studentCategoryManager;
             _paymentTypeManager = paymentTypeManager;
             _academicSessionManager = academicSessionManager;
-
+            _meritTypeManager = meritTypeManager;
         }
 
 
@@ -74,20 +76,20 @@ namespace OnlineAdmission.APP.Controllers
             }
             ViewBag.pageTitle = pageTitle;
             ViewBag.paymentTypes = new SelectList(await _paymentTypeManager.GetAllAsync(),"Id","PaymentTypeName", paymentTypeId);
-
-           //List< Student> student = await _studentManager.GetAllAsync();
+            IEnumerable<Student> students1 = await _studentManager.GetAllAsync();
+            //List< Student> student = await _studentManager.GetAllAsync();
             IQueryable<PaymentReceiptVM> paymentReceiptVMs = from pt in paymentTransactions
 
                                                              join ms in meritStudents
-                                                             on new { NUAdmissionRoll = pt.ReferenceNo, AcademicSessionId = pt.AcademicSessionId, StudentCategoryId = pt.StudentCategoryId } 
+                                                             on new { NUAdmissionRoll = pt.ReferenceNo, AcademicSessionId = pt.AcademicSessionId, StudentCategoryId = pt.StudentCategoryId }
                                                              equals new { ms.NUAdmissionRoll, ms.AcademicSessionId, ms.StudentCategoryId } into ptmsGroup
                                                              from mStu in ptmsGroup.DefaultIfEmpty()
 
                                                              join s in students on new { NUAdmissionRoll = pt.ReferenceNo, StudentCategoryId = pt.StudentCategoryId,
-                                                                 AcademicSessionId = pt.AcademicSessionId } 
+                                                                 AcademicSessionId = pt.AcademicSessionId }
                                                              equals new { s.NUAdmissionRoll, s.StudentCategoryId, s.AcademicSessionId } into ptsGroup
                                                              from stu in ptsGroup.DefaultIfEmpty()
-                                                             
+
                                                              join sub in subjects on mStu.SubjectCode equals sub.Code into subGroup
                                                              from su in subGroup.DefaultIfEmpty()
 
@@ -95,6 +97,7 @@ namespace OnlineAdmission.APP.Controllers
                                                              on new { NUAdmissionRoll = pt.ReferenceNo, StudentCategoryId = pt.StudentCategoryId, AcademicSessionId = pt.AcademicSessionId } 
                                                              equals new { aStu.NUAdmissionRoll, aStu.StudentCategoryId, aStu.AcademicSessionId } into ptastuGroup
                                                              from aStudent in ptastuGroup.DefaultIfEmpty()
+
                                                              select new PaymentReceiptVM
                                                              {
                                                                  PaymentTransaction = pt,
@@ -544,6 +547,8 @@ namespace OnlineAdmission.APP.Controllers
         {
             ViewBag.academicSessionList = new SelectList(await _academicSessionManager.GetAllAsync(),"Id","SessionName");
             ViewBag.paymentTypeList = new SelectList(await _paymentTypeManager.GetAllAsync(), "Id", "PaymentTypeName");
+            ViewBag.studentCategoryList = new SelectList(await _studentCategoryManager.GetAllAsync(), "Id", "CategoryName");
+            ViewBag.meritTypeList = new SelectList(await _meritTypeManager.GetAllAsync(), "Id", "MeritTypeName");
 
             return View();
         }
@@ -552,23 +557,40 @@ namespace OnlineAdmission.APP.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "SuperAdmin, Admin")]
-        public async Task<IActionResult> Create( PaymentTransaction paymentTransaction)
+        public async Task<IActionResult> Create( PaymentTransaction paymentTransaction, int? meritTypeId)
         {
             if (ModelState.IsValid)
             {
-                await _paymentTransactionManager.AddAsync(paymentTransaction);
-                var meritStudent =await _meritStudentManager.GetHonsByAdmissionRollAsync(paymentTransaction.ReferenceNo);
-                meritStudent.PaymentStatus = true;
-                meritStudent.PaymentTransactionId = paymentTransaction.Id;
-                bool isSaved = await _meritStudentManager.UpdateAsync(meritStudent);
-                if (isSaved)
+                paymentTransaction.CreatedAt = DateTime.Now;
+                paymentTransaction.CreatedBy = HttpContext.Session.GetString("UserId");
+                var existingAppliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(paymentTransaction.ReferenceNo, (int)paymentTransaction.StudentCategoryId, (int)paymentTransaction.AcademicSessionId);
+                if (existingAppliedStudent != null)
                 {
-                    return RedirectToAction(nameof(Index));
+                    paymentTransaction.MobileNumber = existingAppliedStudent.MobileNo;
+                }
+
+                await _paymentTransactionManager.AddAsync(paymentTransaction);
+                var meritStudent = await _meritStudentManager.GetMeritStudentAsync(paymentTransaction.ReferenceNo, (int)paymentTransaction.StudentCategoryId, (int)meritTypeId, (int)paymentTransaction.AcademicSessionId );
+                if (meritStudent !=null)
+                {
+                    meritStudent.PaymentStatus = true;
+                    meritStudent.PaymentTransactionId = paymentTransaction.Id;
+                    bool isSaved = await _meritStudentManager.UpdateAsync(meritStudent);
+                    if (isSaved)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+                else
+                {
+                    ViewBag.msg = "This student is not found in merit list.";
                 }
             }
 
             ViewBag.academicSessionList = new SelectList(await _academicSessionManager.GetAllAsync(), "Id", "SessionName", paymentTransaction.AcademicSessionId);
             ViewBag.paymentTypeList = new SelectList(await _paymentTypeManager.GetAllAsync(), "Id", "PaymentTypeName", paymentTransaction.PaymentTypeId);
+            ViewBag.studentCategoryList = new SelectList(await _studentCategoryManager.GetAllAsync(), "Id", "CategoryName");
+            ViewBag.meritTypeList = new SelectList(await _meritTypeManager.GetAllAsync(), "Id", "MeritTypeName");
             return View(paymentTransaction);
         }
 
