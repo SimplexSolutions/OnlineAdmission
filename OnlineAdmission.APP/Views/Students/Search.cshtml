@@ -19,15 +19,25 @@
         <div class="card">
             @if (Model.PaymentTypeId == 1)
             {
-                <div class="card-header">
-                    <span class="text-info font-weight-bold h5">@ViewBag.FormTitle <br /> Model.MeritType.MeritTypeName</span>
-                </div>
+            <div class="card-header">
+                <span class="text-info font-weight-bold h5">@ViewBag.FormTitle </span>
+                @if (Model.MeritType.MeritTypeName != null)
+                {
+                    <br />
+                    <span class="text-warning font-weight-bold">(@Model.MeritType.MeritTypeName)</span>
+                }
+            </div>
             }
             else
             {
-                <div class="card-header">
-                    <span class="text-info font-weight-bold h5">@ViewBag.FormTitle </span>
-                </div>
+        <div class="card-header">
+            <span class="text-info font-weight-bold h5">@ViewBag.FormTitle </span>
+            @if (Model.MeritType.MeritTypeName != null)
+            {
+                <br />
+                <span class="text-warning font-weight-bold">(@Model.MeritType.MeritTypeName)</span>
+            }
+        </div>
             }
 
             <div class="card-body">

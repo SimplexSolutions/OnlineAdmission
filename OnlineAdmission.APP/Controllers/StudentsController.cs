@@ -509,8 +509,7 @@ namespace OnlineAdmission.APP.Controllers
             var meritType = await _meritTypeManager.GetByIdAsync((int)stuPaymentType.MeritTypeId);
             var category = await _studentCategoryManager.GetByIdAsync((int)stuPaymentType.StudentCategoryId);
             var paymentType = await _paymentTypeManager.GetByIdAsync((int)stuPaymentType.PaymentTypeId);
-            //var meritType = await _meritTypeManager.GetByIdAsync(1);
-            //StudentDynamicInfoVM studentDynamicInfoVM = new StudentDynamicInfoVM();
+
             StudentDynamicInfoVM studentDynamicInfoVM = new StudentDynamicInfoVM()
             {
                 CategoryId = stuPaymentType.StudentCategoryId,
@@ -525,14 +524,12 @@ namespace OnlineAdmission.APP.Controllers
             };
             //StudentCategory studentCategory = await _studentCategoryManager.GetByIdAsync(stuPaymentType.StudentCategoryId);
             ViewBag.FormTitle = stuPaymentType.StudentCategory.CategoryName + " " + stuPaymentType.PaymentType.PaymentTypeName + " " + (stuPaymentType.AcademicSession.SessionName);
-
             if (TempData["msg"] != null)
             {
                 ViewBag.msg = TempData["msg"].ToString();
             }
             ViewBag.notify = notification;
-            //ViewBag.studentPaymentTypeId = studentPaymentTypeId;
-            //ViewBag.studentCategoryId = category.CategoryName;
+
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user != null)
             {
