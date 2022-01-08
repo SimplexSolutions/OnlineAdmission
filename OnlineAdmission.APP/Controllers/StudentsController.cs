@@ -562,6 +562,7 @@ namespace OnlineAdmission.APP.Controllers
                     //if (degreePassRoll > 0)
                     //{
                     var payment = await _paymentTransactionManager.GetPaymentTransactionAsync(model.NuRoll, model.CategoryId, model.SessionId, model.PaymentTypeId);
+                    ViewBag.Remarks = stuPaymentType.Remarks;
                     if (payment != null)
                     {
                         ViewBag.isApplicationPaid = true;
@@ -575,7 +576,6 @@ namespace OnlineAdmission.APP.Controllers
                         if (appliedStudent == null)
                         {
                             ViewBag.provideAppliedInformation = "Please submit your basic information.";
-                            ViewBag.Remarks = stuPaymentType.Remarks;
                             ViewBag.infoCollection = true;
                             return View(model);
                         }
@@ -621,6 +621,8 @@ namespace OnlineAdmission.APP.Controllers
                     if (meritStudent.PaymentStatus == true)
                     {
                         ViewBag.paidNotAdmitted = "Congratulations! Your payment is completed";
+                        StudentPaymentType studentPaymentType = await _studentPaymentTypeManager.GetByIdAsync(model.StudentPaymentTypeId);
+                        ViewBag.remarks = studentPaymentType.Remarks;
                         return View(model);
                     }
                     else if (meritStudent.PaymentStatus == false)

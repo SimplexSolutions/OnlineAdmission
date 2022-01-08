@@ -19,25 +19,25 @@
         <div class="card">
             @if (Model.PaymentTypeId == 1)
             {
-            <div class="card-header">
-                <span class="text-info font-weight-bold h5">@ViewBag.FormTitle </span>
-                @if (Model.MeritType.MeritTypeName != null)
-                {
-                    <br />
-                    <span class="text-warning font-weight-bold">(@Model.MeritType.MeritTypeName)</span>
-                }
-            </div>
+                <div class="card-header">
+                    <span class="text-info font-weight-bold h5">@ViewBag.FormTitle </span>
+                    @if (Model.MeritType.MeritTypeName != null)
+                    {
+                        <br />
+                        <span class="text-warning font-weight-bold">(@Model.MeritType.MeritTypeName)</span>
+                    }
+                </div>
             }
             else
             {
-        <div class="card-header">
-            <span class="text-info font-weight-bold h5">@ViewBag.FormTitle </span>
-            @if (Model.MeritType.MeritTypeName != null)
-            {
-                <br />
-                <span class="text-warning font-weight-bold">(@Model.MeritType.MeritTypeName)</span>
-            }
-        </div>
+                <div class="card-header">
+                    <span class="text-info font-weight-bold h5">@ViewBag.FormTitle </span>
+                    @if (Model.MeritType.MeritTypeName != null)
+                    {
+                        <br />
+                        <span class="text-warning font-weight-bold">(@Model.MeritType.MeritTypeName)</span>
+                    }
+                </div>
             }
 
             <div class="card-body">
@@ -109,7 +109,7 @@
                             <span class="alert font-weight-bold text-info">@ViewBag.FormTitle</span><hr />
                         </div>
                     </div>
-                    
+
                     @if (ViewBag.paymentNotCompleted != null)
                     {
                         <div class="card-footer">
@@ -155,7 +155,7 @@
                             </div>
                         </div>
                     }
-                    
+
                 }
             }
             else
@@ -174,12 +174,16 @@
                             </form>
                         </div>
                     </div>
-                    <div class="note bg-danger mt-1 mb-1 p-1">
-                        <span class="text-justify text-light">
-                            @ViewBag.Remarks
-
-                        </span>
-                    </div>
+                    if (ViewBag.Remarks != null)
+                    {
+                        <div class="col-md-10 offset-md-1">
+                            <div class="note bg-danger mt-1 mb-1 p-1">
+                                <span class="text-justify text-light">
+                                    @ViewBag.Remarks <b><u>This is text</u></b>
+                                </span>
+                            </div>
+                        </div>
+                    }
                 }
                 @if (ViewBag.alreadyAdmittedStudent != null)
                 {
