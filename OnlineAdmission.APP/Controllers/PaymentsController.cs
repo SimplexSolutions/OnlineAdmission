@@ -45,7 +45,7 @@ namespace OnlineAdmission.APP.Controllers
 
         public async Task<IActionResult> Index(int studentCategoryId, int paymentTypeId, int page, int pageSize, string usrtext, DateTime? fromdate, DateTime? todate)
         {
-            var students = _studentManager.GetIQueryableData();
+            var students = _studentManager.GetIQueryableData().Where(s => s.Status == true);
            // var cnt = students.Count();
             var appliedStudents = _appliedStudentManager.GetIQueryableData();
             var meritStudents = _meritStudentManager.GetIQueryableData();
@@ -53,7 +53,7 @@ namespace OnlineAdmission.APP.Controllers
             //var students = _studentManager.GetIQueryableData();
             var subjects = _subjectManager.GetIQueryableData();
             string pageTitle = "";
-            students = students.Where(s => s.Status == true);
+           // students = students.Where(s => s.Status == true);
            // var cntWTrue = students.Count();
             if (studentCategoryId > 0)
             {
@@ -76,37 +76,113 @@ namespace OnlineAdmission.APP.Controllers
             }
             ViewBag.pageTitle = pageTitle;
             ViewBag.paymentTypes = new SelectList(await _paymentTypeManager.GetAllAsync(),"Id","PaymentTypeName", paymentTypeId);
-            IEnumerable<Student> students1 = await _studentManager.GetAllAsync();
+            //IEnumerable<Student> students1 = await _studentManager.GetAllAsync();
             //List< Student> student = await _studentManager.GetAllAsync();
-            IQueryable<PaymentReceiptVM> paymentReceiptVMs = from pt in paymentTransactions
+            IQueryable<PaymentReceiptVM> paymentReceiptVMs = null;
+            
+            if (paymentTypeId == 1)
+            {
+                paymentReceiptVMs = from pt in paymentTransactions.Where(x=> x.PaymentTypeId==1)
 
-                                                             join ms in meritStudents
-                                                             on new { NUAdmissionRoll = pt.ReferenceNo, AcademicSessionId = pt.AcademicSessionId, StudentCategoryId = pt.StudentCategoryId }
-                                                             equals new { ms.NUAdmissionRoll, ms.AcademicSessionId, ms.StudentCategoryId } into ptmsGroup
-                                                             from mStu in ptmsGroup.DefaultIfEmpty()
+                                        //join ms in meritStudents
+                                        //on new { NUAdmissionRoll = pt.ReferenceNo, AcademicSessionId = pt.AcademicSessionId, StudentCategoryId = pt.StudentCategoryId }
+                                        //equals new { ms.NUAdmissionRoll, ms.AcademicSessionId, ms.StudentCategoryId } into ptmsGroup
+                                        //from mStu in ptmsGroup.DefaultIfEmpty()
 
-                                                             join s in students on new { NUAdmissionRoll = pt.ReferenceNo, StudentCategoryId = pt.StudentCategoryId,
-                                                                 AcademicSessionId = pt.AcademicSessionId }
-                                                             equals new { s.NUAdmissionRoll, s.StudentCategoryId, s.AcademicSessionId } into ptsGroup
-                                                             from stu in ptsGroup.DefaultIfEmpty()
+                                        //join s in students on new
+                                        //{
+                                        //    NUAdmissionRoll = pt.ReferenceNo,
+                                        //    StudentCategoryId = pt.StudentCategoryId,
+                                        //    AcademicSessionId = pt.AcademicSessionId
+                                        //}
+                                        //equals new { s.NUAdmissionRoll, s.StudentCategoryId, s.AcademicSessionId } into ptsGroup
+                                        //from stu in ptsGroup.DefaultIfEmpty()
 
-                                                             join sub in subjects on mStu.SubjectCode equals sub.Code into subGroup
-                                                             from su in subGroup.DefaultIfEmpty()
+                                        //join sub in subjects on stu.SubjectId equals sub.Id into subGroup
+                                        //from su in subGroup.DefaultIfEmpty()
 
-                                                             join aStu in appliedStudents
-                                                             on new { NUAdmissionRoll = pt.ReferenceNo, StudentCategoryId = pt.StudentCategoryId, AcademicSessionId = pt.AcademicSessionId } 
-                                                             equals new { aStu.NUAdmissionRoll, aStu.StudentCategoryId, aStu.AcademicSessionId } into ptastuGroup
-                                                             from aStudent in ptastuGroup.DefaultIfEmpty()
+                                    //join aStu in appliedStudents
+                                    //on new { NUAdmissionRoll = pt.ReferenceNo, StudentCategoryId = pt.StudentCategoryId, AcademicSessionId = pt.AcademicSessionId }
+                                    //equals new { aStu.NUAdmissionRoll, aStu.StudentCategoryId, aStu.AcademicSessionId } into ptastuGroup
+                                    //from aStudent in ptastuGroup.DefaultIfEmpty()
 
-                                                             select new PaymentReceiptVM
-                                                             {
-                                                                 PaymentTransaction = pt,
-                                                                 MeritStudent = mStu,
-                                                                 Subject = su,
-                                                                 AppliedStudent = aStudent,
-                                                                 AcademicSession = pt.AcademicSession,
-                                                                 Student = stu
-                                                             };
+                                    select new PaymentReceiptVM
+                                    {
+                                        PaymentTransaction = pt,
+                                         MeritStudent = null,
+                                         Subject = null,
+                                        AppliedStudent = null,
+                                        AcademicSession = pt.AcademicSession,
+                                         Student = null
+                                    };
+            }
+            else if (paymentTypeId > 1)
+            {
+                paymentReceiptVMs = from pt in paymentTransactions
+
+                                    //join ms in meritStudents
+                                    //on new { NUAdmissionRoll = pt.ReferenceNo, AcademicSessionId = pt.AcademicSessionId, StudentCategoryId = pt.StudentCategoryId }
+                                    //equals new { ms.NUAdmissionRoll, ms.AcademicSessionId, ms.StudentCategoryId } into ptmsGroup
+                                    //from mStu in ptmsGroup.DefaultIfEmpty()
+
+                                    join s in students on new
+                                    {
+                                        NUAdmissionRoll = pt.ReferenceNo,
+                                        StudentCategoryId = pt.StudentCategoryId,
+                                        AcademicSessionId = pt.AcademicSessionId
+                                    }
+                                    equals new { s.NUAdmissionRoll, s.StudentCategoryId, s.AcademicSessionId } into ptsGroup
+                                    from stu in ptsGroup.DefaultIfEmpty()
+
+                                    join sub in subjects on stu.SubjectId equals sub.Id into subGroup
+                                    from su in subGroup.DefaultIfEmpty()
+
+                                   select new PaymentReceiptVM
+                                    {
+                                        PaymentTransaction = pt,
+                                        //MeritStudent = mStu,
+                                        Subject = su,
+                                        AcademicSession = pt.AcademicSession,
+                                        Student = stu
+                                    };
+            }
+            else
+            {
+                paymentReceiptVMs = from pt in paymentTransactions
+
+                                    //join ms in meritStudents
+                                    //on new { NUAdmissionRoll = pt.ReferenceNo, AcademicSessionId = pt.AcademicSessionId, StudentCategoryId = pt.StudentCategoryId }
+                                    //equals new { ms.NUAdmissionRoll, ms.AcademicSessionId, ms.StudentCategoryId } into ptmsGroup
+                                    //from mStu in ptmsGroup.DefaultIfEmpty()
+
+                                    join s in students on new
+                                    {
+                                        NUAdmissionRoll = pt.ReferenceNo,
+                                        StudentCategoryId = pt.StudentCategoryId,
+                                        AcademicSessionId = pt.AcademicSessionId
+                                    }
+                                    equals new { s.NUAdmissionRoll, s.StudentCategoryId, s.AcademicSessionId } into ptsGroup
+                                    from stu in ptsGroup.DefaultIfEmpty()
+
+                                    join sub in subjects on stu.SubjectId equals sub.Id into subGroup
+                                    from su in subGroup.DefaultIfEmpty()
+
+                                    //join aStu in appliedStudents
+                                    //on new { NUAdmissionRoll = pt.ReferenceNo, StudentCategoryId = pt.StudentCategoryId, AcademicSessionId = pt.AcademicSessionId }
+                                    //equals new { aStu.NUAdmissionRoll, aStu.StudentCategoryId, aStu.AcademicSessionId } into ptastuGroup
+                                    //from aStudent in ptastuGroup.DefaultIfEmpty()
+
+                                    select new PaymentReceiptVM
+                                    {
+                                        PaymentTransaction = pt,
+                                       // MeritStudent = mStu,
+                                        Subject = su,
+                                        //AppliedStudent = aStudent,
+                                        AcademicSession = pt.AcademicSession,
+                                        Student = stu
+                                    };
+            }
+
 
 
 
@@ -154,12 +230,12 @@ namespace OnlineAdmission.APP.Controllers
             //                        select a;
             //}
 
-            if (paymentTypeId ==2)
-            {
-                paymentReceiptVMs = from a in paymentReceiptVMs
-                                    from sub in subjects.Where(s => s.Code == a.MeritStudent.SubjectCode)
-                                    select a;
-            }
+            //if (paymentTypeId ==2)
+            //{
+            //    paymentReceiptVMs = from a in paymentReceiptVMs
+            //                        from sub in subjects.Where(s => s.Code == a.MeritStudent.SubjectCode)
+            //                        select a;
+            //}
 
             if (!string.IsNullOrEmpty(usrtext))
             {
