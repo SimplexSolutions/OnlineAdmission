@@ -1293,7 +1293,7 @@ namespace OnlineAdmission.APP.Controllers
                 //OrderId = meritStudent.NUAdmissionRoll + "" + paymentshortcode + "" + DateTime.Now.ToString("HHmmss");
                 double paymentForSubjectChange = 0.00;
 
-                int AA = model.PaymentTypeId;
+                //int AA = model.PaymentTypeId;
                 if (subjectChange == 1)
                 {
                     Student existingStudent = await _studentManager.GetStudentAsync(model.NuRoll, model.CategoryId, model.SessionId);
@@ -1312,7 +1312,8 @@ namespace OnlineAdmission.APP.Controllers
                         amount = paymentForSubjectChange;
                     }
                 }
-                serviceCharge = amount * .0157;
+                //serviceCharge = amount * .0157;
+                serviceCharge = amount * .015228;
                 totalAmount = Math.Round(amount + serviceCharge);
                 serviceCharge = Math.Round((totalAmount * .015), 2);
             }
@@ -1320,7 +1321,8 @@ namespace OnlineAdmission.APP.Controllers
             {
                 var category = await _studentCategoryManager.GetByIdAsync((int)model.CategoryId);
                 amount = category.ApplicationFee;
-                serviceCharge = amount * .0157;
+                //serviceCharge = amount * .0157;
+                serviceCharge = amount * .015228;
                 totalAmount = Math.Round(amount + serviceCharge);
                 serviceCharge = Math.Round((totalAmount * .015), 2);
             }

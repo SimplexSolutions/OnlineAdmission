@@ -65,6 +65,7 @@ namespace OnlineAdmission.APP.Controllers
                 appliedStudents = appliedStudents.Where(s => s.StudentCategoryId == studentCategoryId);
                 meritStudents = meritStudents.Include(m => m.AcademicSession).Where(m => m.StudentCategoryId == studentCategoryId);
                 paymentTransactions = paymentTransactions.Where(s => s.StudentCategoryId == studentCategoryId);
+               // var aaa = paymentTransactions.Count();
             }
 
 
@@ -74,6 +75,7 @@ namespace OnlineAdmission.APP.Controllers
                 PaymentType paymentType = await _paymentTypeManager.GetByIdAsync(paymentTypeId);
                 pageTitle = pageTitle + " (" + paymentType.PaymentTypeName + ")";
                 paymentTransactions = paymentTransactions.Where(s => s.PaymentTypeId == paymentTypeId);
+               // var aaa = paymentTransactions.Count();
             }
             ViewBag.pageTitle = pageTitle;
             ViewBag.paymentTypes = new SelectList(await _paymentTypeManager.GetAllAsync(), "Id", "PaymentTypeName", paymentTypeId);
@@ -83,7 +85,7 @@ namespace OnlineAdmission.APP.Controllers
 
             if (paymentTypeId == 1)
             {
-                paymentReceiptVMs = from pt in paymentTransactions.Where(x => x.PaymentTypeId == 1)
+                paymentReceiptVMs = from pt in paymentTransactions
 
                                         //join ms in meritStudents
                                         //on new { NUAdmissionRoll = pt.ReferenceNo, AcademicSessionId = pt.AcademicSessionId, StudentCategoryId = pt.StudentCategoryId }
