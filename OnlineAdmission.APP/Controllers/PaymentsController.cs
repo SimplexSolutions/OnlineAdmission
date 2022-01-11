@@ -217,6 +217,7 @@ namespace OnlineAdmission.APP.Controllers
                                     m.PaymentTransaction.TransactionId.ToLower() == usrtext ||
                                     m.PaymentTransaction.Amount.ToString() == usrtext ||
                                     m.PaymentTransaction.StudentName.Contains(usrtext) ||
+                                    m.PaymentTransaction.MobileNumber.Contains(usrtext) ||
                                     m.PaymentTransaction.TransactionDate.ToString().Contains(usrtext));
                 }
                 else
@@ -228,6 +229,7 @@ namespace OnlineAdmission.APP.Controllers
                                     m.Student.CollegeRoll.ToString() == usrtext ||
                                     m.Student.StudentMobile.ToString().Contains(usrtext) ||
                                     m.Subject.SubjectName.ToLower() == usrtext ||
+                                    m.PaymentTransaction.MobileNumber.Contains(usrtext) ||
                                     m.PaymentTransaction.Amount.ToString() == usrtext ||
                                     m.PaymentTransaction.TransactionDate.ToString().Contains(usrtext));
                 }

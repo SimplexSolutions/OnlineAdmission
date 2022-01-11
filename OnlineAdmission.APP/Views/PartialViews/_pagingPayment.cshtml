@@ -15,9 +15,18 @@
     DateTime newDateTime = new DateTime(2001, 01, 01);
 
     string searchtext = ViewBag.data == null ? "" : ViewBag.data;
-    DateTime todate = ViewBag.todate == null ? DateTime.Today : ViewBag.todate;
-    DateTime fromdate = ViewBag.fromdate == null ? newDateTime : ViewBag.fromdate;
-    string pagecontroller = ViewBag.controller == null ? "home" : ViewBag.controller; ;
+    DateTime todate = new DateTime();
+    DateTime fromdate = new DateTime();
+    if (ViewBag.fromdate != null)
+    {
+        fromdate = Convert.ToDateTime(ViewBag.fromdate);
+    }
+    if (ViewBag.todate != null)
+    {
+        todate = Convert.ToDateTime(ViewBag.todate);
+    }
+    
+    string pagecontroller = ViewBag.controller == null ? "home" : ViewBag.Controller;
     string pageaction = ViewBag.action == null ? "Index" : ViewBag.action;
     int studentCategoryId = ViewBag.studentCategoryId == null ? 0: ViewBag.studentCategoryId;
     int paymentType = 0;
