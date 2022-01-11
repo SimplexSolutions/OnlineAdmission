@@ -34,10 +34,10 @@
         </div>
         <div class="col-md-3">
             <div class="form-inline">
-                    <label for="paymentTypeId" class="col-md-5 text-md-right col-form-label">Payment Type</label>
-                    <select class="form-control form-control-sm" name="paymentTypeId" asp-items="@ViewBag.paymentTypes" >
-                        <option selected disabled>-Select Type-</option>
-                    </select>
+                <label for="paymentTypeId" class="col-md-5 text-md-right col-form-label">Payment Type</label>
+                <select class="form-control form-control-sm" name="paymentTypeId" asp-items="@ViewBag.paymentTypes" >
+                    <option selected disabled>-Select Type-</option>
+                </select>
             </div>
         </div>
         <div class="col-md-4">
@@ -48,10 +48,9 @@
                 }
 
                 <input type="text" name="usrtext" value="@ViewBag.data" class="form-control form-control-sm" placeholder="Search...." />
-
                 <button class="btn-info form-control form-control-sm" type="submit">Search</button>
             </div>
-                    </div>
+        </div>
     </form>
 
 
