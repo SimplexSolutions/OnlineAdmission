@@ -4,11 +4,11 @@
     DateTime todate = new DateTime(); /*= DateTime.Today.Date;*/
     if (ViewBag.fromdate!=null)
     {
-        fromdate = ViewBag.fromdate;
+        fromdate = Convert.ToDateTime(ViewBag.fromdate);
     }
     if (ViewBag.todate != null)
     {
-        todate = ViewBag.todate;
+        todate = Convert.ToDateTime(ViewBag.todate);
     }
     int studentCategoryId = ViewBag.studentCategoryId > 0 ? ViewBag.studentCategoryId : 0;
 }

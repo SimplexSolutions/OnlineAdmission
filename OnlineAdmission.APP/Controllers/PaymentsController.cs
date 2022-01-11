@@ -174,8 +174,7 @@ namespace OnlineAdmission.APP.Controllers
                     paymentReceiptVMs = from a in paymentReceiptVMs
                                         where (a.PaymentTransaction.TransactionDate >= fromdate && a.PaymentTransaction.TransactionDate <= todate)
                                         select a;
-                    //ViewBag.fromdate = ((DateTime)fromdate).Date.ToString("dd-MM-yyyy"); 
-                    //ViewBag.todate = ((DateTime)todate).Date.ToString("dd-MM-yyyy"); 
+                    
                 }
                 else if (fromdate != null && todate == null)
                 {
@@ -189,6 +188,8 @@ namespace OnlineAdmission.APP.Controllers
                                         where (a.PaymentTransaction.TransactionDate.Date <= todate)
                                         select a;
                 }
+                ViewBag.fromdate = ((DateTime)fromdate).Date.ToString("yyyy-MM-dd"); 
+                ViewBag.todate = ((DateTime)todate).Date.ToString("yyyy-MM-dd"); 
             }
             //else if (fromdate == null && todate == null)
             //{
