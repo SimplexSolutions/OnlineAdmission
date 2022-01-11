@@ -2482,6 +2482,8 @@ namespace OnlineAdmission.APP.Controllers
             student.PresentDistrict = await _districtManager.GetByIdAsync(student.PresentDistrictId);
             student.PermanentDistrict = await _districtManager.GetByIdAsync(student.PermanentDistrictId);
             student.MailingDistrict = await _districtManager.GetByIdAsync(student.MailingDistrictId);
+            student.StudentCategory = await _studentCategoryManager.GetByIdAsync((int)student.StudentCategoryId);
+            student.AcademicSession = await _academicSessionManager.GetByIdAsync((int)student.AcademicSessionId);
             MeritStudent meritStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(student.NUAdmissionRoll);
 
             

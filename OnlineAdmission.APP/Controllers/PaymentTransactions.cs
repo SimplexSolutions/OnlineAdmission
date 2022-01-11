@@ -48,7 +48,8 @@ namespace OnlineAdmission.APP.Controllers
             httpClient = new HttpClient(); 
             var responseContent =  await httpClient.GetAsync(paymentDetails);
             var  br_ResponseContent = await responseContent.Content.ReadAsStringAsync();
-            dynamic responsevalue = JObject.Parse(br_ResponseContent);            
+            dynamic responsevalue = JObject.Parse(br_ResponseContent); 
+            
 
             if (status.ToLower() == "success")
             {
