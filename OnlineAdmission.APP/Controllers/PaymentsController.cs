@@ -66,7 +66,7 @@ namespace OnlineAdmission.APP.Controllers
                 meritStudents = meritStudents.Include(m => m.AcademicSession).Where(m => m.StudentCategoryId == studentCategoryId);
                 paymentTransactions = paymentTransactions.Where(s => s.StudentCategoryId == studentCategoryId);
             }
-
+            
 
             if (paymentTypeId > 0)
             {

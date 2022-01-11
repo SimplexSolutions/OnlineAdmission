@@ -10,7 +10,6 @@
     {
         todate = ViewBag.todate;
     }
-    int paymentTypeId = ViewBag.paymentType > 0? ViewBag.paymentType:0;
     int studentCategoryId = ViewBag.studentCategoryId > 0 ? ViewBag.studentCategoryId : 0;
 }
 @if (ViewBag.action != null)
@@ -21,31 +20,36 @@
 
     <form asp-action="@actionName" class="form-inline" method="post">
         <input type="hidden" name="studentCategoryId" value="@studentCategoryId" />
-        <input type="hidden" name="paymentTypeId" value="@paymentTypeId" />
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="form-inline">
                 <div class="form-group">
-                    <label class="col-md-2">From</label>
-                    <input type="date" name="fromdate" class="form-control-sm" value="@fromdate">
+                    <label for="fromdate" class="col-md-2">From</label>
+                    <input type="date" name="fromdate" id="fromdate" class="form-control form-control-sm" value="@fromdate">
                 </div>
-                <div class="form-group mx-sm-3 mb-2">
-                    <label class="col-md-2">To</label>
-                    <input type="date" class="form-control-sm" name="todate" value="@todate">
+                <div class="form-group">
+                    <label for="todate" class="col-md-2">To</label>
+                    <input type="date" class="form-control form-control-sm" name="todate" id="todate" value="@todate">
                 </div>
             </div>
         </div>
-
-        <div class="col-md-6">
+        <div class="col-md-3">
+            <div class="form-inline">
+                    <label for="paymentTypeId" class="col-md-5 text-md-right col-form-label">Payment Type</label>
+                    <select class="form-control form-control-sm" name="paymentTypeId" asp-items="@ViewBag.paymentTypes" >
+                        <option selected disabled>-Select Type-</option>
+                    </select>
+            </div>
+        </div>
+        <div class="col-md-4">
             <div class="float-md-right">
-                @*<h4 class="text-primary"> @ViewBag.count</h4>*@
                 @if (ViewBag.count != null)
                 {
                     <span>Total found @ViewBag.count</span>
                 }
 
-                <input type="text" name="usrtext" value="@ViewBag.data" class="form-control" placeholder="Search...." />
+                <input type="text" name="usrtext" value="@ViewBag.data" class="form-control form-control-sm" placeholder="Search...." />
 
-                <button class="btn-info form-control" type="submit">Search</button>
+                <button class="btn-info form-control form-control-sm" type="submit">Search</button>
             </div>
                     </div>
     </form>

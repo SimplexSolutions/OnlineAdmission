@@ -55,22 +55,6 @@
         <h4>@pageTitle</h4>
     </div>
 
-    <div class="col-md-6">
-        <form asp-action="Index">
-            <input type="hidden" name="studentCategoryId" value="@studentCategoryId" />
-            <div class="form-group row">
-                <div class="input-group mb-3">
-                    <label class="col-md-2 text-md-right col-form-label">Payment Type</label>
-                    <select class="form-control" name="paymentTypeId" asp-items="@ViewBag.paymentTypes">
-                        <option selected disabled>-Select Type-</option>
-                    </select>
-                    <div class="input-group-append">
-                        <button class="btn btn-info" type="submit">Search By Payment Type</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
 </div>
 
 <partial name="~/Views/PartialViews/_Search_Date_Range.cshtml">
