@@ -15,7 +15,7 @@ namespace OnlineAdmission.BLL.IManager
         Task<PaymentTransaction> GetApplicationTransactionByNuRollAsync(int nuRoll, int studentCategory);
         Task<PaymentTransaction> GetAdmissionTrByNuRoll(int nuRoll, int studentCategory);
         Task<PaymentTransaction> GetPaymentTransactionByTrId(string transactionId);
-        Task<PaymentTransaction> GetPaymentTransactionById(int id);
+        Task<PaymentTransaction> GetPaymentTransactionByIdAsync(int id);
         Task<List<PaymentTransaction>> GetAllPaymentTrancsactionByNuRoll(int nuRoll);
     }
 }

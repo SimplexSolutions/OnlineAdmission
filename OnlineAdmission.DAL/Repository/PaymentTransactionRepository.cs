@@ -46,9 +46,9 @@ namespace OnlineAdmission.DAL.Repository
             return existingTransaction;
         }
 
-        public async Task<PaymentTransaction> GetPaymentTransactionById(int id)
+        public async Task<PaymentTransaction> GetPaymentTransactionByIdAsync(int id)
         {
-            var existingTransaction = await _context.PaymentTransactions.FirstOrDefaultAsync(t => t.Id == id);
+            var existingTransaction = await _context.PaymentTransactions.Include(p => p.StudentCategory).FirstOrDefaultAsync(t => t.Id == id);
             return existingTransaction;
         }
 

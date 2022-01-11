@@ -65,7 +65,6 @@ namespace OnlineAdmission.APP.Controllers
                 appliedStudents = appliedStudents.Where(s => s.StudentCategoryId == studentCategoryId);
                 meritStudents = meritStudents.Include(m => m.AcademicSession).Where(m => m.StudentCategoryId == studentCategoryId);
                 paymentTransactions = paymentTransactions.Where(s => s.StudentCategoryId == studentCategoryId);
-               // var aaa = paymentTransactions.Count();
             }
 
 
@@ -75,7 +74,6 @@ namespace OnlineAdmission.APP.Controllers
                 PaymentType paymentType = await _paymentTypeManager.GetByIdAsync(paymentTypeId);
                 pageTitle = pageTitle + " (" + paymentType.PaymentTypeName + ")";
                 paymentTransactions = paymentTransactions.Where(s => s.PaymentTypeId == paymentTypeId);
-               // var aaa = paymentTransactions.Count();
             }
             ViewBag.pageTitle = pageTitle;
             ViewBag.paymentTypes = new SelectList(await _paymentTypeManager.GetAllAsync(), "Id", "PaymentTypeName", paymentTypeId);
@@ -573,25 +571,25 @@ namespace OnlineAdmission.APP.Controllers
             {
                 return NotFound();
             }
-            var allMeritStudents = await _meritStudentManager.GetAllAsync();
 
             var paymentTransaction = await _paymentTransactionManager.GetByIdAsync((int)id);
             StudentCategory studentCategory = await _studentCategoryManager.GetByIdAsync(studentCategoryId);
             ViewBag.studentCategoryId = studentCategoryId;
             MeritStudent existMeritStudent = await _meritStudentManager.GetMeritStudentAsync(paymentTransaction.ReferenceNo, studentCategoryId, meritTypeId, academicSessionId);
 
-            var appliedStudent = await _appliedStudentManager.GetByAdmissionRollAsync(paymentTransaction.ReferenceNo, studentCategoryId);
+            var appliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(paymentTransaction.ReferenceNo,studentCategoryId,academicSessionId);
             Subject existSubject = new Subject();
-            Student student = new Student();
-            if (existMeritStudent!=null)
+            Student student = await _studentManager.GetStudentAsync(paymentTransaction.ReferenceNo, studentCategoryId, academicSessionId);
+            
+            if (student != null)
             {
-                existSubject = await _subjectManager.GetByCodeAsync(existMeritStudent.SubjectCode);
-                student = await _studentManager.GetByAdmissionRollAsync(existMeritStudent.NUAdmissionRoll, studentCategoryId);
+                existSubject = await _subjectManager.GetByCodeAsync(student.Subject.Code);
             }
 
             PaymentReceiptVM paymentReceiptVM = new PaymentReceiptVM();
             paymentReceiptVM.PaymentTransaction = paymentTransaction;
             paymentReceiptVM.MeritStudent = existMeritStudent;
+            paymentReceiptVM.PaymentType = await _paymentTypeManager.GetByIdAsync((int)paymentTransaction.PaymentTypeId);
             if (appliedStudent!=null)
             {
                 paymentReceiptVM.AppliedStudent = appliedStudent;
@@ -602,8 +600,6 @@ namespace OnlineAdmission.APP.Controllers
                 paymentReceiptVM.Student = student;
                 
             }
-            
-
             return View(paymentReceiptVM);
         }
 

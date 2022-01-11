@@ -208,7 +208,7 @@
                             {
                                 if (item.MeritStudent != null)
                                 {
-                                    <a class="btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.PaymentTransaction.StudentCategoryId" asp-route-academicSessionId="@item.PaymentTransaction.AcademicSessionId" asp-route-meritTypeId="@item.MeritStudent.MeritTypeId">Edit</a>
+                                    <a class="btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.PaymentTransaction.Id" asp-route-studentCategoryId="@item.PaymentTransaction.StudentCategoryId" asp-route-academicSessionId="@item.PaymentTransaction.AcademicSessionId" asp-route-meritTypeId="@ViewBag.paymentType">Edit</a>
                                 }
                                 else
                                 {

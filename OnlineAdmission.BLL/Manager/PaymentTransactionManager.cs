@@ -38,9 +38,9 @@ namespace OnlineAdmission.BLL.Manager
             return await _paymentTransactionRepository.GetPaymentTransactionAsync(nuRoll, studentCategoryId, academicSessionId, paymentTypeId);
         }
 
-        public async Task<PaymentTransaction> GetPaymentTransactionById(int id)
+        public async Task<PaymentTransaction> GetPaymentTransactionByIdAsync(int id)
         {
-            return await _paymentTransactionRepository.GetPaymentTransactionById(id);
+            return await _paymentTransactionRepository.GetPaymentTransactionByIdAsync(id);
         }
 
         public async Task<PaymentTransaction> GetPaymentTransactionByTrId(string transactionId)

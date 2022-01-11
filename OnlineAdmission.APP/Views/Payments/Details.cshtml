@@ -48,7 +48,7 @@
                                 </p>
                             </div>
                         </div>
-                        <hr /><span class="font-weight-bold text-dark">Payment Receipt</span><hr />
+                        <hr /><span class="font-weight-bold text-dark">Payment Receipt <br /> <span class="text-secondary font-weight-normal">@Model.PaymentTransaction.StudentCategory.CategoryName</span> </span><hr />
                         <div class="row">
                             <div class="col-md-6 text-md-left">
                                 <span class="">Session : 2020-2021</span>
@@ -82,12 +82,15 @@
                             <dd class="col-md-8">
                                 @Html.DisplayFor(model => model.AppliedStudent.NUAdmissionRoll)
                             </dd>
-                            <dt class="col-md-4">
-                                @Html.DisplayNameFor(model => model.Subject)
-                            </dt>
-                            <dd class="col-md-8">
-                                @Html.DisplayFor(model => model.Subject.SubjectName)
-                            </dd>
+                            @if (Model.Subject.SubjectName != null)
+                            {
+                                <dt class="col-md-4">
+                                    @Html.DisplayNameFor(model => model.Subject)
+                                </dt>
+                                <dd class="col-md-8">
+                                    @Html.DisplayFor(model => model.Subject.SubjectName)
+                                </dd>
+                            }
                             <dt class="col-md-4">
                                 @Html.DisplayNameFor(model => model.AppliedStudent.MobileNo)
                             </dt>
@@ -101,7 +104,11 @@
                                 @Html.DisplayNameFor(model => model.PaymentTransaction.Description)
                             </dt>
                             <dd class="col-md-8">
-                                @Html.DisplayFor(model => model.PaymentTransaction.Description)
+                                @if (Model.PaymentTransaction.Description != null)
+                                {
+                                    @Html.DisplayFor(model => model.PaymentTransaction.Description)
+
+                                } @Model.PaymentType.PaymentTypeName Fee
                             </dd>
                             <dt class="col-md-4">
                                 @Html.DisplayNameFor(model => model.PaymentTransaction.AdmissionFee)
