@@ -165,8 +165,8 @@ namespace OnlineAdmission.APP.Controllers
                 int subjectCode = existingSubject.Code;
                 int count = await _studentManager.GetCountAsync(existingSubject.Id)+1;
                 string sl = count.ToString("D3");
-                
-                
+                ViewBag.studentCategory = model.CategoryId;
+
                 StudentCreateVM student = new StudentCreateVM();
                 student.Name = existingAppliedStudent.ApplicantName;
                 student.FatherName = existingAppliedStudent.FatherName;
