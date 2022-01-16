@@ -43,14 +43,17 @@
 .studentPhoto {
     border: 1px solid #ede1e1;
 }
+
 .honsText{
     writing-mode:vertical-rl;
     text-orientation:upright;
     margin:0px 0px 0px 0px;
-    padding:0px 0px 0px 0px;
+    padding:2px;
     font-size:9px;
-    color:blue;
+    color:white;
     font-weight:bold;
+    background-color:chocolate;
+    border-radius:4px;
 }
 
 .part3 {

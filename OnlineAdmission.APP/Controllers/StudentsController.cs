@@ -161,7 +161,7 @@ namespace OnlineAdmission.APP.Controllers
                 var existingAppliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(model.NuRoll, model.CategoryId, model.SessionId);
                 var existingSubject = await _subjectManager.GetByCodeAsync(existingMeritStudent.SubjectCode);
 
-                string year = DateTime.Today.ToString("yyyy");
+
                 int subjectCode = existingSubject.Code;
                 int count = await _studentManager.GetCountAsync(existingSubject.Id)+1;
                 string sl = count.ToString("D3");
@@ -178,6 +178,32 @@ namespace OnlineAdmission.APP.Controllers
                 student.NuAdmissionRoll = model.NuRoll;
                 student.StudentCategoryId = (int)existingMeritStudent.StudentCategoryId;
                 student.AcademicSessionId = model.SessionId;
+
+                string year = "";
+                var AcademicSession = await _academicSessionManager.GetByIdAsync((int)model.SessionId);
+                if (AcademicSession != null)
+                {
+                    if (model.CategoryId == 1)
+                    {
+                        year = AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length - 4);
+                    }
+                    else if (model.CategoryId == 2)
+                    {
+                        year = AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length - 4);
+                    }
+                    else if (model.CategoryId == 3)
+                    {
+                        year = AcademicSession.SessionName.Substring(0, 4);
+                    }
+                    else if (model.CategoryId == 4)
+                    {
+                        year = (Convert.ToInt32(AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length - 4)) + 1).ToString();
+                    }
+                    else if (model.CategoryId == 5)
+                    {
+                        year = AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length - 4);
+                    }
+                }
 
                 if (subjectCode < 10)
                 {
@@ -209,19 +235,6 @@ namespace OnlineAdmission.APP.Controllers
             var existingSubject = await _subjectManager.GetByIdAsync(model.SubjectId);
             model.Subject = existingSubject;
             var existStudent = await _studentManager.GetStudentAsync(model.NuAdmissionRoll,(int)model.StudentCategoryId, (int)model.AcademicSessionId);
-            //if (existStudent != null)
-            //{
-            //    msg = "HSC Roll is already Exist";
-            //    ViewBag.msg = msg;
-            //    return View(model);
-            //}
-            //existStudent = await _studentManager.GetStudentBySSCRollAsync(model.SSCRoll, model.SSCBoard);
-            //if (existStudent != null)
-            //{
-            //    msg = "SSC Roll is already Exist";
-            //    ViewBag.msg = msg;
-            //    return View(model);
-            //}
 
             if (existStudent == null)
             {
@@ -266,10 +279,34 @@ namespace OnlineAdmission.APP.Controllers
                     {
                         //string msg = "Please upload an image";
                     }
-                    
 
 
-                    string year = DateTime.Today.ToString("yyyy");
+                    string year = "";
+                    var AcademicSession = await _academicSessionManager.GetByIdAsync((int)model.AcademicSessionId);
+                    if (AcademicSession != null)
+                    {
+                        if (model.StudentCategoryId == 1)
+                        {
+                            year = AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length - 4);
+                        }
+                        else if (model.StudentCategoryId == 2)
+                        {
+                            year = AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length - 4);
+                        }
+                        else if (model.StudentCategoryId == 3)
+                        {
+                            year = AcademicSession.SessionName.Substring(0,4);
+                        }
+                        else if (model.StudentCategoryId == 4)
+                        {
+                            year = (Convert.ToInt32(AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length - 4))+1).ToString();
+                        }
+                        else if(model.StudentCategoryId == 5)
+                        {
+                            year = AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length - 4);
+                        }
+                    }
+
                     int subjectCode = existingSubject.Code;
                     int count = await _studentManager.GetCountAsync(existingSubject.Id)+1;
                     string sl = count.ToString("D3");
@@ -414,7 +451,7 @@ namespace OnlineAdmission.APP.Controllers
             }
         }
         [Authorize(Roles = "Admin,SuperAdmin,Teacher")]
-        public async Task<ActionResult> IdCard(string studentMeritType)
+        public async Task<ActionResult> IdCard(int studentCategoryId)
         {
             var student = await _studentManager.GetAllAsync();
             List<MeritStudent> meritStudents = new List<MeritStudent>();
@@ -423,14 +460,12 @@ namespace OnlineAdmission.APP.Controllers
                 var mStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(item.NUAdmissionRoll);
                 meritStudents.Add(mStudent);
             }
-            if (studentMeritType!=null )
+            if (studentCategoryId > 0)
             {
-                student = (from s in student
-                          join a in meritStudents on s.NUAdmissionRoll equals a.NUAdmissionRoll
-                          where a.Comments.ToLower().Trim() == studentMeritType.ToLower().Trim()
-                          select s).ToList();
-
+                student = student.Where(s => s.StudentCategoryId == studentCategoryId).ToList();
             }
+
+
             ViewBag.count = student.Count;
             return View(student);
         }
@@ -603,7 +638,7 @@ namespace OnlineAdmission.APP.Controllers
                     if (meritStudent == null)
                     {
                         ViewBag.NotSelected = "Sorry! You are not selected for admission.";
-                        return View();
+                        return View(model);
                     }
 
                     var appliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(model.NuRoll, model.CategoryId, model.SessionId);
@@ -1228,6 +1263,7 @@ namespace OnlineAdmission.APP.Controllers
                     httpClient.DefaultRequestHeaders.Add("X-KM-MC-Id", GlobalVariables.MerchantId);
                     httpClient.DefaultRequestHeaders.Add("X-KM-Client-Type", "PC_WEB");
                     httpClient.DefaultRequestHeaders.Add("X-KM-Api-Version", "v-0.2.0");
+
                     // Do the actual request and await the response
                     var httpResponse = await httpClient.PostAsync(GlobalVariables.InitializeAPI + GlobalVariables.MerchantId + "/" + OrderId, httpContent);
 
@@ -1245,9 +1281,6 @@ namespace OnlineAdmission.APP.Controllers
                 _logger.LogWarning(ex.ToString());
                
             }
-
-            
-
 
             Console.WriteLine("Initialize API Response:" + responseContent + "\n");
             #endregion
@@ -2564,7 +2597,7 @@ namespace OnlineAdmission.APP.Controllers
                 StudentCreateVM studentCreateVM = _mapper.Map<StudentCreateVM>(previousStudent);
                 Student NewStudent = _mapper.Map<Student>(studentCreateVM);
                 //Creating New College Roll
-                int newCollgeRoll = await CreateCollgeRoll(model.SubjectId);
+                int newCollgeRoll = await CreateCollgeRoll(model.SubjectId, (int)previousStudent.AcademicSessionId, (int)previousStudent.StudentCategoryId);
                 var isCollegeRollAssign = await _studentManager.GetByCollegeRollAsync(newCollgeRoll);
                 if (isCollegeRollAssign != null)
                 {
@@ -2867,19 +2900,42 @@ namespace OnlineAdmission.APP.Controllers
             return true;
         }
 
-        public async Task<int> CreateCollgeRoll(int subId)
+        public async Task<int> CreateCollgeRoll(int subId, int sessionId, int categoryId)
         {
             Subject newSubject = await _subjectManager.GetByIdAsync(subId);
             int studentCount = await _studentManager.GetCountAsync(subId) + 1;
-            
+            string year = "";
+            var AcademicSession = await _academicSessionManager.GetByIdAsync(sessionId);
+            if (AcademicSession != null)
+            {
+                if (categoryId == 1)
+                {
+                    year = AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length - 4);
+                }
+                else if (categoryId == 2)
+                {
+                    year = AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length - 4);
+                }
+                else if (categoryId == 3)
+                {
+                    year = AcademicSession.SessionName.Substring(0, 4);
+                }
+                else if (categoryId == 4)
+                {
+                    year = (Convert.ToInt32(AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length - 4)) + 1).ToString();
+                }
+                else if (categoryId == 5)
+                {
+                    year = AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length - 4);
+                }
+            }
+
+
             int colRoll = Convert.ToInt32(
-                DateTime.Today.ToString("yyyy").Substring(DateTime.Today.ToString("yyyy").Length - 2) +
+                year.Substring(DateTime.Today.ToString("yyyy").Length - 2) +
                 newSubject.Code.ToString("D2") + studentCount.ToString("D3"));
             return colRoll;
         }
-
-        
-
         #endregion
 
         #endregion

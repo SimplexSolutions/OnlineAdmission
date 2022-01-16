@@ -1,8 +1,18 @@
-﻿@model IEnumerable<OnlineAdmission.Entity.Student>
+﻿@using OnlineAdmission.BLL.IManager;
+
+@model IEnumerable<OnlineAdmission.Entity.Student>
+
+@inject IStudentCategoryManager _stuentCategoryManager
+
+@{
+    var studentCategoryList = await _stuentCategoryManager.GetAllAsync();
+}
 
 @{
     ViewData["Title"] = "IdCard";
     string departmentName = "";
+
+
 }
 
 <h1>Id Card</h1>
@@ -11,18 +21,22 @@
         <button class="btn btn-info" onclick="window.print()"><i class="fa fa-print"></i> </button>
     </div>
     <div class="col-md-6 col-sm-12 col-xl-6">
-       
+
         <form asp-action="IdCard">
             <div class="input-group mb-3">
                 @if (ViewBag.count != null)
                 {
                     <span class="col-form-label pr-2">Total Found @ViewBag.count</span>
                 }
-                <select name="studentMeritType" type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                    <option selected disabled>Select Merit List</option>
-                    <option value="1st Merit List">Hon's First Merit List</option>
-                    <option value="2nd Merit List">Hon's Seconed Merit List</option>
+                <select name="studentCategoryId" type="text" class="form-control">
+                    <option selected disabled>Select Student List</option>
+                    @foreach (var category in studentCategoryList)
+                    {
+                        <option value="@category.Id">@category.CategoryName</option>
+                    }
                 </select>
+
+
                 <div class="input-group-append">
                     <button class="btn p-0" type="submit">
                         <span class="input-group-text" id="basic-addon2"> Search </span>
@@ -34,105 +48,105 @@
     </div>
 </div>
 
-@section Styles{ 
+@section Styles{
     <link href="~/css/IDCard/IDCardStyle.css" rel="stylesheet" />
 }
 @if (Model != null)
 {
-<div class="row col-md-12">
-    @foreach (var student in Model)
-    {
-        departmentName = student.Subject.SubjectName;
-        <div class="fullCard m-2">
-            <div class="text-center part1">
-                <img src="~/Images/Collge/Logo22.png" alt="Alternate Text" /><br />
-                @*<span class="h6">TEJGAON COLLEGE, DHAKA</span>*@
-                <span class="collegeName" style="font-size:16px;">TEJGAON COLLEGE, DHAKA</span>
-            </div>
-            <div class="text-center  part2">
-                <div class="row">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4 text-lg-right">
-                        <img class="card-img-top studentPhoto" src="~/Images/Students/@student.Photo" alt="Card image cap">
-                    </div>
-                    <div class="col-md-4 text-left">
-                        <p class="honsText" >HONOURS</p>
+    <div class="row col-md-12">
+        @foreach (var student in Model)
+        {
+            departmentName = student.Subject.SubjectName;
+            <div class="fullCard m-2">
+                <div class="text-center part1">
+                    <img src="~/Images/Collge/Logo22.png" alt="Alternate Text" /><br />
+                    @*<span class="h6">TEJGAON COLLEGE, DHAKA</span>*@
+                    <span class="collegeName" style="font-size:16px;">TEJGAON COLLEGE, DHAKA</span>
+                </div>
+                <div class="text-center  part2">
+                    <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4 text-lg-right">
+                            <img class="card-img-top studentPhoto" src="~/Images/Students/@student.Photo" alt="Card image cap">
+                        </div>
+                        <div class="col-md-4 text-left">
+                            <p class="honsText">@student.StudentCategory.IDCardShortName</p>
+                        </div>
                     </div>
                 </div>
+                <div class="pl-3 pr-3 part3">
+                    <table class="myTable">
+                        <tr class="">
+                            @if (student.Name.Length > 28)
+                            {
+                                <td colspan="3" class="studentName" style="font-size:x-small">@student.Name</td>
+                            }
+                            else
+                            {
+                                <td colspan="3" class="studentName">@student.Name</td>
+                            }
+                        </tr>
+                        @*<tr>
+                                <td class="" colspan="3">Bachelor Program</td>
+                            </tr>*@
+                        <tr>
+                            @if (departmentName.Length > 30 && departmentName.Length < 39)
+                            {
+                                <td class="" colspan="3" style="font-size:x-small">Department of @departmentName</td>
+                            }
+                            else if (departmentName.Length > 38)
+                            {
+                                <td class="" colspan="3" style="font-size:xx-small">Department of @departmentName</td>
+                            }
+                            else
+                            {
+                                <td class="" colspan="3">Department of @departmentName</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>Roll No</td>
+                            <td>:</td>
+                            <td>@student.CollegeRoll</td>
+                        </tr>
+                        <tr>
+                            <td>Session</td>
+                            <td>:</td>
+                            <td>2020-2021</td>
+                        </tr>
+                        <tr>
+                            <td>Blood Group</td>
+                            <td>:</td>
+                            <td>@(student.BloodGroup)</td>
+                        </tr>
+                        <tr>
+                            <td>Cell</td>
+                            <td>:</td>
+                            <td>0@(student.StudentMobile)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-center">Valid Up to June’2025</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="text-right principalArea">
+                    <span class="sign"><img src="~/Images/Collge/sign2.png" alt="Alternate Text" /></span><br />
+                    <span class="principal">Principal</span>
+                </div>
             </div>
-            <div class="pl-3 pr-3 part3">
-                <table class="myTable">
-                    <tr class="">
-                        @if (student.Name.Length > 28)
-                        {
-                            <td colspan="3" class="studentName" style="font-size:x-small">@student.Name</td>
-                        }
-                        else
-                        {
-                            <td colspan="3" class="studentName">@student.Name</td>
-                        }
-                    </tr>
-                    @*<tr>
-                        <td class="" colspan="3">Bachelor Program</td>
-                    </tr>*@
-                    <tr>
-                        @if (departmentName.Length > 30 && departmentName.Length < 39)
-                        {
-                            <td class="" colspan="3" style="font-size:x-small">Department of @departmentName</td>
-                        }
-                        else if (departmentName.Length > 38)
-                        {
-                            <td class="" colspan="3" style="font-size:xx-small">Department of @departmentName</td>
-                        }
-                        else
-                        {
-                            <td class="" colspan="3">Department of @departmentName</td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>Roll No</td>
-                        <td>:</td>
-                        <td>@student.CollegeRoll</td>
-                    </tr>
-                    <tr>
-                        <td>Session</td>
-                        <td>:</td>
-                        <td>2020-2021</td>
-                    </tr>
-                    <tr>
-                        <td>Blood Group</td>
-                        <td>:</td>
-                        <td>@(student.BloodGroup)</td>
-                    </tr>
-                    <tr>
-                        <td>Cell</td>
-                        <td>:</td>
-                        <td>0@(student.StudentMobile)</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" class="text-center">Valid Up to June’2025</td>
-                    </tr>
-                </table>
-            </div>
-            <div class="text-right principalArea">
-                <span class="sign"><img src="~/Images/Collge/sign2.png" alt="Alternate Text" /></span><br />
-                <span class="principal">Principal</span>
-            </div>
-        </div>
-        @*<div class="fullCard m-2"></div>*@
-        @*<div class="backpart m-2 p-4 text-center">
-            <p class="font-weight-bold">If found, Please return to:</p>
-            <p class="font-weight-bolder">TEJGAON COLLEGE, DHAKA</p>
-            <p>16, Indira Road, Farmgate,</p>
-            <p>Dhaka-1215</p><br />
-            <p>Phone:-+88 02-48113628</p>
-            <p>+ 88 02-48117008</p><br />
-            <p class="font-italic">E-mail: tejgaoncollege@ymail.com</p>
-            <p class="font-italic">www.tejgaoncollege.edu.bd</p>
-        </div>*@
-    }
+            @*<div class="fullCard m-2"></div>*@
+            @*<div class="backpart m-2 p-4 text-center">
+                    <p class="font-weight-bold">If found, Please return to:</p>
+                    <p class="font-weight-bolder">TEJGAON COLLEGE, DHAKA</p>
+                    <p>16, Indira Road, Farmgate,</p>
+                    <p>Dhaka-1215</p><br />
+                    <p>Phone:-+88 02-48113628</p>
+                    <p>+ 88 02-48117008</p><br />
+                    <p class="font-italic">E-mail: tejgaoncollege@ymail.com</p>
+                    <p class="font-italic">www.tejgaoncollege.edu.bd</p>
+                </div>*@
+        }
 
-</div>
+    </div>
 
 }
 
