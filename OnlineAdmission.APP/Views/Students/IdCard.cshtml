@@ -3,9 +3,11 @@
 @model IEnumerable<OnlineAdmission.Entity.Student>
 
 @inject IStudentCategoryManager _stuentCategoryManager
+@inject IAcademicSessionManager _sessionManager
 
 @{
     var studentCategoryList = await _stuentCategoryManager.GetAllAsync();
+    var sessionList = await _sessionManager.GetAllAsync();
 }
 
 @{
@@ -24,10 +26,13 @@
 
         <form asp-action="IdCard">
             <div class="input-group mb-3">
-                @if (ViewBag.count != null)
-                {
-                    <span class="col-form-label pr-2">Total Found @ViewBag.count</span>
-                }
+                <select name="sessionId" class="form-control">
+                    <option value="value">Select Session</option>
+                    @foreach (var aSession in sessionList)
+                    {
+                        <option value="@aSession.Id">@aSession.SessionName</option>
+                    }
+                </select>
                 <select name="studentCategoryId" type="text" class="form-control">
                     <option selected disabled>Select Student List</option>
                     @foreach (var category in studentCategoryList)
@@ -37,6 +42,10 @@
                 </select>
 
 
+                @if (ViewBag.count != null)
+                {
+                    <span class="col-form-label pr-2">Total Found @ViewBag.count</span>
+                }
                 <div class="input-group-append">
                     <button class="btn p-0" type="submit">
                         <span class="input-group-text" id="basic-addon2"> Search </span>
@@ -53,6 +62,15 @@
 }
 @if (Model != null)
 {
+    if (ViewBag.idCardTitle != null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <span class="alert alert-info">@ViewBag.idCardTitle <span class="text-warning">Found @ViewBag.count Result</span></span>
+            </div>
+        </div>
+        <br />
+    }
     <div class="row col-md-12">
         @foreach (var student in Model)
         {

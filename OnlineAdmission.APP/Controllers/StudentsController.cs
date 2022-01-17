@@ -103,6 +103,7 @@ namespace OnlineAdmission.APP.Controllers
                                join m in selectedMeritList on s.NUAdmissionRoll equals m.NUAdmissionRoll
                                select s;
                 }
+
                 ViewBag.category = studentCategory;
                 ViewBag.subject = categorySubject;
                 ViewBag.meritType = meritType;
@@ -451,20 +452,25 @@ namespace OnlineAdmission.APP.Controllers
             }
         }
         [Authorize(Roles = "Admin,SuperAdmin,Teacher")]
-        public async Task<ActionResult> IdCard(int studentCategoryId)
+        public async Task<ActionResult> IdCard(int studentCategoryId, int sessionId)
         {
+            string IdCardTitle = "";
             var totalStudent = await _studentManager.GetAllAsync();
             var student = totalStudent.Where(s=> s.Status == true && s.StudentCategoryId != null);
-            //List<MeritStudent> meritStudents = new List<MeritStudent>();
-            //foreach (var item in student)
-            //{
-            //    var mStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(item.NUAdmissionRoll);
-            //    meritStudents.Add(mStudent);
-            //}
+            if (sessionId > 0)
+            {
+                var academicSession = await _academicSessionManager.GetByIdAsync(sessionId);
+                student = student.Where(s => s.AcademicSessionId == sessionId).ToList();
+                IdCardTitle = academicSession.SessionName;
+            }
+
             if (studentCategoryId > 0)
             {
                 student = student.Where(s => s.StudentCategoryId == studentCategoryId).ToList();
+                var studentCategory = await _studentCategoryManager.GetByIdAsync(studentCategoryId);
                 ViewBag.count = student.ToList().Count;
+                IdCardTitle = IdCardTitle + " (" + studentCategory.CategoryName + ")";
+                ViewBag.idCardTitle = IdCardTitle;
             }
             else
             {
