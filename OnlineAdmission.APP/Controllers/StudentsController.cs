@@ -453,20 +453,25 @@ namespace OnlineAdmission.APP.Controllers
         [Authorize(Roles = "Admin,SuperAdmin,Teacher")]
         public async Task<ActionResult> IdCard(int studentCategoryId)
         {
-            var student = await _studentManager.GetAllAsync();
-            List<MeritStudent> meritStudents = new List<MeritStudent>();
-            foreach (var item in student)
-            {
-                var mStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(item.NUAdmissionRoll);
-                meritStudents.Add(mStudent);
-            }
+            var totalStudent = await _studentManager.GetAllAsync();
+            var student = totalStudent.Where(s=> s.Status == true && s.StudentCategoryId != null);
+            //List<MeritStudent> meritStudents = new List<MeritStudent>();
+            //foreach (var item in student)
+            //{
+            //    var mStudent = await _meritStudentManager.GetHonsByAdmissionRollAsync(item.NUAdmissionRoll);
+            //    meritStudents.Add(mStudent);
+            //}
             if (studentCategoryId > 0)
             {
                 student = student.Where(s => s.StudentCategoryId == studentCategoryId).ToList();
+                ViewBag.count = student.ToList().Count;
             }
-
-
-            ViewBag.count = student.Count;
+            else
+            {
+                student = null;
+                ViewBag.count = 0;
+            }
+                            
             return View(student);
         }
 
