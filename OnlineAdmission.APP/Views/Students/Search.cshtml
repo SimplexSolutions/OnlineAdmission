@@ -71,7 +71,7 @@
             {
                 <div class="card-footer">
                     <div class="col-md-6 offset-3">
-                        <span class="alert alertify-notifier text-danger font-weight-bold">@ViewBag.invalidRoll</span>
+                        <span class="alert text-danger font-weight-bold">@ViewBag.invalidRoll</span>
                     </div>
                 </div>
             }
@@ -221,13 +221,15 @@
                 {
                     <div class="card-footer">
                         <div class="col-md-6 offset-3">
+                            <br />
                             <span class="alert alert-success">@ViewBag.paidNotAdmitted</span>
+                            <br /><br />
                             <form asp-action="create" asp-controller="Students" method="get">
                                 <input type="hidden" asp-for="NuRoll" />
                                 <input type="hidden" asp-for="CategoryId" />
                                 <input type="hidden" asp-for="SessionId" />
                                 <input type="hidden" asp-for="MeritTypeId" />
-                                <input class="btn btn-info" type="submit" value="Form Fillup" />
+                                <input class="btn btn-info" type="submit" value="Form Fill Up" />
                             </form>
                         </div>
                     </div>
@@ -236,7 +238,7 @@
                 {
                     <div class="card-footer">
                         <div class="col-md-6 offset-3">
-                            <span class="alert alertify-notifier text-danger font-weight-bold">@ViewBag.NotSelected</span>
+                            <span class="alert text-danger font-weight-bold">@ViewBag.NotSelected</span>
                         </div>
                     </div>
                 }

@@ -94,11 +94,11 @@ namespace OnlineAdmission.Entity
 
         [StringLength(50)]
         public string Religion { get; set; }
-
-        [Display(Name = "H.S.C Roll"), Required(ErrorMessage = "HSC Roll Required")]
+        
+        [Display(Name = "H.S.C Roll")]
         public long HSCRoll { get; set; }
 
-        [Display(Name = "S.S.C Roll"), Required(ErrorMessage = "SSC Roll Required")]
+        [Display(Name = "S.S.C Roll")]
         public int SSCRoll { get; set; }
 
         [Display(Name = "S.S.C Roll")]

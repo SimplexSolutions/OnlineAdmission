@@ -111,7 +111,7 @@ namespace OnlineAdmission.APP.ViewModels.Student
         [Display(Name = "S.S.C Roll"), Required(ErrorMessage = "SSC Roll Required")]
         public int SSCRoll { get; set; }
 
-        [Display(Name = "S.S.C Roll")]
+        [Display(Name = "Honours Roll")]
         public int? HonorsRoll { get; set; }
 
         [Required(ErrorMessage = "HSC CGPA Required"), Display(Name = "HSC GPA")]
@@ -126,10 +126,10 @@ namespace OnlineAdmission.APP.ViewModels.Student
         [Display(Name = "College Roll")]
         public int CollegeRoll { get; set; }
 
-        [Display(Name = "Passing Year"), Range(2008, 2019), Required(ErrorMessage = "Passing Year Required")]
+        [Display(Name = "Passing Year")]
         public int SSCPassingYear { get; set; }
 
-        [Display(Name = "Passing Year"), Range(2012, 2021), Required(ErrorMessage = "Passing Year Required")]
+        [Display(Name = "Passing Year")]
         public int HSCPassingYear { get; set; }
 
         [Display(Name = "Passing Year")]

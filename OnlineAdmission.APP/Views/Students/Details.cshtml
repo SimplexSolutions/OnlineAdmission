@@ -11,22 +11,6 @@
     }
     string studentClass = "";
     studentClass = Model.Student.StudentCategory.CategoryName +" ("+ Model.Student.AcademicSession.SessionName+")";
-    //if (Model.Student.StudentCategoryId == 2)
-    //{
-    //    studentClass = "1st Year Bachelor of Honours(Professional) 2020-2021";
-    //}
-    //else if (Model.Student.StudentCategoryId == 3)
-    //{
-    //    studentClass = "MBA (Professional) 2020-2021";
-    //}
-    //else if (Model.Student.StudentCategoryId == 4)
-    //{
-    //    studentClass = "Masters Admission 2020-2021";
-    //}
-    //else
-    //{
-    //    studentClass = "1st Year Bachelor of Honours 2020-2021";
-    //}
 
 }
 
@@ -109,15 +93,9 @@
                         if (Model.PreviousSubject!=null)
                         {
                            <span>(@Model.PreviousSubject.SubjectName)</span>
-                        }
-                        
+                        }                        
                     }
-                    
-
                 </div>
-                
-
-
                 <label asp-for="Student.CollegeRoll" class="col-form-label col-md-2 text-right">College Roll : </label>
                 <div class="col-md-2">
                     <input asp-for="Student.CollegeRoll" disabled readonly class="form-control-plaintext font-weight-bold" />
@@ -128,9 +106,6 @@
                 </div>
             </div>
 
-            @*<div class="row bg-success p-1 d-block">
-                    <h5 class="text-center text-white">Student's Detail Info</h5>
-                </div>*@
 
             <div class="form-group row pt-2">
                 <label asp-for="Student.Name" class="col-form-label col-md-2 text-right"></label>
@@ -207,9 +182,7 @@
                     <input asp-for="Student.Religion" class="form-control-plaintext font-weight-bold" disabled readonly />
                 </div>
             </div>
-            @*<div class="row bg-success p-1 d-block">
-                    <h5 class="text-center text-white">Student's Address Info</h5>
-                </div>*@
+
             <div class="form-group row pt-1">
                 <label asp-for="Student.PresentAddress1" class="col-form-label col-md-2 text-right"></label>
                 <div class="col-md-10">
@@ -319,7 +292,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if (Model.Student.StudentCategoryId == 4)
+                        @if (Model.Student.StudentCategoryId == 4 || Model.Student.StudentCategoryId == 3)
                         {
                             <tr class="font-weight-bold">
                                 <td>Honors</td>
@@ -340,42 +313,46 @@
                                 </td>
                             </tr>
                         }
-                        <tr class="font-weight-bold">
-                            <td>HSC</td>
-                            <td>
-                                @Model.Student.HSCRoll
-                            </td>
-                            <td>
-                                @Model.Student.HSCGPA
-                            </td>
-                            <td>
-                                @Model.Student.HSCPassingYear
-                            </td>
-                            <td>
-                                @Model.Student.HSCBoard
-                            </td>
-                            <td>
-                                @Model.Student.HSCRemark
-                            </td>
-                        </tr>
-                        <tr class="font-weight-bold">
-                            <td>SSC</td>
-                            <td>
-                                @Model.Student.SSCRoll
-                            </td>
-                            <td>
-                                @Model.Student.SSCGPA
-                            </td>
-                            <td>
-                                @Model.Student.SSCPassingYear
-                            </td>
-                            <td>
-                                @Model.Student.SSCBoard
-                            </td>
-                            <td>
-                                @Model.Student.SSCRemark
-                            </td>
-                        </tr>
+                        else
+                        {
+                            <tr class="font-weight-bold">
+                                <td>HSC</td>
+                                <td>
+                                    @Model.Student.HSCRoll
+                                </td>
+                                <td>
+                                    @Model.Student.HSCGPA
+                                </td>
+                                <td>
+                                    @Model.Student.HSCPassingYear
+                                </td>
+                                <td>
+                                    @Model.Student.HSCBoard
+                                </td>
+                                <td>
+                                    @Model.Student.HSCRemark
+                                </td>
+                            </tr>
+                            <tr class="font-weight-bold">
+                                <td>SSC</td>
+                                <td>
+                                    @Model.Student.SSCRoll
+                                </td>
+                                <td>
+                                    @Model.Student.SSCGPA
+                                </td>
+                                <td>
+                                    @Model.Student.SSCPassingYear
+                                </td>
+                                <td>
+                                    @Model.Student.SSCBoard
+                                </td>
+                                <td>
+                                    @Model.Student.SSCRemark
+                                </td>
+                            </tr>
+
+                        }
                     </tbody>
                 </table>
             </div>

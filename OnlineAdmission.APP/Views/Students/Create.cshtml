@@ -1,26 +1,23 @@
-﻿@model OnlineAdmission.APP.ViewModels.Student.StudentCreateVM
+﻿@using OnlineAdmission.Entity
+@using OnlineAdmission.BLL.IManager
+
+@model OnlineAdmission.APP.ViewModels.Student.StudentCreateVM
+
+@inject IStudentCategoryManager _categoryManager;
+@inject IAcademicSessionManager _sessionManager;
 
 @{
     ViewData["Title"] = "Create";
     Layout = User.IsInRole("Admin") ? "~/Views/Shared/_Layout.cshtml" : "~/Views/Shared/_LayoutStudent.cshtml";
 
     string studentMobileNumber = "+880" + Model.StudentMobile;
-    string studentClass = "1st Year Bachelor of Honours 2020-2021";
-    if (ViewBag.studentCategory == 3)
+    string studentClass = "";
+
+    AcademicSession academicSession = await _sessionManager.GetByIdAsync((int)Model.AcademicSessionId);
+    StudentCategory studentCategory = await _categoryManager.GetByIdAsync((int)Model.StudentCategoryId);
+    if (academicSession != null && studentCategory != null)
     {
-        studentClass = "MBA (Professional) 2020-2021";
-    }
-    else if (ViewBag.studentCategory == 2)
-    {
-        studentClass = "1st Year Bachelor(Professional) of Honours 2020-2021";
-    }
-    else if (ViewBag.studentCategory == 4)
-    {
-        studentClass = "Masters Admission 2019-2020";
-    }
-    else
-    {
-        studentClass = "1st Year Bachelor of Honours 2020-2021";
+        studentClass = studentCategory.CategoryName + " Admission " + academicSession.SessionName;
     }
 }
 
@@ -30,7 +27,7 @@
             <div class="text-center">
                 <h3>Tejgaon College, Dhaka</h3>
                 <h5>College Code: 6422</h5>
-                <h5>@studentClass</h5><br />
+                <h5>@studentClass </h5><hr />
                 <h3>Student Personal Information Form</h3>
             </div>
         </div>
@@ -163,7 +160,7 @@
             <div class="form-group row">
                 <label asp-for="Birthday" class="text-right col-form-label col-md-2"></label>
                 <div class="col-md-5">
-                    <input asp-for="Birthday" class="form-control" min="1993-01-01" max="2005-12-31"  />
+                    <input asp-for="Birthday" class="form-control" min="1990-01-01" max="2005-12-31"  />
                     <span asp-validation-for="Birthday" class="text-danger"></span>
                 </div>
 
@@ -227,6 +224,7 @@
             <span class="offset-md-2">
                 (<input type="checkbox" id="sameAddress" /> <label>Same as Present Address</label>)
             </span>
+
             <div class="form-group row">
                 <label asp-for="PermanentAddress1" class="control-label col-md-2 text-md-right"></label>
                 <div class="col-md-10">
@@ -234,6 +232,7 @@
                     <span asp-validation-for="PermanentAddress1" class="text-danger"></span>
                 </div>
             </div>
+
             <div class="form-group row">
                 <div class="col-md-7 offset-2">
                     <input asp-for="PermanentAddress2" class="form-control" />
@@ -344,7 +343,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if (ViewBag.studentCategory == 4)
+                        @if (Model.StudentCategoryId == 4 || Model.StudentCategoryId == 3)
                         {
                             <tr>
                                 <td>Honors</td>
@@ -370,86 +369,91 @@
                                 </td>
                             </tr>
                         }
-                        
-                        <tr>
-                            <td>HSC</td>
-                            <td>
-                                <input  asp-for="HSCRoll" class="form-control" />
-                                <span asp-validation-for="HSCRoll" class="text-danger"></span>
-                            </td>
-                            <td>
-                                <input asp-for="HSCGPA" class="form-control" />
-                                <span asp-validation-for="HSCGPA" class="text-danger"></span>
-                            </td>
-                            <td>
-                                <input asp-for="HSCPassingYear" class="form-control" />
-                                <span asp-validation-for="HSCPassingYear" class="text-danger"></span>
-                            </td>
-                            <td>
-                                @*<input asp-for="HSCBoard" class="form-control" />*@
-                                <select asp-for="HSCBoard" class="form-control select2">
-                                    <option disabled selected>Select Board</option>
-                                    <option value="Dhaka">Dhaka</option>
-                                    <option value="Comilla">Comilla</option>
-                                    <option value="Rajshahi">Rajshahi</option>
-                                    <option value="Chittagong">Chittagong</option>
-                                    <option value="Sylhet">Sylhet</option>
-                                    <option value="Barisal">Barisal</option>
-                                    <option value="Jessore">Jessore</option>
-                                    <option value="Dinajpur">Dinajpur</option>
-                                    <option value="Mymensingh">Mymensingh</option>
-                                    <option value="Technical">Technical</option>
-                                    <option value="Madrasha">Madrasha</option>
-                                    <option value="BOU">BOU</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                                <span asp-validation-for="HSCBoard" class="text-danger"></span>
-                            </td>
-                            <td>
-                                <input asp-for="HSCRemark" class="form-control" />
-                                <span asp-validation-for="HSCRemark" class="text-danger"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>SSC</td>
-                            <td>
-                                <input asp-for="SSCRoll" class="form-control" />
-                                <span asp-validation-for="SSCRoll" class="text-danger"></span>
-                            </td>
-                            <td>
-                                <input asp-for="SSCGPA" class="form-control" />
-                                <span asp-validation-for="SSCGPA" class="text-danger"></span>
-                            </td>
-                            <td>
-                                <input asp-for="SSCPassingYear" class="form-control" />
-                                <span asp-validation-for="SSCPassingYear" class="text-danger"></span>
-                            </td>
-                            <td>
-                                @*<input asp-for="SSCBoard" class="form-control" />*@
+                        else
+                        {
 
-                                <select asp-for="SSCBoard" class="form-control select2">
-                                    <option disabled selected>Select Board</option>
-                                    <option value="Dhaka">Dhaka</option>
-                                    <option value="Comilla">Comilla</option>
-                                    <option value="Rajshahi">Rajshahi</option>
-                                    <option value="Chittagong">Chittagong</option>
-                                    <option value="Sylhet">Sylhet</option>
-                                    <option value="Barisal">Barisal</option>
-                                    <option value="Jessore">Jessore</option>
-                                    <option value="Dinajpur">Dinajpur</option>
-                                    <option value="Mymensingh">Mymensingh</option>
-                                    <option value="Technical">Technical</option>
-                                    <option value="Madrasha">Madrasha</option>
-                                    <option value="BOU">BOU</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                                <span asp-validation-for="SSCBoard" class="text-danger"></span>
-                            </td>
-                            <td>
-                                <input asp-for="SSCRemark" class="form-control" />
-                                <span asp-validation-for="SSCRemark" class="text-danger"></span>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>HSC</td>
+                                <td>
+                                    <input asp-for="HSCRoll" class="form-control" />
+                                    <span asp-validation-for="HSCRoll" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="HSCGPA" class="form-control" />
+                                    <span asp-validation-for="HSCGPA" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="HSCPassingYear" class="form-control" />
+                                    <span asp-validation-for="HSCPassingYear" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    @*<input asp-for="HSCBoard" class="form-control" />*@
+                                    <select asp-for="HSCBoard" class="form-control select2">
+                                        <option disabled selected>Select Board</option>
+                                        <option value="Dhaka">Dhaka</option>
+                                        <option value="Comilla">Comilla</option>
+                                        <option value="Rajshahi">Rajshahi</option>
+                                        <option value="Chittagong">Chittagong</option>
+                                        <option value="Sylhet">Sylhet</option>
+                                        <option value="Barisal">Barisal</option>
+                                        <option value="Jessore">Jessore</option>
+                                        <option value="Dinajpur">Dinajpur</option>
+                                        <option value="Mymensingh">Mymensingh</option>
+                                        <option value="Technical">Technical</option>
+                                        <option value="Madrasha">Madrasha</option>
+                                        <option value="BOU">BOU</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <span asp-validation-for="HSCBoard" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="HSCRemark" class="form-control" />
+                                    <span asp-validation-for="HSCRemark" class="text-danger"></span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>SSC</td>
+                                <td>
+                                    <input asp-for="SSCRoll" class="form-control" />
+                                    <span asp-validation-for="SSCRoll" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="SSCGPA" class="form-control" />
+                                    <span asp-validation-for="SSCGPA" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="SSCPassingYear" class="form-control" />
+                                    <span asp-validation-for="SSCPassingYear" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    @*<input asp-for="SSCBoard" class="form-control" />*@
+
+                                    <select asp-for="SSCBoard" class="form-control select2">
+                                        <option disabled selected>Select Board</option>
+                                        <option value="Dhaka">Dhaka</option>
+                                        <option value="Comilla">Comilla</option>
+                                        <option value="Rajshahi">Rajshahi</option>
+                                        <option value="Chittagong">Chittagong</option>
+                                        <option value="Sylhet">Sylhet</option>
+                                        <option value="Barisal">Barisal</option>
+                                        <option value="Jessore">Jessore</option>
+                                        <option value="Dinajpur">Dinajpur</option>
+                                        <option value="Mymensingh">Mymensingh</option>
+                                        <option value="Technical">Technical</option>
+                                        <option value="Madrasha">Madrasha</option>
+                                        <option value="BOU">BOU</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <span asp-validation-for="SSCBoard" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="SSCRemark" class="form-control" />
+                                    <span asp-validation-for="SSCRemark" class="text-danger"></span>
+                                </td>
+                            </tr>
+                        }
+
                     </tbody>
                 </table>
             </div>
@@ -515,19 +519,6 @@
                 $("#imageFrame").hide();
                 $("#imageBox").show();
             });
-
-
-
-            //$('#checkbox1').change(function () {
-            //    if (this.checked) {
-            //        var returnVal = confirm("Are you sure?");
-            //        $(this).prop("checked", returnVal);
-            //    }
-            //    $('#textbox1').val(this.checked);
-            //});
-
-
-
 
 
             //Code for Autofill
