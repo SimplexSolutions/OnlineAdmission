@@ -648,7 +648,8 @@ namespace OnlineAdmission.APP.Controllers
 
                     if (meritStudent == null)
                     {
-                        ViewBag.NotSelected = "Sorry! You are not selected for admission.";
+                        ViewBag.NotSelected = "Sorry! You are not selected for";
+                        ViewBag.NotSelectedCategory = stuPaymentType.StudentCategory.CategoryName + " admission by - " + stuPaymentType.MeritType.MeritTypeName;
                         return View(model);
                     }
 

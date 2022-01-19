@@ -237,8 +237,10 @@
                 @if (ViewBag.NotSelected != null)
                 {
                     <div class="card-footer">
-                        <div class="col-md-6 offset-3">
-                            <span class="alert text-danger font-weight-bold">@ViewBag.NotSelected</span>
+                        <div class="col-md-9 offset-md-2">
+                            <span class="alert text-danger font-weight-bold">@ViewBag.NotSelected 
+                                <span class="alert alert-success">@ViewBag.NotSelectedCategory</span>
+                            </span>
                         </div>
                     </div>
                 }
