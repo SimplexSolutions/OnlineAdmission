@@ -103,34 +103,48 @@ namespace OnlineAdmission.APP.ViewModels.Student
         [StringLength(50)]
         public string Religion { get; set; }
 
-        [Display(Name = "H.S.C Roll"), Required(ErrorMessage = "HSC Roll Required")]
-        public int HSCRoll { get; set; }
+        [Display(Name = "Honours Roll")]
+        public int HonorsRoll { get; set; }
 
-        [Display(Name = "S.S.C Roll"), Required(ErrorMessage = "SSC Roll Required")]
+        [Display(Name = "H.S.C Roll")]
+        public long HSCRoll { get; set; }
+
+        [Display(Name = "S.S.C Roll")]
         public int SSCRoll { get; set; }
 
-        [Required(ErrorMessage = "HSC CGPA Required"), Display(Name = "HSC GPA")]
+
+        [Display(Name = "HONS GPA")]
+        public double HonsGPA { get; set; }
+
+        [Display(Name = "HSC GPA")]
         public double HSCGPA { get; set; }
 
-        [Required(ErrorMessage = "SSC CGPA Required"), Display(Name = "SSC GPA")]
+        [Display(Name = "SSC GPA")]
         public double SSCGPA { get; set; }
 
         [Display(Name = "College Roll")]
         public int CollegeRoll { get; set; }
 
-        [Display(Name = "Passing Year"), Range(2016, 2019), Required(ErrorMessage = "Passing Year Required")]
+        [Display(Name = "Passing Year")]
         public int SSCPassingYear { get; set; }
 
-        [Display(Name = "Passing Year"), Range(2018, 2021), Required(ErrorMessage = "Passing Year Required")]
+        [Display(Name = "Passing Year")]
         public int HSCPassingYear { get; set; }
 
-        [Display(Name = "SSC Board"), StringLength(20)]
+        [Display(Name = "Passing Year")]
+        public int? HONSPassingYear { get; set; }
+
+        [Display(Name = "SSC Board")]
         public string SSCBoard { get; set; }
 
-        [Display(Name = "HSC Board"), StringLength(20)]
+        [Display(Name = "HSC Board")]
         public string HSCBoard { get; set; }
+
+        [Display(Name = "University")]
+        public string University { get; set; }
         public string SSCRemark { get; set; }
         public string HSCRemark { get; set; }
+        public string HONSRemark { get; set; }
 
         public int NuAdmissionRoll { get; set; }
         public bool Status { get; set; }
@@ -143,7 +157,7 @@ namespace OnlineAdmission.APP.ViewModels.Student
         [Display(Name = "Mother's NID")]
         public string MotherNID { get; set; }
 
-
+        public int StudentCategoryId { get; set; }
         public ICollection<SelectListItem> DistrictList { get; set; }
         public ICollection<SelectListItem> SubjectList { get; set; }
     }

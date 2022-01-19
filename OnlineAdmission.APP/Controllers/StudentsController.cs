@@ -370,8 +370,10 @@ namespace OnlineAdmission.APP.Controllers
 
             var subject = await _subjectManager.GetByIdAsync(student.SubjectId);
             StudentEditVM studentEditVM = _mapper.Map<StudentEditVM>(student);
+
             studentEditVM.Subject = subject;
             studentEditVM.DistrictList = new SelectList(await _districtManager.GetAllAsync(), "Id", "DistrictName").ToList();
+            studentEditVM.StudentCategoryId = (int)student.StudentCategoryId;
             return View(studentEditVM);
         }
 
@@ -381,6 +383,10 @@ namespace OnlineAdmission.APP.Controllers
         [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<ActionResult> Edit(int id, StudentEditVM student, IFormFile photo)
         {
+            if (id != student.Id)
+            {
+                return NotFound();
+            }
             string msg = "";
             if (ModelState.IsValid)
             {
