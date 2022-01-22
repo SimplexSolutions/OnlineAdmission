@@ -675,6 +675,8 @@ namespace OnlineAdmission.APP.Controllers
                     else if (meritStudent.PaymentStatus == false)
                     {
                         ViewBag.paymentNotCompleted = "Your payment is not completed";
+                        StudentPaymentType studentPaymentType = await _studentPaymentTypeManager.GetByIdAsync(model.StudentPaymentTypeId);
+                        ViewBag.remarks = studentPaymentType.Remarks;
                         return View(model);
                     }
 
