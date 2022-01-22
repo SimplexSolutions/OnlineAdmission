@@ -369,7 +369,7 @@ namespace OnlineAdmission.APP.Controllers
             var student = await _studentManager.GetByIdAsync(id);
 
             var subject = await _subjectManager.GetByIdAsync(student.SubjectId);
-            StudentEditVMPrev studentEditVM = _mapper.Map<StudentEditVMPrev>(student);
+            StudentCreateVM studentEditVM = _mapper.Map<StudentCreateVM>(student);
 
             studentEditVM.Subject = subject;
             studentEditVM.DistrictList = new SelectList(await _districtManager.GetAllAsync(), "Id", "DistrictName").ToList();

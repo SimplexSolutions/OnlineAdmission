@@ -20,9 +20,6 @@ namespace OnlineAdmission.APP.Utilities.AutoMapperConfiguration
             CreateMap<StudentCreateVM, Student>();
             CreateMap<Student, StudentCreateVM>();
 
-            CreateMap<StudentEditVMPrev, Student>();
-            CreateMap<Student, StudentEditVMPrev>();
-
             CreateMap<MeritStudent, AppliedStudentVM>();
             CreateMap<AppliedStudentVM, MeritStudent>();
 
