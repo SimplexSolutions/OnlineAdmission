@@ -161,6 +161,9 @@ namespace OnlineAdmission.APP.ViewModels.Student
         public string MotherNID { get; set; }
 
         public int? AcademicSessionId { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+        public string CreatedBy { get; set; }
         public ICollection<SelectListItem> DistrictList { get; set; }
         public ICollection<SelectListItem> SubjectList { get; set; }
     }

@@ -267,7 +267,7 @@ namespace OnlineAdmission.APP.Controllers
                         }
                         string root = _host.WebRootPath;
                         string folder = "Images/Students/";
-                        string attachFile = "p_" + model.HSCRoll.ToString().Trim() + "_" + model.HSCPassingYear.ToString().Trim() + ext;
+                        string attachFile = "p_" + model.NuAdmissionRoll.ToString().Trim() + "_" + model.StudentCategoryId.ToString().Trim() + "_" + model.AcademicSessionId + "_" + DateTime.Now.ToString("yyyyMMdd") + ext;
                         string f = Path.Combine(root, folder, attachFile);
                         using (var stream = new FileStream(f, FileMode.Create))
                         {
@@ -326,9 +326,10 @@ namespace OnlineAdmission.APP.Controllers
                     Student newStudent = _mapper.Map<Student>(model);                    
                     newStudent.Status = true;
                     newStudent.Photo = model.Photo;
+
                     newStudent.CreatedAt = DateTime.Now;
-                    newStudent.CreatedBy = HttpContext.Session.GetString("User");
-                    
+                    newStudent.CreatedBy = HttpContext.Session.GetString("UserId");
+
                     await _studentManager.AddAsync(newStudent);
 
 
@@ -417,7 +418,7 @@ namespace OnlineAdmission.APP.Controllers
 
                     string root = _host.WebRootPath;
                     string folder = "Images/Students/";
-                    string attachFile = "p_" + student.HSCRoll.ToString().Trim() + "_" + student.HSCPassingYear.ToString().Trim() + ext;
+                    string attachFile = "p_" + student.NuAdmissionRoll.ToString().Trim() + "_" + student.StudentCategoryId.ToString().Trim()+"_"+student.AcademicSessionId+"_"+DateTime.Now.ToString("yyyyMMdd") + ext;
                     string f = Path.Combine(root, folder, attachFile);
                     using (var stream = new FileStream(f, FileMode.Create))
                     {
