@@ -271,7 +271,7 @@ namespace OnlineAdmission.APP.Controllers
                         string folder = "Images/Students/";
                         
                 
-                        string attachFile = "p_" + model.NuAdmissionRoll.ToString().Trim() + "_" + model.StudentCategoryId.ToString().Trim() + "_" + AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length-4) + "_" + DateTime.Now.ToString("yyyyMMdd") + ext;
+                        string attachFile = "p_" + model.NuAdmissionRoll.ToString().Trim() + "_" + model.StudentCategoryId.ToString().Trim() + "_" + AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length-4) + ext;
                         string f = Path.Combine(root, folder, attachFile);
                         using (var stream = new FileStream(f, FileMode.Create))
                         {
@@ -423,7 +423,7 @@ namespace OnlineAdmission.APP.Controllers
 
                     string root = _host.WebRootPath;
                     string folder = "Images/Students/";
-                    string attachFile = "p_" + student.NuAdmissionRoll.ToString().Trim() + "_" + student.StudentCategoryId.ToString().Trim()+"_"+ academicSession.SessionName.Substring(academicSession.SessionName.Length-4) + "_"+DateTime.Now.ToString("yyyyMMdd") + ext;
+                    string attachFile = "p_" + student.NuAdmissionRoll.ToString().Trim() + "_" + student.StudentCategoryId.ToString().Trim()+"_"+ academicSession.SessionName.Substring(academicSession.SessionName.Length-4) + ext;
                     string f = Path.Combine(root, folder, attachFile);
                     using (var stream = new FileStream(f, FileMode.Create))
                     {
