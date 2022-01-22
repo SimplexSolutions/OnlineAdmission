@@ -271,7 +271,7 @@ namespace OnlineAdmission.APP.Controllers
                         string folder = "Images/Students/";
                         
                 
-                        string attachFile = "p_" + model.NuAdmissionRoll.ToString().Trim() + "_" + model.StudentCategoryId.ToString().Trim() + "_" + AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length,4) + "_" + DateTime.Now.ToString("yyyyMMdd") + ext;
+                        string attachFile = "p_" + model.NuAdmissionRoll.ToString().Trim() + "_" + model.StudentCategoryId.ToString().Trim() + "_" + AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length-4) + "_" + DateTime.Now.ToString("yyyyMMdd") + ext;
                         string f = Path.Combine(root, folder, attachFile);
                         using (var stream = new FileStream(f, FileMode.Create))
                         {
