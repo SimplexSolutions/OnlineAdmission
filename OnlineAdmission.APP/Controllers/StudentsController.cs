@@ -237,6 +237,8 @@ namespace OnlineAdmission.APP.Controllers
             model.Subject = existingSubject;
             var existStudent = await _studentManager.GetStudentAsync(model.NuAdmissionRoll,(int)model.StudentCategoryId, (int)model.AcademicSessionId);
 
+            var AcademicSession = await _academicSessionManager.GetByIdAsync((int)model.AcademicSessionId);
+
             if (existStudent == null)
             {
                 if (ModelState.IsValid)
@@ -267,7 +269,9 @@ namespace OnlineAdmission.APP.Controllers
                         }
                         string root = _host.WebRootPath;
                         string folder = "Images/Students/";
-                        string attachFile = "p_" + model.NuAdmissionRoll.ToString().Trim() + "_" + model.StudentCategoryId.ToString().Trim() + "_" + model.AcademicSessionId + "_" + DateTime.Now.ToString("yyyyMMdd") + ext;
+                        
+                
+                        string attachFile = "p_" + model.NuAdmissionRoll.ToString().Trim() + "_" + model.StudentCategoryId.ToString().Trim() + "_" + AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length,4) + "_" + DateTime.Now.ToString("yyyyMMdd") + ext;
                         string f = Path.Combine(root, folder, attachFile);
                         using (var stream = new FileStream(f, FileMode.Create))
                         {
@@ -283,7 +287,6 @@ namespace OnlineAdmission.APP.Controllers
 
 
                     string year = "";
-                    var AcademicSession = await _academicSessionManager.GetByIdAsync((int)model.AcademicSessionId);
                     if (AcademicSession != null)
                     {
                         if (model.StudentCategoryId == 1)
@@ -393,6 +396,8 @@ namespace OnlineAdmission.APP.Controllers
             {
                 if (photo != null)
                 {
+
+                    AcademicSession academicSession = await _academicSessionManager.GetByIdAsync((int)student.AcademicSessionId);
                     int allowedImgSize = 200000;
                     if (photo.Length > allowedImgSize)
                     {
@@ -418,7 +423,7 @@ namespace OnlineAdmission.APP.Controllers
 
                     string root = _host.WebRootPath;
                     string folder = "Images/Students/";
-                    string attachFile = "p_" + student.NuAdmissionRoll.ToString().Trim() + "_" + student.StudentCategoryId.ToString().Trim()+"_"+student.AcademicSessionId+"_"+DateTime.Now.ToString("yyyyMMdd") + ext;
+                    string attachFile = "p_" + student.NuAdmissionRoll.ToString().Trim() + "_" + student.StudentCategoryId.ToString().Trim()+"_"+ academicSession.SessionName.Substring(academicSession.SessionName.Length-4) + "_"+DateTime.Now.ToString("yyyyMMdd") + ext;
                     string f = Path.Combine(root, folder, attachFile);
                     using (var stream = new FileStream(f, FileMode.Create))
                     {

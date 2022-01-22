@@ -161,6 +161,7 @@ namespace OnlineAdmission.APP.ViewModels.Student
         public string MotherNID { get; set; }
 
         public int? AcademicSessionId { get; set; }
+        public AcademicSession AcademicSession { get; set; }
 
         public DateTime CreatedAt { get; set; }
         public string CreatedBy { get; set; }
