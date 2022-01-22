@@ -79,7 +79,7 @@ namespace OnlineAdmission.APP.Controllers
         [Authorize(Roles = "Admin,SuperAdmin,Teacher")]
         public async Task<IActionResult> Index(int sessionId, int studentCategory, string usrtext, int page, int pagesize, int categorySubject, int meritType)
         {
-            IQueryable<Student> students = _studentManager.GetStudents();
+            IQueryable<Student> students = _studentManager.GetStudents().Where(x=>x.Status==true);
             var studentCategoryFromSession = HttpContext.Session.GetString("studentCategory");
             
             if (  studentCategory>0)
@@ -129,7 +129,9 @@ namespace OnlineAdmission.APP.Controllers
             if (usrtext!=null)
             {
                 usrtext = usrtext.Trim();
-                students = students.Where(s => s.Name.Contains(usrtext) || s.CollegeRoll.ToString().Contains(usrtext) || s.NUAdmissionRoll.ToString().Contains(usrtext) || s.Subject.SubjectName.Contains(usrtext) || s.StudentMobile.ToString().Contains(usrtext));
+                students = students.Where(s => s.Name.Contains(usrtext) || s.CollegeRoll.ToString().Contains(usrtext) 
+                || s.NUAdmissionRoll.ToString().Contains(usrtext) || s.Subject.SubjectName.Contains(usrtext) 
+                || s.StudentMobile.ToString().Contains(usrtext));
             }
             
             
