@@ -3,26 +3,23 @@ using OnlineAdmission.Entity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlineAdmission.APP.ViewModels.Student
 {
     public class StudentCreateVM
     {
-
+        public int Id { get; set; }
         public int NuAdmissionRoll { get; set; }
 
         [Display(Name = "Subject")]
         public int SubjectId { get; set; }
         public Subject Subject { get; set; }
-        //[Display(Name = "District")]
-        //public int DistrictId { get; set; }
+
         public int? StudentCategoryId { get; set; }
+
         [Required, StringLength(150)]
         public string Name { get; set; }
 
-        //[Required]
         public string Photo { get; set; }
 
         [Required, Display(Name = "Father's Name"), StringLength(250)]

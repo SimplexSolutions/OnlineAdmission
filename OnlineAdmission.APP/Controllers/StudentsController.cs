@@ -369,7 +369,7 @@ namespace OnlineAdmission.APP.Controllers
             var student = await _studentManager.GetByIdAsync(id);
 
             var subject = await _subjectManager.GetByIdAsync(student.SubjectId);
-            StudentEditVM studentEditVM = _mapper.Map<StudentEditVM>(student);
+            StudentEditVMPrev studentEditVM = _mapper.Map<StudentEditVMPrev>(student);
 
             studentEditVM.Subject = subject;
             studentEditVM.DistrictList = new SelectList(await _districtManager.GetAllAsync(), "Id", "DistrictName").ToList();
@@ -381,7 +381,7 @@ namespace OnlineAdmission.APP.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,SuperAdmin")]
-        public async Task<ActionResult> Edit(int id, StudentEditVM student, IFormFile photo)
+        public async Task<ActionResult> Edit(int id, StudentCreateVM student, IFormFile photo)
         {
             if (id != student.Id)
             {
