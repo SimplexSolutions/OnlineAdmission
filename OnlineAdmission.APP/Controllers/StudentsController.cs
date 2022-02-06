@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DBBL_ServiceTest;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -24,6 +25,7 @@ using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace OnlineAdmission.APP.Controllers
 {
@@ -1219,6 +1221,122 @@ namespace OnlineAdmission.APP.Controllers
 
         [AllowAnonymous]
         [HttpGet]
+        public async Task<IActionResult> RocketPayment(StudentDynamicInfoVM model)
+        {
+            //inputModel.Clientip = _accessor.HttpContext.Connection.RemoteIpAddress.ToString(); //DBBL_Utilities.ClientIp;
+            //inputModel.Clientip = "http:\\115.127.26.3";
+            
+            if (true)
+            {
+                string url = "http://115.127.26.3";
+                return new RedirectResult(url);
+
+            }
+
+            var result = new Dictionary<string, object>();
+
+
+            string _user = string.Empty;
+            string _pass = string.Empty;
+
+            //string _secretkey = ConfigurationManager.AppSettings["secretKey"];
+            //string _authority = ConfigurationManager.AppSettings["authority"];
+
+            //string _secretkey = ConfigurationManager.AppSettings[DBBL_Utilities.secretKey];
+            //string _authority = ConfigurationManager.AppSettings[DBBL_Utilities.authority];
+
+            try
+            {
+                //string secret = Request.Headers.Contains("secretKey") ? Request.Headers.GetValues("secretKey").First() : "";
+                //string origin = Request.Headers.Contains("authority") ? Request.Headers.GetValues("authority").First() : "";
+
+                //string secret = Request.Headers.Contains(DBBL_Utilities.secretKey) ? Request.Headers.GetValues(DBBL_Utilities.secretKey).First() : "";
+                //string origin = Request.Headers.Contains(DBBL_Utilities.authority) ? Request.Headers.GetValues(DBBL_Utilities.authority).First() : "";
+
+                //_user = ConfigurationManager.AppSettings["user"];
+                //_pass = ConfigurationManager.AppSettings["pass"];          
+
+                //_user = DBBL_Utilities.user; /*ConfigurationManager.AppSettings[DBBL_Utilities.user];*/
+                //_pass = DBBL_Utilities.pass; /*ConfigurationManager.AppSettings[DBBL_Utilities.pass];*/
+
+                //if (inputModel == null)
+                //{
+                //    result.Add("status", "error");
+                //    result.Add("message", "invalid object");
+                //    return (IActionResult)Ok(result);
+                //}
+
+                if (_user == "" && _pass == "")
+                {
+                    result.Add("status", "error");
+                    result.Add("message", "DBBL user not found");
+                    return (IActionResult)Ok(result);
+                }
+
+                if (_user == "" || _pass == "")
+                {
+                    result.Add("status", "error");
+                    result.Add("message", "DBBL user not found");
+                    return (IActionResult)Ok(result);
+                }
+
+                //if (!_secretkey.Equals(secret))
+                //{
+                //    result.Add("status", "error");
+                //    result.Add("message", "invalid client secret");
+                //    return Ok(result);
+                //}
+
+                //if (!_authority.Equals(origin))
+                //{
+                //    result.Add("status", "error");
+                //    result.Add("message", "invalid authority");
+                //    return Ok(result);
+                //}
+
+                //ServicePointManager.Expect100Continue = true;
+
+                //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
+                var dbbl = new dbblecomtxnClient();
+                //var transid = await dbbl.getransidAsync(_user, _pass, inputModel.Amount, inputModel.Cardtype, inputModel.Txnrefnum, inputModel.Clientip);
+
+
+                //if (transid.Body.@return.Contains("TRANSACTION_ID"))
+                //{
+                //    result.Add("status", "ok");
+                //    result.Add("message", transid);
+                //    //return Redirect("https://espncricinfo.com");// RequestDelegate("");
+                //    string str = (transid.Body.@return).Replace("TRANSACTION_ID:", "");
+                //    //string newStr = str.Replace("TRANSACTION_ID:", "");
+                //    string encodedTrnsId = HttpUtility.UrlEncode(str);
+                //    string site = "https://ecomtest.dutchbanglabank.com/ecomm2/ClientHandler?card_type=" + inputModel.Cardtype +
+                //        "&trans_id=" + encodedTrnsId;
+                //    //return new RedirectResult(site);
+                //    //return RedirectPermanent("~/Policies/PrivacyPolicy");
+                //    //return redirectResult;
+                //    return new RedirectResult(site);
+                //    //return Ok(result);
+                //}
+                //else
+                //{
+                //    result.Add("status", "error");
+                //    result.Add("message", "transaction id not found");
+                //    return (IActionResult)Ok(result);
+                //}
+            }
+            catch (Exception ex)
+            {
+                result.Add("status", "error");
+                result.Add("message", ex.Message);
+                return (IActionResult)Ok(result);
+            }
+        }
+
+
+
+        [AllowAnonymous]
+        [HttpGet]
         public async Task<ActionResult> NagadPayment(StudentDynamicInfoVM model, int? subjectChange)
         {
             if (model.NuRoll<= 0)
@@ -1499,6 +1617,8 @@ namespace OnlineAdmission.APP.Controllers
 
         }
         
+
+
         [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult> NagadPaymentPro(int nuRoll, int studentCategory, string mobileNum, string studentName, int paymentType, string meritType)

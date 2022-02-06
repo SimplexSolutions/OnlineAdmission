@@ -133,8 +133,12 @@
                                 </table>
                             </div>
                             <div class="col-md-6 offset-3">
+                                
                                 <span class="alert text-warning font-weight-bold">@ViewBag.paymentNotCompleted</span>
-                                <form asp-action="NagadPayment" asp-controller="Students" method="get">
+                                @*<button class="btn btn-info" id="makePaymentBtn">Make Payment</button>*@
+
+                                @*<form asp-action="NagadPayment" asp-controller="Students" method="get">*@
+                               @* <form asp-controller="Students" method="get" style="display:none" id="paymentGatewaysForm">
                                     <input type="hidden" asp-for="NuRoll" />
                                     <input type="hidden" asp-for="CategoryId" />
                                     <input type="hidden" asp-for="SessionId" />
@@ -143,8 +147,15 @@
                                     <input type="hidden" asp-for="PaymentTypeShortCode" />
                                     <input type="hidden" asp-for="PaymentTypeId" />
                                     <input type="hidden" asp-for="StudentPaymentTypeId" />
-                                    <input class="btn btn-info" type="submit" value="Make Payment" />
-                                </form>
+
+                                    <div class="col-md-10 offset-md-1 text-md-center" id="logoArea">
+                                        @*<input class="btn btn-dark-info" type="submit" value="BKash" formaction="/PaymentGateways/BkashPayment" />*@
+                                   @*     <input class="btn btn-dark-primary" type="submit" value="Nagad" formaction="/Students/NagadPayment" />
+                                        <input class="btn btn-dark-success" type="submit" value="Rocket" formaction="/Students/RocketPayment" />
+                                    </div>
+
+                                    @*<input class="btn btn-info" type="submit" value="Make Payment" />
+                                </form>*@
                             </div>
                             <div class="note bg-danger mt-1 mb-1 p-1">
                                 <span class="text-justify text-light">
@@ -270,7 +281,9 @@
                         </div>
                         <div class="col-md-6 offset-3">
                             <span class="alert text-warning font-weight-bold">@ViewBag.paymentNotCompleted</span>
-                            <form asp-action="NagadPayment" asp-controller="Students" method="get">
+                            <button class="btn btn-info" id="makePaymentBtn">Make Payment</button>
+                            <br />
+                            <form asp-controller="Students" method="get" style="display:none" id="paymentGatewaysForm">
                                 <input type="hidden" asp-for="NuRoll" />
                                 <input type="hidden" asp-for="CategoryId" />
                                 <input type="hidden" asp-for="SessionId" />
@@ -279,8 +292,21 @@
                                 <input type="hidden" asp-for="PaymentTypeShortCode" />
                                 <input type="hidden" asp-for="PaymentTypeId" />
                                 <input type="hidden" asp-for="StudentPaymentTypeId" />
-                                <input class="btn btn-info" type="submit" value="Make Payment" />
+
+                                 <div class="col-md-10 offset-md-1 text-md-center" id="logoArea">
+                                    @*<input class="btn btn-dark-info" type="submit" value="BKash" formaction="/PaymentGateways/BkashPayment" />*@
+                                    <input class="btn btn-primary" type="submit" value="Nagad" formaction="/Students/NagadPayment" />
+                                    <input class="btn btn-success" type="button" value="DBBL" id="dbblButtonId"/>
+                                </div>
+                                @*<input class="btn btn-info" type="submit" value="Make Payment" />*@
                             </form>
+                        
+
+                    
+
+
+
+
                         </div>
                         <div class="note bg-danger mt-1 mb-1 p-1">
                             <span class="text-justify text-light">
@@ -290,6 +316,135 @@
                             </span>
                         </div>
                     </div>
+                    <div class="row" id="dbblPortion" style="display:none">
+                    <form asp-action="RocketPayment" asp-controller="Students" method="get">
+                        @*<input type="hidden" name="Amount" value="1500000" />
+                        <input type="hidden" name="Txnrefnum" value="HSC_Adm_1_@ViewBag.sscRoll" />*@
+
+                        <input type="hidden" asp-for="NuRoll" />
+                        <input type="hidden" asp-for="CategoryId" />
+                        <input type="hidden" asp-for="SessionId" />
+                        <input type="hidden" asp-for="MeritTypeId" />
+                        <input type="hidden" asp-for="CategoryShortCode" />
+                        <input type="hidden" asp-for="PaymentTypeShortCode" />
+                        <input type="hidden" asp-for="PaymentTypeId" />
+                        <input type="hidden" asp-for="StudentPaymentTypeId" />
+
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-7 col-lg-6 ">
+                                <div class="shadow m-2 p-2">
+                                    Pay With: <span id="payWithName"></span> <hr />
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="form-check-inline">
+                                                        <input id="nexus" type="radio" name="CardType" value="1" class="" />
+                                                        <label for="nexus" class="col-form-label">
+                                                            <img src="~/images/dbbl_img/dbbl-nexus.png" alt="cards" class="h-100"> Nexus Debit
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div><br />
+
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="form-check-inline">
+                                                        <input id="dbbl_master" type="radio" name="CardType" value="2" />
+                                                        <label for="dbbl_master" class="col-form-label">
+                                                            <img src="~/images/dbbl_img/dbbl-master.png" alt="cards" class="h-100">DBBL Master Debit
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br />
+
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="form-check-inline">
+                                                        <input id="dbbl_visa" type="radio" name="CardType" value="3" />
+                                                        <label for="dbbl_visa" class="col-form-label">
+                                                            <img src="~/images/dbbl_img/dbbl-visa.png" alt="cards" class="h-100">DBBL VISA Debit
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br />
+
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="form-check-inline">
+                                                        <input id="visa" type="radio" name="CardType" value="4" />
+                                                        <label for="visa" class="col-form-label">
+                                                            <img src="~/images/dbbl_img/visa.png" alt="cards" class="h-100"> VISA
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="form-check-inline">
+                                                        <input id="dbbl_master" type="radio" name="CardType" value="5" />
+                                                        <label for="dbbl_master" class="col-form-label">
+                                                            <img src="~/images/dbbl_img/master.png" alt="cards" class="h-100">Master
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <br />
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="form-check-inline">
+                                                        <input type="radio" name="CardType" value="6" id="rocket" />
+                                                        <label for="rocket" class="col-form-label">
+                                                            <img src="~/images/dbbl_img/dbbl-mb.png" alt="cards" class="h-100"> Rocket
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="form-check-inline">
+                                                        <input id="NexusPay" type="radio" name="CardType" value="7" />
+                                                        <label for="NexusPay" class="col-form-label">
+                                                            <img src="~/images/dbbl_img/nexuspay.png" alt="cards" class="h-100"> Nexus Pay
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-6">
+                                <div class="form-group row">
+                                    <label class="col-form-label text-md-right col-md-6"></label>
+                                    <div class="col-md-6">
+                                        @*<input type="hidden" readonly name="Amount" value="1500000" />*@
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 offset-md-3 text-center">
+                                <button type="submit" class="btn btn-info">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
                 }
             }
 
@@ -304,3 +459,17 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#makePaymentBtn').click(function () {
+                $('#paymentGatewaysForm').css('display', 'block');
+            });
+            $('#dbblButtonId').click(function () {
+                $('#dbblPortion').css('display', 'block');
+            });
+
+        });
+    </script>
+}
