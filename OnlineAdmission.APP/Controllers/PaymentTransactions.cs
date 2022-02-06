@@ -36,6 +36,9 @@ namespace OnlineAdmission.APP.Controllers
             _studentManager = studentManager;
             _smsManager = sMSManager;
         }
+
+
+        //ActionResult for Nagad payment
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Get(string status,string payment_ref_id)

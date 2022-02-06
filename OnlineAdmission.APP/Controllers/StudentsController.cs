@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OnlineAdmission.APP.Utilities.DBBLUtilities;
+using OnlineAdmission.APP.Utilities.DBBLUtilities.Models;
 using OnlineAdmission.APP.Utilities.Helper;
 using OnlineAdmission.APP.Utilities.NagadSetting;
 using OnlineAdmission.APP.Utilities.SMS;
@@ -18,8 +20,10 @@ using OnlineAdmission.BLL.IManager;
 using OnlineAdmission.Entity;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
@@ -1221,17 +1225,33 @@ namespace OnlineAdmission.APP.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> RocketPayment(StudentDynamicInfoVM model)
+        public async Task<IActionResult> RocketPayment(StudentDynamicInfoVM model, string CardType)
         {
-            //inputModel.Clientip = _accessor.HttpContext.Connection.RemoteIpAddress.ToString(); //DBBL_Utilities.ClientIp;
-            //inputModel.Clientip = "http:\\115.127.26.3";
-            
-            if (true)
-            {
-                string url = "http://115.127.26.3";
-                return new RedirectResult(url);
+            string paymentshortcode = model.CategoryShortCode + model.PaymentTypeShortCode;
+            string OrderId = model.NuRoll + "" + paymentshortcode + "" + DateTime.Now.ToString("HHmmss");
 
+            TransactionInputModel inputModel = new TransactionInputModel();
+            inputModel.Clientip = HttpContext.Connection.RemoteIpAddress.ToString(); //DBBL_Utilities.ClientIp;
+            inputModel.Txnrefnum = OrderId;
+            inputModel.Cardtype = CardType;
+
+
+            MeritStudent meritStudent = await _meritStudentManager.GetMeritStudentAsync(model.NuRoll, model.CategoryId, model.MeritTypeId, model.SessionId);
+
+            if (meritStudent == null)
+            {
+                // _logger.LogWarning("Merit Student Not Found");
+                return RedirectToAction("Search");
             }
+            Subject subject = await _subjectManager.GetByCodeAsync(meritStudent.SubjectCode);
+
+            double amount = subject.AdmissionFee;
+            double serviceCharge = amount * .015228;
+            double totalAmount = Math.Round(amount + serviceCharge);
+            serviceCharge = Math.Round((totalAmount * .015), 2);
+            inputModel.Amount = (totalAmount*100).ToString();
+
+            AppliedStudent appliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(model.NuRoll, model.CategoryId, model.SessionId);
 
             var result = new Dictionary<string, object>();
 
@@ -1242,31 +1262,26 @@ namespace OnlineAdmission.APP.Controllers
             //string _secretkey = ConfigurationManager.AppSettings["secretKey"];
             //string _authority = ConfigurationManager.AppSettings["authority"];
 
-            //string _secretkey = ConfigurationManager.AppSettings[DBBL_Utilities.secretKey];
-            //string _authority = ConfigurationManager.AppSettings[DBBL_Utilities.authority];
+            string _secretkey = ConfigurationManager.AppSettings[DBBL_Utilities.secretKey];
+            string _authority = ConfigurationManager.AppSettings[DBBL_Utilities.authority];
 
             try
             {
-                //string secret = Request.Headers.Contains("secretKey") ? Request.Headers.GetValues("secretKey").First() : "";
-                //string origin = Request.Headers.Contains("authority") ? Request.Headers.GetValues("authority").First() : "";
 
-                //string secret = Request.Headers.Contains(DBBL_Utilities.secretKey) ? Request.Headers.GetValues(DBBL_Utilities.secretKey).First() : "";
-                //string origin = Request.Headers.Contains(DBBL_Utilities.authority) ? Request.Headers.GetValues(DBBL_Utilities.authority).First() : "";
+				//string secret = Request.Headers.Contains(DBBL_Utilities.secretKey) ? Request.Headers.GetValues(DBBL_Utilities.secretKey).First() : "";
+				//string origin = Request.Headers.Contains(DBBL_Utilities.authority) ? Request.Headers.GetValues(DBBL_Utilities.authority).First() : "";
 
-                //_user = ConfigurationManager.AppSettings["user"];
-                //_pass = ConfigurationManager.AppSettings["pass"];          
+				_user = DBBL_Utilities.user; /*ConfigurationManager.AppSettings[DBBL_Utilities.user];*/
+				_pass = DBBL_Utilities.pass; /*ConfigurationManager.AppSettings[DBBL_Utilities.pass];*/
 
-                //_user = DBBL_Utilities.user; /*ConfigurationManager.AppSettings[DBBL_Utilities.user];*/
-                //_pass = DBBL_Utilities.pass; /*ConfigurationManager.AppSettings[DBBL_Utilities.pass];*/
+				if (inputModel == null)
+				{
+					result.Add("status", "error");
+					result.Add("message", "invalid object");
+					return (IActionResult)Ok(result);
+				}
 
-                //if (inputModel == null)
-                //{
-                //    result.Add("status", "error");
-                //    result.Add("message", "invalid object");
-                //    return (IActionResult)Ok(result);
-                //}
-
-                if (_user == "" && _pass == "")
+				if (_user == "" && _pass == "")
                 {
                     result.Add("status", "error");
                     result.Add("message", "DBBL user not found");
@@ -1280,56 +1295,66 @@ namespace OnlineAdmission.APP.Controllers
                     return (IActionResult)Ok(result);
                 }
 
-                //if (!_secretkey.Equals(secret))
-                //{
-                //    result.Add("status", "error");
-                //    result.Add("message", "invalid client secret");
-                //    return Ok(result);
-                //}
+				//if (!_secretkey.Equals(secret))
+				//{
+				//	result.Add("status", "error");
+				//	result.Add("message", "invalid client secret");
+				//	return Ok(result);
+				//}
 
-                //if (!_authority.Equals(origin))
-                //{
-                //    result.Add("status", "error");
-                //    result.Add("message", "invalid authority");
-                //    return Ok(result);
-                //}
+				//if (!_authority.Equals(origin))
+				//{
+				//	result.Add("status", "error");
+				//	result.Add("message", "invalid authority");
+				//	return Ok(result);
+				//}
 
-                //ServicePointManager.Expect100Continue = true;
+				ServicePointManager.Expect100Continue = true;
 
-                //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+				//ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
-                var dbbl = new dbblecomtxnClient();
-                //var transid = await dbbl.getransidAsync(_user, _pass, inputModel.Amount, inputModel.Cardtype, inputModel.Txnrefnum, inputModel.Clientip);
+				var dbbl = new dbblecomtxnClient();
+                var transid = await dbbl.getransidAsync(_user, _pass, inputModel.Amount, inputModel.Cardtype, inputModel.Txnrefnum, inputModel.Clientip);
 
 
-                //if (transid.Body.@return.Contains("TRANSACTION_ID"))
-                //{
-                //    result.Add("status", "ok");
-                //    result.Add("message", transid);
-                //    //return Redirect("https://espncricinfo.com");// RequestDelegate("");
-                //    string str = (transid.Body.@return).Replace("TRANSACTION_ID:", "");
-                //    //string newStr = str.Replace("TRANSACTION_ID:", "");
-                //    string encodedTrnsId = HttpUtility.UrlEncode(str);
-                //    string site = "https://ecomtest.dutchbanglabank.com/ecomm2/ClientHandler?card_type=" + inputModel.Cardtype +
-                //        "&trans_id=" + encodedTrnsId;
-                //    //return new RedirectResult(site);
-                //    //return RedirectPermanent("~/Policies/PrivacyPolicy");
-                //    //return redirectResult;
-                //    return new RedirectResult(site);
-                //    //return Ok(result);
-                //}
-                //else
-                //{
-                //    result.Add("status", "error");
-                //    result.Add("message", "transaction id not found");
-                //    return (IActionResult)Ok(result);
-                //}
-            }
+				if (transid.Body.@return.Contains("TRANSACTION_ID"))
+				{
+					result.Add("status", "ok");
+					result.Add("message", transid);
+					string str = (transid.Body.@return).Replace("TRANSACTION_ID:", "");
+					string encodedTrnsId = HttpUtility.UrlEncode(str);
+					string site = "https://ecomtest.dutchbanglabank.com/ecomm2/ClientHandler?card_type=" + inputModel.Cardtype +
+						"&trans_id=" + encodedTrnsId;
+					
+                    PaymentTransaction paymentTransaction = new PaymentTransaction();
+                    paymentTransaction.AcademicSessionId = model.SessionId;
+                    paymentTransaction.AdmissionFee = amount;
+                    paymentTransaction.Amount = totalAmount;
+                    paymentTransaction.CreatedAt = DateTime.Now;
+                    paymentTransaction.CreatedBy = "Rocket";
+                    paymentTransaction.PaymentTypeId = model.PaymentTypeId;
+                    paymentTransaction.ReferenceNo = model.NuRoll;
+                    paymentTransaction.TransactionDate = DateTime.Now;
+                    paymentTransaction.ServiceCharge = serviceCharge;
+                    paymentTransaction.StudentName = appliedStudent.ApplicantName;
+                    paymentTransaction.StudentCategoryId = model.CategoryId;
+
+                    await _paymentTransactionManager.AddAsync(paymentTransaction);
+
+                    return new RedirectResult(site);
+				}
+				else
+				{
+					result.Add("status", "error");
+					result.Add("message", "transaction id not found");
+					return RedirectToAction("Search","Students",new {msg =result});
+				}
+			}
             catch (Exception ex)
             {
                 result.Add("status", "error");
                 result.Add("message", ex.Message);
-                return (IActionResult)Ok(result);
+                return Ok(result);
             }
         }
 
