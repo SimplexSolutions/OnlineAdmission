@@ -7,118 +7,26 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DBBL_ServiceLive1
+namespace DBBL_ServiceTest
 {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="http://ecom.dbbl/", ConfigurationName="DBBL_ServiceLive1.dbblecomtxn")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace="http://ecom.dbbl/", ConfigurationName="DBBL_ServiceTest.dbblecomtxn")]
     public interface dbblecomtxn
     {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://ecom.dbbl/dbblecomtxn/getresultRequest", ReplyAction="http://ecom.dbbl/dbblecomtxn/getresultResponse")]
-        System.Threading.Tasks.Task<DBBL_ServiceLive1.getresultResponse> getresultAsync(DBBL_ServiceLive1.getresultRequest request);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://ecom.dbbl/dbblecomtxn/getransidRequest", ReplyAction="http://ecom.dbbl/dbblecomtxn/getransidResponse")]
-        System.Threading.Tasks.Task<DBBL_ServiceLive1.getransidResponse> getransidAsync(DBBL_ServiceLive1.getransidRequest request);
+        System.Threading.Tasks.Task<DBBL_ServiceTest.getransidResponse> getransidAsync(DBBL_ServiceTest.getransidRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://ecom.dbbl/dbblecomtxn/getsubmertransidRequest", ReplyAction="http://ecom.dbbl/dbblecomtxn/getsubmertransidResponse")]
-        System.Threading.Tasks.Task<DBBL_ServiceLive1.getsubmertransidResponse> getsubmertransidAsync(DBBL_ServiceLive1.getsubmertransidRequest request);
+        System.Threading.Tasks.Task<DBBL_ServiceTest.getsubmertransidResponse> getsubmertransidAsync(DBBL_ServiceTest.getsubmertransidRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://ecom.dbbl/dbblecomtxn/getresultfieldRequest", ReplyAction="http://ecom.dbbl/dbblecomtxn/getresultfieldResponse")]
-        System.Threading.Tasks.Task<DBBL_ServiceLive1.getresultfieldResponse> getresultfieldAsync(DBBL_ServiceLive1.getresultfieldRequest request);
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class getresultRequest
-    {
+        System.Threading.Tasks.Task<DBBL_ServiceTest.getresultfieldResponse> getresultfieldAsync(DBBL_ServiceTest.getresultfieldRequest request);
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="getresult", Namespace="http://ecom.dbbl/", Order=0)]
-        public DBBL_ServiceLive1.getresultRequestBody Body;
-        
-        public getresultRequest()
-        {
-        }
-        
-        public getresultRequest(DBBL_ServiceLive1.getresultRequestBody Body)
-        {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="")]
-    public partial class getresultRequestBody
-    {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public string userid;
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
-        public string pwd;
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
-        public string transid;
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
-        public string clientip;
-        
-        public getresultRequestBody()
-        {
-        }
-        
-        public getresultRequestBody(string userid, string pwd, string transid, string clientip)
-        {
-            this.userid = userid;
-            this.pwd = pwd;
-            this.transid = transid;
-            this.clientip = clientip;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class getresultResponse
-    {
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="getresultResponse", Namespace="http://ecom.dbbl/", Order=0)]
-        public DBBL_ServiceLive1.getresultResponseBody Body;
-        
-        public getresultResponse()
-        {
-        }
-        
-        public getresultResponse(DBBL_ServiceLive1.getresultResponseBody Body)
-        {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="")]
-    public partial class getresultResponseBody
-    {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public string @return;
-        
-        public getresultResponseBody()
-        {
-        }
-        
-        public getresultResponseBody(string @return)
-        {
-            this.@return = @return;
-        }
+        [System.ServiceModel.OperationContractAttribute(Action="http://ecom.dbbl/dbblecomtxn/getresultRequest", ReplyAction="http://ecom.dbbl/dbblecomtxn/getresultResponse")]
+        System.Threading.Tasks.Task<DBBL_ServiceTest.getresultResponse> getresultAsync(DBBL_ServiceTest.getresultRequest request);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -129,13 +37,13 @@ namespace DBBL_ServiceLive1
     {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="getransid", Namespace="http://ecom.dbbl/", Order=0)]
-        public DBBL_ServiceLive1.getransidRequestBody Body;
+        public DBBL_ServiceTest.getransidRequestBody Body;
         
         public getransidRequest()
         {
         }
         
-        public getransidRequest(DBBL_ServiceLive1.getransidRequestBody Body)
+        public getransidRequest(DBBL_ServiceTest.getransidRequestBody Body)
         {
             this.Body = Body;
         }
@@ -189,13 +97,13 @@ namespace DBBL_ServiceLive1
     {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="getransidResponse", Namespace="http://ecom.dbbl/", Order=0)]
-        public DBBL_ServiceLive1.getransidResponseBody Body;
+        public DBBL_ServiceTest.getransidResponseBody Body;
         
         public getransidResponse()
         {
         }
         
-        public getransidResponse(DBBL_ServiceLive1.getransidResponseBody Body)
+        public getransidResponse(DBBL_ServiceTest.getransidResponseBody Body)
         {
             this.Body = Body;
         }
@@ -229,13 +137,13 @@ namespace DBBL_ServiceLive1
     {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="getsubmertransid", Namespace="http://ecom.dbbl/", Order=0)]
-        public DBBL_ServiceLive1.getsubmertransidRequestBody Body;
+        public DBBL_ServiceTest.getsubmertransidRequestBody Body;
         
         public getsubmertransidRequest()
         {
         }
         
-        public getsubmertransidRequest(DBBL_ServiceLive1.getsubmertransidRequestBody Body)
+        public getsubmertransidRequest(DBBL_ServiceTest.getsubmertransidRequestBody Body)
         {
             this.Body = Body;
         }
@@ -301,13 +209,13 @@ namespace DBBL_ServiceLive1
     {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="getsubmertransidResponse", Namespace="http://ecom.dbbl/", Order=0)]
-        public DBBL_ServiceLive1.getsubmertransidResponseBody Body;
+        public DBBL_ServiceTest.getsubmertransidResponseBody Body;
         
         public getsubmertransidResponse()
         {
         }
         
-        public getsubmertransidResponse(DBBL_ServiceLive1.getsubmertransidResponseBody Body)
+        public getsubmertransidResponse(DBBL_ServiceTest.getsubmertransidResponseBody Body)
         {
             this.Body = Body;
         }
@@ -341,13 +249,13 @@ namespace DBBL_ServiceLive1
     {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="getresultfield", Namespace="http://ecom.dbbl/", Order=0)]
-        public DBBL_ServiceLive1.getresultfieldRequestBody Body;
+        public DBBL_ServiceTest.getresultfieldRequestBody Body;
         
         public getresultfieldRequest()
         {
         }
         
-        public getresultfieldRequest(DBBL_ServiceLive1.getresultfieldRequestBody Body)
+        public getresultfieldRequest(DBBL_ServiceTest.getresultfieldRequestBody Body)
         {
             this.Body = Body;
         }
@@ -397,13 +305,13 @@ namespace DBBL_ServiceLive1
     {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="getresultfieldResponse", Namespace="http://ecom.dbbl/", Order=0)]
-        public DBBL_ServiceLive1.getresultfieldResponseBody Body;
+        public DBBL_ServiceTest.getresultfieldResponseBody Body;
         
         public getresultfieldResponse()
         {
         }
         
-        public getresultfieldResponse(DBBL_ServiceLive1.getresultfieldResponseBody Body)
+        public getresultfieldResponse(DBBL_ServiceTest.getresultfieldResponseBody Body)
         {
             this.Body = Body;
         }
@@ -429,14 +337,106 @@ namespace DBBL_ServiceLive1
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    public interface dbblecomtxnChannel : DBBL_ServiceLive1.dbblecomtxn, System.ServiceModel.IClientChannel
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getresultRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="getresult", Namespace="http://ecom.dbbl/", Order=0)]
+        public DBBL_ServiceTest.getresultRequestBody Body;
+        
+        public getresultRequest()
+        {
+        }
+        
+        public getresultRequest(DBBL_ServiceTest.getresultRequestBody Body)
+        {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="")]
+    public partial class getresultRequestBody
+    {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public string userid;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
+        public string pwd;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
+        public string transid;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
+        public string clientip;
+        
+        public getresultRequestBody()
+        {
+        }
+        
+        public getresultRequestBody(string userid, string pwd, string transid, string clientip)
+        {
+            this.userid = userid;
+            this.pwd = pwd;
+            this.transid = transid;
+            this.clientip = clientip;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getresultResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="getresultResponse", Namespace="http://ecom.dbbl/", Order=0)]
+        public DBBL_ServiceTest.getresultResponseBody Body;
+        
+        public getresultResponse()
+        {
+        }
+        
+        public getresultResponse(DBBL_ServiceTest.getresultResponseBody Body)
+        {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="")]
+    public partial class getresultResponseBody
+    {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public string @return;
+        
+        public getresultResponseBody()
+        {
+        }
+        
+        public getresultResponseBody(string @return)
+        {
+            this.@return = @return;
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    public interface dbblecomtxnChannel : DBBL_ServiceTest.dbblecomtxn, System.ServiceModel.IClientChannel
     {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    public partial class dbblecomtxnClient : System.ServiceModel.ClientBase<DBBL_ServiceLive1.dbblecomtxn>, DBBL_ServiceLive1.dbblecomtxn
+    public partial class dbblecomtxnClient : System.ServiceModel.ClientBase<DBBL_ServiceTest.dbblecomtxn>, DBBL_ServiceTest.dbblecomtxn
     {
         
         /// <summary>
@@ -480,51 +480,34 @@ namespace DBBL_ServiceLive1
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<DBBL_ServiceLive1.getresultResponse> DBBL_ServiceLive1.dbblecomtxn.getresultAsync(DBBL_ServiceLive1.getresultRequest request)
-        {
-            return base.Channel.getresultAsync(request);
-        }
-        
-        public System.Threading.Tasks.Task<DBBL_ServiceLive1.getresultResponse> getresultAsync(string userid, string pwd, string transid, string clientip)
-        {
-            DBBL_ServiceLive1.getresultRequest inValue = new DBBL_ServiceLive1.getresultRequest();
-            inValue.Body = new DBBL_ServiceLive1.getresultRequestBody();
-            inValue.Body.userid = userid;
-            inValue.Body.pwd = pwd;
-            inValue.Body.transid = transid;
-            inValue.Body.clientip = clientip;
-            return ((DBBL_ServiceLive1.dbblecomtxn)(this)).getresultAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<DBBL_ServiceLive1.getransidResponse> DBBL_ServiceLive1.dbblecomtxn.getransidAsync(DBBL_ServiceLive1.getransidRequest request)
+        System.Threading.Tasks.Task<DBBL_ServiceTest.getransidResponse> DBBL_ServiceTest.dbblecomtxn.getransidAsync(DBBL_ServiceTest.getransidRequest request)
         {
             return base.Channel.getransidAsync(request);
         }
         
-        public System.Threading.Tasks.Task<DBBL_ServiceLive1.getransidResponse> getransidAsync(string userid, string pwd, string amount, string cardtype, string txnrefnum, string clientip)
+        public System.Threading.Tasks.Task<DBBL_ServiceTest.getransidResponse> getransidAsync(string userid, string pwd, string amount, string cardtype, string txnrefnum, string clientip)
         {
-            DBBL_ServiceLive1.getransidRequest inValue = new DBBL_ServiceLive1.getransidRequest();
-            inValue.Body = new DBBL_ServiceLive1.getransidRequestBody();
+            DBBL_ServiceTest.getransidRequest inValue = new DBBL_ServiceTest.getransidRequest();
+            inValue.Body = new DBBL_ServiceTest.getransidRequestBody();
             inValue.Body.userid = userid;
             inValue.Body.pwd = pwd;
             inValue.Body.amount = amount;
             inValue.Body.cardtype = cardtype;
             inValue.Body.txnrefnum = txnrefnum;
             inValue.Body.clientip = clientip;
-            return ((DBBL_ServiceLive1.dbblecomtxn)(this)).getransidAsync(inValue);
+            return ((DBBL_ServiceTest.dbblecomtxn)(this)).getransidAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<DBBL_ServiceLive1.getsubmertransidResponse> DBBL_ServiceLive1.dbblecomtxn.getsubmertransidAsync(DBBL_ServiceLive1.getsubmertransidRequest request)
+        System.Threading.Tasks.Task<DBBL_ServiceTest.getsubmertransidResponse> DBBL_ServiceTest.dbblecomtxn.getsubmertransidAsync(DBBL_ServiceTest.getsubmertransidRequest request)
         {
             return base.Channel.getsubmertransidAsync(request);
         }
         
-        public System.Threading.Tasks.Task<DBBL_ServiceLive1.getsubmertransidResponse> getsubmertransidAsync(string userid, string pwd, string submername, string submerid, string terminalid, string amount, string cardtype, string txnrefnum, string clientip)
+        public System.Threading.Tasks.Task<DBBL_ServiceTest.getsubmertransidResponse> getsubmertransidAsync(string userid, string pwd, string submername, string submerid, string terminalid, string amount, string cardtype, string txnrefnum, string clientip)
         {
-            DBBL_ServiceLive1.getsubmertransidRequest inValue = new DBBL_ServiceLive1.getsubmertransidRequest();
-            inValue.Body = new DBBL_ServiceLive1.getsubmertransidRequestBody();
+            DBBL_ServiceTest.getsubmertransidRequest inValue = new DBBL_ServiceTest.getsubmertransidRequest();
+            inValue.Body = new DBBL_ServiceTest.getsubmertransidRequestBody();
             inValue.Body.userid = userid;
             inValue.Body.pwd = pwd;
             inValue.Body.submername = submername;
@@ -534,25 +517,42 @@ namespace DBBL_ServiceLive1
             inValue.Body.cardtype = cardtype;
             inValue.Body.txnrefnum = txnrefnum;
             inValue.Body.clientip = clientip;
-            return ((DBBL_ServiceLive1.dbblecomtxn)(this)).getsubmertransidAsync(inValue);
+            return ((DBBL_ServiceTest.dbblecomtxn)(this)).getsubmertransidAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<DBBL_ServiceLive1.getresultfieldResponse> DBBL_ServiceLive1.dbblecomtxn.getresultfieldAsync(DBBL_ServiceLive1.getresultfieldRequest request)
+        System.Threading.Tasks.Task<DBBL_ServiceTest.getresultfieldResponse> DBBL_ServiceTest.dbblecomtxn.getresultfieldAsync(DBBL_ServiceTest.getresultfieldRequest request)
         {
             return base.Channel.getresultfieldAsync(request);
         }
         
-        public System.Threading.Tasks.Task<DBBL_ServiceLive1.getresultfieldResponse> getresultfieldAsync(string userid, string pwd, string transid, string clientip, string billinginfo)
+        public System.Threading.Tasks.Task<DBBL_ServiceTest.getresultfieldResponse> getresultfieldAsync(string userid, string pwd, string transid, string clientip, string billinginfo)
         {
-            DBBL_ServiceLive1.getresultfieldRequest inValue = new DBBL_ServiceLive1.getresultfieldRequest();
-            inValue.Body = new DBBL_ServiceLive1.getresultfieldRequestBody();
+            DBBL_ServiceTest.getresultfieldRequest inValue = new DBBL_ServiceTest.getresultfieldRequest();
+            inValue.Body = new DBBL_ServiceTest.getresultfieldRequestBody();
             inValue.Body.userid = userid;
             inValue.Body.pwd = pwd;
             inValue.Body.transid = transid;
             inValue.Body.clientip = clientip;
             inValue.Body.billinginfo = billinginfo;
-            return ((DBBL_ServiceLive1.dbblecomtxn)(this)).getresultfieldAsync(inValue);
+            return ((DBBL_ServiceTest.dbblecomtxn)(this)).getresultfieldAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<DBBL_ServiceTest.getresultResponse> DBBL_ServiceTest.dbblecomtxn.getresultAsync(DBBL_ServiceTest.getresultRequest request)
+        {
+            return base.Channel.getresultAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<DBBL_ServiceTest.getresultResponse> getresultAsync(string userid, string pwd, string transid, string clientip)
+        {
+            DBBL_ServiceTest.getresultRequest inValue = new DBBL_ServiceTest.getresultRequest();
+            inValue.Body = new DBBL_ServiceTest.getresultRequestBody();
+            inValue.Body.userid = userid;
+            inValue.Body.pwd = pwd;
+            inValue.Body.transid = transid;
+            inValue.Body.clientip = clientip;
+            return ((DBBL_ServiceTest.dbblecomtxn)(this)).getresultAsync(inValue);
         }
         
         public virtual System.Threading.Tasks.Task OpenAsync()
@@ -584,7 +584,7 @@ namespace DBBL_ServiceLive1
         {
             if ((endpointConfiguration == EndpointConfiguration.dbblecomtxnPort))
             {
-                return new System.ServiceModel.EndpointAddress("https://ecom1.dutchbanglabank.com/ecomws/dbblecomtxn");
+                return new System.ServiceModel.EndpointAddress("https://ecomtest.dutchbanglabank.com/ecomws/dbblecomtxn");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }

@@ -5,8 +5,8 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using DBBL_ServiceLive1;
-//using DBBL_ServiceTest;
+//using DBBL_ServiceLive1;
+using DBBL_ServiceTest;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -45,8 +45,10 @@ namespace OnlineAdmission.APP.Controllers
 
         #region DBBL
         //ActionResult for DBBL Payment
-        [HttpGet]
-        [AllowAnonymous]
+        //[Route("api/[controller]/[action]")]
+        //[ApiController]
+        //[Route("api/[controller]/[action]")]
+        [HttpGet]        
         public async Task<IActionResult> GetTransactionResult(string trans_id)
         {
             var result = new Dictionary<string, object>();

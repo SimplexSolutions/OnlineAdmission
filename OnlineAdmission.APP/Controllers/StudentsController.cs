@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using DBBL_ServiceLive1;
-//using DBBL_ServiceTest;
+//using DBBL_ServiceLive1;
+using DBBL_ServiceTest;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -1342,9 +1342,11 @@ namespace OnlineAdmission.APP.Controllers
                     paymentTransaction.ServiceCharge = serviceCharge;
                     paymentTransaction.PaymentStatus = false;
                     paymentTransaction.StudentName = appliedStudent.ApplicantName;
+                    paymentTransaction.MobileNumber = appliedStudent.MobileNo;
                     paymentTransaction.StudentCategoryId = model.CategoryId;
 
                     await _paymentTransactionManager.AddAsync(paymentTransaction);
+                    DBBL_Utilities.MeritTypeId = model.MeritTypeId;
 
                     return new RedirectResult(site);
 				}

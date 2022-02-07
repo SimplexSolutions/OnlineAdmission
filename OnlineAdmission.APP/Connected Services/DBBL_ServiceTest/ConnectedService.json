@@ -1,22 +1,18 @@
 {
   "ExtendedData": {
     "inputs": [
-      "https://ecom1.dutchbanglabank.com/ecomws/dbblecomtxn?wsdl"
+      "https://ecomtest.dutchbanglabank.com/ecomws/dbblecomtxn?wsdl"
     ],
     "collectionTypes": [
       "System.Array",
       "System.Collections.Generic.Dictionary`2"
     ],
     "namespaceMappings": [
-      "*, DBBL_ServiceLive1"
+      "*, DBBL_ServiceTest"
     ],
     "references": [
       "AutoMapper, {AutoMapper, 10.1.1}",
       "AutoMapper.Extensions.Microsoft.DependencyInjection, {AutoMapper.Extensions.Microsoft.DependencyInjection, 8.1.1}",
-      "C:\\Working Folder\\Projects\\OnlineAdmission\\20220207\\OnlineAdmission\\OnlineAdmission.APP\\bin\\Debug\\net5.0\\OnlineAdmission.BLL.dll",
-      "C:\\Working Folder\\Projects\\OnlineAdmission\\20220207\\OnlineAdmission\\OnlineAdmission.APP\\bin\\Debug\\net5.0\\OnlineAdmission.DAL.dll",
-      "C:\\Working Folder\\Projects\\OnlineAdmission\\20220207\\OnlineAdmission\\OnlineAdmission.APP\\bin\\Debug\\net5.0\\OnlineAdmission.DB.dll",
-      "C:\\Working Folder\\Projects\\OnlineAdmission\\20220207\\OnlineAdmission\\OnlineAdmission.APP\\bin\\Debug\\net5.0\\OnlineAdmission.Entity.dll",
       "dotnet-aspnet-codegenerator-design, {Microsoft.VisualStudio.Web.CodeGeneration.Design, 5.0.2}",
       "ExcelDataReader, {ExcelDataReader, 3.6.0}",
       "Microsoft.AspNetCore.Cryptography.Internal, {Microsoft.AspNetCore.Cryptography.Internal, 5.0.8}",

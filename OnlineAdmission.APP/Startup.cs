@@ -145,6 +145,7 @@ namespace OnlineAdmission.APP
             app.UseStaticFiles();
             app.UseSession();
             app.UseRouting();
+            app.UseCors("AllowAnyCorsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();
