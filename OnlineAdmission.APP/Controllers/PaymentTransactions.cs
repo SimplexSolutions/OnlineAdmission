@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using DBBL_ServiceTest;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using OnlineAdmission.APP.Utilities.DBBLUtilities;
 using OnlineAdmission.APP.Utilities.NagadSetting;
 using OnlineAdmission.APP.Utilities.SMS;
 using OnlineAdmission.BLL.IManager;
@@ -26,18 +29,50 @@ namespace OnlineAdmission.APP.Controllers
         private readonly IAppliedStudentManager _appliedStudentManager;
         private readonly IStudentManager _studentManager;
         private readonly ISMSManager _smsManager;
+        private IHttpContextAccessor _accessor;
 
         public PaymentTransactions(IMeritStudentManager meritStudentManager, IPaymentTransactionManager paymentTransactionManager, ISMSManager sMSManager, 
-            IStudentManager studentManager, IAppliedStudentManager appliedStudentManager)
+            IStudentManager studentManager, IAppliedStudentManager appliedStudentManager, IHttpContextAccessor accessor)
         {
             _meritStudentManager = meritStudentManager;
             this.paymentTransactionManager = paymentTransactionManager;
             _appliedStudentManager = appliedStudentManager;
             _studentManager = studentManager;
             _smsManager = sMSManager;
+            _accessor = accessor;
         }
 
+        #region DBBL
+        //ActionResult for DBBL Payment
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetTransactionResult(string trans_id)
+        {
+            var result = new Dictionary<string, object>();
 
+            string _user = string.Empty;
+            string _pass = string.Empty;
+
+
+            _user = DBBL_Utilities.user; 
+            _pass = DBBL_Utilities.pass;
+
+
+            string Clintip = _accessor.HttpContext.Connection.RemoteIpAddress.ToString();
+            string Txnrefnum = "Test";
+
+            ServicePointManager.Expect100Continue = true;
+
+            var dbbl = new dbblecomtxnClient();
+            var transResult = await dbbl.getresultfieldAsync(_user, _pass, trans_id, Clintip, Txnrefnum);
+            
+            var data = transResult;
+            return (IActionResult)Ok();
+        }
+
+        #endregion
+
+        #region Nagad
         //ActionResult for Nagad payment
         [HttpGet]
         [AllowAnonymous]
@@ -221,6 +256,7 @@ namespace OnlineAdmission.APP.Controllers
             return  Ok();
         }
 
-        
+        #endregion
+
     }
 }
