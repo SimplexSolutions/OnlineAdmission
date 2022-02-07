@@ -5,7 +5,8 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using DBBL_ServiceTest;
+using DBBL_ServiceLive1;
+//using DBBL_ServiceTest;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -65,9 +66,79 @@ namespace OnlineAdmission.APP.Controllers
 
             var dbbl = new dbblecomtxnClient();
             var transResult = await dbbl.getresultfieldAsync(_user, _pass, trans_id, Clintip, Txnrefnum);
-            
-            var data = transResult;
-            return (IActionResult)Ok();
+            if (transResult.Body.@return.Length>0)
+            {
+                var payment = await paymentTransactionManager.GetPaymentTransactionByTrId(trans_id);
+                if (payment != null)
+                {
+                    payment.PaymentStatus = true;
+                    await paymentTransactionManager.UpdateAsync(payment);
+
+                    MeritStudent meritStudent = new MeritStudent();
+                    meritStudent = await _meritStudentManager.GetMeritStudentAsync(payment.ReferenceNo, (int)payment.StudentCategoryId, DBBL_Utilities.MeritTypeId, (int)payment.AcademicSessionId);
+                    string phoneNumber;
+                    string msgText;
+
+                    phoneNumber = payment.MobileNumber;
+                    msgText = "Congratulations! your payment has been successfully paid";
+
+                    if (meritStudent != null)
+                    {
+                        if (payment.PaymentTypeId == 2)
+                        {
+                            meritStudent.PaymentStatus = true;
+                            meritStudent.PaymentTransactionId = payment.Id;
+                            meritStudent.StudentCategoryId = payment.StudentCategoryId;
+                            await _meritStudentManager.UpdateAsync(meritStudent);
+                        }
+
+                    }
+                    AppliedStudent newStudent = await _appliedStudentManager.GetAppliedStudentAsync(payment.ReferenceNo, (int)payment.StudentCategoryId, (int)payment.AcademicSessionId);
+                    phoneNumber = newStudent.MobileNo.ToString();
+                    msgText = "Congratulations! " + newStudent.ApplicantName + "(NU Roll:" + newStudent.NUAdmissionRoll + ") , your admission payment is successfully paid";
+
+                    //////////Code for SMS Sending and Saving///
+
+                    bool SentSMS = false;
+                    SentSMS = await ESMS.SendSMS(phoneNumber, msgText);
+                    SMSModel newSMS = new SMSModel()
+                    {
+                        MobileList = phoneNumber,
+                        Text = msgText,
+                        CreatedAt = DateTime.Now,
+                        CreatedBy = "Payment Getway",
+                        Description = "Payment Success"
+                    };
+
+                    if (SentSMS == true)
+                    {
+                        await _smsManager.AddAsync(newSMS);
+                    }
+
+                    return RedirectToAction("PaymentConfirmation", "Students", new
+                    {
+                        NuAdmissionRoll = payment.ReferenceNo,
+                        CategoryId = payment.StudentCategoryId,
+                        MeritTypeId = DBBL_Utilities.MeritTypeId,
+                        academicSessionId = payment.AcademicSessionId,
+                        paymentTransactionId = payment.Id,
+                        notification = "Successful"
+                    });
+                }
+                else 
+                {
+                    return Ok();
+                }
+            }
+            else
+            {
+                result.Add("status", "error");
+                result.Add("message", "transaction result not found");
+            }
+            // var payment = await _paymentTransactionManager.GetPaymentTransactionAsync(model.NuRoll, model.CategoryId, model.SessionId, model.PaymentTypeId);
+
+            //var data = transResult;
+            return Ok();
         }
 
         #endregion
@@ -93,7 +164,6 @@ namespace OnlineAdmission.APP.Controllers
             {
                 string successNotification = "Congratulations! Payment Completed (BDT: " + responsevalue.amount + "/-)";                
 
-
                 var additionalMerchantInfo = (responsevalue.additionalMerchantInfo).Value;
                 dynamic MerchantInfo = JObject.Parse(additionalMerchantInfo);
 
@@ -108,10 +178,12 @@ namespace OnlineAdmission.APP.Controllers
                     TransactionDate = DateTime.Now,
                     Balance = 0,
                     AccountNo = responsevalue.clientMobileNo,
-                    TransactionId = responsevalue.orderId,
+                    TransactionId = responsevalue.issuerPaymentRefNo,
+                    Description = responsevalue.orderId,
                     ReferenceNo = nuRoll,
                     AdmissionFee = MerchantInfo.AdmissionFee,
                     ServiceCharge = MerchantInfo.ServiceCharge,
+                    PaymentStatus=true,
                     StudentName = MerchantInfo.StudentName,
                     MobileNumber = MerchantInfo.MobileNo,
                     StudentCategoryId = stuCat,

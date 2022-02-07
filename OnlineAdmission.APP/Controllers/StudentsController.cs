@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using DBBL_ServiceTest;
+using DBBL_ServiceLive1;
+//using DBBL_ServiceTest;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -1309,6 +1310,7 @@ namespace OnlineAdmission.APP.Controllers
 				//	return Ok(result);
 				//}
 
+
 				ServicePointManager.Expect100Continue = true;
 
 				//ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
@@ -1334,8 +1336,11 @@ namespace OnlineAdmission.APP.Controllers
                     paymentTransaction.CreatedBy = "Rocket";
                     paymentTransaction.PaymentTypeId = model.PaymentTypeId;
                     paymentTransaction.ReferenceNo = model.NuRoll;
+                    paymentTransaction.TransactionId = str;
+                    paymentTransaction.Description = OrderId;
                     paymentTransaction.TransactionDate = DateTime.Now;
                     paymentTransaction.ServiceCharge = serviceCharge;
+                    paymentTransaction.PaymentStatus = false;
                     paymentTransaction.StudentName = appliedStudent.ApplicantName;
                     paymentTransaction.StudentCategoryId = model.CategoryId;
 

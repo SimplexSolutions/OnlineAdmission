@@ -37,6 +37,8 @@ namespace OnlineAdmission.Entity
         public double ServiceCharge { get; set; }
 
         public string Description { get; set; }
+        [Display(Name = "Is Paid ?")]
+        public bool PaymentStatus { get; set; } = false;
 
         //StudentCategory = 1 = hon's Student
         //StudentCategory = 2 = professional Student

@@ -1,18 +1,22 @@
 {
   "ExtendedData": {
     "inputs": [
-      "https://ecomtest.dutchbanglabank.com/ecomws/dbblecomtxn?wsdl"
+      "https://ecom1.dutchbanglabank.com/ecomws/dbblecomtxn?wsdl"
     ],
     "collectionTypes": [
       "System.Array",
       "System.Collections.Generic.Dictionary`2"
     ],
     "namespaceMappings": [
-      "*, DBBL_ServiceTest"
+      "*, DBBL_ServiceLive1"
     ],
     "references": [
       "AutoMapper, {AutoMapper, 10.1.1}",
       "AutoMapper.Extensions.Microsoft.DependencyInjection, {AutoMapper.Extensions.Microsoft.DependencyInjection, 8.1.1}",
+      "C:\\Working Folder\\Projects\\OnlineAdmission\\20220207\\OnlineAdmission\\OnlineAdmission.APP\\bin\\Debug\\net5.0\\OnlineAdmission.BLL.dll",
+      "C:\\Working Folder\\Projects\\OnlineAdmission\\20220207\\OnlineAdmission\\OnlineAdmission.APP\\bin\\Debug\\net5.0\\OnlineAdmission.DAL.dll",
+      "C:\\Working Folder\\Projects\\OnlineAdmission\\20220207\\OnlineAdmission\\OnlineAdmission.APP\\bin\\Debug\\net5.0\\OnlineAdmission.DB.dll",
+      "C:\\Working Folder\\Projects\\OnlineAdmission\\20220207\\OnlineAdmission\\OnlineAdmission.APP\\bin\\Debug\\net5.0\\OnlineAdmission.Entity.dll",
       "dotnet-aspnet-codegenerator-design, {Microsoft.VisualStudio.Web.CodeGeneration.Design, 5.0.2}",
       "ExcelDataReader, {ExcelDataReader, 3.6.0}",
       "Microsoft.AspNetCore.Cryptography.Internal, {Microsoft.AspNetCore.Cryptography.Internal, 5.0.8}",
@@ -128,6 +132,7 @@
       "System.Net.Sockets, {System.Net.Sockets, 4.3.0}",
       "System.ObjectModel, {System.ObjectModel, 4.3.0}",
       "System.Reflection, {System.Reflection, 4.3.0}",
+      "System.Reflection.DispatchProxy, {System.Reflection.DispatchProxy, 4.7.1}",
       "System.Reflection.Extensions, {System.Reflection.Extensions, 4.3.0}",
       "System.Reflection.Metadata, {System.Reflection.Metadata, 5.0.0}",
       "System.Reflection.Primitives, {System.Reflection.Primitives, 4.3.0}",
@@ -144,13 +149,20 @@
       "System.Runtime.Serialization.Primitives, {System.Runtime.Serialization.Primitives, 4.3.0}",
       "System.Security.AccessControl, {System.Security.AccessControl, 4.7.0}",
       "System.Security.Cryptography.Algorithms, {System.Security.Cryptography.Algorithms, 4.3.0}",
-      "System.Security.Cryptography.Cng, {System.Security.Cryptography.Cng, 4.5.0}",
+      "System.Security.Cryptography.Cng, {System.Security.Cryptography.Cng, 4.7.0}",
       "System.Security.Cryptography.Encoding, {System.Security.Cryptography.Encoding, 4.3.0}",
       "System.Security.Cryptography.Primitives, {System.Security.Cryptography.Primitives, 4.3.0}",
       "System.Security.Cryptography.X509Certificates, {System.Security.Cryptography.X509Certificates, 4.3.0}",
+      "System.Security.Cryptography.Xml, {System.Security.Cryptography.Xml, 4.7.0}",
       "System.Security.Permissions, {System.Security.Permissions, 4.7.0}",
       "System.Security.Principal.Windows, {System.Security.Principal.Windows, 4.7.0}",
       "System.Security.SecureString, {System.Security.SecureString, 4.3.0}",
+      "System.ServiceModel, {System.ServiceModel.Primitives, 4.8.1}",
+      "System.ServiceModel.Duplex, {System.ServiceModel.Duplex, 4.8.1}",
+      "System.ServiceModel.Http, {System.ServiceModel.Http, 4.8.1}",
+      "System.ServiceModel.NetTcp, {System.ServiceModel.NetTcp, 4.8.1}",
+      "System.ServiceModel.Primitives, {System.ServiceModel.Primitives, 4.8.1}",
+      "System.ServiceModel.Security, {System.ServiceModel.Security, 4.8.1}",
       "System.Text.Encoding, {System.Text.Encoding, 4.3.0}",
       "System.Text.Encoding.CodePages, {System.Text.Encoding.CodePages, 4.7.0}",
       "System.Text.Encoding.Extensions, {System.Text.Encoding.Extensions, 4.3.0}",

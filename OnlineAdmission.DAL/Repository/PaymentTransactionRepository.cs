@@ -42,7 +42,7 @@ namespace OnlineAdmission.DAL.Repository
 
         public async Task<PaymentTransaction> GetPaymentTransactionByTrId(string transactionId)
         {
-            var existingTransaction = await _context.PaymentTransactions.FirstOrDefaultAsync(t => t.TransactionId.Trim().ToLower() == transactionId);
+            var existingTransaction = await _context.PaymentTransactions.FirstOrDefaultAsync(t => t.TransactionId.Trim().ToLower() == transactionId && t.PaymentStatus==true);
             return existingTransaction;
         }
 
