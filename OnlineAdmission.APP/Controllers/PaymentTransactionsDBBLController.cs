@@ -116,32 +116,41 @@ namespace OnlineAdmission.APP.Controllers
                         {
                             await _smsManager.AddAsync(newSMS);
                         }
-
-                        return RedirectToAction("PaymentConfirmation", "Students", new
+                        return new RedirectToActionResult("PaymentConfirmation", "Students", new
                         {
                             NuAdmissionRoll = payment.ReferenceNo,
-                            CategoryId = payment.StudentCategoryId,
+                            CategoryId = (int)payment.StudentCategoryId,
                             MeritTypeId = DBBL_Utilities.MeritTypeId,
                             academicSessionId = payment.AcademicSessionId,
                             paymentTransactionId = payment.Id,
-                            notification = "Successful"
+                            notification = msgText
                         });
-                    }
-                    else
-                    {
-                        return Ok();
-                    }
                 }
                 else
                 {
-                    result.Add("status", "error");
-                    result.Add("message", "transaction result not found");
+                   return Ok();
+                }
+                }
+                else
+                {
+                  result.Add("status", "error");
+                  result.Add("message", "transaction result not found");
                 }
                 // var payment = await _paymentTransactionManager.GetPaymentTransactionAsync(model.NuRoll, model.CategoryId, model.SessionId, model.PaymentTypeId);
 
                 //var data = transResult;
-                return Ok();
-            }
+            return Ok();
+    }
+
+        private IActionResult Redirect(string v)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IActionResult RedirectToAction(string v1, string v2)
+        {
+            throw new NotImplementedException();
+        }
 
         private IActionResult Ok()
         {
