@@ -1,14 +1,14 @@
 {
   "ExtendedData": {
     "inputs": [
-      "https://ecomtest.dutchbanglabank.com/ecomws/dbblecomtxn?wsdl"
+      "https://ecom1.dutchbanglabank.com/ecomws/dbblecomtxn?wsdl"
     ],
     "collectionTypes": [
       "System.Array",
       "System.Collections.Generic.Dictionary`2"
     ],
     "namespaceMappings": [
-      "*, DBBL_ServiceTest"
+      "*, DBBL_ServiceLiveEcom1"
     ],
     "references": [
       "AutoMapper, {AutoMapper, 10.1.1}",

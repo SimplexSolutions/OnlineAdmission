@@ -19,7 +19,7 @@ using Newtonsoft.Json.Linq;
 using OnlineAdmission.BLL.IManager;
 using Microsoft.AspNetCore.Authorization;
 using OnlineAdmission.APP.Utilities.DBBLUtilities;
-using DBBL_ServiceTest;
+using DBBL_ServiceLiveEcom1;
 using OnlineAdmission.Entity;
 using OnlineAdmission.APP.Utilities.SMS;
 
@@ -47,7 +47,7 @@ namespace OnlineAdmission.APP.Controllers
                 _accessor = accessor;
             }
         
-        [AllowAnonymous]
+            [AllowAnonymous]
             [HttpGet]
             public async Task<IActionResult> GetTransactionResult(string trans_id)
             {
