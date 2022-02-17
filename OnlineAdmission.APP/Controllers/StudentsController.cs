@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using DBBL_ServiceLiveEcom1;
+//using DBBL_ServiceLiveEcom1;
+using DBBL_ServiceTest;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -1326,12 +1327,12 @@ namespace OnlineAdmission.APP.Controllers
 					string encodedTrnsId = HttpUtility.UrlEncode(str);
 
                     //Test Server
-					//string site = "https://ecomtest.dutchbanglabank.com/ecomm2/ClientHandler?card_type=" + inputModel.Cardtype +
-					//	"&trans_id=" + encodedTrnsId;
-                    
+                    string site = "https://ecomtest.dutchbanglabank.com/ecomm2/ClientHandler?card_type=" + inputModel.Cardtype +
+                        "&trans_id=" + encodedTrnsId;
+
                     //LIVE Server 2
-                    string site = "https://ecom1.dutchbanglabank.com/ecomm2/ClientHandler?card_type=" + inputModel.Cardtype +
-						"&trans_id=" + encodedTrnsId;
+                    //              string site = "https://ecom1.dutchbanglabank.com/ecomm2/ClientHandler?card_type=" + inputModel.Cardtype +
+                    //"&trans_id=" + encodedTrnsId;
 
                     PaymentTransaction paymentTransaction = new PaymentTransaction();
                     paymentTransaction.AcademicSessionId = model.SessionId;

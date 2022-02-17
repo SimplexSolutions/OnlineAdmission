@@ -293,10 +293,12 @@
                                 <input type="hidden" asp-for="PaymentTypeId" />
                                 <input type="hidden" asp-for="StudentPaymentTypeId" />
 
-                                 <div class="col-md-10 offset-md-1 text-md-center" id="logoArea">
+                                <div class="col-md-10 offset-md-1 text-md-center" id="logoArea">
                                     @*<input class="btn btn-dark-info" type="submit" value="BKash" formaction="/PaymentGateways/BkashPayment" />*@
                                     <input class="btn btn-primary" type="submit" value="Nagad" formaction="/Students/NagadPayment" />
-                                    <input class="btn btn-success" type="button" value="DBBL" id="dbblButtonId"/>
+                                    <input class="btn btn-success" type="button" value="DBBL" id="dbblButtonId" />
+                                    @*<input name="CardType" value="6" id="rocket" />
+                                    <input class="btn btn-primary" type="submit" value="Rocket" formaction="/Students/RocketPayment" />*@
                                 </div>
                                 @*<input class="btn btn-info" type="submit" value="Make Payment" />*@
                             </form>
