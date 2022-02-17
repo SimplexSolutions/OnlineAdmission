@@ -627,7 +627,8 @@ namespace OnlineAdmission.APP.Controllers
             if (ModelState.IsValid)
             {
                 paymentTransaction.CreatedAt = DateTime.Now;
-                paymentTransaction.CreatedBy = HttpContext.Session.GetString("UserId");
+                paymentTransaction.PaymentStatus = true;
+                paymentTransaction.CreatedBy = paymentTransaction.CreatedBy;// HttpContext.Session.GetString("UserId");
                 var existingAppliedStudent = await _appliedStudentManager.GetAppliedStudentAsync(paymentTransaction.ReferenceNo, (int)paymentTransaction.StudentCategoryId, (int)paymentTransaction.AcademicSessionId);
                 if (existingAppliedStudent != null)
                 {
