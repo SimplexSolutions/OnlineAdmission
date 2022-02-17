@@ -50,7 +50,7 @@ namespace OnlineAdmission.APP.Controllers
             // var cnt = students.Count();
             var appliedStudents = _appliedStudentManager.GetIQueryableData();
             var meritStudents = _meritStudentManager.GetIQueryableData();
-            var paymentTransactions = _paymentTransactionManager.GetIQueryableData();
+            var paymentTransactions = _paymentTransactionManager.GetIQueryableData().Where(s => s.PaymentStatus==true);
             //var students = _studentManager.GetIQueryableData();
             var subjects = _subjectManager.GetIQueryableData();
             string pageTitle = "";
@@ -163,6 +163,9 @@ namespace OnlineAdmission.APP.Controllers
             ViewBag.pagesize = pageSize;
             pageSize = pageSize <= 0 ? 50 : pageSize;
             page = page <= 0 ? 1 : page;
+
+          //  DateTime start = fromdate();
+           // DateTime date =(DateTime) fromdate.Date;
             //var sss= DateTime.ParseExact(fromdate, "dd-MM-yyyy");
             //var  YearMonth = (DateTime)fromdate.ToString("") .ToString("dddd, yyyy-mm-dd");
             //((DateTime)fromdate).Date && a.PaymentTransaction.TransactionDate.Date >= ((DateTime)todate).Date) 

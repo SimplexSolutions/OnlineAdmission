@@ -1336,7 +1336,11 @@ namespace OnlineAdmission.APP.Controllers
                     PaymentTransaction exPT = await _paymentTransactionManager.GetPaymentTransactionAsync(model.NuRoll, model.CategoryId, model.SessionId, model.PaymentTypeId);
                     if (exPT != null)
                     {
-                        return RedirectToAction("Search", "Students");
+                        exPT.TransactionId = str;
+                       await _paymentTransactionManager.UpdateAsync(exPT);
+
+                        return new RedirectResult(site);
+                       // return RedirectToAction("Search", "Students");
 
                     }
                     PaymentTransaction paymentTransaction = new PaymentTransaction();

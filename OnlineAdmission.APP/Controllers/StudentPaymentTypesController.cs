@@ -126,10 +126,12 @@ namespace OnlineAdmission.APP.Controllers
         // POST: StudentPaymentTypesController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int id, IFormCollection collection)
         {
             try
             {
+                var subject = await _studentPaymentTypeManager.GetByIdAsync((int)id);
+                await _studentPaymentTypeManager.RemoveAsync(subject);
                 return RedirectToAction(nameof(Index));
             }
             catch
