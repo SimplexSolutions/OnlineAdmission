@@ -45,6 +45,21 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label asp-for="Description" class="control-label col-md-2 text-md-right"></label>
+                <div class="col-md-6">
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="CreatedBy" class="control-label col-md-2 text-md-right"></label>
+                <div class="col-md-6">
+                    <input asp-for="CreatedBy" class="form-control" />
+                    <span asp-validation-for="CreatedBy" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
                 <label asp-for="TransactionId" class="control-label col-md-2 text-md-right"></label>
                 <div class="col-md-6">
                     <input asp-for="TransactionId" class="form-control" />
@@ -100,9 +115,9 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label  class="control-label col-md-2 text-md-right">Merit Type</label>
+                <label class="control-label col-md-2 text-md-right">Merit Type</label>
                 <div class="col-md-6">
-                    <select name="meritTypeId"  asp-items="ViewBag.meritTypeList" class="form-control">
+                    <select name="meritTypeId" asp-items="ViewBag.meritTypeList" class="form-control">
                         <option disabled selected>Select Merit Type</option>
                     </select>
                 </div>

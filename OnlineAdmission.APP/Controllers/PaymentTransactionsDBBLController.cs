@@ -19,8 +19,8 @@ using Newtonsoft.Json.Linq;
 using OnlineAdmission.BLL.IManager;
 using Microsoft.AspNetCore.Authorization;
 using OnlineAdmission.APP.Utilities.DBBLUtilities;
-//using DBBL_ServiceLiveEcom1;
-using DBBL_ServiceTest;
+using DBBL_ServiceLiveEcom1;
+//using DBBL_ServiceTest;
 using OnlineAdmission.Entity;
 using OnlineAdmission.APP.Utilities.SMS;
 
@@ -69,7 +69,84 @@ namespace OnlineAdmission.APP.Controllers
 
                 var dbbl = new dbblecomtxnClient();
                 var transResult = await dbbl.getresultfieldAsync(_user, _pass, trans_id, Clintip, Txnrefnum);
-                if (transResult.Body.@return.Contains("OK"))
+
+            //String RESULT_CODE = "N/A";
+            //String DSECURE = "N/A";
+            //String RRN = "N/A";
+            //String APPROVAL_CODE = "N/A";
+            //String CARD_NUMBER = "N/A";
+            //String AMOUNT = "N/A";
+            //String TRANS_DATE = "N/A";
+            //String CARDNAME = "N/A";
+            //String DESCRIPTION = "N/A";
+
+            //string RESULT = transResult.ToString();
+
+            //string[] resultfield = RESULT.Split('^');// .Split('^');
+            //string part1 = "";
+            //string part2 = "";
+
+            //foreach (string lines in resultfield)
+            //{
+            //    part1 = lines.Split('>')[0].Trim();
+            //    part2 = lines.Split('>')[1].Trim();
+
+            //    if (part1.Contains("RESULT"))
+            //    {
+            //        RESULT = part2;
+            //    }
+            //    else if (part1.Contains("RESULT_CODE"))
+            //    {
+            //        RESULT_CODE = part2;
+            //    }
+            //    else if (part1.Contains("3DSECURE"))
+            //    {
+            //        DSECURE = part2;
+            //    }
+
+            //    else if (part1.Contains("RRN"))
+            //    {
+            //        RRN = part2;
+            //    }
+            //    else if (part1.Contains("APPROVAL_CODE"))
+            //    {
+            //        APPROVAL_CODE = part2;
+            //    }
+            //    else if (part1.Contains("CARD_NUMBER"))
+            //    {
+            //        CARD_NUMBER = part2;
+            //    }
+            //    else if (part1.Contains("AMOUNT"))
+            //    {
+            //        AMOUNT = part2;
+            //    }
+            //    else if (part1.Contains("TRANS_DATE"))
+            //    {
+            //        TRANS_DATE = part2;
+            //    }
+            //    else if (part1.Contains("CARDNAME"))
+            //    {
+            //        CARDNAME = part2;
+            //    }
+            //    else if (part1.Contains("DESCRIPTION"))
+            //    {
+            //        DESCRIPTION = part2;
+            //    }
+
+            //}
+
+            //Console.WriteLine("RESULT:" + RESULT);
+            //Console.WriteLine("RESULT_CODE:" + RESULT_CODE);
+            //Console.WriteLine("DSECURE:" + DSECURE);
+            //Console.WriteLine("RRN:" + RRN);
+            //Console.WriteLine("APPROVAL_CODE:" + APPROVAL_CODE);
+            //Console.WriteLine("CARD_NUMBER:" + CARD_NUMBER);
+            //Console.WriteLine("AMOUNT:" + AMOUNT);
+            //Console.WriteLine("TRANS_DATE:" + TRANS_DATE);
+            //Console.WriteLine("CARDNAME:" + CARDNAME);
+            //Console.WriteLine("DESCRIPTION:" + DESCRIPTION);
+
+            if (transResult.Body.@return.Contains("OK"))
                 {
                     var payment = await paymentTransactionManager.GetPaymentTransactionByTrId(trans_id);
                     if (payment != null)
