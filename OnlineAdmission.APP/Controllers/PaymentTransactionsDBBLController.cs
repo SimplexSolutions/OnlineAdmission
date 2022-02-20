@@ -54,7 +54,8 @@ namespace OnlineAdmission.APP.Controllers
             {
             if (cat_id == 1) 
             { 
-                string site = "http://115.127.26.3:8020/PaymentTransactionsDBBL/GetTransactionResult?trans_id="+ trans_id;
+                //string site = "http://115.127.26.3:8020/PaymentTransactionsDBBL/GetTransactionResult?trans_id="+ trans_id;
+                string site = "http://tc.eiimsbd.com/PaymentTransactionsDBBL/GetTransactionResult?trans_id="+ trans_id;
                 return new RedirectResult(site);
             }
                    
