@@ -213,6 +213,10 @@ namespace OnlineAdmission.APP.Controllers
                     {
                         year = AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length - 4);
                     }
+                    else if (model.CategoryId == 6)
+                    {
+                        year = AcademicSession.SessionName.Substring(AcademicSession.SessionName.Length - 4);
+                    }
                 }
 
                 if (subjectCode < 10)
@@ -1329,10 +1333,11 @@ namespace OnlineAdmission.APP.Controllers
                     //Test Server
                     //string site = "https://ecomtest.dutchbanglabank.com/ecomm2/ClientHandler?card_type=" + inputModel.Cardtype +
                     //    "&trans_id=" + encodedTrnsId;
-
+                    int cat_id = 2; //Other than HSC
                     //LIVE Server 2
                     string site = "https://ecom1.dutchbanglabank.com/ecomm2/ClientHandler?card_type=" + inputModel.Cardtype +
-                                    "&trans_id=" + encodedTrnsId;
+                                    "&trans_id=" + encodedTrnsId +
+                                    "&cat_id=" + cat_id;
                     PaymentTransaction exPT = await _paymentTransactionManager.GetPaymentTransactionAsync(model.NuRoll, model.CategoryId, model.SessionId, model.PaymentTypeId);
                     if (exPT != null)
                     {
@@ -1594,6 +1599,8 @@ namespace OnlineAdmission.APP.Controllers
                 meritType = model.MeritTypeId,
                 sessionId = model.SessionId
             };
+
+           // studentType 1: HSC 2: OTHERS
 
             var paymentFinalJSON = new
             {

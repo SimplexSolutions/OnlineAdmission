@@ -50,9 +50,18 @@ namespace OnlineAdmission.APP.Controllers
         
             [AllowAnonymous]
             [HttpGet]
-            public async Task<IActionResult> GetTransactionResult(string trans_id)
+            public async Task<IActionResult> GetTransactionResult(string trans_id,int cat_id)
             {
-                var result = new Dictionary<string, object>();
+            if (cat_id == 1) 
+            { 
+                string site = "http://115.127.26.3:8020/PaymentTransactionsDBBL/GetTransactionResult?trans_id="+ trans_id;
+                return new RedirectResult(site);
+            }
+                   
+
+                
+
+            var result = new Dictionary<string, object>();
 
                 string _user = string.Empty;
                 string _pass = string.Empty;

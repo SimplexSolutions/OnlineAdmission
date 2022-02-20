@@ -167,6 +167,11 @@ namespace OnlineAdmission.APP.Controllers
 
                 var additionalMerchantInfo = (responsevalue.additionalMerchantInfo).Value;
                 dynamic MerchantInfo = JObject.Parse(additionalMerchantInfo);
+                //if (MerchantInfo.studentType == 1)
+                //{
+                //    string site = "http://115.127.26.3:8020/api/PaymentTransactionsAPI?status=" + status+ "&payment_ref_id=" + payment_ref_id;
+                //    return new RedirectResult(site);
+                //}
 
                 int nuRoll = MerchantInfo.NuAdmissionRoll;
                 int stuCat = MerchantInfo.StudentCategory;
